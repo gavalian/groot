@@ -55,12 +55,14 @@ public class HistogramPlotter implements IDataSetPlotter  {
             
         double xps = frame.getAxis(0).getAxisPosition(dataX - errorX*0.5);
         double xpe = frame.getAxis(0).getAxisPosition(dataX + errorX*0.5);
-        double yp  = frame.getAxis(1).getAxisPosition(0.0);
+        double yp  = frame.getAxis(1).getDimension().getMax() - 
+                frame.getAxis(1).getAxisPosition(0.0)                 
+                + frame.getAxis(1).getDimension().getMin();
             
         GeneralPath path = new GeneralPath();
         path.moveTo((int) xps, (int) yp);
         
-        for(int p = 1; p < npoints; p++){
+        for(int p = 0; p < npoints; p++){
             
             dataX  = dataset.getDataX(p);
             dataY  = dataset.getDataY(p);
@@ -68,26 +70,47 @@ public class HistogramPlotter implements IDataSetPlotter  {
             
             xps = frame.getAxis(0).getAxisPosition(dataX - errorX*0.5);
             xpe = frame.getAxis(0).getAxisPosition(dataX + errorX*0.5);
-            yp  = frame.getAxis(1).getAxisPosition(dataY);                    
-            path.moveTo((int) xps, (int) yp);
-            path.moveTo((int) xpe, (int) yp);
+            yp  = frame.getAxis(1).getDimension().getMax() - 
+                    frame.getAxis(1).getAxisPosition(dataY)                    
+                    + frame.getAxis(1).getDimension().getMin();                    
+            path.lineTo((int) xps, (int) yp);
+            path.lineTo((int) xpe, (int) yp);
             
         }
         
+        yp  = frame.getAxis(1).getDimension().getMax() - 
+                frame.getAxis(1).getAxisPosition(0.0)                 
+                + frame.getAxis(1).getDimension().getMin();
+        path.lineTo((int) xpe, (int) yp);
+        
+        g2d.setColor(Color.blue);
+        g2d.fill(path);
+        
         g2d.setColor(Color.red);
+
         g2d.draw(path);
     }
 
     @Override
     public Dimension2D getDataRegion() {
+        
         this.dataRegion.set(
                 dataset.getDataX(0), dataset.getDataX(0), 
-                dataset.getDataY(0), dataset.getDataY(0)
+                0.0, 0.0
                 );
         int dataSize = dataset.getDataSize(0);
         for(int p = 0; p < dataSize; p++){
+            double x1 = dataset.getDataX(p)-dataset.getDataEX(p)*0.5;
+            double x2 = dataset.getDataX(p)+dataset.getDataEX(p)*0.5;
             this.dataRegion.grow(dataset.getDataX(p), dataset.getDataY(p));
+            this.dataRegion.getDimension(0).grow(x1);
+            this.dataRegion.getDimension(0).grow(x2);
         }
+        double ymin = this.dataRegion.getDimension(1).getMin();
+        double ymax = this.dataRegion.getDimension(1).getMax();
+        
+        this.dataRegion.getDimension(1).setMinMax(ymin,ymax + Math.abs(ymax-ymin)*0.2);
+        
         return dataRegion;
     }
     
