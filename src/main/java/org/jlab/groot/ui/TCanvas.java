@@ -73,7 +73,7 @@ public class TCanvas extends JFrame {
         graph.addPoint(3.0, 12.0, 0.0, 0.0);
         graph.addPoint(4.0, 9.0, 0.0, 0.0);
         
-        H1F  h = FunctionFactory.randomGausian(200, 0.1, 0.8, 20000, 0.4, 0.2);
+        H1F  h = FunctionFactory.randomGausian(80, 0.1, 0.8, 20000, 0.4, 0.1);
         GraphErrors  gr = h.getGraph();
         //c1.getCanvas().getPad(0).addPlotter(new GraphErrorsPlotter(gr));
         c1.getCanvas().getPad(0).addPlotter(new HistogramPlotter(h));

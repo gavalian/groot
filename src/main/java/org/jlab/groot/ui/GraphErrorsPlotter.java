@@ -60,6 +60,9 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
         for(int p = 0; p < graphDataSet.getDataSize(0); p++){
             graphDataRegion.grow(graphDataSet.getDataX(p),graphDataSet.getDataY(p));
         }
+        
+        graphDataRegion.getDimension(0).addPadding(0.05);
+        graphDataRegion.getDimension(1).addPadding(0.0,0.15);
         return graphDataRegion;
     }
 

@@ -106,10 +106,8 @@ public class HistogramPlotter implements IDataSetPlotter  {
             this.dataRegion.getDimension(0).grow(x1);
             this.dataRegion.getDimension(0).grow(x2);
         }
-        double ymin = this.dataRegion.getDimension(1).getMin();
-        double ymax = this.dataRegion.getDimension(1).getMax();
-        
-        this.dataRegion.getDimension(1).setMinMax(ymin,ymax + Math.abs(ymax-ymin)*0.2);
+
+        this.dataRegion.getDimension(1).addPadding(0.0, 0.2);
         
         return dataRegion;
     }
