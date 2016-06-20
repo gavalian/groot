@@ -167,4 +167,17 @@ public class Dimension1D {
             System.out.println(v);
         }
     }
+    
+    
+    public void addPadding(double fraction){
+        double value = fraction*getLength();
+        setMinMax(this.dimMin-value,this.dimMax+value);
+    }
+    
+    public void addPadding(double frLow, double frHigh){
+        double valueL = frLow*getLength();
+        double valueH = frHigh*getLength();
+        setMinMax(this.dimMin-valueL,this.dimMax+valueH);
+    }
+    
 }
