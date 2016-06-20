@@ -1,0 +1,24 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.jlab.groot.ui;
+
+import java.awt.Graphics2D;
+import org.jlab.groot.data.IDataSet;
+import org.jlab.groot.math.Dimension2D;
+
+/**
+ *
+ * @author gavalian
+ */
+public interface IDataSetPlotter {
+    
+    String       getOptions();
+    void         setOptions(String opt);
+    String       getName();
+    IDataSet     getDataSet();
+    void         draw(Graphics2D  g2d, GraphicsAxisFrame frame);
+    Dimension2D  getDataRegion();
+}

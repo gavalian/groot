@@ -11,6 +11,8 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javafx.scene.text.FontWeight;
 import org.jlab.groot.math.Dimension2D;
 
@@ -23,6 +25,8 @@ public class EmbeddedPad {
     Dimension2D      padDimensions = new Dimension2D();
     GraphicsAxisFrame    axisFrame = new GraphicsAxisFrame();
     Color                backgroundColor = Color.WHITE;
+    Map<String,IDataSetPlotter>   padDataSets = new LinkedHashMap<String,IDataSetPlotter>();
+    
     
     public EmbeddedPad(){
         
@@ -40,13 +44,40 @@ public class EmbeddedPad {
     
     public void draw(Graphics2D g2d){
         //update(g2d);
+        
+        
+        Dimension2D  dim = new Dimension2D();
+        
+        for(Map.Entry<String,IDataSetPlotter>  entry : padDataSets.entrySet()){
+            Dimension2D region = entry.getValue().getDataRegion();
+            axisFrame.getAxis(0).setRange(
+                    region.getDimension(0).getMin(),
+                    region.getDimension(0).getMax()
+                    );
+            axisFrame.getAxis(1).setRange(
+                    region.getDimension(1).getMin(),
+                    region.getDimension(1).getMax()
+                    );
+            System.out.println(entry.getKey() + " : " + region);
+            System.out.println(axisFrame.getAxis(0));
+            //entry.getValue().draw(g2d, axisFrame);
+        }
+        
         update(g2d);
         g2d.setColor(Color.BLACK);                
-        axisFrame.draw(g2d, padDimensions);        
+        axisFrame.draw(g2d, padDimensions);
+        
+        for(Map.Entry<String,IDataSetPlotter>  entry : padDataSets.entrySet()){
+            entry.getValue().draw(g2d, axisFrame);
+        }
     }
     
     public void update(Graphics2D g2d){
-        axisFrame.getAxis(0).setRange(4, 5);
-        axisFrame.getAxis(1).setRange(27,32);
+        //axisFrame.getAxis(0).setRange(4, 5);
+        //axisFrame.getAxis(1).setRange(27,32);
+    }
+    
+    public void addPlotter(IDataSetPlotter ip){
+        this.padDataSets.put(ip.getName(), ip);
     }
 }

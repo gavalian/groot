@@ -41,6 +41,10 @@ public class EmbeddedCanvas extends JPanel {
         pad.draw(g2d);
     }
     
+    public EmbeddedPad  getPad(int index){
+        return this.pad;
+    }
+    
     public static void main(String[] args){
         JFrame frame = new JFrame();
         EmbeddedCanvas canvas = new EmbeddedCanvas(400,400);

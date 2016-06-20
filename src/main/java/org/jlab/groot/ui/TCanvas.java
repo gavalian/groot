@@ -17,6 +17,9 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.SoftBevelBorder;
+import org.jlab.groot.data.GraphErrors;
+import org.jlab.groot.data.H1F;
+import org.jlab.groot.math.FunctionFactory;
 
 /**
  *
@@ -58,8 +61,22 @@ public class TCanvas extends JFrame {
         this.setVisible(true);
     }
     
+    public EmbeddedCanvas  getCanvas(){
+        return this.canvas;
+    }
     
     public static void main(String[] args){
-        new TCanvas("c1",600,400);
+        TCanvas c1 = new TCanvas("c1",600,400);
+        GraphErrors  graph = new GraphErrors();
+        graph.addPoint(1.0, 1.0, 0.0, 0.0);
+        graph.addPoint(2.0, 8.0, 0.0, 0.0);
+        graph.addPoint(3.0, 12.0, 0.0, 0.0);
+        graph.addPoint(4.0, 9.0, 0.0, 0.0);
+        
+        H1F  h = FunctionFactory.randomGausian(100, 0.1, 0.8, 20000, 0.4, 0.05);
+        GraphErrors  gr = h.getGraph();
+        c1.getCanvas().getPad(0).addPlotter(new GraphErrorsPlotter(gr));
+        //c1.getCanvas().getPad(0).addPlotter(new HistogramPlotter(h));
+        
     }
 }

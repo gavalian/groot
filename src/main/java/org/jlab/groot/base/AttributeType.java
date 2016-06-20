@@ -18,19 +18,21 @@ public enum AttributeType {
     LINE_WIDTH       ( 3, "LINE_WIDTH"),
     FILL_COLOR       ( 4, "FILL_COLOR"),
     FILL_STYLE       ( 5, "FILL_STYLE"),
-    MARKER_COLOR     ( 6, "FILL_COLOR"),
-    MARKER_STYLE     ( 7, "FILL_COLOR"),
-    MARKER_SIZE      ( 8, "FILL_COLOR"),
+    MARKER_COLOR     ( 6, "MARKER_COLOR"),
+    MARKER_STYLE     ( 7, "MARKER_STYLE"),
+    MARKER_SIZE      ( 8, "MARKER_SIZE"),
     MARING_TOP       ( 10, "MARGIN_TOP"),
     MARING_BOTTOM    ( 11, "MARGIN_TOP"),
     MARING_LEFT      ( 12, "MARGIN_TOP"),
-    MARING_RIGHT     ( 13, "MARGIN_TOP"),    
-    AXIS_LINE_WIDTH  ( 14, "AXIS_LINE_WIDTH")
+    MARING_RIGHT     ( 13, "MARGIN_TOP"),     
+    AXIS_LINE_WIDTH    ( 14, "AXIS_LINE_WIDTH"),
+    AXIS_TICKMARK_SIZE (15,"AXIS_TICKMARK_SIZE"),
+    AXIS_BACKGROUND_COLOR (16,"AXIS_BACKGROUND_COLOR")
     ;
     
     private int attributeId ;
     private String attributeName;
-    
+    //private String attributeDescription;
     
     AttributeType(){
         attributeId   = 0;

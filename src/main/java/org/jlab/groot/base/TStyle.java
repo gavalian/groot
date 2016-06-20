@@ -20,7 +20,15 @@ public class TStyle {
         attr.add(AttributeType.LINE_WIDTH, 1);
         attr.add(AttributeType.LINE_STYLE, 1);        
         attr.add(AttributeType.FILL_COLOR, 4);
+        attr.add(AttributeType.AXIS_LINE_WIDTH, 1);
+        //attr.add(AttributeType., 1);
+        
         return attr;
+    }
+    
+    
+    public static Attributes getStyle(){
+        return grootStyle;
     }
     
     
