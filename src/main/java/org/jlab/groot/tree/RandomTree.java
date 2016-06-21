@@ -7,6 +7,10 @@
 package org.jlab.groot.tree;
 
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  *
@@ -47,6 +51,7 @@ public class RandomTree extends Tree {
         
         List<String> branches = tree.getListOfBranches();        
         TreeCut  q2cut = new TreeCut("q2cut","q2>2.0&epX>0.5",branches);
+        tree.getSelector().addCut(q2cut);
         
         int counter = 0;
         while(tree.readNext()==true){            
@@ -54,5 +59,17 @@ public class RandomTree extends Tree {
             counter++;
             System.out.println( counter + " : " + status);
         }
+        
+        JFrame frame = new JFrame();
+         DefaultMutableTreeNode top =
+                 tree.getTree();
+
+         JTree jtree = new JTree(top);
+         
+         jtree.putClientProperty("JTree.lineStyle", "Angled");
+         JScrollPane treeView = new JScrollPane(jtree);
+         frame.add(treeView);
+         frame.pack();
+         frame.setVisible(true);
     }
 }

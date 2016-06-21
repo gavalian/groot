@@ -6,10 +6,18 @@
 
 package org.jlab.groot.tree;
 
+import java.awt.Component;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JTree;
+import javax.swing.UIManager;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
 /**
  *
@@ -19,9 +27,10 @@ public class Tree implements ITree {
     
     private String treeName = "tree";
     
-    private  Map<String,Branch>  treeBranches    = new LinkedHashMap<String,Branch>();
-    private  TreeSelector        defaultSelector = new TreeSelector();
-    
+    private  Map<String,Branch>     treeBranches    = new LinkedHashMap<String,Branch>();
+    private  TreeSelector           defaultSelector = new TreeSelector();
+    private  static Map<String,ImageIcon>  treeNodeIcons   = Tree.initTreeIcons();
+            
     public Tree(String name){
         this.treeName = name;
     }
@@ -47,6 +56,25 @@ public class Tree implements ITree {
         return listOfBranches;
     }
 
+    public static Map<String,ImageIcon>  getTreeIcons(){
+        return treeNodeIcons;
+    }
+    
+    public static Map<String,ImageIcon>  initTreeIcons(){
+        Map<String,ImageIcon> iconMap = new HashMap<String,ImageIcon>();
+        try {
+            ImageIcon leafIcon = new ImageIcon(Tree.class.getClassLoader().getResource("icons/tree/leaf_t.png"));
+            ImageIcon dirIcon  = new ImageIcon(Tree.class.getClassLoader().getResource("icons/tree/tree_t.png"));            
+            UIManager.put("Tree.closedIcon", dirIcon);
+            UIManager.put("Tree.openIcon",   dirIcon);
+            UIManager.put("Tree.leafIcon",  leafIcon);
+            UIManager.put("Tree.paintLines", Boolean.TRUE);
+        } catch(Exception e){
+            
+        }
+        return iconMap;
+    }
+    
     public Branch getBranch(String name) {
         return this.treeBranches.get(name);
     }
@@ -109,4 +137,25 @@ public class Tree implements ITree {
         }
         return vector;
     }
+    
+    public DefaultMutableTreeNode getTree() {
+
+        DefaultMutableTreeNode root         = new DefaultMutableTreeNode(getName());
+        DefaultMutableTreeNode rootbranch   = new DefaultMutableTreeNode("Branches");
+        DefaultMutableTreeNode rootcuts     = new DefaultMutableTreeNode("Selector");
+        root.add(rootbranch);
+        root.add(rootcuts);
+        
+        List<String> branches = getListOfBranches();
+        for(String item : branches){
+            rootbranch.add(new DefaultMutableTreeNode(item));
+        }
+        
+        Map<String,TreeCut> cuts = this.defaultSelector.getSelectorCuts();
+        for(Map.Entry<String,TreeCut> entry : cuts.entrySet()){
+            rootcuts.add(new DefaultMutableTreeNode(entry.getKey()));
+        }
+        return root;
+    }        
+        
 }
