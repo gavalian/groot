@@ -12,6 +12,7 @@
 package org.jlab.groot.data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -31,6 +32,9 @@ public class DataVector {
         this.set(data);
     }
     
+    public DataVector(List<Double> data){
+        set(data);
+    }
     /**
      * Initialize the array with given values.
      * @param data initial data
@@ -43,6 +47,12 @@ public class DataVector {
         }
     }
     
+    public final void set(List<Double> data){
+        this.datavec.clear();
+        for(Double item : data){
+            this.add(item);
+        }
+    }
     
     public int  size(){ return datavec.size();}
     public void clear() { datavec.clear();}

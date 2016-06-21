@@ -159,6 +159,15 @@ public class H1F  implements IDataSet {
         this.hAttr.addString(AttributeType.STRING_TITLE_Y, yTitle);
     }
     
+    public static H1F  create(String name, int bins, DataVector vec){
+        double min = vec.getMin();
+        double max = vec.getMax();
+        H1F h = new H1F(name,"",bins,min,max);
+        for(int i = 0; i < vec.getSize(); i++){
+            h.fill(vec.getValue(i));
+        }
+        return h;
+    }
     /**
      * The getter for the histogram title.
      * @return Title of the histogram.
