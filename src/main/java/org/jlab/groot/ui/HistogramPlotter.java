@@ -8,6 +8,8 @@ package org.jlab.groot.ui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
+
 import org.jlab.groot.base.AttributeType;
 import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.IDataSet;
@@ -63,6 +65,8 @@ public class HistogramPlotter implements IDataSetPlotter  {
         double yp = frame.getPointY(0.0);
         
         GeneralPath path = new GeneralPath();
+        //Path2D path = new Path2D.Double();
+        
         path.moveTo((int) xps, (int) yp);
         
         for(int p = 0; p < npoints; p++){

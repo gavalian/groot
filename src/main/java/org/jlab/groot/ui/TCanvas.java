@@ -83,15 +83,12 @@ public class TCanvas extends JFrame {
         h2.setFillColor(44);
         h1.setFillColor(33);
         GraphErrors  gr = h1.getGraph();
-        c1.getCanvas().divide(1,1);
+        c1.getCanvas().divide(2,2);
         c1.getCanvas().initTimer(3000);
+        h1.add(h2);
         //c1.getCanvas().getPad(0).setAxisFontSize(14);
         //c1.getCanvas().getPad(0).addPlotter(new GraphErrorsPlotter(gr));
-        for(int i = 0; i < c1.getCanvas().getNPads(); i++){
-            c1.getCanvas().getPad(i).setAxisFontSize(12);
-            c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h1));
-            c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h2));
-        }
+        
         
         F1D func = new F1D("func","[amp]*gaus(x,[mean],[sigma])",0.1,0.8);
         func.setParameters(new double[]{120,0.4,0.05});
@@ -102,8 +99,21 @@ public class TCanvas extends JFrame {
         DataFitter.fit(func, h2, "E");
         DataFitter.fit(func2, h1, "E");
         
-        c1.getCanvas().getPad(0).addPlotter(new FunctionPlotter(func));
-        c1.getCanvas().getPad(0).addPlotter(new FunctionPlotter(func2));
+        F1D func3 = new F1D("func3","[p0]+[p1]*x+[amp]*gaus(x,[mean],[sigma])+[amp2]*gaus(x,[mean2],[sigma2])",0.1,0.8);
+        func3.setParameters(new double[]{1.0,1.0,120,0.4,0.05,120.0,0.6,0.05});
+        func3.setLineWidth(3);
+
+        DataFitter.fit(func3, h1, "E");
+        h1.setLineColor(4);
+        for(int i = 0; i < c1.getCanvas().getNPads(); i++){
+            c1.getCanvas().getPad(i).setAxisFontSize(12);
+            c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h1));
+            c1.getCanvas().getPad(i).addPlotter(new FunctionPlotter(func3));
+            //c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h2));
+        }
+        //c1.getCanvas().getPad(0).addPlotter(new FunctionPlotter(func));
+        //c1.getCanvas().getPad(0).addPlotter(new FunctionPlotter(func2));
+        
         c1.getCanvas().update();
     }
 }
