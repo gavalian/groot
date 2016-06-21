@@ -19,6 +19,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.SoftBevelBorder;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.fitter.DataFitter;
+import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.FunctionFactory;
 
 /**
@@ -81,7 +83,7 @@ public class TCanvas extends JFrame {
         h2.setFillColor(44);
         h1.setFillColor(33);
         GraphErrors  gr = h1.getGraph();
-        c1.getCanvas().divide(5,4);
+        c1.getCanvas().divide(1,1);
         c1.getCanvas().initTimer(3000);
         //c1.getCanvas().getPad(0).setAxisFontSize(14);
         //c1.getCanvas().getPad(0).addPlotter(new GraphErrorsPlotter(gr));
@@ -90,6 +92,18 @@ public class TCanvas extends JFrame {
             c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h1));
             c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h2));
         }
+        
+        F1D func = new F1D("func","[amp]*gaus(x,[mean],[sigma])",0.1,0.8);
+        func.setParameters(new double[]{120,0.4,0.05});
+        
+        F1D func2 = new F1D("func2","[p0]+[p1]*x+[amp]*gaus(x,[mean],[sigma])",0.1,0.8);
+        func2.setParameters(new double[]{1.0,1.0,120,0.4,0.05});
+        func2.setLineColor(4);
+        DataFitter.fit(func, h2, "E");
+        DataFitter.fit(func2, h1, "E");
+        
+        c1.getCanvas().getPad(0).addPlotter(new FunctionPlotter(func));
+        c1.getCanvas().getPad(0).addPlotter(new FunctionPlotter(func2));
         c1.getCanvas().update();
     }
 }
