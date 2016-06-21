@@ -18,7 +18,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.jlab.groot.data.GraphErrors;
+import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
+import org.jlab.groot.math.Func1D;
 
 /**
  *
@@ -34,6 +38,7 @@ public class EmbeddedCanvas extends JPanel {
     private int  numberOfColumns = 1;
     private List<EmbeddedPad>    canvasPads  = new ArrayList<EmbeddedPad>();
     private int                  selectedPad = 2;
+    private int                  activePad   = 0;
     
     public EmbeddedCanvas(int xsize, int ysize){
         super();
@@ -54,6 +59,48 @@ public class EmbeddedCanvas extends JPanel {
         for(int i = 0; i < nc*nr; i++){
             this.canvasPads.add(new EmbeddedPad());
         }
+        activePad   = 0;
+    }
+    
+    public void moveNext(){
+        activePad++;
+        if(activePad>=this.canvasPads.size()){
+            activePad = 0;
+        }
+    }
+    
+    public void drawNext(IDataSet ds){
+        this.draw(ds, "");
+    }
+    
+    public void drawNext(IDataSet ds, String options){
+        draw(ds,options);
+        moveNext();
+    }
+    
+    public void draw(IDataSet ds){
+        draw(ds,"");
+    }
+    
+    public void draw(IDataSet ds, String options){
+        if(options.contains("same")==false){
+            canvasPads.get(activePad).reset();
+        }
+        
+        if(ds instanceof H1F){
+            canvasPads.get(activePad).addPlotter(new HistogramPlotter(ds));
+        }
+        
+        if(ds instanceof GraphErrors){
+            canvasPads.get(activePad).addPlotter(new GraphErrorsPlotter(ds));
+        }
+        if(ds instanceof Func1D){
+            canvasPads.get(activePad).addPlotter(new FunctionPlotter(ds));
+        }
+    }
+    
+    public void cd(int pad){
+        activePad = pad;
     }
     
     @Override

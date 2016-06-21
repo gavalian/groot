@@ -138,6 +138,10 @@ public class Tree implements ITree {
         return vector;
     }
     
+    public boolean hasBranch(String name){
+        return this.treeBranches.containsKey(name);
+    }
+    
     public DefaultMutableTreeNode getTree() {
 
         DefaultMutableTreeNode root         = new DefaultMutableTreeNode(getName());
