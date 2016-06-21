@@ -6,6 +6,7 @@
 
 package org.jlab.groot.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -17,6 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.jlab.groot.math.Dimension2D;
 
 /**
  *
@@ -30,7 +32,8 @@ public class EmbeddedCanvas extends JPanel {
     private Long paintingTime    = (long) 0;
     private int  numberOfRows    = 1;
     private int  numberOfColumns = 1;
-    private List<EmbeddedPad>    canvasPads = new ArrayList<EmbeddedPad>();
+    private List<EmbeddedPad>    canvasPads  = new ArrayList<EmbeddedPad>();
+    private int                  selectedPad = 2;
     
     public EmbeddedCanvas(int xsize, int ysize){
         super();
@@ -77,6 +80,19 @@ public class EmbeddedCanvas extends JPanel {
             paintingTime += (et-st);
             numberOfPaints++;
             System.out.println(this.getBenchmarkString());
+            
+            if(selectedPad>=0&&selectedPad<canvasPads.size()){
+                g2d.setColor(Color.red);
+                g2d.setStroke(new BasicStroke(1));
+                Dimension2D d = canvasPads.get(selectedPad).padDimensions;
+                g2d.drawRect(
+                        (int) d.getDimension(0).getMin(), 
+                        (int) d.getDimension(1).getMin(), 
+                        (int) (d.getDimension(0).getMax()-d.getDimension(0).getMin()),
+                        (int) (d.getDimension(1).getMax()-d.getDimension(1).getMin())
+                );
+            }
+            
         } catch (Exception e){
             
         }
