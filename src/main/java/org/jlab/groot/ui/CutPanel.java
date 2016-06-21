@@ -122,6 +122,7 @@ public class CutPanel extends JPanel{
 		saveButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
 				if(cut!=null){
 					cut.setName(cutNameTextField.getText());
 					cut.setExpression(cutTextArea.getText());
@@ -129,6 +130,9 @@ public class CutPanel extends JPanel{
 					selector.addCut(new TreeCut(cutNameTextField.getText(),cutTextArea.getText(),branches));
 				}
 				SwingUtilities.getWindowAncestor(cutNameTextField).dispose();
+=======
+				selector.addCut(new TreeCut(cutNameTextField.getText(),cutTextArea.getText(),branches));
+>>>>>>> gavalian/master
 			}
 		});
 		
