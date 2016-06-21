@@ -171,10 +171,12 @@ public class StudioUI implements MouseListener,ActionListener {
     public void addCut(){
         System.out.println("doing some stuff...");
         CutPanel cutPane = new CutPanel(studioTree);
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Cut Editor");
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(cutPane);
         frame.pack();
+        frame.setLocationRelativeTo(this.frame);
+        frame.setMinimumSize(frame.getSize());
         frame.setVisible(true);        
     }
     
@@ -225,10 +227,17 @@ public class StudioUI implements MouseListener,ActionListener {
 
     public void addDescriptor(){
         DescriptorPanel  panel = null;
+<<<<<<< HEAD
+        panel = new DescriptorPanel(studioTree,analyzer,2);
+        JFrame frame = new JFrame("Edit Histogram");
+=======
         panel = new DescriptorPanel(studioTree,analyzer);
         JFrame frame = new JFrame();
+>>>>>>> gavalian/master
         frame.add(panel);
         frame.pack();
+        frame.setLocationRelativeTo(this.frame);
+        frame.setMinimumSize(frame.getSize());
         frame.setVisible(true);
     }
     
