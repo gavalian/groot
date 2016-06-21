@@ -196,12 +196,11 @@ public class StudioUI implements MouseListener,ActionListener {
             TreePath path = jtree.getPathForLocation(e.getX(), e.getY());
             if (path != null) {
                 System.out.println(path.getLastPathComponent().toString());
-                scanTreeItem(path.getLastPathComponent().toString());
-                
+                scanTreeItem(path.getLastPathComponent().toString());                
                 String cutString = path.getLastPathComponent().toString();
-                if(cutString.contains("Selector")==true){
-                    addCut();
-                }
+                //if(cutString.contains("Selector")==true){
+                //    addCut();
+                //}
             }
         }
     }
@@ -228,8 +227,13 @@ public class StudioUI implements MouseListener,ActionListener {
 
     public void addDescriptor(){
         DescriptorPanel  panel = null;
+<<<<<<< HEAD
         panel = new DescriptorPanel(studioTree,analyzer,2);
         JFrame frame = new JFrame("Edit Histogram");
+=======
+        panel = new DescriptorPanel(studioTree,analyzer);
+        JFrame frame = new JFrame();
+>>>>>>> gavalian/master
         frame.add(panel);
         frame.pack();
         frame.setLocationRelativeTo(this.frame);
@@ -242,6 +246,9 @@ public class StudioUI implements MouseListener,ActionListener {
         System.out.println("Action appeared = " + e.getActionCommand());
         if(e.getActionCommand().compareTo("Add Descriptor")==0){
             this.addDescriptor();
+        }
+        if(e.getActionCommand().compareTo("Add Cut")==0){
+            this.addCut();
         }
     }
 }

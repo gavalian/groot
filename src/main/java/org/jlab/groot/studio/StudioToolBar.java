@@ -32,8 +32,15 @@ public class StudioToolBar {
         toolbar = new JToolBar();
         JButton btnOpen = new JButton(leafIcon);
         JButton btnClose = new JButton(dirIcon);
-        btnOpen.setActionCommand("Add Descriptor");
+        btnOpen.setToolTipText("Add Data Descriptor");
+        btnClose.setToolTipText("Add Cut");
+        
+        btnOpen.setActionCommand("Add Descriptor");        
         btnOpen.addActionListener(listener);
+        
+        btnClose.setActionCommand("Add Cut");
+        btnClose.addActionListener(listener);
+        
         toolbar.add(btnOpen);
         toolbar.add(btnClose);
         
