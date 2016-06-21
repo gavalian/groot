@@ -82,7 +82,7 @@ public class CutPanel extends JPanel{
 		});
 		
 		cutTextArea.setPreferredSize(new Dimension(200,100));
-		JButton saveButton = new JButton("Save and Close");
+		JButton saveButton = new JButton("Apply");
 
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
