@@ -35,26 +35,5 @@ public class TreeAnalyzer {
         }
     }
     
-    public class DatasetDescriptor {
-        
-        String name = "somename";
-        IDataSet       descDataset = null;
-        List<String>   descCutList = new ArrayList<String>();
-        
-        public DatasetDescriptor(String name, int nbins, double min, double max){
-            
-        }
-        
-        public void addCut(String name){
-            descCutList.add(name);
-        }
-        
-        public List<String>  getCuts(){
-            return this.descCutList;
-        }
-        
-        public IDataSet getDataSet(){
-            return this.descDataset;
-        }
-    }
+ 
 }

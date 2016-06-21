@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeCut;
@@ -24,7 +25,7 @@ public class CutPanel extends JPanel{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	TreeCut cut;
+	TreeCut cut = null;
 	Tree tree;
 	TreeSelector selector;
 	String name = "";
@@ -53,6 +54,15 @@ public class CutPanel extends JPanel{
 		init();
 	}
 	
+	public CutPanel(Tree tree, TreeCut cut){
+		this.tree = tree;
+		this.selector = tree.getSelector();
+		this.name = cut.getName();
+		this.cutString = cut.getExpression(); 
+		this.branches = (ArrayList<String>) tree.getListOfBranches();
+		init();
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void init() {
 	
@@ -77,7 +87,8 @@ public class CutPanel extends JPanel{
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
-		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
 		cutValueTextField.setColumns(6);
 
 		int gridInt = 0;
@@ -111,30 +122,17 @@ public class CutPanel extends JPanel{
 		saveButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				selector.addCut(new TreeCut(cutNameTextField.getText(),cutTextArea.getText(),branches));
-				cutNameTextField.
+				if(cut!=null){
+					cut.setName(cutNameTextField.getText());
+					cut.setExpression(cutTextArea.getText());
+				}else{
+					selector.addCut(new TreeCut(cutNameTextField.getText(),cutTextArea.getText(),branches));
+				}
+				SwingUtilities.getWindowAncestor(cutNameTextField).dispose();
 			}
 		});
 		
 	}
-	/*
-	public static void main(String[] args){
-		JFrame frame = new JFrame("CutPanel Test");
-		ArrayList<String> branches = new ArrayList<String>();
-		branches.add("mm2pp");
-		branches.add("ebeam");
-		branches.add("mppbar1");
-		branches.add("mppbar2");
-
-
-
-		TreeCut cut = new TreeCut("Turducken","mm2pp>0.0",branches);
-		CutPanel blah = new CutPanel(cut);
-		frame.add(blah);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-	}*/
 	    
 	private void update(){
 		
