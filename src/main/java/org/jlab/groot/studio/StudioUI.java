@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -34,7 +36,9 @@ import org.jlab.groot.data.DataVector;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.tree.RandomTree;
 import org.jlab.groot.tree.Tree;
+import org.jlab.groot.tree.TreeAnalyzer;
 import org.jlab.groot.ui.CutPanel;
+import org.jlab.groot.ui.DescriptorPanel;
 import org.jlab.groot.ui.EmbeddedCanvas;
 import org.jlab.groot.ui.HistogramPlotter;
 
@@ -42,7 +46,7 @@ import org.jlab.groot.ui.HistogramPlotter;
  *
  * @author gavalian
  */
-public class StudioUI implements MouseListener {
+public class StudioUI implements MouseListener,ActionListener {
     
     JSplitPane  splitPane = null;
     JPanel      navigationPane = null;
@@ -54,6 +58,7 @@ public class StudioUI implements MouseListener {
     JPanel  statusPane = null;
     JMenuBar menuBar = null;
     StudioToolBar  toolBar = null;
+    TreeAnalyzer  analyzer = new TreeAnalyzer();
     
     public StudioUI(Tree tree){
         frame = new JFrame();
@@ -108,6 +113,7 @@ public class StudioUI implements MouseListener {
     }
     
     private void initMenu(){
+        
         statusPane = new JPanel();
         
         statusPane.setLayout(new GridBagLayout());
@@ -135,7 +141,7 @@ public class StudioUI implements MouseListener {
         //JToolBar toolBar = new JToolBar("");
         //toolBar.add(new Button("Divide"));
         //toolBar.add(new Button("Add"));
-        toolBar = new StudioToolBar();
+        toolBar = new StudioToolBar(this);
         
         menuBar = new JMenuBar();
         JMenu  menuFile = new JMenu("File");
@@ -216,5 +222,22 @@ public class StudioUI implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         this.updateTree();
+    }
+
+    public void addDescriptor(){
+        DescriptorPanel  panel = null;
+        panel = new DescriptorPanel(studioTree,analyzer,2);
+        JFrame frame = new JFrame();
+        frame.add(panel);
+        frame.pack();
+        frame.setVisible(true);
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("Action appeared = " + e.getActionCommand());
+        if(e.getActionCommand().compareTo("Add Descriptor")==0){
+            this.addDescriptor();
+        }
     }
 }
