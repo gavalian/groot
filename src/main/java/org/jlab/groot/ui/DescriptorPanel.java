@@ -53,7 +53,7 @@ public class DescriptorPanel extends JPanel {
 		init();
 	}
 	
-	DescriptorPanel(Tree tree, DatasetDescriptor descriptor){
+	DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, DatasetDescriptor descriptor){
 		this.nDim = 1;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;

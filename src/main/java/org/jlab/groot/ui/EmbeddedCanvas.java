@@ -70,7 +70,7 @@ public class EmbeddedCanvas extends JPanel {
     }
     
     public void drawNext(IDataSet ds){
-        this.draw(ds, "");
+        this.drawNext(ds, "");
     }
     
     public void drawNext(IDataSet ds, String options){
