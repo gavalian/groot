@@ -7,6 +7,7 @@
 package org.jlab.groot.ui;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.List;
 import org.jlab.groot.base.FontProperties;
 import org.jlab.groot.math.Dimension1D;
@@ -84,7 +85,7 @@ public class GraphicsAxis {
     }
 
     public Dimension1D  getRange(){
-        return this.axisDimension;
+        return this.axisRange;
     }
     /**
      * prints string representation of the axis.
@@ -131,13 +132,56 @@ public class GraphicsAxis {
     }
     
     public void  setAxisDivisions(int ndiv){
+        this.axisLabels.setFontName(this.axisLabelFont.getFontName());
+        this.axisLabels.setFontSize(this.axisLabelFont.getFontSize());
+        /* DEBUG */
+        //System.out.println(" font size = " + this.axisLabelFont.getFontSize());
         this.numberOfMajorTicks = ndiv;
+        if(this.isLogarithmic==true){
+            
+        }
+        
         List<Double> ticks = axisRange.getDimensionTicks(this.numberOfMajorTicks);
         this.axisLabels.update(ticks);
     }
     
     public List<Double>  getAxisTicks(){
         return this.axisLabels.getTicks();
+    }
+    
+    public List<Double> getAxisMinorTicks(){
+        
+        int nticks = this.axisLabels.getTicks().size();
+        List<Double>  minorTicks = new ArrayList<Double>();
+        if(nticks>=2){
+            double cTick = axisLabels.getTicks().get(0);
+            double nTick = axisLabels.getTicks().get(1);
+            double step  = Math.abs(nTick-cTick)/4.0;
+            
+            for(int i = 0; i < nticks-1; i++){
+                cTick = axisLabels.getTicks().get(i);
+                nTick = axisLabels.getTicks().get(i+1);                
+                for(int m = 0; m < 3; m++){
+                    minorTicks.add(cTick+step*(m+1));
+                }
+            }
+            
+            cTick = nTick;
+            int ncount = 0;
+            while(cTick<this.axisRange.getMax()&&ncount<10){
+                cTick += step;
+                if(cTick<axisRange.getMax()) minorTicks.add(cTick);
+                ncount++;
+            }
+            
+            cTick = axisLabels.getTicks().get(0);
+            ncount = 0;
+            while(cTick>axisRange.getMin()&&ncount<10){
+                cTick -= step;
+                if(cTick>axisRange.getMin()) minorTicks.add(cTick);
+            }
+        }
+        return minorTicks;
     }
     
     public double  getLabelFraction(Graphics2D g2d, boolean isVertical){

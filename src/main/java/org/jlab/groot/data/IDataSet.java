@@ -12,6 +12,7 @@ import org.jlab.groot.base.Attributes;
  * @author gavalian
  */
 public interface IDataSet {
+    
     void        setName(String name);
     String      getName();
     int         getDataSize(int axis);
@@ -21,4 +22,5 @@ public interface IDataSet {
     double      getDataEX(int bin);
     double      getDataEY(int bin);
     double      getData(int xbin, int ybin);
+    
 }

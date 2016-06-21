@@ -15,7 +15,8 @@ import java.util.Map;
  */
 public class Attributes {
     Map<AttributeType,Integer>  attributesMap = new LinkedHashMap<AttributeType,Integer>();
-    
+    Map<AttributeType,String>   attributesString = new LinkedHashMap<AttributeType,String>();
+ 
     public Attributes(){
         
     }
@@ -30,6 +31,10 @@ public class Attributes {
     
     public int get(AttributeType type){
         return this.attributesMap.get(type);
+    }
+    
+    public void addString(AttributeType type, String value){
+        this.attributesString.put(type, value);
     }
     
     public Map<AttributeType,Integer>  getMap(){return this.attributesMap;}

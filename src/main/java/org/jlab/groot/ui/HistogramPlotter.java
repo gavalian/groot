@@ -8,6 +8,8 @@ package org.jlab.groot.ui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
+import org.jlab.groot.base.AttributeType;
+import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
 
@@ -55,10 +57,11 @@ public class HistogramPlotter implements IDataSetPlotter  {
             
         double xps = frame.getAxis(0).getAxisPosition(dataX - errorX*0.5);
         double xpe = frame.getAxis(0).getAxisPosition(dataX + errorX*0.5);
-        double yp  = frame.getAxis(1).getDimension().getMax() - 
-                frame.getAxis(1).getAxisPosition(0.0)                 
-                + frame.getAxis(1).getDimension().getMin();
-            
+        //double yp  = frame.getAxis(1).getDimension().getMax() - 
+        //        frame.getAxis(1).getAxisPosition(0.0)                 
+        //        + frame.getAxis(1).getDimension().getMin();
+        double yp = frame.getPointY(0.0);
+        
         GeneralPath path = new GeneralPath();
         path.moveTo((int) xps, (int) yp);
         
@@ -70,24 +73,28 @@ public class HistogramPlotter implements IDataSetPlotter  {
             
             xps = frame.getAxis(0).getAxisPosition(dataX - errorX*0.5);
             xpe = frame.getAxis(0).getAxisPosition(dataX + errorX*0.5);
-            yp  = frame.getAxis(1).getDimension().getMax() - 
-                    frame.getAxis(1).getAxisPosition(dataY)                    
-                    + frame.getAxis(1).getDimension().getMin();                    
+            //yp  = frame.getAxis(1).getDimension().getMax() - 
+            //        frame.getAxis(1).getAxisPosition(dataY)                    
+            //        + frame.getAxis(1).getDimension().getMin();                    
+            yp = frame.getPointY(dataY);
             path.lineTo((int) xps, (int) yp);
             path.lineTo((int) xpe, (int) yp);
             
         }
         
-        yp  = frame.getAxis(1).getDimension().getMax() - 
-                frame.getAxis(1).getAxisPosition(0.0)                 
-                + frame.getAxis(1).getDimension().getMin();
+        //yp  = frame.getAxis(1).getDimension().getMax() - 
+        //        frame.getAxis(1).getAxisPosition(0.0)                 
+        //        + frame.getAxis(1).getDimension().getMin();
+        yp = frame.getPointY(0.0);
         path.lineTo((int) xpe, (int) yp);
-        
-        g2d.setColor(Color.blue);
-        g2d.fill(path);
-        
-        g2d.setColor(Color.red);
-
+        int fillColor = this.dataset.getAttributes().get(AttributeType.FILL_COLOR);
+        if(fillColor>=0){
+            g2d.setColor(TStyle.getColor(fillColor));
+            g2d.fill(path);
+        }
+        //g2d.fill(path);
+        int lineColor = this.dataset.getAttributes().get(AttributeType.LINE_COLOR);
+        g2d.setColor(TStyle.getColor(lineColor));
         g2d.draw(path);
     }
 

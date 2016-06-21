@@ -73,10 +73,23 @@ public class TCanvas extends JFrame {
         graph.addPoint(3.0, 12.0, 0.0, 0.0);
         graph.addPoint(4.0, 9.0, 0.0, 0.0);
         
-        H1F  h = FunctionFactory.randomGausian(80, 0.1, 0.8, 20000, 0.4, 0.1);
-        GraphErrors  gr = h.getGraph();
+        H1F  h1 = FunctionFactory.randomGausian(80, 0.1, 0.8, 8000, 0.6, 0.1);
+        H1F  h2 = FunctionFactory.randomGausian(80, 0.1, 0.8, 20000, 0.3, 0.05);
+        h1.setName("h100");
+        h2.setName("h200");
+        h2.setLineColor(1);
+        h2.setFillColor(44);
+        h1.setFillColor(33);
+        GraphErrors  gr = h1.getGraph();
+        c1.getCanvas().divide(5,4);
+        c1.getCanvas().initTimer(3000);
+        //c1.getCanvas().getPad(0).setAxisFontSize(14);
         //c1.getCanvas().getPad(0).addPlotter(new GraphErrorsPlotter(gr));
-        c1.getCanvas().getPad(0).addPlotter(new HistogramPlotter(h));
-        
+        for(int i = 0; i < c1.getCanvas().getNPads(); i++){
+            c1.getCanvas().getPad(i).setAxisFontSize(12);
+            c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h1));
+            c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h2));
+        }
+        c1.getCanvas().update();
     }
 }
