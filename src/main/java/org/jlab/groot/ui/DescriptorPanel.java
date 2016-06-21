@@ -39,21 +39,21 @@ public class DescriptorPanel extends JPanel {
 	JTextField minTextFieldY = new JTextField();
 	JTextField maxTextFieldY = new JTextField();
 
-	DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer,int nDim){
+	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer,int nDim){
 		this.nDim = nDim;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
 		init();
 	}
 	
-	DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer){
+	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer){
 		this.nDim = 1;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
 		init();
 	}
 	
-	DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, DatasetDescriptor descriptor){
+	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, DatasetDescriptor descriptor){
 		this.nDim = 1;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
