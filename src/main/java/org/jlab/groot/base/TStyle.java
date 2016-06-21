@@ -6,6 +6,8 @@
 
 package org.jlab.groot.base;
 
+import java.awt.Color;
+
 /**
  *
  * @author gavalian
@@ -13,7 +15,8 @@ package org.jlab.groot.base;
 public class TStyle {
     
     public static Attributes  grootStyle = TStyle.createAttributes();
-            
+
+    
     public static Attributes createAttributes(){
         Attributes attr = new Attributes();
         attr.add(AttributeType.LINE_COLOR, 0);
@@ -29,6 +32,10 @@ public class TStyle {
     
     public static Attributes getStyle(){
         return grootStyle;
+    }
+    
+    public static Color getColor(int index){
+        return ColorPalette.getColor(index);
     }
     
     

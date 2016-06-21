@@ -22,8 +22,8 @@ import org.jlab.groot.math.Dimension2D;
  */
 public class EmbeddedPad {
 
-    Dimension2D      padDimensions = new Dimension2D();
-    GraphicsAxisFrame    axisFrame = new GraphicsAxisFrame();
+    Dimension2D            padDimensions = new Dimension2D();
+    GraphicsAxisFrame          axisFrame = new GraphicsAxisFrame();
     Color                backgroundColor = Color.WHITE;
     Map<String,IDataSetPlotter>   padDataSets = new LinkedHashMap<String,IDataSetPlotter>();
     
@@ -38,7 +38,7 @@ public class EmbeddedPad {
     
     public EmbeddedPad setDimension(int x, int y, int width, int height){
         this.padDimensions.getDimension(0).setMinMax(x,x+width);
-        this.padDimensions.getDimension(1).setMinMax(y, y+height);        
+        this.padDimensions.getDimension(1).setMinMax(y, y+height);
         return this;
     }
     
@@ -47,8 +47,15 @@ public class EmbeddedPad {
         
         
         Dimension2D  dim = new Dimension2D();
-        
+        int counter = 0;
         for(Map.Entry<String,IDataSetPlotter>  entry : padDataSets.entrySet()){
+            if(counter==0){
+                dim.copy(entry.getValue().getDataRegion());
+            } else {
+                dim.combine(entry.getValue().getDataRegion());
+            }
+            counter++;
+            /*
             Dimension2D region = entry.getValue().getDataRegion();
             axisFrame.getAxis(0).setRange(
                     region.getDimension(0).getMin(),
@@ -59,17 +66,21 @@ public class EmbeddedPad {
                     region.getDimension(1).getMax()
                     );
             System.out.println(entry.getKey() + " : " + region);
-            System.out.println(axisFrame.getAxis(0));
+            System.out.println(axisFrame.getAxis(0));*/
             //entry.getValue().draw(g2d, axisFrame);
         }
         
         update(g2d);
-        g2d.setColor(Color.BLACK);                
+        g2d.setColor(Color.BLACK);
+        axisFrame.getAxis(0).setRange(dim.getDimension(0).getMin(), dim.getDimension(0).getMax());
+        axisFrame.getAxis(1).setRange(dim.getDimension(1).getMin(), dim.getDimension(1).getMax());        
+        axisFrame.getDimension().copy(padDimensions);
+        //axisFrame.update(g2d);
         axisFrame.draw(g2d, padDimensions);
-        
         for(Map.Entry<String,IDataSetPlotter>  entry : padDataSets.entrySet()){
             entry.getValue().draw(g2d, axisFrame);
         }
+
     }
     
     public void update(Graphics2D g2d){
@@ -80,4 +91,10 @@ public class EmbeddedPad {
     public void addPlotter(IDataSetPlotter ip){
         this.padDataSets.put(ip.getName(), ip);
     }
+    
+    public void setAxisFontSize(int size){
+        this.axisFrame.getAxis(0).getLabelFont().setFontSize(size);
+        this.axisFrame.getAxis(1).getLabelFont().setFontSize(size);
+    }
+    
 }

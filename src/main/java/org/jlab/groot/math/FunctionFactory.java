@@ -5,6 +5,8 @@
  */
 package org.jlab.groot.math;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.jlab.groot.data.H1F;
 
 /**
@@ -12,6 +14,17 @@ import org.jlab.groot.data.H1F;
  * @author gavalian
  */
 public class FunctionFactory {
+    
+    public static Map<String,Func1D>  funcionDesk = new LinkedHashMap<String,Func1D>();
+    
+    public static void registerFunction(Func1D func){
+        if(FunctionFactory.funcionDesk.containsKey(func.getName())==true){
+            System.out.println("[FunctionFactory] warning : ---> replacing function with name = "
+            + func.getName());
+        }
+        FunctionFactory.funcionDesk.put(func.getName(), func);
+    }
+    
     
     public static double  gauss(double x, double mean, double sigma){
         return Math.exp(-(x-mean)*(x-mean)/(2.0*sigma*sigma));

@@ -8,6 +8,7 @@ package org.jlab.groot.ui;
 import java.awt.font.TextAttribute;
 import java.text.AttributedString;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -17,10 +18,10 @@ import java.util.TreeMap;
  */
 public class LatexTextTools {
     
-    private static TreeMap<String,String>  greekTranslation = getTable();
+    private static Map<String,String>  greekTranslation = getTable();
             
-    public static TreeMap<String,String> getTable(){
-        TreeMap<String,String> table = new TreeMap<String,String>();
+    public static Map<String,String> getTable(){
+        Map<String,String> table = new LinkedHashMap<String,String>();
         table.put("#alpha", "\u03B1");
         table.put("#beta" , "\u03B2");
         table.put("#gamma", "\u03B3");
@@ -55,7 +56,10 @@ public class LatexTextTools {
     }
     
     public static String convertUnicode(String original){
+        
+        if(original.contains("#")==false&&original.contains("^")==false) return original;
         String newString = original;
+        
         for(Map.Entry<String,String> entry : LatexTextTools.greekTranslation.entrySet()){
             newString = newString.replaceAll(entry.getKey(), entry.getValue());
         }

@@ -132,11 +132,13 @@ public class H1F  implements IDataSet {
         this.hAttr.add(AttributeType.LINE_WIDTH,  1);
         this.hAttr.add(AttributeType.LINE_COLOR,  1);
         this.hAttr.add(AttributeType.LINE_STYLE,  1);
-        this.hAttr.add(AttributeType.FILL_COLOR,  4);
+        this.hAttr.add(AttributeType.FILL_COLOR, -1);
         this.hAttr.add(AttributeType.FILL_STYLE,  0);
         this.hAttr.add(AttributeType.MARKER_SIZE, 6);
         this.hAttr.add(AttributeType.MARKER_STYLE, 1);
         this.hAttr.add(AttributeType.MARKER_COLOR, 2);
+        this.hAttr.addString(AttributeType.STRING_TITLE_X, "");
+        this.hAttr.addString(AttributeType.STRING_TITLE_Y, "");
     }
     /**
      * Sets the x-axis title to the specified parameter
@@ -144,7 +146,7 @@ public class H1F  implements IDataSet {
      */
     public final void setXTitle(String xTitle) {
         //this.getXaxis().setTitle(xTitle);
-        
+        this.hAttr.addString(AttributeType.STRING_TITLE_X, xTitle);
     }
     
     /**
@@ -154,7 +156,7 @@ public class H1F  implements IDataSet {
      */
     public final void setYTitle(String yTitle) {
         //this.getYaxis().setTitle(yTitle);
-        
+        this.hAttr.addString(AttributeType.STRING_TITLE_Y, yTitle);
     }
     
     /**
@@ -192,7 +194,7 @@ public class H1F  implements IDataSet {
      */
     public final void setTitle(String title) {
         //histTitle = title;
-        
+        this.hAttr.addString(AttributeType.STRING_TITLE, title);
     }
     
     /**
@@ -715,7 +717,7 @@ public class H1F  implements IDataSet {
 
     @Override
     public Attributes getAttributes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.hAttr;
     }
 
     @Override
@@ -744,6 +746,23 @@ public class H1F  implements IDataSet {
         return 0.0;
     }
     
+    /**
+     * ROOT COMPATABILITY Functions
+     */
     
+    public void setFillColor(int color){
+        this.hAttr.add(AttributeType.FILL_COLOR, color);
+    }
   
+    public int getFillColor(){
+        return this.hAttr.get(AttributeType.FILL_COLOR);
+    }
+    
+    public void setLineColor(int color){
+        this.hAttr.add(AttributeType.LINE_COLOR, color);
+    }
+    
+    public int getLineColor(){
+        return this.hAttr.get(AttributeType.LINE_COLOR);
+    }
 }
