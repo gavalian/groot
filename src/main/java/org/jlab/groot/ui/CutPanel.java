@@ -112,7 +112,7 @@ public class CutPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				selector.addCut(new TreeCut(cutNameTextField.getText(),cutTextArea.getText(),branches));
-				cutNameTextField.
+				//cutNameTextField.
 			}
 		});
 		
