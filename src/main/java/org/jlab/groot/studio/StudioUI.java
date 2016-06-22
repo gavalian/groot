@@ -53,7 +53,10 @@ public class StudioUI implements MouseListener,ActionListener {
     EmbeddedCanvas drawCanvas = null;
     JFrame  frame = null;
     Tree    studioTree = null;
+    
     JTree   jtree = null;
+    JTree   jtreeAnalyzer = null;
+    
     JPanel  studioPane = null;
     JPanel  statusPane = null;
     JMenuBar menuBar = null;
@@ -94,7 +97,7 @@ public class StudioUI implements MouseListener,ActionListener {
         canvasPane.add(drawCanvas,BorderLayout.CENTER);
 
         
-        splitPane.setLeftComponent(navigationPane);
+        //splitPane.setLeftComponent(navigationPane);
         splitPane.setRightComponent(canvasPane);
 
         
@@ -104,6 +107,18 @@ public class StudioUI implements MouseListener,ActionListener {
         jtree = new JTree(top);
         jtree.addMouseListener(this);
         JScrollPane treeView = new JScrollPane(jtree);
+        
+        DefaultMutableTreeNode topa =
+                analyzer.getTree();
+        jtreeAnalyzer = new JTree(topa);
+        JScrollPane treeViewAnalyzer = new JScrollPane(jtreeAnalyzer);
+        treeViewAnalyzer.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        JSplitPane splitPaneNavigation = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        splitPaneNavigation.setTopComponent(jtree);
+        splitPaneNavigation.setBottomComponent(jtreeAnalyzer);
+        splitPane.setLeftComponent(splitPaneNavigation);
+//JSplitPane treeSplit = 
+                
         navigationPane.setBorder(new EmptyBorder(5,5,5,5));
         navigationPane.setLayout(new BorderLayout());
         navigationPane.add(treeView,BorderLayout.CENTER);
@@ -183,6 +198,8 @@ public class StudioUI implements MouseListener,ActionListener {
     public void updateTree(){
         DefaultTreeModel model = new DefaultTreeModel(studioTree.getTree());
         this.jtree.setModel(model);
+        DefaultTreeModel modelAnalyzer = new DefaultTreeModel(this.analyzer.getTree());
+        this.jtreeAnalyzer.setModel(modelAnalyzer);
     }
     
     public static void main(String[] args){
@@ -227,13 +244,13 @@ public class StudioUI implements MouseListener,ActionListener {
 
     public void addDescriptor(){
         DescriptorPanel  panel = null;
-<<<<<<< HEAD
+
         panel = new DescriptorPanel(studioTree,analyzer,2);
         JFrame frame = new JFrame("Edit Histogram");
-=======
+
         panel = new DescriptorPanel(studioTree,analyzer);
-        JFrame frame = new JFrame();
->>>>>>> gavalian/master
+        
+
         frame.add(panel);
         frame.pack();
         frame.setLocationRelativeTo(this.frame);

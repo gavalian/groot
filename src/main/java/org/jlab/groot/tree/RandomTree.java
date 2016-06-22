@@ -33,7 +33,7 @@ public class RandomTree extends Tree {
     }
     
     public boolean readNext(){
-        if(nrowsRead>=100) return false;
+        if(nrowsRead>=800) return false;
         Double q2 = 1.0 + Math.random()*5;
         Double w2 = 0.5 + Math.random()*8;
         Double epx = Math.random();

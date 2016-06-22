@@ -7,7 +7,7 @@ import org.jlab.groot.data.IDataSet;
 
 public class DatasetDescriptor {
     
-    String name = "somename";
+    String descName = "somename";
     IDataSet       descDataset = null;
     List<String>   descCutList = new ArrayList<String>();
     private int nDim;
@@ -18,6 +18,7 @@ public class DatasetDescriptor {
     private double yMin;
     private double yMax;
     public DatasetDescriptor(String name, int nbins, double min, double max){
+        this.descName = name; 
     	this.nDim = 1;
     	this.nBinsX = nbins;
     	this.xMin = min;
@@ -56,8 +57,8 @@ public class DatasetDescriptor {
         return this.descDataset;
     }
 
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public String getName() {
+        // TODO Auto-generated method stub
+        return descName;
+    }
 }
