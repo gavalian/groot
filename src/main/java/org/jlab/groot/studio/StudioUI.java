@@ -112,7 +112,7 @@ public class StudioUI implements MouseListener,ActionListener {
                 analyzer.getTree();
         jtreeAnalyzer = new JTree(topa);
         JScrollPane treeViewAnalyzer = new JScrollPane(jtreeAnalyzer);
-        
+        treeViewAnalyzer.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         JSplitPane splitPaneNavigation = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         splitPaneNavigation.setTopComponent(jtree);
         splitPaneNavigation.setBottomComponent(jtreeAnalyzer);
