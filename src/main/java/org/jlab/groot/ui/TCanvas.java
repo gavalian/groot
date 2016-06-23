@@ -100,6 +100,8 @@ public class TCanvas extends JFrame {
         DataFitter.fit(func2, h1, "E");
         
         F1D func3 = new F1D("func3","[p0]+[p1]*x+[amp]*gaus(x,[mean],[sigma])+[amp2]*gaus(x,[mean2],[sigma2])",0.1,0.8);
+        
+        
         func3.setParameters(new double[]{1.0,1.0,120,0.4,0.05,120.0,0.6,0.05});
         func3.setLineWidth(3);
 
