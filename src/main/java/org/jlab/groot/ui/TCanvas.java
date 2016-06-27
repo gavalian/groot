@@ -79,7 +79,7 @@ public class TCanvas extends JFrame {
         H1F  h1 = FunctionFactory.randomGausian(25, 0.1, 5.0, 8000, 2.2, 0.4);
         H1F  h2 = FunctionFactory.randomGausian(25, 0.1, 5.0, 20000, 3.3, 0.2);
         
-        H2F  h3 = FunctionFactory.randomGausian2D(300, 0.1, 5.0, 2000000, 2.4, 0.55);
+        H2F  h3 = FunctionFactory.randomGausian2D(120, 0.1, 5.0, 2000000, 2.4, 0.55);
         
         h1.setName("h100");
         h2.setName("h200");
@@ -88,7 +88,7 @@ public class TCanvas extends JFrame {
         h1.setFillColor(33);
         GraphErrors  gr = h1.getGraph();
         c1.getCanvas().divide(2,2);
-        c1.getCanvas().initTimer(2000);
+        c1.getCanvas().initTimer(600);
         //h1.add(h2);
         //c1.getCanvas().getPad(0).setAxisFontSize(14);
         //c1.getCanvas().getPad(0).addPlotter(new GraphErrorsPlotter(gr));
@@ -128,17 +128,24 @@ public class TCanvas extends JFrame {
             c1.getCanvas().draw(h3,"colz");
         }*/
         
-        c1.getCanvas().divide(1,1);
+        c1.getCanvas().divide(2,2);
 
-        for(int i = 0; i < 1; i++){
-            c1.getCanvas().getPad(i).setLogZ(true);
-            
+        for(int i = 0; i < 2; i++){
+            if(i==0) c1.getCanvas().getPad(i).setLogZ(true);
             c1.getCanvas().cd(i);
             c1.getCanvas().draw(h3);
             //c1.getCanvas().draw(h2);
             //c1.getCanvas().draw(h1,"same");
             c1.getCanvas().update();
         }
+        
+        for(int i = 2; i < 4; i++){
+            c1.getCanvas().cd(i);
+            if(i==2) c1.getCanvas().getPad(i).setLogY(true);
+            c1.getCanvas().draw(h2);
+            c1.getCanvas().update();
+        }
+        
         //c1.getCanvas().getPad(0).show();
         //c1.getCanvas().getPad(1).show();
     }
