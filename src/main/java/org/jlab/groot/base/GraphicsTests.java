@@ -13,6 +13,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.jlab.groot.graphics.GraphAxis;
 
 
 /**
@@ -22,10 +23,13 @@ import javax.swing.JPanel;
 public class GraphicsTests extends JPanel {
     
     ColorPalette palette = new ColorPalette();
+    GraphAxis    xaxis   = new GraphAxis();
+    GraphAxis    yaxis   = new GraphAxis();
     
     public GraphicsTests(){
-        super();     
+        super();
         this.setPreferredSize(new Dimension(500,500));
+        
     }
     
     @Override
@@ -41,7 +45,24 @@ public class GraphicsTests extends JPanel {
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, w, h);
         int axisWidth = palette.getAxisWidth(g2d,20,20,15,h-30,0.0,400.0,true);
-        palette.draw(g2d, w-axisWidth,20,20,h-40,0.0,400.0,true);
+        //palette.draw(g2d, w-axisWidth,20,20,h-40,0.0,400.0,true);
+
+        int offsetX = yaxis.getAxisBounds(g2d);
+        int offsetY = yaxis.getAxisBounds(g2d);
+        
+        xaxis.setTitle("X-axis");
+
+        xaxis.setDimension(offsetY, w-40);
+
+        xaxis.setRange(0.0, 1.0);
+        
+        yaxis.setVertical(true);
+
+        xaxis.setRange(0.0, 1.0);
+        yaxis.setDimension(h-offsetX, 40);        
+
+        xaxis.drawAxis(g2d, offsetY,h-offsetX);
+        yaxis.drawAxis(g2d, offsetY,h-offsetX);
     }
     
     
