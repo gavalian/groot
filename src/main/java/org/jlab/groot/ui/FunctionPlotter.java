@@ -13,6 +13,7 @@ import org.jlab.groot.base.AttributeType;
 import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
+import org.jlab.groot.math.Dimension3D;
 
 /**
  *
@@ -20,7 +21,7 @@ import org.jlab.groot.math.Dimension2D;
  */
 public class FunctionPlotter implements IDataSetPlotter {
 
-    private Dimension2D dataRegion  = new Dimension2D();
+    private Dimension3D dataRegion  = new Dimension3D();
     private String      drawOptions = "";
     private IDataSet    functionData = null;
     
@@ -69,13 +70,13 @@ public class FunctionPlotter implements IDataSetPlotter {
     }
 
     @Override
-    public Dimension2D getDataRegion() {
+    public Dimension3D getDataRegion() {
         double xp = this.functionData.getDataX(0);
         double yp = this.functionData.getDataY(0);
-        this.dataRegion.set(xp,xp,yp,yp);
+        this.dataRegion.set(xp,xp,yp,yp,0.0,1.0);
         int npoints = functionData.getDataSize(0);
         for(int i = 0; i < npoints; i++){
-            this.dataRegion.grow(functionData.getDataX(i), functionData.getDataY(i));
+            this.dataRegion.grow(functionData.getDataX(i), functionData.getDataY(i),0.5);
         }
         return dataRegion;
     }

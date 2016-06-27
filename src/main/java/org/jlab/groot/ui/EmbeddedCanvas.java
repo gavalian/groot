@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Func1D;
@@ -37,7 +38,7 @@ public class EmbeddedCanvas extends JPanel {
     private int  numberOfRows    = 1;
     private int  numberOfColumns = 1;
     private List<EmbeddedPad>    canvasPads  = new ArrayList<EmbeddedPad>();
-    private int                  selectedPad = 2;
+    private int                  selectedPad = -1;
     private int                  activePad   = 0;
     
     public EmbeddedCanvas(int xsize, int ysize){
@@ -91,9 +92,14 @@ public class EmbeddedCanvas extends JPanel {
             canvasPads.get(activePad).addPlotter(new HistogramPlotter(ds));
         }
         
+        if(ds instanceof H2F){
+            canvasPads.get(activePad).addPlotter(new Histogram2DPlotter(ds));
+        }
+        
         if(ds instanceof GraphErrors){
             canvasPads.get(activePad).addPlotter(new GraphErrorsPlotter(ds));
         }
+        
         if(ds instanceof Func1D){
             canvasPads.get(activePad).addPlotter(new FunctionPlotter(ds));
         }
@@ -182,6 +188,10 @@ public class EmbeddedCanvas extends JPanel {
             @Override
             public void run() {
                 update();
+                /*for(int i = 0; i < canvasPads.size();i++){
+                    System.out.println("PAD = " + i);
+                    canvasPads.get(i).show();
+                }*/
             }
         };
         updateTimer = new Timer("EmbeddeCanvasTimer");

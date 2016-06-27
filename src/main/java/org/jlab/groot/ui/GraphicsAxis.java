@@ -57,6 +57,7 @@ public class GraphicsAxis {
     public void setLog(boolean logflag){
         this.isLogarithmic = logflag;
         this.axisRange.setLog(logflag);
+        this.setRange(axisRange.getMin(), axisRange.getMax());
     }
     /**
      * returns the logarithmic properties of the axis
@@ -73,14 +74,13 @@ public class GraphicsAxis {
      */
     public final GraphicsAxis setRange(double min, double max){
         this.axisRange.setMinMax(min, max);
-    
-        List<Double> ticks = axisRange.getDimensionTicks(this.numberOfMajorTicks);
-        /*
-        System.out.println("--->  list size = " + ticks.size());
-        for(Double t : ticks){
-            System.out.println(" *  " + t);
-        }*/
-        axisLabels.update(ticks);
+        if(this.isLogarithmic==true){
+            List<Double> ticks = axisRange.getDimensionTicksLog(this.numberOfMajorTicks);
+            axisLabels.updateLog(ticks);
+        } else {
+            List<Double> ticks = axisRange.getDimensionTicks(this.numberOfMajorTicks);
+            axisLabels.update(ticks);
+        }
         return this;
     }
 
@@ -138,18 +138,40 @@ public class GraphicsAxis {
         //System.out.println(" font size = " + this.axisLabelFont.getFontSize());
         this.numberOfMajorTicks = ndiv;
         if(this.isLogarithmic==true){
-            
+            List<Double> ticks = axisRange.getDimensionTicksLog(this.numberOfMajorTicks);
+            axisLabels.updateLog(ticks);
+        } else {
+            List<Double> ticks = axisRange.getDimensionTicks(this.numberOfMajorTicks);
+            this.axisLabels.update(ticks);
         }
-        
-        List<Double> ticks = axisRange.getDimensionTicks(this.numberOfMajorTicks);
-        this.axisLabels.update(ticks);
     }
     
     public List<Double>  getAxisTicks(){
         return this.axisLabels.getTicks();
     }
     
-    public List<Double> getAxisMinorTicks(){
+    public List<Double>  getAxisMinorTicks(){
+        if(this.isLogarithmic==false){
+            return this.getAxisMinorTicksLinear();
+        } else {
+            return this.getAxisMinorTicksLog();
+        }
+    }
+    
+    private List<Double> getAxisMinorTicksLog(){
+        List<Double>  minorTicks = new ArrayList<Double>();
+        List<Double>  majorTicks = axisLabels.getTicks();
+        
+        for(int i = 0; i < majorTicks.size()-1; i++){
+            for(int k = 2; k < 10; k++){
+                double tick =  (majorTicks.get(i)*k);
+                minorTicks.add(tick);
+            }
+        }
+        return minorTicks;
+    }
+    
+    private List<Double> getAxisMinorTicksLinear(){
         
         int nticks = this.axisLabels.getTicks().size();
         List<Double>  minorTicks = new ArrayList<Double>();
@@ -205,7 +227,9 @@ public class GraphicsAxis {
     public String toString(){
         StringBuilder str = new StringBuilder();
         str.append("Axis : ");
-        str.append(String.format("(%4d x %4d ) : ->  ", (int) axisDimension.getMin(), 
+        str.append(" LOG = ");
+        str.append(this.isLogarithmic);
+        str.append(String.format("  (%4d x %4d ) : ->  ", (int) axisDimension.getMin(), 
                 (int) axisDimension.getMax()));
         str.append(axisLabels.toString());
         return str.toString();
@@ -217,8 +241,11 @@ public class GraphicsAxis {
     public static void main(String[] args){
         GraphicsAxis  axis = new GraphicsAxis();
         axis.setDimension(20, 100);
-        axis.setRange(0.45, 0.87);
-        axis.show();
-        
+        axis.setRange(0.0, 120.0);
+        axis.setLog(true);        
+        axis.show();      
+        for(double d = 0; d < 120; d+=0.5){
+            System.out.println( d + " fraction = " + axis.getAxisPosition(d));
+        }
     }
 }
