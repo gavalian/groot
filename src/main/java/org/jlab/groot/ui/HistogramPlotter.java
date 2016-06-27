@@ -14,16 +14,19 @@ import org.jlab.groot.base.AttributeType;
 import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
+import org.jlab.groot.math.Dimension3D;
 
 /**
  *
  * @author gavalian
  */
 public class HistogramPlotter implements IDataSetPlotter  {
+    
     String       plottingOptions = "";
     IDataSet     dataset = null;
-    Dimension2D  dataRegion  = new Dimension2D();
+    Dimension3D  dataRegion  = new Dimension3D();
     String       datasetName = "";
+    
     public HistogramPlotter(IDataSet ds){
         dataset = ds;
         datasetName = ds.getName();
@@ -51,6 +54,7 @@ public class HistogramPlotter implements IDataSetPlotter  {
 
     @Override
     public void draw(Graphics2D g2d, GraphicsAxisFrame frame) {
+        
         int npoints = dataset.getDataSize(0);
 
         double dataX  = dataset.getDataX(0);
@@ -79,8 +83,10 @@ public class HistogramPlotter implements IDataSetPlotter  {
             xpe = frame.getAxis(0).getAxisPosition(dataX + errorX*0.5);
             //yp  = frame.getAxis(1).getDimension().getMax() - 
             //        frame.getAxis(1).getAxisPosition(dataY)                    
-            //        + frame.getAxis(1).getDimension().getMin();                    
+            //        + frame.getAxis(1).getDimension().getMin(); 
+            if(dataY<0.1) dataY = 0.0;
             yp = frame.getPointY(dataY);
+            //System.out.println("histogram = " + p + " " + dataY + " " + yp);
             path.lineTo((int) xps, (int) yp);
             path.lineTo((int) xpe, (int) yp);
             
@@ -103,17 +109,17 @@ public class HistogramPlotter implements IDataSetPlotter  {
     }
 
     @Override
-    public Dimension2D getDataRegion() {
+    public Dimension3D getDataRegion() {
         
         this.dataRegion.set(
                 dataset.getDataX(0), dataset.getDataX(0), 
-                0.0, 0.0
+                0.0, 0.0,0.0,1.0
                 );
         int dataSize = dataset.getDataSize(0);
         for(int p = 0; p < dataSize; p++){
             double x1 = dataset.getDataX(p)-dataset.getDataEX(p)*0.5;
             double x2 = dataset.getDataX(p)+dataset.getDataEX(p)*0.5;
-            this.dataRegion.grow(dataset.getDataX(p), dataset.getDataY(p));
+            this.dataRegion.grow(dataset.getDataX(p), dataset.getDataY(p),0.5);
             this.dataRegion.getDimension(0).grow(x1);
             this.dataRegion.getDimension(0).grow(x2);
         }

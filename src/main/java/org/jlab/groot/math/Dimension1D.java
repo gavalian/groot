@@ -14,7 +14,8 @@ import java.util.List;
  */
 public class Dimension1D {
 
-    double dimMin  = 0.0;
+    private final double SMALL_NUMBER = 10e-25;
+    double dimMin  = 0.0;    
     double dimMax  = 1.0;
     
     boolean isLog = false;    
@@ -55,8 +56,17 @@ public class Dimension1D {
     public double getFraction(double point){
         if(this.isLog==false)
             return (point-this.dimMin)/(this.dimMax-this.dimMin);
+        
         double min = this.dimMin;
-        double distance = Math.log10(point) - Math.log10(min);
+        double datapoint = point;
+        if(datapoint<SMALL_NUMBER){
+            datapoint = 0.1;
+        }
+        
+        if(min<SMALL_NUMBER){
+            min = 0.1;
+        }
+        double distance = Math.log10(datapoint) - Math.log10(min);
         //System.out.println("distance = " + distance + " " + point);
         double frac = distance/this.length();
         return frac;
@@ -78,6 +88,9 @@ public class Dimension1D {
     public double length(){
         if(isLog==false) return (dimMax-dimMin);        
         double min = dimMin;
+        if(min<SMALL_NUMBER){
+            min = 0.1;
+        }
         return Math.log10(dimMax) - Math.log10(min);
     }
     
@@ -113,6 +126,48 @@ public class Dimension1D {
             numberX += tickSpacing;
         }
         return axisTicks;
+    }
+    
+    private List<Double>  createTicks(int maxTicks, double min, double max){
+        List<Double>  axisTicks = new ArrayList<Double>();
+        
+        double range = niceNum(max - min, false);
+        double tickSpacing = niceNum(range / (maxTicks - 1), true);
+        double niceMin =
+                Math.floor(min / tickSpacing) * tickSpacing;
+        double niceMax =
+                Math.ceil(max / tickSpacing) * tickSpacing;
+        
+        double numberX = niceMin;
+        while(numberX<=max){
+            if(numberX>=min&&numberX<=max){
+                axisTicks.add(numberX);
+            }
+            numberX += tickSpacing;
+        }
+        return axisTicks;
+    }
+    
+    public List<Double>  getDimensionTicksLog(int maxTicks){
+        List<Double> ticks = new ArrayList<Double>();
+        double axisMinimum = this.dimMin;
+        
+        if(axisMinimum<SMALL_NUMBER){
+            axisMinimum = 0.1;
+        }
+        
+        double orderMax = Math.log10(this.dimMax);
+        double orderMin = Math.log10(axisMinimum);
+        //System.out.println("order = " + orderMin);
+        //System.out.println("order = " + orderMax);
+        List<Double>  orderTicks = this.createTicks(maxTicks, orderMin, orderMax);
+        int count = 0;
+        for(Double value : orderTicks){
+            int power = (int) value.intValue();
+            //System.out.println(count + " : " + Math.pow(10, power));
+            ticks.add(Math.pow(10,power));
+        }
+        return ticks;
     }
     
     public boolean  contains(double x){
@@ -158,21 +213,6 @@ public class Dimension1D {
         return niceFraction * Math.pow(10, exponent);
     }
     
-    public static void main(String[] args){
-        
-        Dimension1D  x = new Dimension1D(1.0,10.0);
-        x.setLog(true);
-        for(double value = 1.0; value < 10.0 ; value += 1.0){
-            System.out.println(value + " --> " + x.getFraction(value) + "  length = " + x.length());
-        }
-                
-        List<Double>  ticks = x.getDimensionTicks(8);
-        for(Double v : ticks){
-            System.out.println(v);
-        }
-    }
-    
-    
     public void addPadding(double fraction){
         double value = fraction*getLength();
         setMinMax(this.dimMin-value,this.dimMax+value);
@@ -187,5 +227,23 @@ public class Dimension1D {
     @Override
     public String toString(){
         return String.format("Dimension1D :  %8.4f  %8.4f", this.dimMin,this.dimMax);
+    }
+    
+    public static void main(String[] args){
+        
+        Dimension1D  x = new Dimension1D(0.1,100.0);
+        x.setLog(true);
+        
+        for(double value = 1.0; value < 10.0 ; value += 1.0){
+            System.out.println(value + " --> " + x.getFraction(value) + "  length = " + x.length());
+        }
+                
+        List<Double>  ticks = x.getDimensionTicks(8);
+        
+        for(Double v : ticks){
+            System.out.println(v);
+        }
+        
+        List<Double>  ticksLog = x.getDimensionTicksLog(8);
     }
 }

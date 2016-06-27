@@ -87,6 +87,25 @@ public class GraphicsAxisLabels {
                     significantFigures));
         }
     }
+    
+    public void updateLog(List<Double> numbers){
+        this.axisLabels.clear();
+        this.axisTicks.clear();
+        //System.out.println(" Axis LAbels Size = " + numbers.size());
+        for(int loop = 0; loop < numbers.size(); loop++){
+            this.axisTicks.add(numbers.get(loop));
+        }
+        
+        for(int loop = 0; loop < axisTicks.size(); loop++){
+            int order = (int) Math.log10(this.axisTicks.get(loop));
+            if(order==0){
+                axisLabels.add(new LatexText("10"));
+            } else {
+                axisLabels.add(new LatexText(
+                        String.format("10^%d", order)));
+            }
+        }
+    }
     /**
      * updates the array with given ticks and constructs a 
      * LatexText array with strings for axis labels;

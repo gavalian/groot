@@ -6,9 +6,14 @@
 
 package org.jlab.groot.base;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
+import org.jlab.groot.ui.GraphicsAxis;
+import org.jlab.groot.ui.LatexText;
 
 /**
  *
@@ -34,6 +39,10 @@ public class ColorPalette {
     private final ArrayList<Color>  palette = new ArrayList<Color>();
     private static TreeMap<Integer,Color>  colorPalette = ColorPalette.initColorMap();
 
+    private int    axisTickSize = 4;
+    private int    axisStringOffset = 8;
+    
+    
     public ColorPalette(){
         this.set(3);
     }
@@ -176,5 +185,57 @@ public class ColorPalette {
     
     private static Color getTranslucent(Color col, int alpha){
         return new Color(col.getRed(),col.getGreen(),col.getBlue(),alpha);
+    }
+    
+    public int  getAxisWidth(Graphics2D g2d, int x, int y, int width, int height, 
+            double axismin, double axismax, Boolean logFlag){
+        
+        GraphicsAxis zAxis = new GraphicsAxis();
+        zAxis.setLog(logFlag);
+        zAxis.setDimension(y,y+height);
+        zAxis.setRange(axismin, axismax);
+        
+        int axisLength = zAxis.getSize(g2d, true);
+        return width + this.axisStringOffset + axisLength + this.axisTickSize;
+    }
+    
+    public void draw(Graphics2D g2d, int x, int y, int width, int height, 
+            double axismin, double axismax, Boolean logFlag) {
+        //System.out.println("plotting color paletter");
+        
+        GraphicsAxis zAxis = new GraphicsAxis();
+        zAxis.setLog(logFlag);
+        zAxis.setDimension(y,y+height);
+        zAxis.setRange(axismin, axismax);
+        
+        int ncolors = getColor3DSize();
+        for(int i = 0; i < ncolors; i++){
+            g2d.setColor(getColor3D(i));
+            int yp = (int) (( (double) i*height)/ncolors);
+            int offset = (int) (( (double) (i+1)*height)/ncolors);
+            int length = offset-yp;
+            //System.out.println("drawing ");
+            g2d.fillRect(x, y+height-yp - length, width, offset-yp+1);
+        }
+        
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(x, y, width, height);
+        
+        List<Double> axisTicks = zAxis.getAxisTicks();
+        List<LatexText> axisTexts = zAxis.getAxisLabels();
+        
+        for(int i = 0; i < axisTicks.size(); i++){
+            int xc = x + width;
+            int yc = (int) (zAxis.getDimension().getMin() + zAxis.getDimension().getMax()
+                    -  zAxis.getAxisPosition(axisTicks.get(i)));
+            g2d.drawLine(xc, yc, xc+4, yc);
+            //System.out.println("drawing ticks " + xc + "  " + yc);
+            axisTexts.get(i).drawString(g2d, xc+8, yc, 0, 1);
+        }
+        /*
+        
+        g2d.setStroke(new BasicStroke(1));
+
+                */
     }
 }

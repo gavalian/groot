@@ -19,6 +19,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.SoftBevelBorder;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.H2F;
 import org.jlab.groot.fitter.DataFitter;
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.FunctionFactory;
@@ -75,8 +76,11 @@ public class TCanvas extends JFrame {
         graph.addPoint(3.0, 12.0, 0.0, 0.0);
         graph.addPoint(4.0, 9.0, 0.0, 0.0);
         
-        H1F  h1 = FunctionFactory.randomGausian(80, 0.1, 0.8, 8000, 0.6, 0.1);
-        H1F  h2 = FunctionFactory.randomGausian(80, 0.1, 0.8, 20000, 0.3, 0.05);
+        H1F  h1 = FunctionFactory.randomGausian(25, 0.1, 5.0, 8000, 2.2, 0.4);
+        H1F  h2 = FunctionFactory.randomGausian(25, 0.1, 5.0, 20000, 3.3, 0.2);
+        
+        H2F  h3 = FunctionFactory.randomGausian2D(300, 0.1, 5.0, 2000000, 2.4, 0.55);
+        
         h1.setName("h100");
         h2.setName("h200");
         h2.setLineColor(1);
@@ -84,8 +88,8 @@ public class TCanvas extends JFrame {
         h1.setFillColor(33);
         GraphErrors  gr = h1.getGraph();
         c1.getCanvas().divide(2,2);
-        c1.getCanvas().initTimer(3000);
-        h1.add(h2);
+        c1.getCanvas().initTimer(2000);
+        //h1.add(h2);
         //c1.getCanvas().getPad(0).setAxisFontSize(14);
         //c1.getCanvas().getPad(0).addPlotter(new GraphErrorsPlotter(gr));
         
@@ -107,15 +111,35 @@ public class TCanvas extends JFrame {
 
         DataFitter.fit(func3, h1, "E");
         h1.setLineColor(4);
-        for(int i = 0; i < c1.getCanvas().getNPads(); i++){
+        for(int i = 0; i < c1.getCanvas().getNPads()-1; i++){
             c1.getCanvas().getPad(i).setAxisFontSize(12);
             c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h1));
             c1.getCanvas().getPad(i).addPlotter(new FunctionPlotter(func3));
             //c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h2));
         }
-        //c1.getCanvas().getPad(0).addPlotter(new FunctionPlotter(func));
-        //c1.getCanvas().getPad(0).addPlotter(new FunctionPlotter(func2));
         
-        c1.getCanvas().update();
+        c1.getCanvas().cd(3);
+        c1.getCanvas().draw(h3);
+        
+        /*
+        c1.getCanvas().divide(2, 2);
+        for(int i = 0; i < 4; i++){
+            c1.getCanvas().cd(i);
+            c1.getCanvas().draw(h3,"colz");
+        }*/
+        
+        c1.getCanvas().divide(1,1);
+
+        for(int i = 0; i < 1; i++){
+            c1.getCanvas().getPad(i).setLogZ(true);
+            
+            c1.getCanvas().cd(i);
+            c1.getCanvas().draw(h3);
+            //c1.getCanvas().draw(h2);
+            //c1.getCanvas().draw(h1,"same");
+            c1.getCanvas().update();
+        }
+        //c1.getCanvas().getPad(0).show();
+        //c1.getCanvas().getPad(1).show();
     }
 }

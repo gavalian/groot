@@ -8,6 +8,7 @@ package org.jlab.groot.math;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.H2F;
 
 /**
  *
@@ -56,6 +57,20 @@ public class FunctionFactory {
             double x = FunctionFactory.getRandMinMax(min, max);
             double w = FunctionFactory.gauss(x, mean, sigma);
             h.fill(x, w);
+        }
+        return h;
+    } 
+    
+    public static H2F  randomGausian2D(int bins, double min, double max, 
+            int stat, double mean, double sigma){
+        H2F h = new H2F("RandomGaus",bins,min,max, bins, min,max);
+        
+        for(int i = 0; i < stat; i++){
+            double x = FunctionFactory.getRandMinMax(min, max);
+            double y = FunctionFactory.getRandMinMax(min, max);
+            double xw = FunctionFactory.gauss(x, mean, sigma);
+            double yw = FunctionFactory.gauss(y, mean, sigma);
+            h.fill(x,y, xw+yw);
         }
         return h;
     } 

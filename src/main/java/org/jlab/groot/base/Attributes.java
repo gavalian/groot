@@ -33,6 +33,10 @@ public class Attributes {
         return this.attributesMap.get(type);
     }
     
+    public String getString(AttributeType type){
+        return this.attributesString.get(type);
+    }
+    
     public void addString(AttributeType type, String value){
         this.attributesString.put(type, value);
     }

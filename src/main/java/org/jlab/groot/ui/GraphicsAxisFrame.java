@@ -7,6 +7,7 @@
 package org.jlab.groot.ui;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jlab.groot.base.AttributeType;
 import org.jlab.groot.base.Attributes;
+import org.jlab.groot.base.ColorPalette;
 import org.jlab.groot.base.FontProperties;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.base.TStyle;
@@ -30,6 +32,7 @@ public class GraphicsAxisFrame {
     LatexText            graphicsFrameTitle = new LatexText("");
     Dimension2D          frameDimensions    = new Dimension2D();
     PadMargins           axisFrameMargins   = new PadMargins();
+    ColorPalette         zAxisPalette       = new ColorPalette();
     private Attributes   frameAttributes    = new Attributes();
     
     public GraphicsAxisFrame(){
@@ -52,6 +55,11 @@ public class GraphicsAxisFrame {
         }
     }
     
+    
+    public  Attributes getAttributes(){
+        return this.frameAttributes;
+    }
+    
     private void initAttributes(){
         
         frameAttributes.addString(AttributeType.STRING_TITLE, "");
@@ -72,6 +80,10 @@ public class GraphicsAxisFrame {
         
         frameAttributes.add(AttributeType.AXIS_GRID_X, 1);
         frameAttributes.add(AttributeType.AXIS_GRID_Y, 1);
+        
+        frameAttributes.add(AttributeType.AXIS_DRAW_X, 1);
+        frameAttributes.add(AttributeType.AXIS_DRAW_Y, 1);
+        frameAttributes.add(AttributeType.AXIS_DRAW_Z, 0);
         
         frameAttributes.copyValues(TStyle.getStyle());
     }
@@ -147,6 +159,8 @@ public class GraphicsAxisFrame {
         //System.out.println(" FRAME SET " + this.frameDimensions);
         int tickSize = frameAttributes.get(AttributeType.AXIS_TICKS_SIZE);
         int axisLabelOffset = frameAttributes.get(AttributeType.AXIS_LABEL_OFFSET);
+        int axisColor       = frameAttributes.get(AttributeType.AXIS_LINE_COLOR);
+        g2d.setColor(this.zAxisPalette.getColor3D(axisColor));
         g2d.setStroke(new BasicStroke(frameAttributes.get(AttributeType.AXIS_LINE_WIDTH)));
         /**
          * Drawing X axis Line and Ticks and Labels
@@ -170,7 +184,11 @@ public class GraphicsAxisFrame {
         List<LatexText> xTexts = graphicsAxis.get(0).getAxisLabels();
         
         for(int ix = 0; ix < xTicks.size(); ix++){
+            
             int xtick = (int) graphicsAxis.get(0).getAxisPosition(xTicks.get(ix));
+            /*System.out.println("drawing xtick  " + xTicks.get(ix)
+            + "  X = " + xtick + "  Y = " + xticks_y);
+            */
             g2d.drawLine(xtick,xticks_y,xtick,xticks_y-tickSize);
             
             xTexts.get(ix).drawString(g2d, xtick, xticks_y + axisLabelOffset, 1,0);
@@ -201,6 +219,8 @@ public class GraphicsAxisFrame {
         List<LatexText> yTexts = graphicsAxis.get(1).getAxisLabels();
         for(int iy = 0; iy < yTicks.size(); iy++){
             int ytick = (int) getPointY(yTicks.get(iy));
+            //System.out.println(" Draing axis Y "
+            //+ " tick = " + yTicks.get(iy) +  "  position = " + ytick);
             /*(int) (
                     frame.getDimension(1).getLength()-
                     graphicsAxis.get(1).getAxisPosition(yTicks.get(iy))
@@ -226,6 +246,17 @@ public class GraphicsAxisFrame {
         /**
          * if needed the Z-axis will be drawn
          */
+        
+        //System.out.println("Drawing Z axis " + this.getAxis(2).getLog());
+        if(this.frameAttributes.get(AttributeType.AXIS_DRAW_Z)>0){
+            int x = (int) this.graphicsAxis.get(0).getDimension().getMax();
+            int y = (int) ( this.frameDimensions.getDimension(1).getMin()
+                    + this.axisFrameMargins.getTopMargin());
+            int height = (int) this.graphicsAxis.get(1).getDimension().getLength();
+            zAxisPalette.draw(g2d, x+4, y, 15, 
+                    height,
+                    0.0,400.0, this.getAxis(2).getLog());
+        }
     }
     
     public void update(Graphics2D g2d){
@@ -258,7 +289,7 @@ public class GraphicsAxisFrame {
         double fractionY   = graphicsAxis.get(1).getLabelFraction(g2d, true);
         int    ndivisionsY = 10;
         
-        while(fractionY>0.6&&ndivisionsY>2){
+        while(fractionY>0.8&&ndivisionsY>2){
             ndivisionsY = ndivisionsY - 1;
             graphicsAxis.get(1).setAxisDivisions(ndivisionsY);
             fractionY = graphicsAxis.get(1).getLabelFraction(g2d, true);
@@ -270,6 +301,15 @@ public class GraphicsAxisFrame {
         this.axisFrameMargins.setBottomMargin(xStringHeight+5);
         this.axisFrameMargins.setTopMargin(10); 
         
+        
+        if(this.frameAttributes.get(AttributeType.AXIS_DRAW_Z)>0){
+            int zAxisWidth = zAxisPalette.getAxisWidth(g2d, 0, 0, 15, 
+                   (int) this.frameDimensions.getDimension(1).getLength()
+                    , 0.0,400.0,this.getAxis(2).getLog());
+            //System.out.println(" MARGINS RIGHT moved by " + zAxisWidth);
+            this.axisFrameMargins.setRightMargin(15+zAxisWidth);
+        }
+        
         this.graphicsAxis.get(1).setDimension(
                 (int) frameDimensions.getDimension(1).getMin()+axisFrameMargins.getBottomMargin(),
                 (int) frameDimensions.getDimension(1).getMax()-axisFrameMargins.getTopMargin() );
@@ -277,6 +317,7 @@ public class GraphicsAxisFrame {
                 (int) frameDimensions.getDimension(0).getMin()+axisFrameMargins.getLeftMargin(),
                 (int) frameDimensions.getDimension(0).getMax()-axisFrameMargins.getRightMargin()
         );
+               
     }
     
     public static void main(String[] args){
