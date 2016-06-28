@@ -6,6 +6,7 @@
 
 package org.jlab.groot.ui;
 
+import org.jlab.groot.graphics.HistogramPlotter;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;

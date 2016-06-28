@@ -6,6 +6,7 @@
 
 package org.jlab.groot.ui;
 
+import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.jlab.groot.base.ColorPalette;

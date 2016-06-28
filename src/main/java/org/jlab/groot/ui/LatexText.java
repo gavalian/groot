@@ -97,10 +97,24 @@ public class LatexText {
         g2d.drawString(latexString.getIterator(), xp, yp);        
     }
     
-    public  Rectangle2D getBounds( Graphics2D g2d){
+    public  Rectangle2D  getBoundsNumber(Graphics2D g2d){
         FontMetrics fmg = g2d.getFontMetrics(new Font(this.textFamily,Font.PLAIN,this.textFontSize));
+        //System.out.println(" ACCEND = " + fmg.getAscent() + " LEAD " + fmg.getLeading()
+        //+ "  DESCENT " + fmg.getDescent() + "  HEIGHT = " + fmg.getHeight());
         Rectangle2D rect = fmg.getStringBounds(this.latexString.getIterator(), 0,
                 this.latexString.getIterator().getEndIndex(),g2d);
+        //fmg.getHeight();
+        return new Rectangle2D.Double(0,0,rect.getWidth(),fmg.getAscent());
+    }
+    
+    public  Rectangle2D getBounds( Graphics2D g2d){
+        FontMetrics fmg = g2d.getFontMetrics(new Font(this.textFamily,Font.PLAIN,this.textFontSize));
+        //System.out.println(" ACCEND = " + fmg.getAscent() + " LEAD " + fmg.getLeading()
+        //+ "  DESCENT " + fmg.getDescent() + "  HEIGHT = " + fmg.getHeight());
+        Rectangle2D rect = fmg.getStringBounds(this.latexString.getIterator(), 0,
+                this.latexString.getIterator().getEndIndex(),g2d);
+        //fmg.getHeight();
+        //return new Rectangle2D.Double(0,0,rect.getWidth(),fmg.getAscent());
         return rect;
     }
     

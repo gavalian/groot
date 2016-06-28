@@ -6,18 +6,14 @@
 
 package org.jlab.groot.ui;
 
+import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.scene.text.FontWeight;
 import org.jlab.groot.base.AttributeType;
-import org.jlab.groot.data.H2F;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
 

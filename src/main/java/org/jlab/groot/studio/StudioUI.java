@@ -40,7 +40,7 @@ import org.jlab.groot.tree.TreeAnalyzer;
 import org.jlab.groot.ui.CutPanel;
 import org.jlab.groot.ui.DescriptorPanel;
 import org.jlab.groot.ui.EmbeddedCanvas;
-import org.jlab.groot.ui.HistogramPlotter;
+import org.jlab.groot.graphics.HistogramPlotter;
 
 /**
  *
