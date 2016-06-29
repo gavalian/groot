@@ -6,6 +6,9 @@
 
 package org.jlab.groot.ui;
 
+import org.jlab.groot.graphics.Histogram2DPlotter;
+import org.jlab.groot.graphics.GraphErrorsPlotter;
+import org.jlab.groot.graphics.FunctionPlotter;
 import org.jlab.groot.graphics.HistogramPlotter;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -33,6 +36,7 @@ import org.jlab.groot.math.Func1D;
 public class EmbeddedCanvas extends JPanel {
     
     private Timer        updateTimer = null;
+    
     private EmbeddedPad  pad = new EmbeddedPad();
     private Long numberOfPaints  = (long) 0;
     private Long paintingTime    = (long) 0;

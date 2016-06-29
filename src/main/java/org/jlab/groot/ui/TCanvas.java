@@ -6,6 +6,7 @@
 
 package org.jlab.groot.ui;
 
+import org.jlab.groot.graphics.FunctionPlotter;
 import org.jlab.groot.graphics.HistogramPlotter;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

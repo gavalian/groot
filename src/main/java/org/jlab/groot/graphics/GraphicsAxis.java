@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import org.jlab.groot.base.ColorPalette;
 import org.jlab.groot.base.FontProperties;
 import org.jlab.groot.math.Dimension1D;
 import org.jlab.groot.math.Dimension2D;
@@ -22,12 +23,18 @@ import org.jlab.groot.ui.LatexText;
  */
 public class GraphicsAxis {
     
+    public static int  AXISTYPE_COLOR       = 1;
+    public static int  AXISTYPE_HORIZONTAL  = 2;
+    public static int  AXISTYPE_VERTICAL    = 3;        
+    private int    axisType                 = 2;
+    
     private final  Dimension1D                  axisRange   = new Dimension1D();
     private final  Dimension1D              axisDimension   = new Dimension1D();
     
     private        int                 numberOfMajorTicks   = 10;
     private        Boolean                  isLogarithmic   = false;
     private        Boolean                  isVertical      = false;
+    private        Boolean                  isColorAxis     = false;
     
     private        int                      axisTitleOffset = 6;
     private        int                      axisTextOffset  = 5;
@@ -58,6 +65,13 @@ public class GraphicsAxis {
         return this;
     }
     
+    public void setAxisType(int type){
+        if(type == GraphicsAxis.AXISTYPE_COLOR){
+            this.isVertical  = true;
+            this.isColorAxis = true;
+        }
+    }
+    
     public Dimension1D getDimension(){
         return this.axisDimension;
     }
@@ -86,6 +100,12 @@ public class GraphicsAxis {
         this.axisTitle.setFont(this.axisTitleFont.getFontName());
         this.axisTitle.setFontSize(this.axisTitleFont.getFontSize());
     }
+    
+    public boolean getLog(){
+        return this.isLogarithmic;
+    }
+    
+    public void setLog(boolean flag){ this.isLogarithmic = flag;}
     
     public Dimension1D  getRange(){
         return this.axisRange;
@@ -190,7 +210,12 @@ public class GraphicsAxis {
     
     public void drawAxis(Graphics2D g2d, int x, int y){
         
-        g2d.setColor(Color.BLACK);        
+        if(this.isColorAxis==true){
+            this.drawColorAxis(g2d, x, y);
+            return;
+        }
+        
+        g2d.setColor(Color.BLACK);
         //List<Double>  ticks = axisRange.getDimensionTicks(this.numberOfMajorTicks);
         //axisTicks.init(ticks);
         this.setAxisDivisions(10);
@@ -219,6 +244,45 @@ public class GraphicsAxis {
             }
         }
         
+    }
+    
+    
+    private void drawColorAxis(Graphics2D g2d, int x, int y){
+        
+        this.setAxisDivisions(10);
+        this.updateAxisDivisions(g2d);
+        
+        List<Double>     ticks = axisTicks.getAxisTicks();
+        List<LatexText>  texts = axisTicks.getAxisTexts();
+        g2d.setColor(Color.BLACK);
+        
+        g2d.drawLine(x,(int)axisDimension.getMin(),x,(int)axisDimension.getMax());
+        
+        int xstart = x + 4 + 8;        
+        int ncolors = ColorPalette.getColorPallete3DSize();
+        double height = Math.abs(axisDimension.getLength());
+        int    tickSize = this.axisTicksLength/2;
+        //System.out.println(" Draw Z axis X = " + x + " Y = " + y);
+        
+        for(int i = 0; i < ncolors; i++){
+            
+            g2d.setColor(ColorPalette.getColorPalette3D(i));
+            
+            int yp = (int) (( (double) i*height)/ncolors);
+            int offset = (int) (( (double) (i+1)*height)/ncolors);
+            int length = offset-yp;
+            //System.out.println("drawing color  " + i + " yp = " + yp);
+            g2d.fillRect(x+4, (int) (y - offset), 8, length);
+        }
+        
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(x + 4, (int) this.axisDimension.getMax(),
+                8,(int) Math.abs(this.axisDimension.getLength()));
+        for(int i = 0; i < ticks.size(); i++){
+            double tick = this.getAxisPosition(ticks.get(i));
+            g2d.drawLine(xstart,(int) tick,xstart+tickSize,(int) tick);
+            texts.get(i).drawString(g2d, xstart + tickSize + this.axisTextOffset, (int) tick, 0, 1);
+        }
     }
     
     private void updateAxisDivisions(Graphics2D g2d){
