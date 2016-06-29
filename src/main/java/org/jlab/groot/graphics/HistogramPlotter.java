@@ -34,6 +34,12 @@ public class HistogramPlotter implements IDataSetPlotter  {
         datasetName = ds.getName();
     }
     
+    public HistogramPlotter(IDataSet ds,String options){
+        dataset = ds;
+        datasetName = ds.getName();
+        this.plottingOptions = options;
+    }
+    
     @Override
     public String getOptions() {
         return this.plottingOptions;
@@ -109,7 +115,7 @@ public class HistogramPlotter implements IDataSetPlotter  {
         g2d.setColor(TStyle.getColor(lineColor));
         g2d.draw(path);
     }
-
+    
     @Override
     public Dimension3D getDataRegion() {
         

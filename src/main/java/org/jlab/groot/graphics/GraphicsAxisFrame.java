@@ -32,6 +32,7 @@ public class GraphicsAxisFrame {
         axisFrameAxis.add(new GraphicsAxis());
         axisFrameAxis.get(1).setVertical(true);
         axisFrameAxis.get(2).setAxisType(GraphicsAxis.AXISTYPE_COLOR);
+        axisFrameAxis.get(2).setAxisFontSize(10);
     }
     
     

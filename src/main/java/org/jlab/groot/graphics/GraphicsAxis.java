@@ -36,7 +36,7 @@ public class GraphicsAxis {
     private        Boolean                  isVertical      = false;
     private        Boolean                  isColorAxis     = false;
     
-    private        int                      axisTitleOffset = 6;
+    private        int                      axisTitleOffset = 5;
     private        int                      axisTextOffset  = 5;
     private        int                      axisTicksLength = 8;
     
@@ -44,6 +44,7 @@ public class GraphicsAxis {
     private final  FontProperties           axisTitleFont     = new FontProperties();
     private final  LatexText                axisTitle         = new LatexText("");
     private final  GraphicsAxisTicks        axisTicks         = new GraphicsAxisTicks();
+    
     
     /**
      * default 
@@ -203,6 +204,10 @@ public class GraphicsAxis {
             axisBounds = maxH + axisTextOffset;
         }
         
+        if(this.axisTitle.getTextString().length()>1){
+            Rectangle2D rect = axisTitle.getBounds(g2d);
+            axisBounds  += rect.getHeight() + axisTitleOffset;
+        }
         //System.out.println( " Axis : " + axisTitle + "  Max = " +  isVertical +"  " + (int) maxW + "  " + (int) maxH  + "  " + (int) axisBounds);
         return (int) axisBounds;
     }
@@ -234,7 +239,11 @@ public class GraphicsAxis {
             double midpoint = axisRange.getMin() + 0.5*this.axisRange.getLength();
             //System.out.println(" Axis midpoint = " + (int) getAxisPosition(midpoint)
             //+ " " + y);
-            axisTitle.drawString(g2d, (int) getAxisPosition(midpoint),y,1,0);
+            int  axisBounds = (int) texts.get(0).getBoundsNumber(g2d).getHeight();
+            //System.out.println(" Y = " + y + " " + axisBounds + "  "+ (axisBounds + this.axisTextOffset + this.axisTitleOffset));
+            axisTitle.drawString(g2d,
+                    (int) getAxisPosition(midpoint),
+                    y + axisBounds + this.axisTextOffset + this.axisTitleOffset ,1,0);
         } else {
             g2d.drawLine(x,(int)axisDimension.getMin(),x,(int)axisDimension.getMax());
             for(int i = 0; i < ticks.size(); i++){
@@ -242,6 +251,10 @@ public class GraphicsAxis {
                 g2d.drawLine(x,(int) tick,x+this.axisTicksLength,(int) tick);
                 texts.get(i).drawString(g2d, x-this.axisTextOffset, (int) tick, 2, 1);
             }
+            double midpoint = axisRange.getMin() + 0.5*this.axisRange.getLength();
+            axisTitle.drawString(g2d,0,
+                    (int) getAxisPosition(midpoint),
+                     LatexText.ALIGN_CENTER,LatexText.ALIGN_TOP, LatexText.ROTATE_LEFT);
         }
         
     }
@@ -287,8 +300,6 @@ public class GraphicsAxis {
     
     private void updateAxisDivisions(Graphics2D g2d){
         
-
-        
         List<Double>  ticks = this.axisRange.getDimensionTicks(numberOfMajorTicks);
         axisTicks.init(ticks);
         
@@ -319,6 +330,7 @@ public class GraphicsAxis {
                 }
                 fraction = heights/axisLength;
             }
+            
             numberOfMajorTicks = nticks;
         }
     

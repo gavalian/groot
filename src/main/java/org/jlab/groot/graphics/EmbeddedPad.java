@@ -23,11 +23,11 @@ public class EmbeddedPad {
      GraphicsAxisFrame          axisFrame = new GraphicsAxisFrame();
      Color                backgroundColor = Color.WHITE;
      private  PadMargins  padMargins      = new PadMargins();
-    List<IDataSetPlotter> datasetPlotters = new ArrayList<IDataSetPlotter>();
+     List<IDataSetPlotter> datasetPlotters = new ArrayList<IDataSetPlotter>();
     
      public EmbeddedPad(){
-        
-    }
+         
+     }
     
     public EmbeddedPad(int x, int y, int width, int height){
         this.setDimension(x, y, width, height);        
@@ -83,7 +83,10 @@ public class EmbeddedPad {
                     axis.getDimension(1).getMin(),
                     axis.getDimension(1).getMax()
             );
-            
+            axisFrame.getAxisZ().setRange(
+                    axis.getDimension(2).getMin(),
+                    axis.getDimension(2).getMax()
+            );
             datasetPlotters.get(0).draw(g2d, axisFrame);
         }
         

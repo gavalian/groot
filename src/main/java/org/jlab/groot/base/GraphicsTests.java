@@ -43,7 +43,19 @@ public class GraphicsTests extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         
-        this.drawGraphicsFrame(g2d);
+        int xT = 100;
+        int yT = 200;
+        g2d.setColor(Color.red);
+        g2d.drawOval(xT-4, yT-4, 8,8);
+        g2d.setColor(Color.blue);
+        LatexText  text = new LatexText("Rotation Test");
+        
+        
+        text.setFontSize(18);
+                
+        text.drawString(g2d, xT,yT,LatexText.ALIGN_CENTER,LatexText.ALIGN_TOP,LatexText.ROTATE_LEFT);
+        text.drawString(g2d, xT,yT,1,1);        
+//this.drawGraphicsFrame(g2d);
     }
     
     private void drawGraphicsFrame(Graphics2D g2d){

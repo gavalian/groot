@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jlab.groot.base.PadMargins;
@@ -34,7 +36,8 @@ public class EmbeddedCanvas extends JPanel {
     private List<EmbeddedPad>    canvasPads  = new ArrayList<EmbeddedPad>();
     private int                  ec_COLUMNS  = 1;
     private int                  ec_ROWS     = 1;
-        
+    private PadMargins           canvasPadding = new PadMargins();
+    
     public EmbeddedCanvas(){
         super();
         //this.setSize(500, 400);
@@ -54,14 +57,19 @@ public class EmbeddedCanvas extends JPanel {
     
     private void updateCanvasPads(int w, int h){
         int pcounter = 0;
+        int startX   = 5;
+        int minY     = 5;
+        int rW       = w - startX;
+        int rH       = h - minY;
+        
         for(int ir = 0; ir < ec_ROWS; ir++){
             for(int ic = 0; ic < ec_COLUMNS; ic++){
-                double x   = ic * (w/((double) ec_COLUMNS ));
-                double xe  = (ic+1) * (w/((double) ec_COLUMNS ));
-                double y   = ir * ( h/((double) ec_ROWS) );
-                double ye  = (ir+1) * ( h/((double) ec_ROWS));
+                double x   = ic * (rW/((double) ec_COLUMNS ));
+                double xe  = (ic+1) * (rW/((double) ec_COLUMNS ));
+                double y   = ir * ( rH/((double) ec_ROWS) );
+                double ye  = (ir+1) * ( rH/((double) ec_ROWS));
                 //System.out.println("PAD " + pcounter + " " + x + " " + xe );
-                canvasPads.get(pcounter).setDimension((int) x, (int) y,
+                canvasPads.get(pcounter).setDimension((int) x + startX, (int) y - minY,
                         (int) (xe-x), (int) (ye-y));
 
                 pcounter++;
@@ -107,6 +115,10 @@ public class EmbeddedCanvas extends JPanel {
             pad.setMargins(margins);
             pad.draw(g2d);
         }
+        
+        Long et = System.currentTimeMillis();
+        paintingTime += (et-st);
+        numberOfPaints++;
     }
         
     public EmbeddedPad  getPad(int index){
@@ -114,19 +126,19 @@ public class EmbeddedCanvas extends JPanel {
     }
         
     public void update(){
-        Long st = System.currentTimeMillis();
-        this.repaint();
-        Long et = System.currentTimeMillis();
-        paintingTime += (et-st);
-        numberOfPaints++;
+        this.repaint();       
         System.out.println(this.getBenchmarkString());
     }
     
     public String getBenchmarkString(){
         StringBuilder str = new StringBuilder();
         double time = (double) paintingTime;
+        
         double ms =  (time/numberOfPaints);
-        str.append(String.format("Time = %.2f ms",ms));
+        if(numberOfPaints==0) ms = 1000.0;
+        
+        str.append(String.format("Time = %.2f ms Total Time = %d , Events = %d",
+                ms,paintingTime, numberOfPaints));
         return str.toString();
     }
     
@@ -137,6 +149,7 @@ public class EmbeddedCanvas extends JPanel {
     }
     
     public void  initTimer(int interval){
+        System.out.println("[EmbeddedCanvas] ---->  starting an update timer.");
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -159,14 +172,14 @@ public class EmbeddedCanvas extends JPanel {
         frame.setSize(500, 400);
         EmbeddedCanvas canvas = new EmbeddedCanvas();
         canvas.divide(1, 3);
-        canvas.setAxisFontSize(14);
+        canvas.setAxisFontSize(8);
         //canvas.getPad(0).getAxisFrame().getAxisX().setAxisFontSize(18);
         //canvas.getPad(1).getAxisFrame().getAxisY().setAxisFontSize(18);
         //canvas.getPad(0).getAxisFrame().setDrawAxisZ(true);
         
         H1F h1 = FunctionFactory.createDebugH1F(6);
         H1F h2 = FunctionFactory.randomGausian(100, 0.4, 5.6, 200000, 2.3, 0.8);
-        H2F h2d = FunctionFactory.randomGausian2D(120, 0.4, 5.6, 800000, 2.3, 0.8);
+        H2F h2d = FunctionFactory.randomGausian2D(40, 0.4, 5.6, 800000, 2.3, 0.8);
         
         h1.setFillColor(43);
         h2.setFillColor(44);
@@ -178,16 +191,35 @@ public class EmbeddedCanvas extends JPanel {
         canvas.getPad(1).addPlotter(plotter2);
         canvas.getPad(2).addPlotter(plotter3);
         
-        canvas.divide(4,4);
-        for(int i = 0; i < 16; i++){
+        canvas.divide(3,3);
+        canvas.setAxisFontSize(14);
+        for(int i = 0; i < 9; i++){
+            //canvas.getPad(i).getAxisFrame().getAxisX().setTitle("M^2 [GeV]");
+            //canvas.getPad(i).getAxisFrame().getAxisY().setTitle("Counts");
             canvas.getPad(i).getAxisFrame().setDrawAxisZ(true);
-            canvas.getPad(i).addPlotter(plotter3);
+           // if(i%2==0){
+                canvas.getPad(i).addPlotter(plotter3);
+                //canvas.getPad(i).getAxisFrame().setDrawAxisZ(true);
+           // } else {
+              //  canvas.getPad(i).addPlotter(plotter2);
+            //}
         }
-        
-        
-        //canvas.initTimer(300);
+        /*
+        canvas.divide(2, 2);
+        for(int i = 0 ; i < 4; i ++){
+            canvas.getPad(i).getAxisFrame().getAxisX().setTitle("M^2 [GeV]");
+            canvas.getPad(i).getAxisFrame().getAxisY().setTitle("Counts");
+        }*/
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
+        
+        try {
+            Thread.sleep(7000);
+            canvas.initTimer(800);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(EmbeddedCanvas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }
