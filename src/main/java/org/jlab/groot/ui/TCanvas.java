@@ -109,6 +109,7 @@ public class TCanvas extends JFrame {
         
         
         func3.setParameters(new double[]{1.0,1.0,120,0.4,0.05,120.0,0.6,0.05});
+        
         func3.setLineWidth(3);
 
         DataFitter.fit(func3, h1, "E");
