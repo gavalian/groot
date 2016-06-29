@@ -178,30 +178,36 @@ public class EmbeddedCanvas extends JPanel {
         //canvas.getPad(0).getAxisFrame().setDrawAxisZ(true);
         
         H1F h1 = FunctionFactory.createDebugH1F(6);
-        H1F h2 = FunctionFactory.randomGausian(100, 0.4, 5.6, 200000, 2.3, 0.8);
+        H1F h2  = FunctionFactory.randomGausian(100, 0.4, 5.6, 200000, 2.3, 0.8);
+        H1F h2b = FunctionFactory.randomGausian(100, 0.4, 5.6, 80000, 4.0, 0.8);
         H2F h2d = FunctionFactory.randomGausian2D(40, 0.4, 5.6, 800000, 2.3, 0.8);
         
         h1.setFillColor(43);
         h2.setFillColor(44);
+        h2b.setFillColor(43);
         HistogramPlotter  plotter  = new HistogramPlotter(h1);
         HistogramPlotter  plotter2 = new HistogramPlotter(h2);
+        HistogramPlotter  plotter2b = new HistogramPlotter(h2b);
         Histogram2DPlotter  plotter3 = new Histogram2DPlotter(h2d);
         
         canvas.getPad(0).addPlotter(plotter);
         canvas.getPad(1).addPlotter(plotter2);
         canvas.getPad(2).addPlotter(plotter3);
         
-        canvas.divide(3,3);
-        canvas.setAxisFontSize(14);
-        for(int i = 0; i < 9; i++){
+        canvas.divide(4,4);
+        canvas.setAxisFontSize(10);
+        for(int i = 0; i < 16; i++){
             //canvas.getPad(i).getAxisFrame().getAxisX().setTitle("M^2 [GeV]");
             //canvas.getPad(i).getAxisFrame().getAxisY().setTitle("Counts");
-            canvas.getPad(i).getAxisFrame().setDrawAxisZ(true);
+            //canvas.getPad(i).getAxisFrame().setDrawAxisZ(true);
            // if(i%2==0){
-                canvas.getPad(i).addPlotter(plotter3);
+              //  canvas.getPad(i).addPlotter(plotter3);
                 //canvas.getPad(i).getAxisFrame().setDrawAxisZ(true);
            // } else {
-              //  canvas.getPad(i).addPlotter(plotter2);
+            //canvas.getPad(i).setAxisRangeX(2, 8);
+            //canvas.getPad(i).setAxisRangeY(0, 1000);
+                canvas.getPad(i).addPlotter(plotter2b);
+                canvas.getPad(i).addPlotter(plotter2);
             //}
         }
         /*

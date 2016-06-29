@@ -759,19 +759,29 @@ public class H1F  implements IDataSet {
      * ROOT COMPATABILITY Functions
      */
     
-    public void setFillColor(int color){
+    public H1F setFillColor(int color){
         this.hAttr.add(AttributeType.FILL_COLOR, color);
+        return this;
     }
   
     public int getFillColor(){
         return this.hAttr.get(AttributeType.FILL_COLOR);
     }
     
-    public void setLineColor(int color){
+    public H1F setLineColor(int color){
         this.hAttr.add(AttributeType.LINE_COLOR, color);
+        return this;
     }
     
     public int getLineColor(){
         return this.hAttr.get(AttributeType.LINE_COLOR);
+    }
+    
+    public H1F setLineWdith(int width){ 
+            hAttr.add(AttributeType.LINE_WIDTH, width);
+            return this;
+    }
+    public int getLineWidth(){
+        return this.hAttr.get(AttributeType.LINE_WIDTH);
     }
 }
