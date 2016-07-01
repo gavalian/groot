@@ -11,8 +11,13 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import org.jlab.groot.base.PadMargins;
+import org.jlab.groot.data.GraphErrors;
+import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.H2F;
+import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
+import org.jlab.groot.math.Func1D;
 
 /**
  *
@@ -153,4 +158,22 @@ public class EmbeddedPad {
         this.datasetPlotters.add(plotter);
     }
     
+    public void draw(IDataSet ds, String options){
+        if(options.contains("same")==false){
+            this.datasetPlotters.clear();
+        }
+        if(ds instanceof Func1D){
+            this.addPlotter(new FunctionPlotter(ds));
+        }
+        
+        if(ds instanceof H1F){
+            this.addPlotter(new HistogramPlotter(ds,options));
+        }
+        if(ds instanceof H2F){
+            this.addPlotter(new Histogram2DPlotter(ds));
+        }
+        if(ds instanceof GraphErrors){
+            this.addPlotter(new GraphErrorsPlotter(ds));
+        }
+    }
 }

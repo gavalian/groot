@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
+import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.FunctionFactory;
 
 /**
@@ -37,6 +38,7 @@ public class EmbeddedCanvas extends JPanel {
     private int                  ec_COLUMNS  = 1;
     private int                  ec_ROWS     = 1;
     private PadMargins           canvasPadding = new PadMargins();
+    private int                  activePad     = 0; 
     
     public EmbeddedCanvas(){
         super();
@@ -53,6 +55,26 @@ public class EmbeddedCanvas extends JPanel {
         for(int i = 0; i < columns*rows; i++){
             canvasPads.add(new EmbeddedPad());
         }
+        activePad = 0;
+    }
+    
+    public void cd(int pad){
+        if(pad<0){
+            activePad = 0;
+        } else if (pad>=this.canvasPads.size()) {
+            activePad = 0;
+        } else {
+            activePad = pad;
+        }         
+    }
+    
+    
+    public void draw(IDataSet ds){
+        draw(ds,"");
+    }
+    
+    public void draw(IDataSet ds, String options){
+        this.getPad(activePad).draw(ds, options);
     }
     
     private void updateCanvasPads(int w, int h){
@@ -83,45 +105,47 @@ public class EmbeddedCanvas extends JPanel {
      */
     @Override
     public void paint(Graphics g){ 
-
-        Long st = System.currentTimeMillis();
-        Graphics2D g2d = (Graphics2D) g;
-        
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        
-        int w = this.getSize().width;
-        int h = this.getSize().height;
-        g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, w, h);
-        updateCanvasPads(w,h);
-        
-        PadMargins  margins = new PadMargins();
-        
-        for(int i = 0; i < canvasPads.size(); i ++){
-            EmbeddedPad pad = canvasPads.get(i);
-            pad.getAxisFrame().updateMargins(g2d);
-            //pad.getAxisFrame().setAxisMargins(pad.getAxisFrame().getFrameMargins());
-            margins.marginFit(pad.getAxisFrame().getFrameMargins());
+        try {
+            Long st = System.currentTimeMillis();
+            Graphics2D g2d = (Graphics2D) g;
+            
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            int w = this.getSize().width;
+            int h = this.getSize().height;
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(0, 0, w, h);
+            updateCanvasPads(w,h);
+            
+            PadMargins  margins = new PadMargins();
+            
+            for(int i = 0; i < canvasPads.size(); i ++){
+                EmbeddedPad pad = canvasPads.get(i);
+                pad.getAxisFrame().updateMargins(g2d);
+                //pad.getAxisFrame().setAxisMargins(pad.getAxisFrame().getFrameMargins());
+                margins.marginFit(pad.getAxisFrame().getFrameMargins());
+            }
+            
+            for(int i = 0; i < canvasPads.size(); i ++){
+                EmbeddedPad pad = canvasPads.get(i);            
+                //pad.setDimension(0, 0, w, h);                        
+                //System.out.println("PAD " + i + " " + pad.getAxisFrame().getFrameMargins());
+                //pad.getAxisFrame().setAxisMargins(pad.getAxisFrame().getFrameMargins());                
+                //System.out.println(pad.getAxisFrame().getFrameMargins());
+                pad.getAxisFrame().setAxisMargins(margins);
+                pad.setMargins(margins);
+                pad.draw(g2d);
+            }
+            
+            Long et = System.currentTimeMillis();
+            paintingTime += (et-st);
+            numberOfPaints++;
+        } catch(Exception e){
+            System.out.println("[EmbeddedCanvas] ---> ooops");
         }
-        
-        for(int i = 0; i < canvasPads.size(); i ++){
-            EmbeddedPad pad = canvasPads.get(i);            
-            //pad.setDimension(0, 0, w, h);                        
-            //System.out.println("PAD " + i + " " + pad.getAxisFrame().getFrameMargins());
-            //pad.getAxisFrame().setAxisMargins(pad.getAxisFrame().getFrameMargins());                
-            //System.out.println(pad.getAxisFrame().getFrameMargins());
-            pad.getAxisFrame().setAxisMargins(margins);
-            pad.setMargins(margins);
-            pad.draw(g2d);
-        }
-        
-        Long et = System.currentTimeMillis();
-        paintingTime += (et-st);
-        numberOfPaints++;
     }
-        
-    public EmbeddedPad  getPad(int index){
+        public EmbeddedPad  getPad(int index){
         return this.canvasPads.get(index);
     }
         

@@ -80,6 +80,10 @@ public class FunctionPlotter implements IDataSetPlotter {
         for(int i = 0; i < npoints; i++){
             this.dataRegion.grow(functionData.getDataX(i), functionData.getDataY(i),0.5);
         }
+        double length = this.dataRegion.getDimension(1).getLength();
+        this.dataRegion.getDimension(1).setMinMax(
+                this.dataRegion.getDimension(1).getMin(), 
+                this.dataRegion.getDimension(1).getMin() + length*1.1);
         return dataRegion;
     }
  

@@ -18,11 +18,13 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.SoftBevelBorder;
+
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
+import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.fitter.DataFitter;
+import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.FunctionFactory;
 
@@ -43,7 +45,7 @@ public class TCanvas extends JFrame {
         this.setSize(xsize, ysize);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        canvas = new EmbeddedCanvas(xsize,ysize);
+        canvas = new EmbeddedCanvas();
     
         framePane= new JPanel();
         framePane.setLayout(new BorderLayout());
@@ -62,7 +64,7 @@ public class TCanvas extends JFrame {
         framePane.add(statusPane,BorderLayout.PAGE_END);
         
         this.add(framePane);
-        this.pack();
+        //this.pack();
         this.setVisible(true);
     }
     
@@ -70,8 +72,29 @@ public class TCanvas extends JFrame {
         return this.canvas;
     }
     
+    public void divide(int xsize, int ysize){
+        this.canvas.divide(xsize, ysize);
+    }
+    
+    public void cd(int pad){
+        this.canvas.cd(pad);
+    }
+    
+    public void draw(IDataSet ds, String options){
+        this.canvas.draw(ds, options);
+        this.getCanvas().update();
+    }
+    
+    public void draw(IDataSet ds){
+        this.canvas.draw(ds);
+        this.getCanvas().update();
+    }
+    
     public static void main(String[] args){
+        
+        
         TCanvas c1 = new TCanvas("c1",600,400);
+        
         GraphErrors  graph = new GraphErrors();
         graph.addPoint(1.0, 1.0, 0.0, 0.0);
         graph.addPoint(2.0, 8.0, 0.0, 0.0);
@@ -90,7 +113,7 @@ public class TCanvas extends JFrame {
         h1.setFillColor(33);
         GraphErrors  gr = h1.getGraph();
         c1.getCanvas().divide(2,2);
-        c1.getCanvas().initTimer(600);
+        //c1.getCanvas().initTimer(600);
         //h1.add(h2);
         //c1.getCanvas().getPad(0).setAxisFontSize(14);
         //c1.getCanvas().getPad(0).addPlotter(new GraphErrorsPlotter(gr));
@@ -112,18 +135,13 @@ public class TCanvas extends JFrame {
         
         func3.setLineWidth(3);
 
-        DataFitter.fit(func3, h1, "E");
+        //DataFitter.fit(func3, h1, "E");
         h1.setLineColor(4);
-        for(int i = 0; i < c1.getCanvas().getNPads()-1; i++){
-            c1.getCanvas().getPad(i).setAxisFontSize(12);
-            c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h1));
-            c1.getCanvas().getPad(i).addPlotter(new FunctionPlotter(func3));
-            //c1.getCanvas().getPad(i).addPlotter(new HistogramPlotter(h2));
-        }
-        
-        c1.getCanvas().cd(3);
-        c1.getCanvas().draw(h3);
-        
+                
+        c1.divide(1,1);
+        //c1.draw(h1);
+        c1.draw(func3);
+
         /*
         c1.getCanvas().divide(2, 2);
         for(int i = 0; i < 4; i++){
@@ -131,25 +149,7 @@ public class TCanvas extends JFrame {
             c1.getCanvas().draw(h3,"colz");
         }*/
         
-        c1.getCanvas().divide(2,2);
 
-        for(int i = 0; i < 2; i++){
-            if(i==0) c1.getCanvas().getPad(i).setLogZ(true);
-            c1.getCanvas().cd(i);
-            c1.getCanvas().draw(h3);
-            //c1.getCanvas().draw(h2);
-            //c1.getCanvas().draw(h1,"same");
-            c1.getCanvas().update();
-        }
-        
-        for(int i = 2; i < 4; i++){
-            c1.getCanvas().cd(i);
-            if(i==2) c1.getCanvas().getPad(i).setLogY(true);
-            c1.getCanvas().draw(h2);
-            c1.getCanvas().update();
-        }
-        
-        //c1.getCanvas().getPad(0).show();
-        //c1.getCanvas().getPad(1).show();
+
     }
 }
