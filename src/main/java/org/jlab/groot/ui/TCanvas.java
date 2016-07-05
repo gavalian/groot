@@ -101,8 +101,8 @@ public class TCanvas extends JFrame {
         graph.addPoint(3.0, 12.0, 0.0, 0.0);
         graph.addPoint(4.0, 9.0, 0.0, 0.0);
         
-        H1F  h1 = FunctionFactory.randomGausian(25, 0.1, 5.0, 8000, 2.2, 0.4);
-        H1F  h2 = FunctionFactory.randomGausian(25, 0.1, 5.0, 20000, 3.3, 0.2);
+        H1F  h1 = FunctionFactory.randomGausian(80, 0.1, 5.0, 8000, 2.2, 0.4);
+        H1F  h2 = FunctionFactory.randomGausian(80, 0.1, 5.0, 20000, 3.3, 0.2);
         
         H2F  h3 = FunctionFactory.randomGausian2D(120, 0.1, 5.0, 2000000, 2.4, 0.55);
         
@@ -114,7 +114,7 @@ public class TCanvas extends JFrame {
         GraphErrors  gr = h1.getGraph();
         c1.getCanvas().divide(2,2);
         //c1.getCanvas().initTimer(600);
-        //h1.add(h2);
+        h1.add(h2);
         //c1.getCanvas().getPad(0).setAxisFontSize(14);
         //c1.getCanvas().getPad(0).addPlotter(new GraphErrorsPlotter(gr));
         
@@ -128,20 +128,31 @@ public class TCanvas extends JFrame {
         DataFitter.fit(func, h2, "E");
         DataFitter.fit(func2, h1, "E");
         
-        F1D func3 = new F1D("func3","[p0]+[p1]*x+[amp]*gaus(x,[mean],[sigma])+[amp2]*gaus(x,[mean2],[sigma2])",0.1,0.8);
+        F1D func3 = new F1D("func3","[p0]+[p1]*x+[amp]*gaus(x,[mean],[sigma])+[amp2]*gaus(x,[mean2],[sigma2])",0.1,5.0);
         
         
-        func3.setParameters(new double[]{1.0,1.0,120,0.4,0.05,120.0,0.6,0.05});
-        
+        func3.setParameters(new double[]{1.0,0.0,10.0,2.2,0.3,10.0,3.3,0.25});
+        func3.setParLimits(0, 0.0, 1000);
+        func3.setParLimits(1, 0.0, 1000);
+        func3.setParLimits(2, 0, 1000);
+        func3.setParLimits(3, 0, 1000);
+        func3.setParLimits(4, 0, 1000);
+        func3.setParLimits(5, 0, 1000);
+        func3.setParLimits(6, 0, 1000);
+        func3.setParLimits(7, 0, 1000);
         func3.setLineWidth(3);
 
-        //DataFitter.fit(func3, h1, "E");
-        h1.setLineColor(4);
-                
-        c1.divide(1,1);
-        //c1.draw(h1);
-        c1.draw(func3);
 
+        h1.setLineColor(4);
+        func3.show();
+        c1.divide(1,1);
+        h1.divide(40.0);
+        DataFitter.fit(func3, h1, "R");
+        //c1.draw(h1);
+        c1.draw(h1);
+        c1.getCanvas().update();
+        c1.draw(func3,"same");
+        func3.show();
         /*
         c1.getCanvas().divide(2, 2);
         for(int i = 0; i < 4; i++){

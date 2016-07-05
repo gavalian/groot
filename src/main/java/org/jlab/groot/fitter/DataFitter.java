@@ -38,7 +38,7 @@ public class DataFitter {
         MnUserParameters upar = new MnUserParameters();
         for(int loop = 0; loop < npars; loop++){
             UserParameter par = funcFitter.getFunction().parameter(loop);
-            upar.add(par.name(),par.value(),0.001);
+            upar.add(par.name(),par.value(),0.0001);
             if(par.min()>-1e9&&par.max()<1e9){
                 upar.setLimits(par.name(), par.min(), par.max());
             }
@@ -47,6 +47,7 @@ public class DataFitter {
         
         MnScan  scanner = new MnScan(funcFitter,upar);
         FunctionMinimum scanmin = scanner.minimize(); 
+        /*
         System.err.println("******************");
         System.err.println("*   SCAN RESULTS  *");
         System.err.println("******************");
@@ -54,25 +55,26 @@ public class DataFitter {
         System.out.println("pars    : " + upar);
         System.out.println(upar);
         System.err.println("*******************************************");
+        */
         MnMigrad migrad = new MnMigrad(funcFitter, upar);
         FunctionMinimum min = migrad.minimize();
         
         MnUserParameters userpar = min.userParameters();
-        
+        /*
         for(int loop = 0; loop < npars; loop++){
             UserParameter par = funcFitter.getFunction().parameter(loop);
             par.setValue(userpar.value(par.name()));
             par.setError(userpar.error(par.name()));
-        }
+        }*/
         
-        
+        /*
         System.out.println(upar);
         System.err.println("******************");
         System.err.println("*   FIT RESULTS  *");
         System.err.println("******************");
 
         System.err.println(min);
-        
+        */
     }
     
     public static void main(String[] args){

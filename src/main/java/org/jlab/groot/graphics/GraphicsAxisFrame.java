@@ -5,6 +5,7 @@
  */
 package org.jlab.groot.graphics;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -101,6 +102,7 @@ public class GraphicsAxisFrame {
         System.out.println("----> Y axis " + axisFrameAxis.get(1).getDimension());
         */
         g2d.setColor(Color.BLACK);
+        g2d.setStroke(new BasicStroke(1));
         g2d.drawRect(
                 (int) getAxisX().getDimension().getMin(),
                 (int) getAxisY().getDimension().getMax(),

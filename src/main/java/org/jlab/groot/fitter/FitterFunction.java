@@ -17,9 +17,10 @@ import org.jlab.groot.math.Func1D;
  */
 public class FitterFunction implements FCNBase {
    
-    private Func1D    function;
-    private IDataSet  dataset;
+    private Func1D    function = null;
+    private IDataSet  dataset  = null;
     private String    fitOptions = "E";
+    private int       numberOfCalls = 0;
     
     public FitterFunction(Func1D func, IDataSet data){        
         dataset  = data;
@@ -39,6 +40,13 @@ public class FitterFunction implements FCNBase {
         double chi2 = 0.0;
         function.setParameters(pars);        
         chi2 = getChi2(pars,fitOptions);
+        numberOfCalls++;
+        /*
+        if(numberOfCalls%10==0){
+            System.out.println("********************************************************");
+            System.out.println( " Number of calls =  " + numberOfCalls + " CHI 2 " + chi2);
+            function.show();
+        }*/
         //function.show();
         //System.err.println("\n************ CHI 2 = " + chi2);
         return chi2;        
@@ -67,7 +75,7 @@ public class FitterFunction implements FCNBase {
                     chi2 += (yv-y)*(yv-y)/normalization;
                 }
             }
-        }        
+        }
         return chi2;
     }
 }

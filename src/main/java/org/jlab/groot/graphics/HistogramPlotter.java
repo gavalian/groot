@@ -89,11 +89,15 @@ public class HistogramPlotter implements IDataSetPlotter  {
             
             xps = frame.getAxisPointX(dataX - errorX*0.5);
             xpe = frame.getAxisPointX(dataX + errorX*0.5);
+            //System.out.println(" x =  " + dataX + " y = " + dataY + " xps = "
+            //        + xps + " yp = " + yp);
             //yp  = frame.getAxis(1).getDimension().getMax() - 
             //        frame.getAxis(1).getAxisPosition(dataY)                    
             //        + frame.getAxis(1).getDimension().getMin(); 
-            if(dataY<0.1) dataY = 0.0;
+            
+            //if(dataY<0.1) dataY = 0.0;
             yp = frame.getAxisPointY(dataY);
+            
             //System.out.println("histogram = " + p + " " + dataY + " " + yp);
             path.lineTo((int) xps, (int) yp);
             path.lineTo((int) xpe, (int) yp);
