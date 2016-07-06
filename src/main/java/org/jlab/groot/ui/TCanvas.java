@@ -145,14 +145,17 @@ public class TCanvas extends JFrame {
 
         h1.setLineColor(4);
         func3.show();
-        c1.divide(1,1);
+        c1.divide(2,2);
         h1.divide(40.0);
-        DataFitter.fit(func3, h1, "R");
+        DataFitter.fit(func3, h1, "E");
         //c1.draw(h1);
-        c1.draw(h1);
-        c1.getCanvas().update();
-        c1.draw(func3,"same");
+        for(int i = 0 ; i < 4; i ++){
+            c1.cd(i);
+            c1.draw(h1);
+            c1.draw(func3,"same");
+        }
         func3.show();
+        c1.getCanvas().update();
         /*
         c1.getCanvas().divide(2, 2);
         for(int i = 0; i < 4; i++){

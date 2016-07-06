@@ -7,6 +7,7 @@ import org.jlab.groot.base.Attributes;
 import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.Func1D;
 import org.jlab.groot.math.StatNumber;
+import org.jlab.groot.ui.PaveText;
 
 
 
@@ -28,7 +29,7 @@ public class H1F  implements IDataSet {
     String     histName   = "";
     int        histogramUnderFlow = 0;
     int        histogramOverFlow  = 0;
-    
+    int        histogramEntries   = 0;
     Attributes hAttr     = new Attributes();
     
     Func1D     fittedFunction = null;
@@ -242,6 +243,9 @@ public class H1F  implements IDataSet {
      * Resets all bins to 0
      */
     public void reset(){
+        this.histogramEntries = 0;
+        this.histogramOverFlow = 0;
+        this.histogramUnderFlow = 0;
         for(int loop = 0; loop < this.histogramData.length;loop++){
             this.histogramData[loop] = 0.0f;
             if(this.histogramDataError.length==this.histogramData.length){
@@ -391,6 +395,7 @@ public class H1F  implements IDataSet {
      * @param bin		the bin to be incremented, specified in array indexing format.
      */
     public void incrementBinContent(int bin) {
+        this.histogramEntries++;
     	if (bin >= 0 && bin < histogramData.length) {
     		histogramData[bin] = (float) (histogramData[bin] + 1.0);
     		histogramDataError[bin] = (float) Math.sqrt(Math.abs(histogramData[bin]));
@@ -411,6 +416,7 @@ public class H1F  implements IDataSet {
      * @param weight	the weight to increment by
      */
     public void incrementBinContent(int bin, double weight) {
+        this.histogramEntries++;
     	if (bin >= 0 && bin < histogramData.length) {
     		histogramData[bin] = (float) (histogramData[bin] + weight);
     		histogramDataError[bin] = (float) Math.sqrt(Math.abs(histogramData[bin]));
@@ -809,5 +815,38 @@ public class H1F  implements IDataSet {
     }
     public int getLineWidth(){
         return this.hAttr.get(AttributeType.LINE_WIDTH);
+    }
+
+    public void setFunction(Func1D f){
+        this.fittedFunction = f;
+    }
+    
+    public Func1D getFunction(){
+        return this.fittedFunction;
+    }
+    
+    @Override
+    public PaveText getStatBox() {
+        PaveText stat = new PaveText(2);
+        stat.addText("Entries",Integer.toString(histogramEntries));
+        stat.addText("Mean",String.format("%.3f", this.getMean()));
+        stat.addText("RMS",String.format("%.3f", this.getRMS()));
+        stat.addText("Underflow",Integer.toString(this.histogramUnderFlow));
+        stat.addText("Overflow",Integer.toString(this.histogramOverFlow));
+    
+        if(this.fittedFunction!=null){
+            stat.addText("#chi^2/NDF",
+                    String.format("%.3f/%d", 
+                            this.fittedFunction.getChiSquare(),this.fittedFunction.getNDF()));
+            int npars = this.fittedFunction.getNPars();
+            for(int i = 0; i < npars; i++){
+                stat.addText(this.fittedFunction.parameter(i).name(),
+                        String.format("%.3f", 
+                                fittedFunction.parameter(i).value()
+                                //fittedFunction.parameter(i).error()
+                                ));
+            }
+        }
+        return stat;
     }
 }

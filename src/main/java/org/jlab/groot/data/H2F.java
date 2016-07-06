@@ -7,6 +7,7 @@ import org.jlab.groot.base.AttributeType;
 import org.jlab.groot.base.Attributes;
 import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.MultiIndex;
+import org.jlab.groot.ui.PaveText;
 
 
 /**
@@ -633,6 +634,11 @@ public class H2F implements IDataSet {
     @Override
     public double getData(int xbin, int ybin) {
         return this.getBinContent(xbin, ybin);
+    }
+
+    @Override
+    public PaveText getStatBox() {
+        return new PaveText(2);
     }
 
 }

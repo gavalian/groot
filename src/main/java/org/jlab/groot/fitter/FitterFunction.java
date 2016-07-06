@@ -7,6 +7,7 @@
 package org.jlab.groot.fitter;
 
 import org.freehep.math.minuit.FCNBase;
+import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Func1D;
 
@@ -25,12 +26,20 @@ public class FitterFunction implements FCNBase {
     public FitterFunction(Func1D func, IDataSet data){        
         dataset  = data;
         function = func;
+        if(data instanceof H1F){
+            H1F h = (H1F) data;
+            h.setFunction(func);
+        }
     }
     
     public FitterFunction(Func1D func, IDataSet data,String options){
         dataset    = data;
         function   = func;
         fitOptions = options; 
+        if(data instanceof H1F){
+            H1F h = (H1F) data;
+            h.setFunction(func);
+        }
     }
     
     public Func1D getFunction(){return function;}
@@ -41,6 +50,7 @@ public class FitterFunction implements FCNBase {
         function.setParameters(pars);        
         chi2 = getChi2(pars,fitOptions);
         numberOfCalls++;
+        this.function.setChiSquare(chi2);
         /*
         if(numberOfCalls%10==0){
             System.out.println("********************************************************");
@@ -58,7 +68,7 @@ public class FitterFunction implements FCNBase {
         double chi2 = 0.0;
         int npoints = dataset.getDataSize(0);
         function.setParameters(pars);
-        
+        int ndf = 0;
         for(int np = 0; np < npoints; np++){
             double x = dataset.getDataX(np);
             double y = dataset.getDataY(np);
@@ -71,11 +81,16 @@ public class FitterFunction implements FCNBase {
                 if(options.contains("N")==true){
                     normalization = y;
                 }
+                
+                
                 if(normalization>0.000000000001){
                     chi2 += (yv-y)*(yv-y)/normalization;
+                    ndf++;
                 }
             }
         }
+        int npars = function.getNPars();
+        this.function.setNDF(ndf-npars);
         return chi2;
     }
 }

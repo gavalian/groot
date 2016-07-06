@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import org.jlab.groot.graphics.GraphicsAxis;
 import org.jlab.groot.graphics.GraphicsAxisFrame;
 import org.jlab.groot.ui.LatexText;
+import org.jlab.groot.ui.PaveText;
 
 
 /**
@@ -52,9 +53,22 @@ public class GraphicsTests extends JPanel {
         
         
         text.setFontSize(18);
-                
+        
         text.drawString(g2d, xT,yT,LatexText.ALIGN_CENTER,LatexText.ALIGN_TOP,LatexText.ROTATE_LEFT);
-        text.drawString(g2d, xT,yT,1,1);        
+        text.drawString(g2d, xT,yT,1,1);
+        System.out.println("Pave text definition");
+        PaveText pave = new PaveText(2);
+        pave.setPosition(200, 200);
+        pave.addText("Entries","124500");
+
+        pave.addText("RMS","0.047+/-1.2345");
+        for(int i = 0; i < 1; i++){
+            pave.addText("Mean","0.567");
+            pave.addText("#chi^2/NDF","126.34/57");
+        }
+        pave.addText("Underflow","3456");
+        pave.addText("Overflow","23");
+        pave.drawPave(g2d, 200,200);
 //this.drawGraphicsFrame(g2d);
     }
     
