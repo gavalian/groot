@@ -36,12 +36,31 @@ public class ColorPalette {
                              0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
                              0.,0.17,0.33,0.50,0.67,0.83,1.};
     
+    
+    public static double[] red3D   = {0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+                             0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+                             0.,0.,0.,0.17,0.33,0.50,0.67,0.83,1.00,1.00,
+                             1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,
+                             1.,1.,1.,1.,1.,1.,1.};
+    public static double[] green3D = {0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+                             0.,0.08,0.15,0.23,0.31,0.38,0.46,0.53,0.59,0.66,
+                             0.73,0.80,0.87,0.72,0.58,0.43,0.29,0.14,0.00,0.08,
+                             0.17,0.25,0.33,0.42,0.50,0.58,0.67,0.75,0.83,0.92,
+                             1.,1.,1.,1.,1.,1.,1.};
+    public static double[] blue3D = {0.30,0.33,0.36,0.39,0.42,0.45,0.48,0.52,0.56,0.60,
+                             0.64,0.68,0.68,0.70,0.70,0.70,0.70,0.64,0.56,0.48,
+                             0.40,0.33,0.,0.,0.,0.,0.,0.,0.,0.,
+                             0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+                             0.,0.17,0.33,0.50,0.67,0.83,1.};
+    
+    
     private final ArrayList<Color>  palette = new ArrayList<Color>();
     private static TreeMap<Integer,Color>  colorPalette = ColorPalette.initColorMap();
 
     private int    axisTickSize = 4;
     private int    axisStringOffset = 8;
     
+    private static List<Color>  colorPalette3D = ColorPalette.generateColorPalette3D();
     
     public ColorPalette(){
         this.set(3);
@@ -94,6 +113,28 @@ public class ColorPalette {
                 palette.add(new Color(pred,pgreen,pblue));
             }
         }
+    }
+    
+    public static int  getColorPallete3DSize(){
+        return ColorPalette.colorPalette3D.size();
+    }
+    
+    public static Color  getColorPalette3D(int index){
+        return ColorPalette.colorPalette3D.get(index);
+    }
+    
+    public static List<Color> generateColorPalette3D(){
+        List<Color>  palette = new ArrayList<Color>();
+        
+        palette.clear();
+        //palette.add(new Color(245,245,245));
+        for(int loop = 0; loop < red3D.length; loop++){
+            int pred   = (int) (255.0*red3D[loop]);
+            int pgreen = (int) (255.0*green3D[loop]);
+            int pblue  = (int) (255.0*blue3D[loop]);
+            palette.add(new Color(pred,pgreen,pblue));
+        }
+        return palette;
     }
     
     public Color getColor3D(int bin){

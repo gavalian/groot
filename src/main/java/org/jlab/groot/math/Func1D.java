@@ -8,6 +8,7 @@ package org.jlab.groot.math;
 import org.jlab.groot.base.AttributeType;
 import org.jlab.groot.base.Attributes;
 import org.jlab.groot.data.IDataSet;
+import org.jlab.groot.ui.PaveText;
 
 /**
  *
@@ -20,7 +21,8 @@ public class Func1D implements IDataSet {
     private int   defaultDrawingPoints = 250;
     private Dimension1D  functionRange = new Dimension1D();
     private Attributes   funcAttr      = new Attributes();
-        
+    private double      funcChi2       = 0.0;
+    private int         funcNDF        = 0;
     
     public Func1D(String name){
         this.funcName = name;
@@ -169,6 +171,31 @@ public class Func1D implements IDataSet {
     }
     public void setLineStyle(int style){
         this.funcAttr.add(AttributeType.LINE_STYLE, style);
+    }
+
+    public double getChiSquare(){
+        return this.funcChi2;
+    }
+    
+    public int getNDF(){
+        return this.funcNDF;
+    }
+    
+    public void setChiSquare(double chi2){
+        this.funcChi2 = chi2;
+    }
+    
+    public void setNDF(int ndf){
+        this.funcNDF = ndf;
+    }
+    
+    @Override
+    public PaveText getStatBox() {
+        PaveText  stat = new PaveText(2);
+        for(UserParameter par : userPars.getParameters()){
+            stat.addText(par.name(),String.format("%.3f", par.value()));
+        }
+        return stat;
     }
 
 }

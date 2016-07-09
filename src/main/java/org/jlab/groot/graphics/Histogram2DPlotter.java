@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package org.jlab.groot.ui;
+package org.jlab.groot.graphics;
 
+import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.jlab.groot.base.ColorPalette;
@@ -13,6 +14,7 @@ import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension1D;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
+import org.jlab.groot.graphics.GraphicsAxisFrame;
 
 /**
  *
@@ -66,14 +68,14 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                     double errorX = dataSet.getDataEX(xd);
                     double errorY = dataSet.getDataEY(yd);
                     
-                    double xps = frame.getAxis(0).getAxisPosition(dataX - errorX*0.5);
-                    double xpe = frame.getAxis(0).getAxisPosition(dataX + errorX*0.5);
-                    double yps = frame.getPointY(dataY - errorY*0.5);
-                    double ype = frame.getPointY(dataY + errorY*0.5);
+                    double xps = frame.getAxisPointX(dataX - errorX*0.5);
+                    double xpe = frame.getAxisPointX(dataX + errorX*0.5);
+                    double yps = frame.getAxisPointY(dataY - errorY*0.5);
+                    double ype = frame.getAxisPointY(dataY + errorY*0.5);
                     double height = yps - ype;
                     
                     double dataWeight  = this.dataSet.getData(xd, yd);
-                    boolean zAxisLog = frame.getAxis(2).getLog();
+                    boolean zAxisLog = frame.getAxisZ().getLog();
                     //System.out.println("2D plotter axis Z " + zAxisLog);
                     Color  weightColor = palette.getColor3D(dataWeight,dataRegionZ.getMax(), zAxisLog);
                     /*System.out.println("drawing point " + xd + " " + yd

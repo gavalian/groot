@@ -7,6 +7,7 @@ package org.jlab.groot.data;
 
 import org.jlab.groot.base.AttributeType;
 import org.jlab.groot.base.Attributes;
+import org.jlab.groot.ui.PaveText;
 
 /**
  *
@@ -96,6 +97,11 @@ public class GraphErrors implements IDataSet {
     @Override
     public double getData(int xbin, int ybin) {
         return 0.0;
+    }
+
+    @Override
+    public PaveText getStatBox() {
+        return new PaveText(2);
     }
     
     

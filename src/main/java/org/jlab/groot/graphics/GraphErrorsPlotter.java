@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jlab.groot.ui;
+package org.jlab.groot.graphics;
 
+import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
+import org.jlab.groot.graphics.GraphicsAxisFrame;
 
 /**
  *
@@ -39,9 +41,9 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
     public void draw(Graphics2D g2d, GraphicsAxisFrame frame) {
         int npoints = graphDataSet.getDataSize(0);
         for(int p = 0; p < npoints; p++){
-            double xp = frame.getAxis(0).getAxisPosition(graphDataSet.getDataX(p));
+            double xp = frame.getAxisPointX(graphDataSet.getDataX(p));
             //double yp = frame.getAxis(1).getAxisPosition(graphDataSet.getDataY(p));
-            double yp = frame.getPointY(graphDataSet.getDataY(p));
+            double yp = frame.getAxisPointY(graphDataSet.getDataY(p));
             //int    yc = (int) (frame.getAxis(1).getDimension().getMax() - yp 
             //        + frame.getAxis(1).getDimension().getMin());
             

@@ -9,7 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JInternalFrame;
 import org.jlab.groot.data.IDataSet;
-import org.jlab.groot.ui.EmbeddedCanvas;
+import org.jlab.groot.graphics.EmbeddedCanvas;
+
 
 /**
  *
@@ -22,7 +23,7 @@ public class GROOTStudio {
     EmbeddedCanvas canvas = null;
     
     public GROOTStudio(){
-        canvas = new EmbeddedCanvas(500,400);
+        canvas = new EmbeddedCanvas();//(500,400);
         frame = new JInternalFrame("GROOT Studio", true, true, true, true);
         frame.add(canvas);
         frame.pack();

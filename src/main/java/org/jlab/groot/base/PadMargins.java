@@ -50,4 +50,26 @@ public class PadMargins {
         setLeftMargin(p.getLeftMargin()).setRightMargin(p.getRightMargin());
         setFixed(p.isFixed());
     }
+    
+    public void marginFit(PadMargins margin){
+        if(margin.getTopMargin()>this.getTopMargin()){
+            this.setTopMargin(margin.getTopMargin());
+        }
+        if(margin.getBottomMargin()>this.getBottomMargin()){
+            this.setBottomMargin(margin.getBottomMargin());
+        }        
+        if(margin.getLeftMargin()>this.getLeftMargin()){
+            this.setLeftMargin(margin.getLeftMargin());
+        }
+        if(margin.getRightMargin()>this.getRightMargin()){
+            this.setRightMargin(margin.getRightMargin());
+        }
+    }
+    
+    @Override
+    public String toString(){
+        return String.format("( MARGINS ) TOP %d BOTTOM %d LEFT %d RIGTH %d", 
+                this.topMargin, this.bottomMargin, this.leftMargin,
+                this.rightMargin);
+    }
 }

@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jlab.groot.ui;
+package org.jlab.groot.graphics;
 
+import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -14,6 +15,7 @@ import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
+import org.jlab.groot.graphics.GraphicsAxisFrame;
 
 /**
  *
@@ -53,12 +55,12 @@ public class FunctionPlotter implements IDataSetPlotter {
     public void draw(Graphics2D g2d, GraphicsAxisFrame frame) {
         int npoints = functionData.getDataSize(0);
         GeneralPath path = new GeneralPath();
-        double xp = frame.getPointX(functionData.getDataX(0));
-        double yp = frame.getPointY(functionData.getDataY(0));
+        double xp = frame.getAxisPointX(functionData.getDataX(0));
+        double yp = frame.getAxisPointY(functionData.getDataY(0));
         path.moveTo(xp, yp);
         for(int p = 0; p < npoints; p++){
-            xp = frame.getPointX(functionData.getDataX(p));
-            yp = frame.getPointY(functionData.getDataY(p));
+            xp = frame.getAxisPointX(functionData.getDataX(p));
+            yp = frame.getAxisPointY(functionData.getDataY(p));
             path.lineTo(xp, yp);
         }
         int lineColor = functionData.getAttributes().get(AttributeType.LINE_COLOR);
@@ -78,6 +80,10 @@ public class FunctionPlotter implements IDataSetPlotter {
         for(int i = 0; i < npoints; i++){
             this.dataRegion.grow(functionData.getDataX(i), functionData.getDataY(i),0.5);
         }
+        double length = this.dataRegion.getDimension(1).getLength();
+        this.dataRegion.getDimension(1).setMinMax(
+                this.dataRegion.getDimension(1).getMin(), 
+                this.dataRegion.getDimension(1).getMin() + length*1.1);
         return dataRegion;
     }
  

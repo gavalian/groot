@@ -34,13 +34,14 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import org.jlab.groot.data.DataVector;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.tree.RandomTree;
 import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeAnalyzer;
 import org.jlab.groot.ui.CutPanel;
 import org.jlab.groot.ui.DescriptorPanel;
-import org.jlab.groot.ui.EmbeddedCanvas;
-import org.jlab.groot.ui.HistogramPlotter;
+
+import org.jlab.groot.graphics.HistogramPlotter;
 
 /**
  *
@@ -93,7 +94,7 @@ public class StudioUI implements MouseListener,ActionListener {
         canvasPane.setLayout(new BorderLayout());
         canvasPane.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         //canvasPane.setBorder(new EmptyBorder(5,5,5,5));
-        drawCanvas     = new EmbeddedCanvas(500,500,2,2);
+        drawCanvas     = new EmbeddedCanvas();//500,500,2,2);
         canvasPane.add(drawCanvas,BorderLayout.CENTER);
 
         
@@ -175,7 +176,7 @@ public class StudioUI implements MouseListener,ActionListener {
             H1F  h1d = H1F.create(item, 100, vec);
             h1d.setLineColor(1);
             h1d.setFillColor(43);
-            this.drawCanvas.drawNext(h1d);
+            //this.drawCanvas.drawNext(h1d);
             //this.drawCanvas.getPad(0).addPlotter(new HistogramPlotter(h1d));
             this.drawCanvas.update();
         }        

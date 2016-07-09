@@ -74,4 +74,13 @@ public class FunctionFactory {
         }
         return h;
     } 
+    
+    
+    public static H1F  createDebugH1F(int bins){
+        H1F h1 = new H1F("h1","Debug Histogram",bins,0.5, ((float) bins) + 0.5);
+        for(int i =0 ; i < bins; i++){
+            h1.setBinContent(i, i+1);
+        }
+        return h1;
+    }
 }

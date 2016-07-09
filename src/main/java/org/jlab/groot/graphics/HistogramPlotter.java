@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jlab.groot.ui;
+package org.jlab.groot.graphics;
 
+import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
@@ -15,6 +16,7 @@ import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
+import org.jlab.groot.graphics.GraphicsAxisFrame;
 
 /**
  *
@@ -30,6 +32,12 @@ public class HistogramPlotter implements IDataSetPlotter  {
     public HistogramPlotter(IDataSet ds){
         dataset = ds;
         datasetName = ds.getName();
+    }
+    
+    public HistogramPlotter(IDataSet ds,String options){
+        dataset = ds;
+        datasetName = ds.getName();
+        this.plottingOptions = options;
     }
     
     @Override
@@ -61,12 +69,12 @@ public class HistogramPlotter implements IDataSetPlotter  {
         double dataY  = dataset.getDataY(0);
         double errorX = dataset.getDataEX(0);
             
-        double xps = frame.getAxis(0).getAxisPosition(dataX - errorX*0.5);
-        double xpe = frame.getAxis(0).getAxisPosition(dataX + errorX*0.5);
+        double xps = frame.getAxisPointX(dataX - errorX*0.5);
+        double xpe = frame.getAxisPointX(dataX + errorX*0.5);
         //double yp  = frame.getAxis(1).getDimension().getMax() - 
         //        frame.getAxis(1).getAxisPosition(0.0)                 
         //        + frame.getAxis(1).getDimension().getMin();
-        double yp = frame.getPointY(0.0);
+        double yp = frame.getAxisPointY(0.0);
         
         GeneralPath path = new GeneralPath();
         //Path2D path = new Path2D.Double();
@@ -79,13 +87,17 @@ public class HistogramPlotter implements IDataSetPlotter  {
             dataY  = dataset.getDataY(p);
             errorX = dataset.getDataEX(p);
             
-            xps = frame.getAxis(0).getAxisPosition(dataX - errorX*0.5);
-            xpe = frame.getAxis(0).getAxisPosition(dataX + errorX*0.5);
+            xps = frame.getAxisPointX(dataX - errorX*0.5);
+            xpe = frame.getAxisPointX(dataX + errorX*0.5);
+            //System.out.println(" x =  " + dataX + " y = " + dataY + " xps = "
+            //        + xps + " yp = " + yp);
             //yp  = frame.getAxis(1).getDimension().getMax() - 
             //        frame.getAxis(1).getAxisPosition(dataY)                    
             //        + frame.getAxis(1).getDimension().getMin(); 
-            if(dataY<0.1) dataY = 0.0;
-            yp = frame.getPointY(dataY);
+            
+            //if(dataY<0.1) dataY = 0.0;
+            yp = frame.getAxisPointY(dataY);
+            
             //System.out.println("histogram = " + p + " " + dataY + " " + yp);
             path.lineTo((int) xps, (int) yp);
             path.lineTo((int) xpe, (int) yp);
@@ -95,7 +107,7 @@ public class HistogramPlotter implements IDataSetPlotter  {
         //yp  = frame.getAxis(1).getDimension().getMax() - 
         //        frame.getAxis(1).getAxisPosition(0.0)                 
         //        + frame.getAxis(1).getDimension().getMin();
-        yp = frame.getPointY(0.0);
+        yp = frame.getAxisPointY(0.0);
         path.lineTo((int) xpe, (int) yp);
         int fillColor = this.dataset.getAttributes().get(AttributeType.FILL_COLOR);
         if(fillColor>=0){
@@ -107,7 +119,7 @@ public class HistogramPlotter implements IDataSetPlotter  {
         g2d.setColor(TStyle.getColor(lineColor));
         g2d.draw(path);
     }
-
+    
     @Override
     public Dimension3D getDataRegion() {
         

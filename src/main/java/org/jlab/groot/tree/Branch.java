@@ -11,6 +11,7 @@ package org.jlab.groot.tree;
  * @author gavalian
  */
 public class Branch {
+    
     private String branchName = "branch";
     private String branchDesc = "generic branch";
     private String branchUnit = "cm";
