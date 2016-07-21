@@ -76,6 +76,10 @@ public class Func1D implements IDataSet {
         return userPars.getParameters().size();
     }
     
+    public void setParStep(int par, double step){
+        this.parameter(par).setStep(step);
+    }
+    
     public void setParLimits(int par, double min, double max){
         userPars.getParameters().get(par).setLimits(min, max);
     }
@@ -86,6 +90,17 @@ public class Func1D implements IDataSet {
     
     public double evaluate(double x){
         return 1;
+    }
+    
+    public double getIntegral(){
+        int nsamples = 400;
+        double step = this.getRange().getLength()/nsamples;
+        double integral = 0.0;
+        for(int i = 0; i < nsamples; i++){
+            double x = getRange().getMin() + i * step;
+            integral += evaluate(x)*step;
+        }
+        return integral;
     }
     
     public Dimension1D getRange(){

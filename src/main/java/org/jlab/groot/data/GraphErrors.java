@@ -27,6 +27,12 @@ public class GraphErrors implements IDataSet {
         initAttributes();
     }
     
+    public GraphErrors(String name, double[] x, double y[], double[] ex, double[] ey){
+        setName(name);
+        for(int i = 0; i < x.length; i++){
+            this.addPoint(x[i], y[i], ex[i], ey[i]);
+        }
+    }
     
     private void initAttributes(){
         graphAttr.add(AttributeType.LINE_COLOR,   1);
@@ -37,7 +43,7 @@ public class GraphErrors implements IDataSet {
         graphAttr.add(AttributeType.MARKER_STYLE, 1);
     }
     
-    public void addPoint(double x, double y, double ex, double ey){
+    public final void addPoint(double x, double y, double ex, double ey){
         dataX.add(x);
         dataY.add(y);
         dataEX.add(ex);
@@ -104,5 +110,23 @@ public class GraphErrors implements IDataSet {
         return new PaveText(2);
     }
     
+    public DataVector getVectorX(){
+        return this.dataX;
+    }
     
+    public DataVector getVectorY(){
+        return this.dataY;
+    }
+    
+    public void copy(GraphErrors gr){
+        this.dataEX.clear();
+        this.dataEY.clear();
+        this.dataX.clear();
+        this.dataY.clear();
+        for(int i = 0; i < gr.getDataSize(0); i++){
+            this.addPoint( gr.getDataX(i),gr.getDataY(i),
+                    gr.getDataEX(i),gr.getDataEY(i)
+            );
+        }
+    }
 }

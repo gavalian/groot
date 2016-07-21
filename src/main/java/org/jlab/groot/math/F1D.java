@@ -70,20 +70,20 @@ public class F1D extends Func1D {
     
     public final void parse(String str){
         expressionString = str;
-        System.out.println("---> starting parsing....");
+        //System.out.println("---> starting parsing....");
         int pos_o = str.indexOf("[");
         Set<String>  params = new LinkedHashSet<String>();
         
-        System.out.println(" position = " + pos_o);
+        //System.out.println(" position = " + pos_o);
         while(pos_o>=0){
             int pos_c = str.indexOf("]", pos_o);
-            System.out.println("brackets from " + pos_o 
-                    + " to " + pos_c);
+            //System.out.println("brackets from " + pos_o 
+            //        + " to " + pos_c);
             String param = str.substring(pos_o+1, pos_c);
             params.add(param);
             pos_o = str.indexOf("[", pos_c);     
         }
-        System.out.println(params);
+        //System.out.println(params);
         String funcString = str;
         //funcString.replaceAll("x", "p");
         String newString = funcString;
@@ -93,7 +93,7 @@ public class F1D extends Func1D {
             expressionVariables.add(par);
             newString = newString.replace(item,par);
         }
-        System.out.println(newString);
+        //System.out.println(newString);
         
         int npars = expressionVariables.size();
         String[] expvar = new String[npars+1];
@@ -101,7 +101,7 @@ public class F1D extends Func1D {
                 
         for(int i = 0; i < npars; i++){
             expvar[i+1] = expressionVariables.get(i);
-            System.out.println("adding ---> " + expressionVariables.get(i));
+            //System.out.println("adding ---> " + expressionVariables.get(i));
             this.addParameter(expressionVariables.get(i));
         }
         ExpressionBuilder builder = new ExpressionBuilder(newString)

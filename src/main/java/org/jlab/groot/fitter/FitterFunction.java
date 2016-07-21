@@ -22,6 +22,8 @@ public class FitterFunction implements FCNBase {
     private IDataSet  dataset  = null;
     private String    fitOptions = "E";
     private int       numberOfCalls = 0;
+    private long      startTime     = 0L;
+    private long      endTime       = 0L;
     
     public FitterFunction(Func1D func, IDataSet data){        
         dataset  = data;
@@ -30,6 +32,7 @@ public class FitterFunction implements FCNBase {
             H1F h = (H1F) data;
             h.setFunction(func);
         }
+        startTime = System.currentTimeMillis();
     }
     
     public FitterFunction(Func1D func, IDataSet data,String options){
@@ -40,6 +43,7 @@ public class FitterFunction implements FCNBase {
             H1F h = (H1F) data;
             h.setFunction(func);
         }
+        startTime = System.currentTimeMillis();
     }
     
     public Func1D getFunction(){return function;}
@@ -51,6 +55,7 @@ public class FitterFunction implements FCNBase {
         chi2 = getChi2(pars,fitOptions);
         numberOfCalls++;
         this.function.setChiSquare(chi2);
+        endTime = System.currentTimeMillis();
         /*
         if(numberOfCalls%10==0){
             System.out.println("********************************************************");
@@ -81,8 +86,7 @@ public class FitterFunction implements FCNBase {
                 if(options.contains("N")==true){
                     normalization = y;
                 }
-                
-                
+                                
                 if(normalization>0.000000000001){
                     chi2 += (yv-y)*(yv-y)/normalization;
                     ndf++;
@@ -92,5 +96,14 @@ public class FitterFunction implements FCNBase {
         int npars = function.getNPars();
         this.function.setNDF(ndf-npars);
         return chi2;
+    }
+    
+    public String getBenchmarkString(){
+        StringBuilder str = new StringBuilder();
+        double time = (double) (endTime-startTime);
+        str.append(String.format("[fit-benchmark] Time = %.3f , Iterrations = %d"
+                , time/1000.0,
+                this.numberOfCalls));
+        return str.toString();
     }
 }

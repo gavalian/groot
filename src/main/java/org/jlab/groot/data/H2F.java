@@ -475,7 +475,9 @@ public class H2F implements IDataSet {
                 double rms  = h1.getRMS();
                 //System.out.println("MEAN = " + mean + "  RMS = " + rms);
                 double bincenter = this.getXAxis().getBinCenter(loop);
-                graph.addPoint(bincenter, mean, 0.0, rms);
+                if(h1.integral()>1.0){
+                    graph.addPoint(bincenter, mean, this.getXAxis().getBinWidth(loop)/2.0, rms);
+                }
             }
             return graph;
         }

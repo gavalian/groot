@@ -170,6 +170,7 @@ public class Axis implements Serializable {
      * @return			the bin where the specified value is in array indexing format
      */
     public int getBin(double xVal) {
+        if(xVal<axisMargins[0]) return -1;
     	for (int i = 0; i < numBins; i++) {
     		if ((xVal >= axisMargins[i] && xVal < axisMargins[i+1])) {
     			return i;
@@ -179,7 +180,8 @@ public class Axis implements Serializable {
     	if (xVal == axisMargins[axisMargins.length - 1]) {
     		return numBins;
     	}*/
-    	return -1;
+        
+    	return numBins;
     }
     
     /**

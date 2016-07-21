@@ -143,4 +143,32 @@ public class PaveText {
         */
     }
     
+    public void setFont(String name){
+        this.paveFont.setFontName(name);
+        for(List<LatexText> texts : this.paveTexts){
+            for(LatexText text : texts){
+                text.setFont(name);
+            }
+        }
+    }
+    
+    public void setFontSize(int size){
+        this.paveFont.setFontSize(size);
+        for(List<LatexText> texts : this.paveTexts){
+            for(LatexText text : texts){
+                text.setFontSize(size);
+            }
+        }
+    }
+    
+    public List<List<LatexText>> getPaveTexts(){
+        return this.paveTexts;
+    }
+    
+    public void copy(PaveText pave){
+        this.paveTexts.clear();
+        for(List<LatexText>  texts : pave.getPaveTexts()){
+            
+        }
+    }
 }

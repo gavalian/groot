@@ -15,6 +15,7 @@ public class UserParameter {
     double pMin;
     double pMax;
     double pError;
+    double pStep = 0.0001;
     
     boolean isRangeLimited = false;
     
@@ -47,6 +48,7 @@ public class UserParameter {
         pError = 0.0;
     }
     
+    public void setStep(double step){ this.pStep = step;}
     public void setError(double error){ pError = error;}
     public void setName(String name) { pName = name;}
     public void setLimits(double min, double max){pMin = min; pMax=max; isRangeLimited = true;}
@@ -81,6 +83,10 @@ public class UserParameter {
     public void setRandom()
     {
         pValue = pMin + Math.random()*Math.abs(pMax-pMin);
+    }
+    
+    public double getStep(){
+        return this.pStep;
     }
     
     public double getRandom()

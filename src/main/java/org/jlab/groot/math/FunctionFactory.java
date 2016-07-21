@@ -83,4 +83,30 @@ public class FunctionFactory {
         }
         return h1;
     }
+    
+    public static H1F     createH1F(int type, int bins, int samples){
+        Func1D  func = FunctionFactory.createFunction(type);
+        H1F h = new H1F("RandomH1F",bins,0.1,5.0);
+        RandomFunc  random = new RandomFunc(func);
+        for(int i = 0; i < samples; i++){
+            double r = random.random();
+            h.fill(r);
+        }
+        return h;
+    }
+    
+    public static Func1D  createFunction(int type){
+        if(type == 0){
+            F1D func3 = new F1D("func3","[p0]+[p1]*x+[amp]*gaus(x,[mean],[sigma])",0.0,5.4);
+            func3.setParameters(new double[]{15,5,120,2.4,0.45});
+            return func3;
+        }
+        
+        if(type == 1){
+            F1D func3 = new F1D("func3","[p0]+[p1]*x+[amp]*gaus(x,[mean],[sigma])+[amp2]*gaus(x,[mean2],[sigma2])",0.0,5.4);
+            func3.setParameters(new double[]{15,5,120,1.8,0.25, 80,3.2,0.45});
+            return func3;
+        }
+        return null;
+    }
 }

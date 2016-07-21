@@ -26,7 +26,9 @@ import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.fitter.DataFitter;
 import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.math.F1D;
+import org.jlab.groot.math.Func1D;
 import org.jlab.groot.math.FunctionFactory;
+import org.jlab.groot.math.RandomFunc;
 
 /**
  *
@@ -93,7 +95,7 @@ public class TCanvas extends JFrame {
     public static void main(String[] args){
         
         
-        TCanvas c1 = new TCanvas("c1",600,400);
+        TCanvas c1 = new TCanvas("c1",900,1200);
         
         GraphErrors  graph = new GraphErrors();
         graph.addPoint(1.0, 1.0, 0.0, 0.0);
@@ -140,22 +142,52 @@ public class TCanvas extends JFrame {
         func3.setParLimits(5, 0, 1000);
         func3.setParLimits(6, 0, 1000);
         func3.setParLimits(7, 0, 1000);
+        
+        func3.setParStep(0, 0.0);
         func3.setLineWidth(3);
 
 
         h1.setLineColor(4);
         func3.show();
-        c1.divide(2,2);
-        h1.divide(40.0);
+
+        c1.divide(2,3);
+        //h1.divide(40.0);
         DataFitter.fit(func3, h1, "E");
         //c1.draw(h1);
-        for(int i = 0 ; i < 4; i ++){
-            c1.cd(i);
-            c1.draw(h1);
-            c1.draw(func3,"same");
-        }
-        func3.show();
+
+        RandomFunc  random = new RandomFunc(func3,1000);
+        c1.cd(0);
+        c1.draw(func3);        
+        c1.cd(1);
+        c1.draw(random.getGraph());
         c1.getCanvas().update();
+        
+        
+        Func1D func4 = FunctionFactory.createFunction(0);
+        Func1D func5 = FunctionFactory.createFunction(1);
+        
+        H1F h4 = FunctionFactory.createH1F(0, 120, 5000);
+        H1F h5 = FunctionFactory.createH1F(1, 120, 5000);
+        h4.setXTitle("Random Gaussian");
+        h5.setXTitle("Random Gaussian");
+        func5.setRange(0.1, 5.0);
+        //func5.setParStep(3, 0.0);
+        //func5.setParameter(3, 2.0);
+        DataFitter.fit(func5, h5, "N");
+        
+        func5.show();
+        c1.cd(0);
+        c1.getCanvas().getPad(0).getAxisFrame().getAxisX().setTitle("Random Gaussian");
+        c1.getCanvas().getPad(1).getAxisFrame().getAxisX().setTitle("Random Gaussian");
+        c1.draw(h4);
+        c1.cd(1);
+        c1.draw(h5);
+        for(int i = 2; i <6; i++){
+            c1.cd(i);
+            c1.getCanvas().getPad(i).setStatBoxFontSize(14);
+            //c1.getCanvas().getPad(i).setAxisRangeY(0, 50);
+            c1.draw(h5);
+        }
         /*
         c1.getCanvas().divide(2, 2);
         for(int i = 0; i < 4; i++){

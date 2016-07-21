@@ -841,9 +841,9 @@ public class H1F  implements IDataSet {
             int npars = this.fittedFunction.getNPars();
             for(int i = 0; i < npars; i++){
                 stat.addText(this.fittedFunction.parameter(i).name(),
-                        String.format("%.3f", 
-                                fittedFunction.parameter(i).value()
-                                //fittedFunction.parameter(i).error()
+                        String.format("%.3f/%.4f", 
+                                fittedFunction.parameter(i).value(),
+                                fittedFunction.parameter(i).error()
                                 ));
             }
         }

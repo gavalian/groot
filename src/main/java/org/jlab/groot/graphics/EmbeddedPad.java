@@ -10,6 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import org.jlab.groot.base.FontProperties;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
@@ -36,6 +37,9 @@ public class EmbeddedPad {
      
      private boolean       isAutoScaleX    = true;
      private boolean       isAutoScaleY    = true;
+     private FontProperties statBoxFont    = new FontProperties();
+     private int            optStat        = 1;
+     
      
      public EmbeddedPad(){
          
@@ -130,15 +134,29 @@ public class EmbeddedPad {
         g2d.setClip(null);
         //System.out.println("PLOTTERS SIZE = " + this.datasetPlotters.size());
         axisFrame.drawAxis(g2d, padMargins);
-        
-        if(this.datasetPlotters.get(0).getDataSet() instanceof H1F){
-            PaveText statBox = this.datasetPlotters.get(0).getDataSet().getStatBox();
-            statBox.updateDimensions(g2d);
-            int x = (int) (this.padDimensions.getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength()-10);
-            int y = (int) (this.padDimensions.getDimension(1).getMin() + 10) ;
-            statBox.setPosition(x, y);
-            statBox.drawPave(g2d, x, y);
+        if(this.optStat>0){
+            if(this.datasetPlotters.get(0).getDataSet() instanceof H1F){
+                
+                PaveText statBox = this.datasetPlotters.get(0).getDataSet().getStatBox();
+                statBox.setFont(this.statBoxFont.getFontName());
+                statBox.setFontSize(this.statBoxFont.getFontSize());
+                
+                statBox.updateDimensions(g2d);
+                
+                int x = (int) (this.padDimensions.getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength()-10);
+                int y = (int) (this.padDimensions.getDimension(1).getMin() + 10) ;
+                statBox.setPosition(x, y);
+                statBox.drawPave(g2d, x, y);
+            }
         }
+    }
+    
+    public void setOptStat(int opts){
+        this.optStat = opts;
+    }
+    
+    public int getOptStat(){
+        return this.optStat;
     }
     
     public EmbeddedPad setAutoScale(){
@@ -157,6 +175,19 @@ public class EmbeddedPad {
         this.fixedRange.getDimension(1).setMinMax(ymin, ymax);
         this.isAutoScaleY = false;
         return this;
+    }
+    
+    public void setStatBoxFont(String name){
+        this.statBoxFont.setFontName(name);
+    }
+    
+    public void setStatBoxFontSize(int size){
+        this.statBoxFont.setFontSize(size);
+    }
+    
+    public void setAxisFont(String name){
+        this.getAxisFrame().getAxisX().setAxisFont(name);
+        this.getAxisFrame().getAxisY().setAxisFont(name);        
     }
     
     public void setAxisFontSize(int size){
@@ -178,6 +209,10 @@ public class EmbeddedPad {
         
         if(ds instanceof H1F){
             this.addPlotter(new HistogramPlotter(ds,options));
+            H1F h = (H1F) ds;
+            if(h.getFunction()!=null){
+                this.addPlotter(new FunctionPlotter(h.getFunction()));
+            }
         }
         if(ds instanceof H2F){
             this.addPlotter(new Histogram2DPlotter(ds));
@@ -185,5 +220,21 @@ public class EmbeddedPad {
         if(ds instanceof GraphErrors){
             this.addPlotter(new GraphErrorsPlotter(ds));
         }
+    }
+    
+    /**
+     * returns copy of embedded pad with all plotters included.
+     * @return 
+     */
+    public EmbeddedPad  getCopy(){
+        EmbeddedPad pad = new EmbeddedPad();
+        for(int i =0 ; i < this.datasetPlotters.size(); i++){
+            IDataSetPlotter plotter = this.datasetPlotters.get(i);
+            if(plotter instanceof HistogramPlotter){
+                pad.addPlotter(new HistogramPlotter(plotter.getDataSet()));
+            }
+            
+        }
+        return pad;
     }
 }
