@@ -34,6 +34,13 @@ public class GraphErrors implements IDataSet {
         }
     }
     
+    public GraphErrors(String name, double[] x, double y[]){
+        setName(name);
+        for(int i = 0; i < x.length; i++){
+            this.addPoint(x[i], y[i], 0.0,0.0);
+        }
+    }
+    
     private void initAttributes(){
         graphAttr.add(AttributeType.LINE_COLOR,   1);
         graphAttr.add(AttributeType.LINE_WIDTH,   1);

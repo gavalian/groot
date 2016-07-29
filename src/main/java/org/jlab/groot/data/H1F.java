@@ -269,7 +269,7 @@ public class H1F  implements IDataSet {
     public double getMean() {
         double mean  = 0.0;
         double summ  = 0.0;
-        int    count = 0; 
+        double count = 0; 
         for(int i = 0; i < this.getAxis().getNBins(); i++){
             double bincontent =  this.getBinContent(i);
             //System.err.println(" bin count = " + count + " content summ = " + bincontent);

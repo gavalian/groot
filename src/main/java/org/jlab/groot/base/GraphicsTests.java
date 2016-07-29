@@ -6,6 +6,7 @@
 
 package org.jlab.groot.base;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -41,8 +42,16 @@ public class GraphicsTests extends JPanel {
 
         Long st = System.currentTimeMillis();
         Graphics2D g2d = (Graphics2D) g;
+        
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint( RenderingHints.  KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.setRenderingHint( RenderingHints.  KEY_STROKE_CONTROL,
+               RenderingHints.VALUE_STROKE_PURE);
+        
+        //g2d.setRenderingHint( RenderingHints.  KEY_RENDERING, 
+        //        RenderingHints.VALUE_RENDER_QUALITY);
         
         int xT = 100;
         int yT = 200;
@@ -58,7 +67,7 @@ public class GraphicsTests extends JPanel {
         text.drawString(g2d, xT,yT,1,1);
         System.out.println("Pave text definition");
         PaveText pave = new PaveText(2);
-        pave.setPosition(200, 200);
+        pave.setPosition(300, 300);
         pave.addText("Entries","124500");
 
         pave.addText("RMS","0.047+/-1.2345");
@@ -69,6 +78,10 @@ public class GraphicsTests extends JPanel {
         pave.addText("Underflow","3456");
         pave.addText("Overflow","23");
         pave.drawPave(g2d, 200,200);
+        g2d.setStroke(new BasicStroke(1));
+        g2d.drawOval(200,200, 40, 40);        
+        g2d.fillOval(203,203, 34, 34);
+        
 //this.drawGraphicsFrame(g2d);
     }
     

@@ -19,6 +19,13 @@
 	<artifactId>jminuit</artifactId>
         <version>1.0</version>
       </dependency>
+
+      <dependency>
+        <groupId>net.miginfocom</groupId>
+        <artifactId>miglayout</artifactId>
+        <version>4.0</version>
+      </dependency>
+
     </dependencies>
 
     <repositories>

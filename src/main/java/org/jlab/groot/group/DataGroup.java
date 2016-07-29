@@ -26,10 +26,18 @@ public class DataGroup {
     int  numberOfRows    = 1;
     int  numberOfColumns = 1;
     
+    private String dataGroupName = "generic";
     
     public DataGroup(){
         
     }
+    
+    public DataGroup(String name){
+        this.dataGroupName = name;
+    }
+    
+    public final void setName(String name){ this.dataGroupName = name;}
+    public String getName(){ return this.dataGroupName;}
     
     public DataGroup(int ncols, int nrows){
         this.numberOfColumns = ncols;
