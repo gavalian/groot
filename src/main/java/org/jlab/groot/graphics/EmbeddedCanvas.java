@@ -10,25 +10,31 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jlab.groot.base.PadMargins;
+import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
+import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.math.FunctionFactory;
 
 /**
  *
  * @author gavalian
  */
-public class EmbeddedCanvas extends JPanel {
+public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseListener {
     
     private Timer        updateTimer = null;
     private Long numberOfPaints  = (long) 0;
@@ -46,6 +52,17 @@ public class EmbeddedCanvas extends JPanel {
         this.setPreferredSize(new Dimension(500,400));        
         canvasPads.add(new EmbeddedPad());
         this.divide(1, 1);
+        this.initMouse();
+    }
+    
+    public EmbeddedCanvas(EmbeddedPad pad){
+        this.setPreferredSize(new Dimension(500,400));
+        
+    }
+    
+    public final void initMouse(){
+        this.addMouseMotionListener(this);
+        this.addMouseListener(this);
     }
     
     public final void divide(int columns, int rows){
@@ -151,7 +168,7 @@ public class EmbeddedCanvas extends JPanel {
         
     public void update(){
         this.repaint();       
-        System.out.println(this.getBenchmarkString());
+        //System.out.println(this.getBenchmarkString());
     }
     
     public String getBenchmarkString(){
@@ -190,67 +207,103 @@ public class EmbeddedCanvas extends JPanel {
         this.numberOfPaints = 0L;
     }
     
+    public int getPadByXY(int x, int y){
+        int  rowSize = (int) this.getHeight()/this.ec_ROWS;
+        int  row = (int) (y/rowSize);
+        int  colSize = (int) this.getWidth()/this.ec_COLUMNS;
+        int  col = (int) (x/colSize);
+        return row*ec_ROWS + col;
+    }
+
+    public void draw(DataGroup group){
+        int nrows = group.getRows();
+        int ncols = group.getColumns();
+        this.divide(ncols, nrows);
+        
+        int nds   = nrows*ncols;
+        for(int i = 0; i < nds; i++){
+            List<IDataSet> dsList = group.getData(i);
+            this.cd(i);
+            for(IDataSet ds : dsList){
+                this.draw(ds, "same");
+            }
+        }
+    }
+    
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        int pad = this.getPadByXY(e.getX(),e.getY());
+        //System.out.println("you're hovering over pad = " + pad);
+    }
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(e.getClickCount()==2){
+            int pad = this.getPadByXY(e.getX(),e.getY());
+            System.out.println("you double clicked on " + pad);
+            JDialog  dialogWin = new JDialog();            
+            dialogWin.setContentPane(new EmbeddedCanvas());
+            dialogWin.setSize(400, 400);
+            dialogWin.setVisible(true);
+        }
+    }
+    
+    @Override
+    public void mousePressed(MouseEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     public static void main(String[] args){
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 400);
         EmbeddedCanvas canvas = new EmbeddedCanvas();
-        canvas.divide(1, 3);
-        canvas.setAxisFontSize(8);
+        canvas.divide(2, 2);
+        canvas.setAxisFontSize(14);
         //canvas.getPad(0).getAxisFrame().getAxisX().setAxisFontSize(18);
         //canvas.getPad(1).getAxisFrame().getAxisY().setAxisFontSize(18);
         //canvas.getPad(0).getAxisFrame().setDrawAxisZ(true);
         
-        H1F h1 = FunctionFactory.createDebugH1F(6);
+        H1F h1  = FunctionFactory.createDebugH1F(6);
         H1F h2  = FunctionFactory.randomGausian(100, 0.4, 5.6, 200000, 2.3, 0.8);
         H1F h2b = FunctionFactory.randomGausian(100, 0.4, 5.6, 80000, 4.0, 0.8);
         H2F h2d = FunctionFactory.randomGausian2D(40, 0.4, 5.6, 800000, 2.3, 0.8);
         
-        h1.setFillColor(43);
-        h2.setFillColor(44);
-        h2b.setFillColor(43);
-        HistogramPlotter  plotter  = new HistogramPlotter(h1);
-        HistogramPlotter  plotter2 = new HistogramPlotter(h2);
-        HistogramPlotter  plotter2b = new HistogramPlotter(h2b);
-        Histogram2DPlotter  plotter3 = new Histogram2DPlotter(h2d);
-        
-        canvas.getPad(0).addPlotter(plotter);
-        canvas.getPad(1).addPlotter(plotter2);
-        canvas.getPad(2).addPlotter(plotter3);
-        
-        canvas.divide(4,4);
-        canvas.setAxisFontSize(10);
-        for(int i = 0; i < 16; i++){
-            
-            //canvas.getPad(i).getAxisFrame().getAxisY().setTitle("Counts");
-            //canvas.getPad(i).getAxisFrame().setDrawAxisZ(true);
-            if(i%3==0){
-                canvas.getPad(i).addPlotter(plotter3);
-                //canvas.getPad(i).getAxisFrame().setDrawAxisZ(true);
-            } else {
-                canvas.getPad(i).getAxisFrame().getAxisX().setTitle("M^2 [GeV]");
-            //canvas.getPad(i).setAxisRangeX(2, 8);
-            //canvas.getPad(i).setAxisRangeY(0, 1000);
-                canvas.getPad(i).addPlotter(plotter2b);
-                canvas.getPad(i).addPlotter(plotter2);
-            }
-        }
-        /*
-        canvas.divide(2, 2);
-        for(int i = 0 ; i < 4; i ++){
-            canvas.getPad(i).getAxisFrame().getAxisX().setTitle("M^2 [GeV]");
-            canvas.getPad(i).getAxisFrame().getAxisY().setTitle("Counts");
+        DataGroup group = new DataGroup(2,1);
+        h2b.setName("h2b");
+        GraphErrors hprofile = h2d.getProfileX();
+        group.addDataSet(h2d, 0);
+        group.addDataSet(hprofile, 1);
+        canvas.draw(group);
+        /*for(int i =0; i < 4; i++){
+            canvas.cd(i);
+            canvas.draw(h2);
         }*/
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
         
-        try {
-            Thread.sleep(7000);
-            canvas.initTimer(800);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EmbeddedCanvas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
     }
+
+   
 }

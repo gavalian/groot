@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.jlab.groot.base.AttributeType;
 import org.jlab.groot.base.Attributes;
+import org.jlab.groot.base.DatasetAttributes;
 import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.MultiIndex;
 import org.jlab.groot.ui.PaveText;
@@ -24,7 +25,7 @@ public class H2F implements IDataSet {
 	private Axis yAxis = new Axis();
 	private float[] hBuffer;
 	private MultiIndex offset;
-        private Attributes attr = new Attributes(); 
+        private DatasetAttributes attr = new DatasetAttributes(); 
         private Float     maximumBinValue = 0.0f;
         
 	public H2F() {
@@ -202,7 +203,7 @@ public class H2F implements IDataSet {
          */
         public String getTitle(){
             //return this.histTitle;
-            return this.attr.getString(AttributeType.STRING_TITLE);
+            return "";//this.attr.getString(AttributeType.STRING_TITLE);
         }
         /**
          * The getter for the x-axis title.
@@ -210,7 +211,7 @@ public class H2F implements IDataSet {
          * @return		The title of the x-axis as a string
          */
         public String getXTitle() {
-            return this.attr.getString(AttributeType.STRING_TITLE_X);
+            return "";//this.attr.getString(AttributeType.STRING_TITLE_X);
             //return this.getXaxis().getTitle();
         }
         
@@ -220,7 +221,7 @@ public class H2F implements IDataSet {
          * @return		The title of the y-axis as a string
          */
         public String getYTitle() {
-            return this.attr.getString(AttributeType.STRING_TITLE_Y);
+            return "";//this.attr.getString(AttributeType.STRING_TITLE_Y);
             //return this.getYaxis().getTitle();
         }
         
@@ -475,7 +476,9 @@ public class H2F implements IDataSet {
                 double rms  = h1.getRMS();
                 //System.out.println("MEAN = " + mean + "  RMS = " + rms);
                 double bincenter = this.getXAxis().getBinCenter(loop);
-                graph.addPoint(bincenter, mean, 0.0, rms);
+                if(h1.integral()>1.0){
+                    graph.addPoint(bincenter, mean, this.getXAxis().getBinWidth(loop)/2.0, rms);
+                }
             }
             return graph;
         }
@@ -607,7 +610,7 @@ public class H2F implements IDataSet {
     }
 
     @Override
-    public Attributes getAttributes() {
+    public DatasetAttributes getAttributes() {
         return this.attr;
     }
 

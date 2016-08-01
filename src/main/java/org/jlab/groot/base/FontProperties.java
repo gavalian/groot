@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class FontProperties {
     
-    private static List<String>   systemAvailableFonts = FontProperties.getSystemFonts();
+    private static final List<String>   systemAvailableFonts = FontProperties.initSystemFonts();
     
     private String fontName = "Avenir";
     private int    fontSize = 12;
@@ -39,6 +39,16 @@ public class FontProperties {
     
     public static List<String>  getSystemFonts(){
         return systemAvailableFonts;
+    }
+    
+    public static String[]  getSystemFontsArray(){
+        String[] fonts = new String[systemAvailableFonts.size()];
+        int icounter = 0;
+        for(String fn : systemAvailableFonts){
+            fonts[icounter] = fn;
+            icounter++;
+        }
+        return fonts;
     }
     
     public static List<String>  initSystemFonts(){
@@ -76,6 +86,11 @@ public class FontProperties {
         System.out.println("[SystemFonts] ---> set size = " + fontSet.size()
         + ", available " + fontList.size());
         return fontList;
+    }
+    
+    public static String[] getFontSizeArray(){
+        String[] array = new String[]{"6","8","10","12","14","18","24","28","32","48"};
+        return array;
     }
     
     public int getFontSize(){
