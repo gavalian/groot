@@ -10,6 +10,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JDialog;
+import javax.swing.JTabbedPane;
 import org.jlab.groot.base.FontProperties;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.data.GraphErrors;
@@ -236,5 +238,27 @@ public class EmbeddedPad {
             
         }
         return pad;
+    }
+    
+    
+    public static class EmbeddedPadConfigurationPane extends JDialog {
+
+        EmbeddedPad  embeddedPad = null;
+        JTabbedPane  tabbedPane  = null;
+        
+        public EmbeddedPadConfigurationPane(EmbeddedPad pad){
+            super();
+            tabbedPane = new JTabbedPane();
+            this.setEmbeddedPad(pad);
+        }
+        
+        public final void setEmbeddedPad(EmbeddedPad pad){
+            embeddedPad = pad;
+        }
+        
+        public void initUI(){
+            //embeddedPad.getAxisFrame().getAxisX()
+        }
+        
     }
 }

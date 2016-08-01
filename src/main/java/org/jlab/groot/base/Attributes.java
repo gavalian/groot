@@ -8,12 +8,14 @@ package org.jlab.groot.base;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.swing.JComboBox;
 
 /**
  *
  * @author gavalian
  */
 public class Attributes {
+    
     Map<AttributeType,Integer>  attributesMap = new LinkedHashMap<AttributeType,Integer>();
     Map<AttributeType,String>   attributesString = new LinkedHashMap<AttributeType,String>();
  
@@ -60,6 +62,17 @@ public class Attributes {
         for(Map.Entry<AttributeType,Integer> entry : getMap().entrySet()){
             if(attr.getMap().containsKey(entry.getKey())==true){
                 this.attributesMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+    
+    public static void  chooseByString(JComboBox comboBox, String value){
+        int nentries = comboBox.getItemCount();
+        for(int index = 0; index < nentries; index++){
+            String item = (String) comboBox.getItemAt(index);
+            if(value.compareTo(item)==0){
+                comboBox.setSelectedIndex(index);
+                return;
             }
         }
     }
