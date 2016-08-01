@@ -53,6 +53,7 @@ public class DatasetAttributes implements Cloneable {
     public int  getMarkerColor(){return this.markerColor;}
     public int  getMarkerWidth(){return this.markerWidth;}
     public int  getMarkerStyle(){return this.markerStyle;}
+    public int  getFillColor() {return this.fillColor;}
     
     
     @Override

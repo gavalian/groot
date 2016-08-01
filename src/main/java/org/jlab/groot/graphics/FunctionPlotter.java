@@ -63,8 +63,8 @@ public class FunctionPlotter implements IDataSetPlotter {
             yp = frame.getAxisPointY(functionData.getDataY(p));
             path.lineTo(xp, yp);
         }
-        int lineColor = functionData.getAttributes().get(AttributeType.LINE_COLOR);
-        int lineWidth = functionData.getAttributes().get(AttributeType.LINE_WIDTH);
+        int lineColor = functionData.getAttributes().getLineColor();
+        int lineWidth = functionData.getAttributes().getLineWidth();
 
         g2d.setColor(TStyle.getColor(lineColor));
         g2d.setStroke(new BasicStroke(lineWidth));
