@@ -6,6 +6,7 @@
 package org.jlab.groot.graphics;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -72,7 +73,9 @@ public class EmbeddedPad {
     public GraphicsAxisFrame  getAxisFrame(){
         return this.axisFrame;
     }
-    
+    public void paint(Graphics g){
+    	this.draw((Graphics2D)g);
+    }
     public void draw(Graphics2D g2d){                
         //axisFrame.updateMargins(g2d);
         //axisFrame.setAxisMargins(padMargins);
@@ -200,7 +203,9 @@ public class EmbeddedPad {
     public void addPlotter(IDataSetPlotter plotter){
         this.datasetPlotters.add(plotter);
     }
-    
+    public int getWidth(){return (int)(padDimensions.getDimension(0).getMax() -  padDimensions.getDimension(0).getMin());}
+    public int getHeight(){return (int)(padDimensions.getDimension(1).getMax() -  padDimensions.getDimension(1).getMin());}
+
     public void draw(IDataSet ds, String options){
         if(options.contains("same")==false){
             this.datasetPlotters.clear();

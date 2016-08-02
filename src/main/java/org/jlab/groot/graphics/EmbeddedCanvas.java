@@ -10,18 +10,35 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
@@ -29,17 +46,19 @@ import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.math.FunctionFactory;
+import org.jlab.groot.ui.TransferableImage;
 
 /**
  *
  * @author gavalian
  */
-public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseListener {
+public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseListener, ActionListener {
     
     private Timer        updateTimer = null;
     private Long numberOfPaints  = (long) 0;
     private Long paintingTime    = (long) 0;
-    
+    private JPopupMenu popup = null;
+    private int popupPad = 0;
     private List<EmbeddedPad>    canvasPads  = new ArrayList<EmbeddedPad>();
     private int                  ec_COLUMNS  = 1;
     private int                  ec_ROWS     = 1;
@@ -52,12 +71,13 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         this.setPreferredSize(new Dimension(500,400));        
         canvasPads.add(new EmbeddedPad());
         this.divide(1, 1);
+        this.createPopupMenu();
         this.initMouse();
     }
     
     public EmbeddedCanvas(EmbeddedPad pad){
         this.setPreferredSize(new Dimension(500,400));
-        
+        this.createPopupMenu();
     }
     
     public final void initMouse(){
@@ -251,11 +271,16 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             dialogWin.setSize(400, 400);
             dialogWin.setVisible(true);
         }
+       
     }
     
     @Override
     public void mousePressed(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    	 if (e.isPopupTrigger()) {
+             popupPad = getPadByXY(e.getX(),e.getY());
+             //System.out.println("POP-UP coordinates = " + e.getX() + " " + e.getY() + "  pad = " + popupPad);
+             popup.show(EmbeddedCanvas.this, e.getX(), e.getY());
+         }
     }
 
     @Override
@@ -271,6 +296,128 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     @Override
     public void mouseExited(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private void createPopupMenu(){
+        this.popup = new JPopupMenu();
+        JMenuItem itemCopy = new JMenuItem("Copy Canvas Image");
+        JMenuItem itemCopyPad = new JMenuItem("Copy Pad");
+        JMenuItem itemPaste = new JMenuItem("Paste Pad");
+        JMenuItem itemSave = new JMenuItem("Save");
+        JMenuItem itemSaveAs = new JMenuItem("Save As...");
+        JMenuItem itemFitPanel = new JMenuItem("Fit Panel");
+        JMenuItem itemOptions = new JMenuItem("Options");
+        JMenuItem itemOpenWindow = new JMenuItem("Open in New Window");
+        itemCopy.addActionListener(this);
+        itemCopyPad.addActionListener(this);
+        itemSave.addActionListener(this);
+        itemSaveAs.addActionListener(this);
+        itemFitPanel.addActionListener(this);
+        itemOptions.addActionListener(this);
+        itemOpenWindow.addActionListener(this);
+        itemPaste.addActionListener(this);
+        this.popup.add(itemCopy);
+        this.popup.add(itemCopyPad);
+        //this.popup.add(itemPaste);
+        this.popup.add(itemSave);
+        this.popup.add(itemSaveAs);
+        //this.popup.add(new JSeparator());
+        //this.popup.add(itemFitPanel);
+        //this.popup.add(new JSeparator());
+        //this.popup.add(itemOptions);
+        //this.popup.add(itemOpenWindow);
+        addMouseListener(this);
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("action performed " + e.getActionCommand());
+        /*
+        if(e.getActionCommand().compareTo("Options")==0){
+            this.openOptionsPanel(popupPad);
+        }
+        if(e.getActionCommand().compareTo("Fit Panel")==0){
+            this.openFitPanel(popupPad);
+        }*/
+        if(e.getActionCommand().compareTo("Copy")==0){
+            this.copyToClipboard();
+        }/*
+        if(e.getActionCommand().compareTo("Paste Pad")==0){
+            this.paste(popupPad);
+        }*/
+        if(e.getActionCommand().compareTo("Copy Pad")==0){
+            this.copyToClipboard(popupPad);
+        }
+        if(e.getActionCommand().compareTo("Save")==0){
+        	File desktop = new File(System.getProperty("user.home"), "Desktop");
+        	DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
+        	String data = df.format(new Date());
+        	this.save(desktop.getAbsolutePath() +File.separator+"Plot_"+data+".png");
+        	System.out.println("Saved File:"+desktop.getAbsolutePath() +File.separator+"Plot_"+data+".png");
+        }
+        if(e.getActionCommand().compareTo("Save As...")==0){
+            final JFileChooser fc = new JFileChooser("Save As...");
+        	File desktop = new File(System.getProperty("user.home"), "Desktop");
+        	DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
+        	String data = df.format(new Date());
+        	this.save(desktop.getAbsolutePath() +File.separator+"Plot_"+data+".png");
+            fc.setSelectedFile(new File(desktop.getAbsolutePath() +File.separator+"Plot_"+data+".png"));
+            FileFilter filter = new FileNameExtensionFilter("PNG File","png");
+            fc.addChoosableFileFilter(filter);
+            fc.setFileFilter(filter);
+            //In response to a button click:
+            int returnVal = fc.showSaveDialog(this);
+            
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                if(file.exists()==true){
+                    JOptionPane.showMessageDialog(this, "Error. The file already esits....");
+                } else {
+                    //System.out.println("saving file : " + file.getAbsolutePath());
+                    this.save(file.getAbsolutePath());
+                }
+            }
+        }/*
+        if(e.getActionCommand().compareTo("Open in New Window")==0){
+        	this.openInNewWindow(popupPad);
+        }*/
+        
+    }
+    private BufferedImage getScreenShot(){
+        BufferedImage bi = new BufferedImage(
+            this.getWidth(), this.getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
+        this.paint(bi.getGraphics());
+        return bi;
+    }
+    
+    private BufferedImage getScreenShot(int index){
+        //BufferedImage bi = new BufferedImage(
+        //    (int)this.getPad(index).getWidth(), (int)this.getPad(index).getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
+    	BufferedImage bi = new BufferedImage(
+                this.getWidth(), this.getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
+    	this.getPad(index).paint(bi.getGraphics());
+        return bi;
+    }
+    public void copyToClipboard(){
+    	TransferableImage trans = new TransferableImage( getScreenShot() );
+        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+        c.setContents( trans, null );
+    }
+    
+    private void copyToClipboard(int popupPad) {
+    	TransferableImage trans = new TransferableImage(getScreenShot(popupPad));
+    	//trans.setDataSetCollection(this.getPad(popupPad).getPad().getCollection());
+        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+        c.setContents(trans, null );
+    }
+
+    
+    public void save(String filename){    	
+    	  File imageFile = new File(filename);
+    	    try{
+    	        imageFile.createNewFile();
+    	        ImageIO.write(getScreenShot(), "png", imageFile);
+    	    }catch(Exception ex){
+    	    }
     }
     
     public static void main(String[] args){
