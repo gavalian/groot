@@ -812,7 +812,7 @@ public class H1F  implements IDataSet {
         return 1;//this.hAttr.get(AttributeType.LINE_COLOR);
     }
     
-    public H1F setLineWdith(int width){ 
+    public H1F setLineWidth(int width){ 
         //hAttr.add(AttributeType.LINE_WIDTH, width);
         return this;
     }
@@ -831,7 +831,7 @@ public class H1F  implements IDataSet {
     @Override
     public PaveText getStatBox() {
         PaveText stat = new PaveText(2);
-        stat.addText("Entries",Integer.toString(histogramEntries));
+        stat.addText("Entries",Integer.toString(this.getEntries()));
         stat.addText("Mean",String.format("%.3f", this.getMean()));
         stat.addText("RMS",String.format("%.3f", this.getRMS()));
         stat.addText("Underflow",Integer.toString(this.histogramUnderFlow));
