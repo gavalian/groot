@@ -156,7 +156,7 @@ public class DatasetAttributes implements Cloneable {
             }else if(e.getSource()==boxMarkerColor){
             	attr.setMarkerColor(Integer.parseInt(colorChoices[boxMarkerColor.getSelectedIndex()]));
             }else if(e.getSource()==boxMarkerSize){
-            	attr.setMarkerSize(Integer.parseInt(colorChoices[boxMarkerWidth.getSelectedIndex()]));
+            	attr.setMarkerSize(Integer.parseInt(colorChoices[boxMarkerSize.getSelectedIndex()]));
             }else if(e.getSource()==boxMarkerStyle){
             	attr.setMarkerStyle(Integer.parseInt(colorChoices[boxMarkerStyle.getSelectedIndex()]));
             }else if(e.getSource()==boxFillColor){
