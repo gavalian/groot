@@ -34,7 +34,8 @@ public class multiGaus {
 			for (int j = 0; j < 34000; j++) {
 				h1[i].fill(rndm.random());
 			}
-			//h1[i].setLineWidth(2);
+			//h1[i].setLineWidth(10);
+			//h1[i].setLineColor(5);
 			h1[i].setFillColor(30 + (i % 4) + 2);
 			c1.cd(i);
 			c1.draw(h1[i]);

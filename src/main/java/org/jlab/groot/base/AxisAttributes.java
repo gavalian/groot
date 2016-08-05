@@ -188,6 +188,7 @@ public class AxisAttributes {
             }else if(e.getSource()==axisTitle){
             	attr.setAxisTitle(axisTitle.getText());
             }
+        
         }
         
         @Override

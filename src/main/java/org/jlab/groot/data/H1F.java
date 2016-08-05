@@ -135,19 +135,18 @@ public class H1F  implements IDataSet {
     }
     
     public final void initAttributes(){
-        /*
-        this.hAttr.add(AttributeType.LINE_WIDTH,  1);
-        this.hAttr.add(AttributeType.LINE_COLOR,  1);
-        this.hAttr.add(AttributeType.LINE_STYLE,  1);
-        this.hAttr.add(AttributeType.FILL_COLOR, -1);
-        this.hAttr.add(AttributeType.FILL_STYLE,  0);
-        this.hAttr.add(AttributeType.MARKER_SIZE, 6);
-        this.hAttr.add(AttributeType.MARKER_STYLE, 1);
-        this.hAttr.add(AttributeType.MARKER_COLOR, 2);
-        this.hAttr.addString(AttributeType.STRING_TITLE_X, "");
-        this.hAttr.addString(AttributeType.STRING_TITLE_Y, "");
-        */
+        this.hAttr.setLineWidth(1);
+        this.hAttr.setLineColor(1);
+        this.hAttr.setLineStyle(1);
+        this.hAttr.setFillColor(-1);
+        this.hAttr.setFillStyle(0);
+        //this.hAttr.setMarkerSize(6);
+        //this.hAttr.setMarkerStyle(1);
+        //this.hAttr.setMarkerColor(2);
+        //this.hAttr.addString(AttributeType.STRING_TITLE_X, "");
+        //this.hAttr.addString(AttributeType.STRING_TITLE_Y, "");  
     }
+    
     /**
      * Sets the x-axis title to the specified parameter
      * @param xTitle		The desired title of the x-axis
@@ -795,29 +794,29 @@ public class H1F  implements IDataSet {
      * @return 
      */  
     public H1F setFillColor(int color){
-        //this.hAttr.add(AttributeType.FILL_COLOR, color);
+        this.hAttr.setFillColor(color);
         return this;
     }
   
     public int getFillColor(){
-        return 1;// this.hAttr.get(AttributeType.FILL_COLOR);
+        return this.hAttr.getFillColor();
     }
     
     public H1F setLineColor(int color){
-        //this.hAttr.add(AttributeType.LINE_COLOR, color);
+       this.hAttr.setLineColor(color);
         return this;
     }
     
     public int getLineColor(){
-        return 1;//this.hAttr.get(AttributeType.LINE_COLOR);
+        return this.hAttr.getLineColor();
     }
     
-    public H1F setLineWdith(int width){ 
-        //hAttr.add(AttributeType.LINE_WIDTH, width);
+    public H1F setLineWidth(int width){ 
+    	this.hAttr.setLineWidth(width);
         return this;
     }
     public int getLineWidth(){
-        return 1;//this.hAttr.get(AttributeType.LINE_WIDTH);
+        return this.hAttr.getLineWidth();
     }
 
     public void setFunction(Func1D f){
@@ -831,7 +830,7 @@ public class H1F  implements IDataSet {
     @Override
     public PaveText getStatBox() {
         PaveText stat = new PaveText(2);
-        stat.addText("Entries",Integer.toString(histogramEntries));
+        stat.addText("Entries",Integer.toString(this.getEntries()));
         stat.addText("Mean",String.format("%.3f", this.getMean()));
         stat.addText("RMS",String.format("%.3f", this.getRMS()));
         stat.addText("Underflow",Integer.toString(this.histogramUnderFlow));
