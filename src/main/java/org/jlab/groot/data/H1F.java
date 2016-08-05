@@ -795,29 +795,29 @@ public class H1F  implements IDataSet {
      * @return 
      */  
     public H1F setFillColor(int color){
-        //this.hAttr.add(AttributeType.FILL_COLOR, color);
+        this.hAttr.setFillColor(color);
         return this;
     }
   
     public int getFillColor(){
-        return 1;// this.hAttr.get(AttributeType.FILL_COLOR);
+        return this.hAttr.getFillColor();
     }
     
     public H1F setLineColor(int color){
-        //this.hAttr.add(AttributeType.LINE_COLOR, color);
+       this.hAttr.setLineColor(color);
         return this;
     }
     
     public int getLineColor(){
-        return 1;//this.hAttr.get(AttributeType.LINE_COLOR);
+        return this.hAttr.getLineColor();
     }
     
     public H1F setLineWidth(int width){ 
-        //hAttr.add(AttributeType.LINE_WIDTH, width);
+    	this.hAttr.setLineWidth(width);
         return this;
     }
     public int getLineWidth(){
-        return 1;//this.hAttr.get(AttributeType.LINE_WIDTH);
+        return this.hAttr.getLineWidth();
     }
 
     public void setFunction(Func1D f){

@@ -1,6 +1,6 @@
 
 
-package org.root.ui;
+package org.jlab.groot.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;

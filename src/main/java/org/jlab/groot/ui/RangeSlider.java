@@ -1,5 +1,5 @@
 
-package org.root.ui;
+package org.jlab.groot.ui;
 
 
 import javax.swing.JSlider;
