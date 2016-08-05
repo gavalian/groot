@@ -43,13 +43,13 @@ public class GraphErrors implements IDataSet {
     }
     
     private void initAttributes(){
-        /*graphAttr.add(AttributeType.LINE_COLOR,   1);
-        graphAttr.add(AttributeType.LINE_WIDTH,   1);
-        graphAttr.add(AttributeType.LINE_STYLE,   1);
-        graphAttr.add(AttributeType.MARKER_COLOR, 1);
-        graphAttr.add(AttributeType.MARKER_SIZE,  6);
-        graphAttr.add(AttributeType.MARKER_STYLE, 1);
-                */
+        graphAttr.setLineColor(1);
+        graphAttr.setLineWidth(1);
+        graphAttr.setLineStyle(1);
+        graphAttr.setMarkerColor(1);
+        graphAttr.setMarkerSize(6);
+        graphAttr.setMarkerStyle(1);
+                
     }
     
     public final void addPoint(double x, double y, double ex, double ey){

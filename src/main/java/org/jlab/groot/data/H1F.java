@@ -135,19 +135,18 @@ public class H1F  implements IDataSet {
     }
     
     public final void initAttributes(){
-        /*
-        this.hAttr.add(AttributeType.LINE_WIDTH,  1);
-        this.hAttr.add(AttributeType.LINE_COLOR,  1);
-        this.hAttr.add(AttributeType.LINE_STYLE,  1);
-        this.hAttr.add(AttributeType.FILL_COLOR, -1);
-        this.hAttr.add(AttributeType.FILL_STYLE,  0);
-        this.hAttr.add(AttributeType.MARKER_SIZE, 6);
-        this.hAttr.add(AttributeType.MARKER_STYLE, 1);
-        this.hAttr.add(AttributeType.MARKER_COLOR, 2);
-        this.hAttr.addString(AttributeType.STRING_TITLE_X, "");
-        this.hAttr.addString(AttributeType.STRING_TITLE_Y, "");
-        */
+        this.hAttr.setLineWidth(1);
+        this.hAttr.setLineColor(1);
+        this.hAttr.setLineStyle(1);
+        this.hAttr.setFillColor(-1);
+        this.hAttr.setFillStyle(0);
+        //this.hAttr.setMarkerSize(6);
+        //this.hAttr.setMarkerStyle(1);
+        //this.hAttr.setMarkerColor(2);
+        //this.hAttr.addString(AttributeType.STRING_TITLE_X, "");
+        //this.hAttr.addString(AttributeType.STRING_TITLE_Y, "");  
     }
+    
     /**
      * Sets the x-axis title to the specified parameter
      * @param xTitle		The desired title of the x-axis
