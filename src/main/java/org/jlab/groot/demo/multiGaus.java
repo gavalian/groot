@@ -13,7 +13,7 @@ public class multiGaus {
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Demo JFrame");
-		frame.setSize(800, 650);
+		frame.setSize(1000, 650);
 		EmbeddedCanvas c1 = new EmbeddedCanvas();
 		c1.divide(4, 4);
 
@@ -34,7 +34,7 @@ public class multiGaus {
 			for (int j = 0; j < 34000; j++) {
 				h1[i].fill(rndm.random());
 			}
-			//h1[i].setLineWidth(10);
+			h1[i].setLineWidth(2);
 			//h1[i].setLineColor(5);
 			h1[i].setFillColor(30 + (i % 4) + 2);
 			c1.cd(i);
