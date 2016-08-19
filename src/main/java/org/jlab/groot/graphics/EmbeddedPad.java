@@ -159,7 +159,7 @@ public class EmbeddedPad {
             		//System.out.println("Counter:"+counter);
             		if(tempOpt%10!=0){
             			toBeDrawn.add(currentStats.get(counter));
-            			System.out.print("counter:"+counter);
+            			//System.out.print("counter:"+counter);
             			/*for(LatexText text : currentStats.get(counter)){
             				System.out.print(" "+text.getTextString());
             			}*/
