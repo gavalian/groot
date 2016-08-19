@@ -32,21 +32,23 @@ import net.miginfocom.swing.MigLayout;
  */
 public class AxisAttributes {
     
-    private String labelFontName    = "Avenir";
-    private int    labelFontSize    = 12;
-    private String titleFontName    = "Avenir";
-    private int    titleFontSize    = 12;
-    private boolean axisAutoScale   = true;
-    private double  axisMinimum     = 0.0;
-    private double  axisMaximum     = 1.0;
-    private int    labelOffset      = 4;
-    private int    titleOffset      = 5;
-    private boolean axisGrid        = true;
-    private int     lineColor       = 1;
-    private int     lineWidth       = 1;
-    private int     tickSize        = 5;
-    private String  axisTitleString = "";
+    private String  labelFontName    = "Avenir";
+    private int     labelFontSize    = 12;
+    private String  titleFontName    = "Avenir";
+    private int     titleFontSize    = 12;
+    private boolean  axisAutoScale   = true;
+    private double   axisMinimum     = 0.0;
+    private double   axisMaximum     = 1.0;
+    private int     labelOffset      = 4;
+    private int     titleOffset      = 5;
+    private boolean  axisGrid        = true;
+    private int      lineColor       = 1;
+    private int      lineWidth       = 1;
+    private int      tickSize        = 5;
+    private String   axisTitleString = "";
+    
     private EmbeddedCanvas can      = null;
+    
     public AxisAttributes(){
         
     }
@@ -59,6 +61,8 @@ public class AxisAttributes {
     public void setAxisMinimum(double min) {this.axisMinimum = min;}
     public void setAxisMaximum(double max) {this.axisMaximum = max;}
     public void setAxisGrid(boolean grid){ this.axisGrid = grid;}
+    
+    
     public void setLineColor(int color) { this.lineColor = color;}
     public void setLineWidth(int width) { this.lineWidth = width;}
     public void setTickSize(int size) { this.tickSize = size;}
