@@ -38,7 +38,7 @@ public class multiGaus {
 			//h1[i].setLineColor(5);
 			h1[i].setFillColor(30 + (i % 4) + 2);
 			c1.cd(i);
-			//c1.getPad(i).getAxisFrame().getAxisX().attr.setTitleOffset(100);
+			//c1.getPad(i).getAxisFrame().getAxisX().attr.setTitleOffset(20);
 			c1.draw(h1[i]);
 		}
 		frame.add(c1);

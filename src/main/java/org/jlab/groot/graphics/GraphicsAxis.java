@@ -202,14 +202,14 @@ public class GraphicsAxis {
         }
         
         if(this.isVertical==true){
-            axisBounds = maxW + axisTextOffset;
+            axisBounds = maxW + this.attr.getLabelOffset();
         }  else {
-            axisBounds = maxH + axisTextOffset;
+            axisBounds = maxH + this.attr.getLabelOffset();
         }
         
-        if(this.axisTitle.getTextString().length()>1){
-            Rectangle2D rect = axisTitle.getBounds(g2d);
-            axisBounds  += rect.getHeight() + axisTitleOffset;
+        if(this.attr.getTitle().getTextString().length()>1){
+            Rectangle2D rect = this.attr.getTitle().getBounds(g2d);
+            axisBounds  += rect.getHeight() + this.attr.getTitleOffset();
         }
         //System.out.println( " Axis : " + axisTitle + "  Max = " +  isVertical +"  " + (int) maxW + "  " + (int) maxH  + "  " + (int) axisBounds);
         return (int) axisBounds;
