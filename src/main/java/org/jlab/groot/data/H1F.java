@@ -827,6 +827,7 @@ public class H1F  implements IDataSet {
     @Override
     public PaveText getStatBox() {
         PaveText stat = new PaveText(2);
+        stat.addText("Name",this.getName());
         stat.addText("Entries",Integer.toString(this.getEntries()));
         stat.addText("Mean",String.format("%.3f", this.getMean()));
         stat.addText("RMS",String.format("%.3f", this.getRMS()));

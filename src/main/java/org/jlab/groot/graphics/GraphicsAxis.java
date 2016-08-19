@@ -252,8 +252,10 @@ public class GraphicsAxis {
                 g2d.drawLine(x,(int) tick,x+tickLength,(int) tick);
                 texts.get(i).drawString(g2d, x-labelOffset, (int) tick, 2, 1);
             }
+            int  axisBounds = (int) texts.get(0).getBoundsNumber(g2d).getWidth();
             double midpoint = axisRange.getMin() + 0.5*this.axisRange.getLength();
-            attr.getTitle().drawString(g2d,0,
+            System.out.println("x:"+x+" axisBounds: "+ axisBounds+" labelOffset:"+labelOffset+" titleOffset:"+titleOffset);
+            attr.getTitle().drawString(g2d, x - axisBounds - labelOffset - titleOffset-35,
                     (int) getAxisPosition(midpoint),
                      LatexText.ALIGN_CENTER,LatexText.ALIGN_TOP, LatexText.ROTATE_LEFT);
         }

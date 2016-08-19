@@ -165,10 +165,18 @@ public class PaveText {
         return this.paveTexts;
     }
     
+    public void  setPaveTexts(List<List<LatexText>> paveTexts){
+        this.paveTexts = paveTexts;
+    }
+    
     public void copy(PaveText pave){
         this.paveTexts.clear();
         for(List<LatexText>  texts : pave.getPaveTexts()){
             
         }
     }
+
+	public void addRow(List<LatexText> element) {
+		paveTexts.add(element);
+	}
 }
