@@ -90,6 +90,11 @@ public class EmbeddedPad {
                         -padDimensions.getDimension(1).getMin())
                 );
         */
+        
+        axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getYTitle());
+        axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getXTitle());
+
+        
         Dimension3D  axis = new Dimension3D();
         axis.set(0.0, 1.0, 0.0, 1.0, 0.0, 1.0);
         if(this.datasetPlotters.size()>0){

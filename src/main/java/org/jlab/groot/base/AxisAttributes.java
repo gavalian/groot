@@ -23,6 +23,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jlab.groot.graphics.EmbeddedCanvas;
+import org.jlab.groot.ui.LatexText;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -46,6 +47,7 @@ public class AxisAttributes {
     private int      lineWidth       = 1;
     private int      tickSize        = 5;
     private String   axisTitleString = "";
+    private LatexText axisTitle      = new LatexText(axisTitleString);
     
     private EmbeddedCanvas can      = null;
     
@@ -53,7 +55,140 @@ public class AxisAttributes {
         
     }
     
-    public void setLabelFontName(String fn){this.labelFontName = fn;}
+    /**
+	 * @return the labelOffset
+	 */
+	public int getLabelOffset() {
+		return labelOffset;
+	}
+
+	/**
+	 * @param labelOffset the labelOffset to set
+	 */
+	public void setLabelOffset(int labelOffset) {
+		this.labelOffset = labelOffset;
+	}
+
+	/**
+	 * @return the titleOffset
+	 */
+	public int getTitleOffset() {
+		return titleOffset;
+	}
+
+	/**
+	 * @param titleOffset the titleOffset to set
+	 */
+	public void setTitleOffset(int titleOffset) {
+		this.titleOffset = titleOffset;
+	}
+
+	/**
+	 * @return the axisTitleString
+	 */
+	public String getAxisTitleString() {
+		return axisTitleString;
+	}
+
+	/**
+	 * @param axisTitleString the axisTitleString to set
+	 */
+	public void setAxisTitleString(String axisTitleString) {
+		this.axisTitleString = axisTitleString;
+	}
+
+	/**
+	 * @return the can
+	 */
+	public EmbeddedCanvas getCan() {
+		return can;
+	}
+
+	/**
+	 * @param can the can to set
+	 */
+	public void setCan(EmbeddedCanvas can) {
+		this.can = can;
+	}
+
+	/**
+	 * @return the labelFontName
+	 */
+	public String getLabelFontName() {
+		return labelFontName;
+	}
+
+	/**
+	 * @return the labelFontSize
+	 */
+	public int getLabelFontSize() {
+		return labelFontSize;
+	}
+
+	/**
+	 * @return the titleFontName
+	 */
+	public String getTitleFontName() {
+		return titleFontName;
+	}
+
+	/**
+	 * @return the titleFontSize
+	 */
+	public int getTitleFontSize() {
+		return titleFontSize;
+	}
+
+	/**
+	 * @return the axisAutoScale
+	 */
+	public boolean isAxisAutoScale() {
+		return axisAutoScale;
+	}
+
+	/**
+	 * @return the axisMinimum
+	 */
+	public double getAxisMinimum() {
+		return axisMinimum;
+	}
+
+	/**
+	 * @return the axisMaximum
+	 */
+	public double getAxisMaximum() {
+		return axisMaximum;
+	}
+
+	/**
+	 * @return the axisGrid
+	 */
+	public boolean isAxisGrid() {
+		return axisGrid;
+	}
+
+	/**
+	 * @return the lineColor
+	 */
+	public int getLineColor() {
+		return lineColor;
+	}
+
+	/**
+	 * @return the lineWidth
+	 */
+	public int getLineWidth() {
+		return lineWidth;
+	}
+
+	/**
+	 * @return the tickSize
+	 */
+	public int getTickSize() {
+		return tickSize;
+	}
+
+	public void setLabelFontName(String fn){this.labelFontName = fn;}
     public void setLabelFontSize(int fs){this.labelFontSize = fs;}
     public void setTitleFontName(String fn){this.titleFontName = fn;}
     public void setTitleFontSize(int fs){this.titleFontSize = fs;}
@@ -219,6 +354,11 @@ public class AxisAttributes {
         frame.pack();
         frame.setVisible(true);
     }
+
+	public LatexText getTitle() {
+		axisTitle.setText(axisTitleString);;
+		return axisTitle;
+	}
     
 }
 
