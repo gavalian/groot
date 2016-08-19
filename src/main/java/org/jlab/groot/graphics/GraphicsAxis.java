@@ -39,13 +39,6 @@ public class GraphicsAxis {
     private        Boolean                  isVertical      = false;
     private        Boolean                  isColorAxis     = false;
     
-    private        int                      axisTitleOffset = 5;
-    private        int                      axisTextOffset  = 5;
-    private        int                      axisTicksLength = 8;
-    
-    private final  FontProperties           axisLabelFont     = new FontProperties();
-    private final  FontProperties           axisTitleFont     = new FontProperties();
-    private final  LatexText                axisTitle         = new LatexText("");
     private final  GraphicsAxisTicks        axisTicks         = new GraphicsAxisTicks();
     
     
@@ -138,26 +131,26 @@ public class GraphicsAxis {
      * @return 
      */
     public FontProperties   getTitleFont(){
-        return this.axisTitleFont;
+        return this.attr.getTitleFont();
     }
     /**
      * returns properties for the label fonts.
      * @return 
      */
     public FontProperties   getLabelFont(){
-        return this.axisLabelFont;
+        return this.attr.getLabelFont();
     }
     
     public void setAxisFont(String fontname){
     	attr.setLabelFontName(fontname);
         //axisLabelFont.setFontName(fontname);
-        axisTicks.updateFont(axisLabelFont);
+        axisTicks.updateFont(getTitleFont());
     }
     
     public void setAxisFontSize(int size){
         attr.setLabelFontSize(size);
     	//axisLabelFont.setFontSize(size);
-        axisTicks.updateFont(axisLabelFont);
+        axisTicks.updateFont(getLabelFont());
     }
     
     public int  getSize(Graphics2D g2d, boolean vertical){
@@ -282,7 +275,7 @@ public class GraphicsAxis {
         int xstart = x + 4 + 8;        
         int ncolors = ColorPalette.getColorPallete3DSize();
         double height = Math.abs(axisDimension.getLength());
-        int    tickSize = this.axisTicksLength/2;
+        int    tickSize = this.attr.getTickSize()/2;
         //System.out.println(" Draw Z axis X = " + x + " Y = " + y);
         
         for(int i = 0; i < ncolors; i++){
@@ -302,7 +295,7 @@ public class GraphicsAxis {
         for(int i = 0; i < ticks.size(); i++){
             double tick = this.getAxisPosition(ticks.get(i));
             g2d.drawLine(xstart,(int) tick,xstart+tickSize,(int) tick);
-            texts.get(i).drawString(g2d, xstart + tickSize + this.axisTextOffset, (int) tick, 0, 1);
+            texts.get(i).drawString(g2d, xstart + tickSize + this.attr.getLabelOffset(), (int) tick, 0, 1);
         }
     }
     

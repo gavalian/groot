@@ -22,6 +22,7 @@ import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
 import org.jlab.groot.math.Func1D;
+import org.jlab.groot.ui.LatexText;
 import org.jlab.groot.ui.PaveText;
 
 /**
@@ -90,11 +91,15 @@ public class EmbeddedPad {
                         -padDimensions.getDimension(1).getMin())
                 );
         */
-        
-        axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getYTitle());
-        axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getXTitle());
 
         
+        //axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getYTitle());
+        //axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getXTitle());
+        //axisFrame.updateMargins(g2d);
+        //System.out.println(padMargins);
+       // padMargins = axisFrame.getFrameMargins();
+      // System.out.println(padMargins);
+
         Dimension3D  axis = new Dimension3D();
         axis.set(0.0, 1.0, 0.0, 1.0, 0.0, 1.0);
         if(this.datasetPlotters.size()>0){
@@ -146,7 +151,23 @@ public class EmbeddedPad {
         axisFrame.drawAxis(g2d, padMargins);
         if(this.optStat>0){
             if(this.datasetPlotters.get(0).getDataSet() instanceof H1F){
+                /*
+            	List<List<LatexText>> blah = this.datasetPlotters.get(0).getDataSet().getStatBox().getPaveTexts();
+            	int tempOpt = optStat;
+            	while(optStat>1){
+            		tempOpt = tempOpt/10;
+            	}*/
+            	/*
+                PaveText statBox = this.datasetPlotters.get(0).getDataSet().getStatBox();
+                statBox.setFont(this.statBoxFont.getFontName());
+                statBox.setFontSize(this.statBoxFont.getFontSize());
                 
+                statBox.updateDimensions(g2d);
+                
+                int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength()-5);
+                int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin()+5) ;
+                statBox.setPosition(x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
+                statBox.drawPave(g2d, x-padMargins.getRightMargin(), y+padMargins.getTopMargin());*/
                 PaveText statBox = this.datasetPlotters.get(0).getDataSet().getStatBox();
                 statBox.setFont(this.statBoxFont.getFontName());
                 statBox.setFontSize(this.statBoxFont.getFontSize());
@@ -232,6 +253,8 @@ public class EmbeddedPad {
         if(ds instanceof GraphErrors){
             this.addPlotter(new GraphErrorsPlotter(ds));
         }
+        axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getYTitle());
+        axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getXTitle());
     }
     
     /**

@@ -66,7 +66,6 @@ public class GraphicsAxisFrame {
     }
     
     public void setAxisMargins(PadMargins margins){
-        
         double xcorner = axisFrameDimension.getDimension(0).getMin() + margins.getLeftMargin();
         double ycorner = axisFrameDimension.getDimension(1).getMax() - margins.getBottomMargin();
         
@@ -83,7 +82,6 @@ public class GraphicsAxisFrame {
     }
     
     public void drawAxis(Graphics2D g2d, PadMargins margins){
-        
         double xcorner = axisFrameDimension.getDimension(0).getMin() + margins.getLeftMargin();
         double ycorner = axisFrameDimension.getDimension(1).getMax() - margins.getBottomMargin();
         /*
