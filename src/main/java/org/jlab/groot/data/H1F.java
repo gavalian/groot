@@ -147,11 +147,16 @@ public class H1F  implements IDataSet {
         //this.hAttr.addString(AttributeType.STRING_TITLE_Y, "");  
     }
     
+    public final void setTitle(String title){
+        this.hAttr.setTitle(title);
+    }
+    
     /**
      * Sets the x-axis title to the specified parameter
      * @param xTitle		The desired title of the x-axis
      */
     public final void setXTitle(String xTitle) {
+        this.hAttr.setXTitle(xTitle);
         //this.getXaxis().setTitle(xTitle);
         //this.hAttr.addString(AttributeType.STRING_TITLE_X, xTitle);
     }
@@ -162,6 +167,7 @@ public class H1F  implements IDataSet {
      * @param yTitle		The desired title of the y-axis
      */
     public final void setYTitle(String yTitle) {
+        this.hAttr.setYTitle(yTitle);
         //this.getYaxis().setTitle(yTitle);
         //this.hAttr.addString(AttributeType.STRING_TITLE_Y, yTitle);
     }
@@ -201,16 +207,6 @@ public class H1F  implements IDataSet {
     public String getYTitle() {
         return "";
         //return this.getYaxis().getTitle();
-    }
-    
-    /**
-     * Sets the specified parameter as the title of the histogram
-     * 
-     * @param title		The desired title of the histogram
-     */
-    public final void setTitle(String title) {
-        //histTitle = title;
-        //this.hAttr.addString(AttributeType.STRING_TITLE, title);
     }
     
     /**
@@ -815,6 +811,7 @@ public class H1F  implements IDataSet {
     	this.hAttr.setLineWidth(width);
         return this;
     }
+    
     public int getLineWidth(){
         return this.hAttr.getLineWidth();
     }

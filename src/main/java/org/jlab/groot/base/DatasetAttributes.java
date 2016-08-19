@@ -36,9 +36,18 @@ public class DatasetAttributes implements Cloneable {
     private int fillColor   = 0;
     private int fillStyle   = 1;
     
+    private String stringXtitle = "";
+    private String stringYtitle = "";
+    private String stringTitle  = "";
+    
     public DatasetAttributes(){
         
     }
+    
+    public void setXTitle(String title){ this.stringXtitle = title;}
+    public void setYTitle(String title){ this.stringYtitle = title;}
+    public void setTitle(String title){ this.stringTitle = title;}
+    
     
     public void setLineColor(int color){ this.lineColor = color;}
     public void setLineWidth(int width){ this.lineWidth = width;}
@@ -59,6 +68,9 @@ public class DatasetAttributes implements Cloneable {
     public int  getFillColor() {return this.fillColor;}
     public int  getFillStyle(){return this.fillStyle;}
     
+    public String getTitle() { return this.stringTitle;}
+    public String getXTitle(){ return this.stringXtitle;}
+    public String getYTitle(){ return this.stringYtitle;}
     
     @Override
     public DatasetAttributes  clone() throws CloneNotSupportedException{
