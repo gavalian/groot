@@ -11,6 +11,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jlab.groot.base.AxisAttributes;
 import org.jlab.groot.base.ColorPalette;
 import org.jlab.groot.base.FontProperties;
 import org.jlab.groot.math.Dimension1D;
@@ -23,6 +25,7 @@ import org.jlab.groot.ui.LatexText;
  */
 public class GraphicsAxis {
     
+	public AxisAttributes attr			    = new AxisAttributes();
     public static int  AXISTYPE_COLOR       = 1;
     public static int  AXISTYPE_HORIZONTAL  = 2;
     public static int  AXISTYPE_VERTICAL    = 3;        
@@ -97,9 +100,7 @@ public class GraphicsAxis {
     }
 
     public void setTitle(String title){
-        this.axisTitle.setText(title);
-        this.axisTitle.setFont(this.axisTitleFont.getFontName());
-        this.axisTitle.setFontSize(this.axisTitleFont.getFontSize());
+    	attr.setAxisTitleString(title);
     }
     
     public boolean getLog(){
@@ -148,12 +149,14 @@ public class GraphicsAxis {
     }
     
     public void setAxisFont(String fontname){
-        axisLabelFont.setFontName(fontname);
+    	attr.setLabelFontName(fontname);
+        //axisLabelFont.setFontName(fontname);
         axisTicks.updateFont(axisLabelFont);
     }
     
     public void setAxisFontSize(int size){
-        axisLabelFont.setFontSize(size);
+        attr.setLabelFontSize(size);
+    	//axisLabelFont.setFontSize(size);
         axisTicks.updateFont(axisLabelFont);
     }
     
@@ -229,30 +232,35 @@ public class GraphicsAxis {
         List<Double>     ticks = axisTicks.getAxisTicks();
         List<LatexText>  texts = axisTicks.getAxisTexts();
         
+        int labelOffset = attr.getLabelOffset();
+        int titleOffset = attr.getTitleOffset();
+        int tickLength = attr.getTickSize();
+
+        
         if(this.isVertical==false){
             g2d.drawLine((int)axisDimension.getMin(),y,(int)axisDimension.getMax(),y);
             for(int i = 0; i < ticks.size(); i++){
                 double tick = this.getAxisPosition(ticks.get(i));
-                g2d.drawLine((int) tick,y,(int) tick,y-this.axisTicksLength);
-                texts.get(i).drawString(g2d, (int) tick, y + this.axisTextOffset, 1, 0);                
+                g2d.drawLine((int) tick,y,(int) tick,y-tickLength);
+                texts.get(i).drawString(g2d, (int) tick, y + labelOffset, 1, 0);                
             }
             double midpoint = axisRange.getMin() + 0.5*this.axisRange.getLength();
             //System.out.println(" Axis midpoint = " + (int) getAxisPosition(midpoint)
             //+ " " + y);
             int  axisBounds = (int) texts.get(0).getBoundsNumber(g2d).getHeight();
             //System.out.println(" Y = " + y + " " + axisBounds + "  "+ (axisBounds + this.axisTextOffset + this.axisTitleOffset));
-            axisTitle.drawString(g2d,
+            attr.getTitle().drawString(g2d,
                     (int) getAxisPosition(midpoint),
-                    y + axisBounds + this.axisTextOffset + this.axisTitleOffset ,1,0);
+                    y + axisBounds + labelOffset + titleOffset ,1,0);
         } else {
             g2d.drawLine(x,(int)axisDimension.getMin(),x,(int)axisDimension.getMax());
             for(int i = 0; i < ticks.size(); i++){
                 double tick = this.getAxisPosition(ticks.get(i));
-                g2d.drawLine(x,(int) tick,x+this.axisTicksLength,(int) tick);
-                texts.get(i).drawString(g2d, x-this.axisTextOffset, (int) tick, 2, 1);
+                g2d.drawLine(x,(int) tick,x+tickLength,(int) tick);
+                texts.get(i).drawString(g2d, x-labelOffset, (int) tick, 2, 1);
             }
             double midpoint = axisRange.getMin() + 0.5*this.axisRange.getLength();
-            axisTitle.drawString(g2d,0,
+            attr.getTitle().drawString(g2d,0,
                     (int) getAxisPosition(midpoint),
                      LatexText.ALIGN_CENTER,LatexText.ALIGN_TOP, LatexText.ROTATE_LEFT);
         }

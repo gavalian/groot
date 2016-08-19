@@ -195,7 +195,7 @@ public class H1F  implements IDataSet {
      * @return		The title of the x-axis as a string
      */
     public String getXTitle() {
-        return "";
+        return this.hAttr.getXTitle();
     	//return this.getXaxis().getTitle();
     }
     
@@ -205,7 +205,7 @@ public class H1F  implements IDataSet {
      * @return		The title of the y-axis as a string
      */
     public String getYTitle() {
-        return "";
+        return this.hAttr.getYTitle();
         //return this.getYaxis().getTitle();
     }
     
@@ -225,7 +225,7 @@ public class H1F  implements IDataSet {
      * @return		the title of the histogram as a string
      */
     public String title() {
-    	return histTitle;
+    	return this.hAttr.getTitle();
     }
     
     /**
