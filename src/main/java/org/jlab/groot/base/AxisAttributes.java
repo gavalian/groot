@@ -35,7 +35,7 @@ import net.miginfocom.swing.MigLayout;
  *
  * @author gavalian
  */
-public class AxisAttributes {
+public class AxisAttributes implements Cloneable{
     
     private String  labelFontName    = "Avenir";
     private int     labelFontSize    = 12;
@@ -194,6 +194,10 @@ public class AxisAttributes {
 	public int getTickSize() {
 		return tickSize;
 	}
+	 @Override
+	public Object clone() throws CloneNotSupportedException {
+	        return super.clone();
+	    }
 
 	public void setLabelFontName(String fn){this.labelFontName = fn;}
     public void setLabelFontSize(int fs){this.labelFontSize = fs;}

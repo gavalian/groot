@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -66,6 +67,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     private int                  ec_ROWS     = 1;
     private PadMargins           canvasPadding = new PadMargins();
     private int                  activePad     = 0; 
+    private boolean isChild = false;
     
     public EmbeddedCanvas(){
         super();
@@ -266,12 +268,25 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     @Override
     public void mouseClicked(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        if(e.getClickCount()==2){
+        if(e.getClickCount()==2&&!isChild){
             int pad = this.getPadByXY(e.getX(),e.getY());
-            System.out.println("you double clicked on " + pad);
-            JDialog  dialogWin = new JDialog();            
-            dialogWin.setContentPane(new EmbeddedCanvas());
-            dialogWin.setSize(400, 400);
+            double scale = 1.5;
+            //System.out.println("you double clicked on " + pad);
+            JDialog  dialogWin = new JDialog();
+            EmbeddedCanvas can = new EmbeddedCanvas();
+            EmbeddedPad embeddedPad = this.getPad(pad).getCopy();
+            int xSize = (int)(this.getPad(pad).getWidth());
+            int ySize = (int)(this.getPad(pad).getHeight());
+
+            can.setPreferredSize(new Dimension((int)(xSize*scale),(int)(ySize*scale)));
+            can.setChild(true);
+            ArrayList<EmbeddedPad> pads = new ArrayList<EmbeddedPad>();
+            pads.add(embeddedPad);
+            can.canvasPads = pads;
+            dialogWin.setContentPane(can);
+           // dialogWin.setSize(400, 400);
+            dialogWin.pack();
+            dialogWin.setLocation(new Point(e.getX(),e.getY()));
             dialogWin.setVisible(true);
         }
        
@@ -329,7 +344,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         //this.popup.add(new JSeparator());
         this.popup.add(itemOptions);
         //this.popup.add(itemOpenWindow);
-        addMouseListener(this);
+        //addMouseListener(this);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -465,6 +480,14 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         frame.setVisible(true);
         
     }
+
+	public boolean isChild() {
+		return isChild;
+	}
+
+	public void setChild(boolean isChild) {
+		this.isChild = isChild;
+	}
 
    
 }

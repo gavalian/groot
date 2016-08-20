@@ -462,4 +462,7 @@ public class GraphicsAxis {
 	public AxisAttributes getAttributes() {
 		return attr;
 	}
+	public void setAttributes(AxisAttributes attr) {
+		this.attr = attr;
+	}
 }

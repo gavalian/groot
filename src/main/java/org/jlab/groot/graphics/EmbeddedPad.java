@@ -15,6 +15,8 @@ import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
+
+import org.jlab.groot.base.AxisAttributes;
 import org.jlab.groot.base.FontProperties;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.data.GraphErrors;
@@ -304,8 +306,16 @@ public class EmbeddedPad {
             if(plotter instanceof HistogramPlotter){
                 pad.addPlotter(new HistogramPlotter(plotter.getDataSet()));
             }
-            
         }
+        try {
+			pad.getAxisX().setAttributes((AxisAttributes) this.getAxisX().getAttributes().clone());
+			pad.getAxisY().setAttributes((AxisAttributes) this.getAxisY().getAttributes().clone());
+
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        pad.setOptStat(this.optStat);
         return pad;
     }
     
