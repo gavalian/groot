@@ -98,15 +98,14 @@ public class EmbeddedPad {
 		this.datasetPlotters = datasetPlotters;
 	}
 	
-	public void drawAtOrigin(Graphics2D g2d){
-		double x1 = axisFrame.getFrameDimensions().getDimension(0).getMin();
-		double x2 = axisFrame.getFrameDimensions().getDimension(0).getMax();
-		double y1 = axisFrame.getFrameDimensions().getDimension(1).getMin();
-		double y2 = axisFrame.getFrameDimensions().getDimension(1).getMax();
-		this.setDimension(0, 0, g2d.getClip().getBounds().width,g2d.getClip().getBounds().height);
-		this.draw(g2d);
+	/*
+	public void drawScreenshot(Graphics g){
+		EmbeddedCanvas can = new EmbeddedCanvas();
+		can.setPreferredSize(new Dimension(this.getWidth(),this.getHeight()));
+		this.setDimension(5, -5, 362,218);
+		this.draw((Graphics2D)g);
 		this.setDimension((int)x1, (int)y1, (int)x2, (int)y2);
-	}
+	}*/
 
 	public void draw(Graphics2D g2d){                
         //axisFrame.updateMargins(g2d);
@@ -315,6 +314,12 @@ public class EmbeddedPad {
             IDataSetPlotter plotter = this.datasetPlotters.get(i);
             if(plotter instanceof HistogramPlotter){
                 pad.addPlotter(new HistogramPlotter(plotter.getDataSet()));
+            }
+            if(plotter instanceof FunctionPlotter){
+                pad.addPlotter(new FunctionPlotter(plotter.getDataSet()));
+            }
+            if(plotter instanceof Histogram2DPlotter){
+                pad.addPlotter(new Histogram2DPlotter(plotter.getDataSet()));
             }
         }
         try {

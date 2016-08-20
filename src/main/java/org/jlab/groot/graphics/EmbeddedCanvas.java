@@ -132,7 +132,9 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
                 double xe  = (ic+1) * (rW/((double) ec_COLUMNS ));
                 double y   = ir * ( rH/((double) ec_ROWS) );
                 double ye  = (ir+1) * ( rH/((double) ec_ROWS));
-                //System.out.println("PAD " + pcounter + " " + x + " " + xe );
+               // System.out.println("PAD " + pcounter + " " + x + " " + xe );
+                //System.out.printf("Pad: "+pcounter+" %d %d %d %d\n",(int) x + startX, (int) y - minY,
+                //        (int) (xe-x), (int) (ye-y));
                 canvasPads.get(pcounter).setDimension((int) x + startX, (int) y - minY,
                         (int) (xe-x), (int) (ye-y));
 
@@ -443,13 +445,30 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         return bi;
     }
     
-    private BufferedImage getScreenShot(int index){
+    private BufferedImage getScreenShot(int pad){
         //BufferedImage bi = new BufferedImage(
         //    (int)this.getPad(index).getWidth(), (int)this.getPad(index).getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
-    	BufferedImage bi = new BufferedImage(
-                this.getPad(index).getWidth(), this.getPad(index).getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
-    	this.getPad(index).paint(bi.getGraphics());
-        return bi;
+    	//BufferedImage bi = new BufferedImage(
+         //       this.getPad(pad).getWidth(), this.getPad(pad).getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
+        double scale = 1.0;
+        //System.out.println("you double clicked on " + pad);
+        //JDialog  dialogWin = new JDialog();
+        EmbeddedCanvas can = new EmbeddedCanvas();
+        EmbeddedPad embeddedPad = this.getPad(pad).getCopy();
+        int xSize = (int)(this.getPad(pad).getWidth());
+        int ySize = (int)(this.getPad(pad).getHeight());
+
+        can.setPreferredSize(new Dimension((int)(xSize*scale),(int)(ySize*scale)));
+        can.setMinimumSize(new Dimension((int)(xSize*scale),(int)(ySize*scale)));
+        can.setSize(new Dimension((int)(xSize*scale),(int)(ySize*scale)));
+        can.setChild(true);
+        ArrayList<EmbeddedPad> pads = new ArrayList<EmbeddedPad>();
+        pads.add(embeddedPad);
+        can.canvasPads = pads;
+       // dialogWin.setContentPane(can);
+       // dialogWin.setSize(400, 400);
+        //dialogWin.pack();
+        return can.getScreenShot();
     }
     public void copyToClipboard(){
     	TransferableImage trans = new TransferableImage( getScreenShot() );

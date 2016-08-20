@@ -40,15 +40,15 @@ public class multiGaus {
 			h1[i].setFillColor(30 + (i % 4) + 2);
 			
 			c1.cd(i);
-			String optStatString = "1";
+			String optStatString = "";
 			for(int j=0; j<4-i%4; j++){
 				optStatString +="1";
 			}
 			optStatString+="0";
 			c1.getPad(i).setOptStat(Integer.parseInt(optStatString));
-			c1.getPad(i).getAxisX().setRange(-6.0, 5.0);
-			c1.getPad(i).getAxisX().setAutoScale(true);
-			c1.getPad(i).getAxisY().setRange(0, 2000.0);
+			//c1.getPad(i).getAxisX().setRange(-6.0, 5.0);
+			//c1.getPad(i).getAxisX().setAutoScale(true);
+			//c1.getPad(i).getAxisY().setRange(0, 2000.0);
 			//c1.getPad(i).getAxisY().setAutoScale(true);
 			//System.out.println(c1.getPad(i).getAxisX());
 			c1.draw(h1[i]);
