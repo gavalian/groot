@@ -46,6 +46,11 @@ public class multiGaus {
 			}
 			optStatString+="0";
 			c1.getPad(i).setOptStat(Integer.parseInt(optStatString));
+			c1.getPad(i).getAxisX().setRange(-6.0, 5.0);
+			c1.getPad(i).getAxisX().setAutoScale(true);
+			c1.getPad(i).getAxisY().setRange(0, 2000.0);
+			//c1.getPad(i).getAxisY().setAutoScale(true);
+			System.out.println(c1.getPad(i).getAxisX());
 			c1.draw(h1[i]);
 			
 			//DataFitter fitter = new DataFitter();

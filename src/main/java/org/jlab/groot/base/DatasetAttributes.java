@@ -35,6 +35,12 @@ public class DatasetAttributes implements Cloneable {
     private int markerStyle = 1;
     private int fillColor   = 0;
     private int fillStyle   = 1;
+    private int datasetType  = 0;
+    public final static int HISTOGRAM = 0;
+    public final static int HISTOGRAM2D = 1;
+    public final static int GRAPHERRORS = 2;
+    public final static int FUNCTION = 3;
+
     
     private String stringXtitle = "";
     private String stringYtitle = "";
@@ -131,31 +137,35 @@ public class DatasetAttributes implements Cloneable {
             boxFillColor.addActionListener(this);
 
             
-            this.add(labelLineColor);
-            this.add(boxLineColor,"wrap, pushx, growx");
-            this.add(labelLineWidth);
-            this.add(boxLineWidth,"wrap, growx");
-            this.add(labelLineStyle);
-            this.add(boxLineStyle,"wrap, growx");
+            if(attr.getDatasetType()==DatasetAttributes.HISTOGRAM|| attr.getDatasetType()==DatasetAttributes.FUNCTION){
+	            this.add(labelLineColor);
+	            this.add(boxLineColor,"wrap, pushx, growx");
+	            this.add(labelLineWidth);
+	            this.add(boxLineWidth,"wrap, growx");
+	            this.add(labelLineStyle);
+	            this.add(boxLineStyle,"wrap, growx");
+            }
+           
+            
+            if(attr.getDatasetType()==DatasetAttributes.GRAPHERRORS){
+            	this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
+            	this.add(new JLabel("Maker Color:"));
+                this.add(boxMarkerColor,"wrap, growx");
+                this.add(new JLabel("Maker Size:"));
+                this.add(boxMarkerSize,"wrap, growx");
+                this.add(new JLabel("Maker Style:"));
+                this.add(boxMarkerStyle,"wrap, growx");
+            }
+           
+            if(attr.getDatasetType()==DatasetAttributes.HISTOGRAM){
+                this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
+                this.add(new JLabel("Fill Color:"));
+                this.add(boxFillColor,"wrap, pushx, growx");
+            }
+            this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
+            
             JButton buttonDefault = new JButton("Default");
             JButton buttonApply = new JButton("Apply");
-            this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
-            
-            this.add(new JLabel("Maker Color:"));
-            this.add(boxMarkerColor,"wrap, growx");
-            
-            this.add(new JLabel("Maker Size:"));
-            this.add(boxMarkerSize,"wrap, growx");
-            
-            this.add(new JLabel("Maker Style:"));
-            this.add(boxMarkerStyle,"wrap, growx");
-            
-            this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
-            this.add(new JLabel("Fill Color:"));
-            this.add(boxFillColor,"wrap, pushx, growx");
-            this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
-            
-            
             this.add(buttonDefault,"skip, pushx, split2");
             this.add(buttonApply,"pushx");
         }
@@ -201,4 +211,12 @@ public class DatasetAttributes implements Cloneable {
         frame.pack();
         frame.setVisible(true);
     }
+
+	public int getDatasetType() {
+		return datasetType;
+	}
+
+	public void setDatasetType(int datasetType) {
+		this.datasetType = datasetType;
+	}
 }

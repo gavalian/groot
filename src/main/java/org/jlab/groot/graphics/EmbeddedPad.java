@@ -39,7 +39,7 @@ public class EmbeddedPad {
      private  PadMargins  padMargins       = new PadMargins();
      List<IDataSetPlotter> datasetPlotters = new ArrayList<IDataSetPlotter>();
      
-     Dimension3D           fixedRange      = new Dimension3D();
+     //Dimension3D           fixedRange      = new Dimension3D();
      
      private boolean       isAutoScaleX    = true;
      private boolean       isAutoScaleY    = true;
@@ -126,23 +126,28 @@ public class EmbeddedPad {
             }
         }
         
-        if(this.isAutoScaleX==false){
-            axis.getDimension(0).copy(this.fixedRange.getDimension(0));
+        if(this.getAxisX().isAutoScale()==false){
+            axis.getDimension(0).copy(this.getAxisX().getRange());
+        }else{
+        	axisFrame.getAxisX().setRange(
+                    axis.getDimension(0).getMin(),
+                    axis.getDimension(0).getMax()
+            );
+        	axisFrame.getAxisX().attr.setAxisAutoScale(true);
         }
         
-        if(this.isAutoScaleY==false){
-            axis.getDimension(1).copy(this.fixedRange.getDimension(1));
+        if(this.getAxisY().isAutoScale()==false){
+            axis.getDimension(1).copy(this.getAxisY().getRange());
+        }else{
+        	axisFrame.getAxisY().setRange(
+                    axis.getDimension(1).getMin(),
+                    axis.getDimension(1).getMax()
+            );
+        	axisFrame.getAxisY().attr.setAxisAutoScale(true);
         }
         
-        axisFrame.getAxisX().setRange(
-                axis.getDimension(0).getMin(),
-                axis.getDimension(0).getMax()
-        );
-            
-        axisFrame.getAxisY().setRange(
-                axis.getDimension(1).getMin(),
-                axis.getDimension(1).getMax()
-        );
+        
+      
         axisFrame.getAxisZ().setRange(
                 axis.getDimension(2).getMin(),
                 axis.getDimension(2).getMax()
@@ -227,15 +232,24 @@ public class EmbeddedPad {
     }
     
     public EmbeddedPad setAxisRangeX(double xmin, double xmax){
-        this.fixedRange.getDimension(0).setMinMax(xmin, xmax);
+        this.getAxisX().setRange(xmin,xmax);
         this.isAutoScaleX = false;
         return this;
     }
     
+    
     public EmbeddedPad setAxisRangeY(double ymin, double ymax){
-        this.fixedRange.getDimension(1).setMinMax(ymin, ymax);
+        this.getAxisY().setRange(ymin,ymax);
         this.isAutoScaleY = false;
         return this;
+    }
+ 
+    public GraphicsAxis getAxisX(){
+    	return this.axisFrame.getAxisX();
+    }
+    
+    public GraphicsAxis getAxisY(){
+    	return this.axisFrame.getAxisY();
     }
     
     public void setStatBoxFont(String name){

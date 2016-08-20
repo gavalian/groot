@@ -182,6 +182,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             numberOfPaints++;
         } catch(Exception e){
             System.out.println("[EmbeddedCanvas] ---> ooops");
+            System.out.println(e);
         }
     }
         public EmbeddedPad  getPad(int index){

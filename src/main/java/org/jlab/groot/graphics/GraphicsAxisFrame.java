@@ -121,6 +121,7 @@ public class GraphicsAxisFrame {
         this.drawAxisZ = flag;
     }
     
+    
     public GraphicsAxis  getAxisX(){
         return this.axisFrameAxis.get(0);
     }

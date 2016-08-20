@@ -31,7 +31,7 @@ public class GraphicsAxis {
     public static int  AXISTYPE_VERTICAL    = 3;        
     private int    axisType                 = 2;
     
-    private final  Dimension1D                  axisRange   = new Dimension1D();
+   // private final  Dimension1D                  axisRange   = new Dimension1D();
     private final  Dimension1D              axisDimension   = new Dimension1D();
     
     private        int                 numberOfMajorTicks   = 10;
@@ -48,6 +48,7 @@ public class GraphicsAxis {
     public GraphicsAxis(){        
         this.setDimension( 0, 100);
         this.setRange( 0.0, 1.0);
+        this.attr.setAxisAutoScale(true);
         //this.axisLabels.setFontName("Avenir");
         //this.axisLabels.setFontSize(12);
     }
@@ -80,12 +81,15 @@ public class GraphicsAxis {
      * @return 
      */
     public final GraphicsAxis setRange(double min, double max){
-        this.axisRange.setMinMax(min, max);
+        //this.axisRange.setMinMax(min, max);
+    	this.attr.setAxisAutoScale(false);
+        this.attr.setAxisMinimum(min);
+        this.attr.setAxisMaximum(max);
         if(this.isLogarithmic==true){
-            List<Double> ticks = axisRange.getDimensionTicksLog(this.numberOfMajorTicks);
+            List<Double> ticks = this.attr.getRange().getDimensionTicksLog(this.numberOfMajorTicks);
             //axisLabels.updateLog(ticks);
         } else {
-            List<Double> ticks = axisRange.getDimensionTicks(this.numberOfMajorTicks);
+            List<Double> ticks = this.attr.getRange().getDimensionTicks(this.numberOfMajorTicks);
             this.axisTicks.init(ticks);
             //axisLabels.update(ticks);
         }
@@ -103,7 +107,7 @@ public class GraphicsAxis {
     public void setLog(boolean flag){ this.isLogarithmic = flag;}
     
     public Dimension1D  getRange(){
-        return this.axisRange;
+        return this.attr.getRange();
     }
     /**
      * prints string representation of the axis.
@@ -118,7 +122,7 @@ public class GraphicsAxis {
      * @return 
      */
     public double getAxisPosition(double value){        
-        double fraction = this.axisRange.getFraction(value);
+        double fraction = this.attr.getRange().getFraction(value);
         if(axisDimension.getMin()<axisDimension.getMax()){
             return this.axisDimension.getPoint(fraction);     
         } else {
@@ -237,7 +241,7 @@ public class GraphicsAxis {
                 g2d.drawLine((int) tick,y,(int) tick,y-tickLength);
                 texts.get(i).drawString(g2d, (int) tick, y + labelOffset, 1, 0);                
             }
-            double midpoint = axisRange.getMin() + 0.5*this.axisRange.getLength();
+            double midpoint = this.attr.getRange().getMin() + 0.5*this.attr.getRange().getLength();
             //System.out.println(" Axis midpoint = " + (int) getAxisPosition(midpoint)
             //+ " " + y);
             int  axisBounds = (int) texts.get(0).getBoundsNumber(g2d).getHeight();
@@ -253,7 +257,7 @@ public class GraphicsAxis {
                 texts.get(i).drawString(g2d, x-labelOffset, (int) tick, 2, 1);
             }
             int  axisBounds = (int) texts.get(0).getBoundsNumber(g2d).getWidth();
-            double midpoint = axisRange.getMin() + 0.5*this.axisRange.getLength();
+            double midpoint = this.attr.getRange().getMin() + 0.5*this.attr.getRange().getLength();
             //System.out.println("x:"+x+" axisBounds: "+ axisBounds+" labelOffset:"+labelOffset+" titleOffset:"+titleOffset);
             
             //Gagik, here's the offset issue. I threw a -35 in there and it fixes the offset, kinda
@@ -305,7 +309,7 @@ public class GraphicsAxis {
     
     private void updateAxisDivisions(Graphics2D g2d){
         
-        List<Double>  ticks = this.axisRange.getDimensionTicks(numberOfMajorTicks);
+        List<Double>  ticks = this.attr.getRange().getDimensionTicks(numberOfMajorTicks);
         axisTicks.init(ticks);
         
         double heights    = 0.0;
@@ -325,7 +329,7 @@ public class GraphicsAxis {
             while(fraction>0.6&&nticks>2){
                 //System.out.println("Oh yeah - " + nticks + "  fraction " + fraction );
                 nticks--;
-                ticks = this.axisRange.getDimensionTicks(nticks);
+                ticks = this.attr.getRange().getDimensionTicks(nticks);
                 axisTicks.init(ticks);
                 //heights  = axisTicks.getTextsHeight(g2d);
                 if(this.isVertical==true){
@@ -445,4 +449,11 @@ public class GraphicsAxis {
             return -placeOfDifference;
         }
     }
+
+	public boolean isAutoScale() {
+		return attr.isAxisAutoScale();
+	}
+	public void setAutoScale(boolean b) {
+		attr.setAxisAutoScale(b);	
+	}
 }
