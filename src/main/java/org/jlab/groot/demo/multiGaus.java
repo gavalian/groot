@@ -22,7 +22,7 @@ public class multiGaus {
 		c1.divide(4, 4);
 		Random rand = new Random();
 		H1F[] h1 = new H1F[16];
-		for (int i = 0; i < h1.length; i++) {
+		for (int i = 0; i < h1.length-1; i++) {
 			h1[i] = new H1F("h" + i, "", 200, -5.0, 5.0);
 			h1[i].setXTitle("Randomly Generated Function");
 			h1[i].setYTitle("Counts");

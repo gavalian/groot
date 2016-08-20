@@ -97,6 +97,16 @@ public class EmbeddedPad {
 	public void setDatasetPlotters(List<IDataSetPlotter> datasetPlotters) {
 		this.datasetPlotters = datasetPlotters;
 	}
+	
+	public void drawAtOrigin(Graphics2D g2d){
+		double x1 = axisFrame.getFrameDimensions().getDimension(0).getMin();
+		double x2 = axisFrame.getFrameDimensions().getDimension(0).getMax();
+		double y1 = axisFrame.getFrameDimensions().getDimension(1).getMin();
+		double y2 = axisFrame.getFrameDimensions().getDimension(1).getMax();
+		this.setDimension(0, 0, g2d.getClip().getBounds().width,g2d.getClip().getBounds().height);
+		this.draw(g2d);
+		this.setDimension((int)x1, (int)y1, (int)x2, (int)y2);
+	}
 
 	public void draw(Graphics2D g2d){                
         //axisFrame.updateMargins(g2d);
@@ -129,7 +139,7 @@ public class EmbeddedPad {
                 Dimension3D d3d = plotter.getDataRegion();
                 axis.combine(d3d);
             }
-        }
+        
         
         if(this.getAxisX().isAutoScale()==false){
             axis.getDimension(0).copy(this.getAxisX().getRange());
@@ -219,6 +229,7 @@ public class EmbeddedPad {
                 statBox.drawPave(g2d, x, y);
                 */
             }
+        }
         }
     }
     

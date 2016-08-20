@@ -447,7 +447,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         //BufferedImage bi = new BufferedImage(
         //    (int)this.getPad(index).getWidth(), (int)this.getPad(index).getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
     	BufferedImage bi = new BufferedImage(
-                this.getWidth(), this.getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
+                this.getPad(index).getWidth(), this.getPad(index).getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
     	this.getPad(index).paint(bi.getGraphics());
         return bi;
     }
