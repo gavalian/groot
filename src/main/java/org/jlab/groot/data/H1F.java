@@ -126,7 +126,7 @@ public class H1F  implements IDataSet {
      * @param xMin		The desired minimum x-axis value
      * @param xMax		The desired maximum x-axis value
      */
-    public H1F(String name, String title, double xMin, double xMax) {
+    public H1F(String name, String title, double xMin, double xMax)  {
     	setName(name);
     	setTitle(title);
     	set((int)(xMax - xMin), xMin, xMax);

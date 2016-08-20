@@ -14,6 +14,8 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -37,7 +39,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -318,7 +319,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     
     private void createPopupMenu(){
         this.popup = new JPopupMenu();
-        JMenuItem itemCopy = new JMenuItem("Copy Canvas Image");
+        JMenuItem itemCopy = new JMenuItem("Copy Canvas");
         JMenuItem itemCopyPad = new JMenuItem("Copy Pad");
         JMenuItem itemPaste = new JMenuItem("Paste Pad");
         JMenuItem itemSave = new JMenuItem("Save");
@@ -336,7 +337,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         itemPaste.addActionListener(this);
         this.popup.add(itemCopy);
         this.popup.add(itemCopyPad);
-        //this.popup.add(itemPaste);
+        this.popup.add(itemPaste);
         this.popup.add(itemSave);
         this.popup.add(itemSaveAs);
         //this.popup.add(new JSeparator());
@@ -356,12 +357,12 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         if(e.getActionCommand().compareTo("Fit Panel")==0){
             this.openFitPanel(popupPad);
         }*/
-        if(e.getActionCommand().compareTo("Copy")==0){
+        if(e.getActionCommand().compareTo("Copy Canvas")==0){
             this.copyToClipboard();
-        }/*
+        }
         if(e.getActionCommand().compareTo("Paste Pad")==0){
             this.paste(popupPad);
-        }*/
+        }
         if(e.getActionCommand().compareTo("Copy Pad")==0){
             this.copyToClipboard(popupPad);
         }
@@ -400,7 +401,31 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         }*/
         
     }
-    private void openOptionsPanel(int popupPad2) {
+    private void paste(int popupPad2) {
+    	 DataFlavor dmselFlavor = new DataFlavor(EmbeddedPad.class, "EmbeddedPad");
+    	 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+         Transferable clipboardContent = clipboard.getContents(null);
+
+         DataFlavor[] flavors = clipboardContent.getTransferDataFlavors();
+         System.out.println("flavors.length = " + flavors.length);
+         for (int i = 0; i < flavors.length; i++){
+         	if(flavors[i].equals(dmselFlavor)){
+         		System.out.println("We have a match!");
+         		try{
+         		EmbeddedPad pad = (EmbeddedPad) clipboardContent.getTransferData(dmselFlavor);
+         		for(int j=0; j<pad.getDatasetPlotters().size(); j++){
+         			this.getPad(popupPad2).getDatasetPlotters().add(pad.getDatasetPlotters().get(j));
+         		}
+         		this.update();
+         		}catch(Exception e){
+         			e.printStackTrace();
+         		}
+         	}
+         }
+            //System.out.println("flavor[" + i + "] = " + flavors[i]);		
+	}
+
+	private void openOptionsPanel(int popupPad2) {
     	JFrame frame = new JFrame("Options Panel");
     	frame.setLayout(new BorderLayout());
     	OptionsPanel mainPanel = new OptionsPanel(this,popupPad2);
@@ -434,7 +459,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     
     private void copyToClipboard(int popupPad) {
     	TransferableImage trans = new TransferableImage(getScreenShot(popupPad));
-    	//trans.setDataSetCollection(this.getPad(popupPad).getPad().getCollection());
+    	trans.setPad(this.getPad(popupPad));
         Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
         c.setContents(trans, null );
     }

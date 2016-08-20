@@ -11,7 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
@@ -34,8 +33,8 @@ import org.jlab.groot.ui.PaveText;
  * @author gavalian
  */
 public class EmbeddedPad {
-    
-     Dimension2D            padDimensions  = new Dimension2D();
+ 
+	 Dimension2D            padDimensions  = new Dimension2D();
      GraphicsAxisFrame          axisFrame  = new GraphicsAxisFrame();
      Color                backgroundColor  = Color.WHITE;
      private  PadMargins  padMargins       = new PadMargins();
