@@ -8,6 +8,8 @@ package org.jlab.groot.base;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -24,6 +26,7 @@ import javax.swing.event.ChangeListener;
 
 import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.math.Dimension1D;
+import org.jlab.groot.ui.DoubleSpinner;
 import org.jlab.groot.ui.LatexText;
 
 import net.miginfocom.swing.MigLayout;
@@ -219,8 +222,8 @@ public class AxisAttributes {
     public static class AxisAttributesPane extends JPanel implements ActionListener, ChangeListener {
         AxisAttributes attr = null;
         
-        JSpinner   axisMinimum = null;
-        JSpinner   axisMaximum = null;
+        DoubleSpinner   axisMinimum = null;
+        DoubleSpinner   axisMaximum = null;
         JCheckBox  axisAutoScale = null;
         JCheckBox  axisGrid      = null;
         JComboBox  labelFont     = null;
@@ -230,6 +233,12 @@ public class AxisAttributes {
         JComboBox  titleFontSize = null;
         
         JTextField axisTitle     = null;
+        private List<ActionListener> listeners = new ArrayList<ActionListener>();
+        
+        public void addAttributeListener(ActionListener al){
+            this.listeners.add(al);
+        }
+        
         
         
         public AxisAttributesPane(AxisAttributes aa){
@@ -245,6 +254,11 @@ public class AxisAttributes {
             titleFont = new JComboBox(FontProperties.getSystemFontsArray());
             labelFontSize = new JComboBox(FontProperties.getFontSizeArray());
             titleFontSize = new JComboBox(FontProperties.getFontSizeArray());
+            
+            labelFont.setSelectedItem(attr.getLabelFontName());
+            titleFont.setSelectedItem(attr.getTitleFontName());
+            labelFontSize.setSelectedItem(attr.getLabelFontSize());
+            titleFontSize.setSelectedItem(attr.getTitleFontSize());
             
             labelFont.addActionListener(this);
             titleFont.addActionListener(this);
@@ -278,10 +292,15 @@ public class AxisAttributes {
             this.add(axisTitle,"wrap, pushx, growx");
             this.add(new JSeparator(),"skip, wrap, growx");
             
-            axisMinimum   = new JSpinner();
-            axisMaximum   = new JSpinner();
+            axisMinimum   = new DoubleSpinner();
+            axisMaximum   = new DoubleSpinner();
             axisAutoScale = new JCheckBox();
             axisGrid      = new JCheckBox();
+            
+            axisMinimum.setValue(attr.getAxisMinimum());
+            axisMaximum.setValue(attr.getAxisMaximum());
+            axisAutoScale.setSelected(attr.isAxisAutoScale());
+            axisGrid.setSelected(attr.isAxisGrid());
 
             axisMinimum.addChangeListener(this);
             axisMaximum.addChangeListener(this);
@@ -304,17 +323,13 @@ public class AxisAttributes {
             JButton buttonApply   = new JButton("Apply");
             this.add(buttonDefault,"skip, split2, pushy");
             this.add(buttonApply,"wrap, pushy");
-            buttonApply.addActionListener(new ActionListener(){
-    			public void actionPerformed(ActionEvent e){
-    				//System.out.println("Update the axis!");
-    				attr.updateCanvas();
-    			}
-            });
             
         }
         
-        public void updateAttr(AxisAttributes axisAttr){
-            
+        public void updateCanvas(){
+        	for(ActionListener actionListener:listeners){
+        		actionListener.actionPerformed(new ActionEvent(this, 0, ""));
+        	}
         }
         
         @Override
@@ -327,26 +342,34 @@ public class AxisAttributes {
             }else if(e.getSource()==labelFontSize){
             	attr.setLabelFontSize(Integer.parseInt(FontProperties.getFontSizeArray()[labelFontSize.getSelectedIndex()]));
             }else if(e.getSource()==titleFontSize){
-            	attr.setLabelFontSize(Integer.parseInt(FontProperties.getFontSizeArray()[titleFontSize.getSelectedIndex()]));
+            	attr.setTitleFontSize(Integer.parseInt(FontProperties.getFontSizeArray()[titleFontSize.getSelectedIndex()]));
             }else if(e.getSource()==axisTitle){
             	attr.setAxisTitle(axisTitle.getText());
             }
-        
+            updateCanvas();
         }
         
         @Override
         public void stateChanged(ChangeEvent e) {
             //System.out.println("stateChanged:" + e.getSource().toString());
             if(e.getSource()==axisMinimum){
-            	attr.setAxisMinimum((double) axisMinimum.getValue());
+            	attr.setAxisMinimum((double) axisMinimum.getDouble());
+            	attr.setAxisAutoScale(false);
+            	axisAutoScale.setSelected(false);
             }else if(e.getSource()==axisMaximum){
-            	attr.setAxisMaximum((double) axisMaximum.getValue());
+            	attr.setAxisMaximum((double) axisMaximum.getDouble());
+            	attr.setAxisAutoScale(false);
+            	axisAutoScale.setSelected(false);
             }else if(e.getSource()==axisAutoScale){
             	attr.setAxisAutoScale(axisAutoScale.isSelected());
+            	attr.setAxisMinimum((double) axisMinimum.getDouble());
+            	attr.setAxisMaximum((double) axisMaximum.getDouble());
             }else if(e.getSource()==axisGrid){
             	attr.setAxisGrid(axisGrid.isSelected());
             }
+            updateCanvas();
         }
+
         
        
     }
@@ -360,7 +383,9 @@ public class AxisAttributes {
     }
 
 	public LatexText getTitle() {
-		axisTitle.setText(axisTitleString);;
+		axisTitle.setText(axisTitleString);
+		axisTitle.setFont(this.titleFontName);
+		axisTitle.setFontSize(this.titleFontSize);
 		return axisTitle;
 	}
 

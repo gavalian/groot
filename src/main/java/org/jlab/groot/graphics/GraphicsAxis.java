@@ -25,7 +25,7 @@ import org.jlab.groot.ui.LatexText;
  */
 public class GraphicsAxis {
     
-	public AxisAttributes attr			    = new AxisAttributes();
+	private AxisAttributes attr			    = new AxisAttributes();
     public static int  AXISTYPE_COLOR       = 1;
     public static int  AXISTYPE_HORIZONTAL  = 2;
     public static int  AXISTYPE_VERTICAL    = 3;        
@@ -101,10 +101,10 @@ public class GraphicsAxis {
     }
     
     public boolean getLog(){
-        return this.isLogarithmic;
+        return this.getAttributes().isLog();
     }
     
-    public void setLog(boolean flag){ this.isLogarithmic = flag;}
+    public void setLog(boolean flag){ this.getAttributes().setLog(flag);}
     
     public Dimension1D  getRange(){
         return this.attr.getRange();
@@ -148,7 +148,7 @@ public class GraphicsAxis {
     public void setAxisFont(String fontname){
     	attr.setLabelFontName(fontname);
         //axisLabelFont.setFontName(fontname);
-        axisTicks.updateFont(getTitleFont());
+        axisTicks.updateFont(getLabelFont());
     }
     
     public void setAxisFontSize(int size){
@@ -224,6 +224,7 @@ public class GraphicsAxis {
         //List<Double>  ticks = axisRange.getDimensionTicks(this.numberOfMajorTicks);
         //axisTicks.init(ticks);
         this.setAxisDivisions(10);
+        axisTicks.updateFont(getLabelFont());
         this.updateAxisDivisions(g2d);
         
         List<Double>     ticks = axisTicks.getAxisTicks();
@@ -270,10 +271,11 @@ public class GraphicsAxis {
     
     
     private void drawColorAxis(Graphics2D g2d, int x, int y){
-        
+
         this.setAxisDivisions(10);
+        axisTicks.updateFont(getLabelFont());
         this.updateAxisDivisions(g2d);
-        
+
         List<Double>     ticks = axisTicks.getAxisTicks();
         List<LatexText>  texts = axisTicks.getAxisTexts();
         g2d.setColor(Color.BLACK);
@@ -311,7 +313,8 @@ public class GraphicsAxis {
         
         List<Double>  ticks = this.attr.getRange().getDimensionTicks(numberOfMajorTicks);
         axisTicks.init(ticks);
-        
+        axisTicks.updateFont(getLabelFont());
+
         double heights    = 0.0;
         
         if(this.isVertical==true){
@@ -455,5 +458,8 @@ public class GraphicsAxis {
 	}
 	public void setAutoScale(boolean b) {
 		attr.setAxisAutoScale(b);	
+	}
+	public AxisAttributes getAttributes() {
+		return attr;
 	}
 }

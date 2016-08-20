@@ -50,7 +50,7 @@ public class multiGaus {
 			c1.getPad(i).getAxisX().setAutoScale(true);
 			c1.getPad(i).getAxisY().setRange(0, 2000.0);
 			//c1.getPad(i).getAxisY().setAutoScale(true);
-			System.out.println(c1.getPad(i).getAxisX());
+			//System.out.println(c1.getPad(i).getAxisX());
 			c1.draw(h1[i]);
 			
 			//DataFitter fitter = new DataFitter();

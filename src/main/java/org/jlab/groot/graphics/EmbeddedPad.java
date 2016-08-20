@@ -41,10 +41,9 @@ public class EmbeddedPad {
      
      //Dimension3D           fixedRange      = new Dimension3D();
      
-     private boolean       isAutoScaleX    = true;
-     private boolean       isAutoScaleY    = true;
      private FontProperties statBoxFont    = new FontProperties();
      private int            optStat        = 1;
+     private boolean		isSelected     = false;
      
      
      public EmbeddedPad(){
@@ -66,6 +65,11 @@ public class EmbeddedPad {
         );
         //System.out.println(padDimensions);
         return this;
+    }
+    
+    public void setAxisRange(double xmin, double xmax, double ymin, double ymax){
+    	this.getAxisX().setRange(xmin, xmax);
+    	this.getAxisY().setRange(xmin, xmax);
     }
     
     public void setMargins(PadMargins margins){
@@ -133,7 +137,7 @@ public class EmbeddedPad {
                     axis.getDimension(0).getMin(),
                     axis.getDimension(0).getMax()
             );
-        	axisFrame.getAxisX().attr.setAxisAutoScale(true);
+        	axisFrame.getAxisX().getAttributes().setAxisAutoScale(true);
         }
         
         if(this.getAxisY().isAutoScale()==false){
@@ -143,7 +147,7 @@ public class EmbeddedPad {
                     axis.getDimension(1).getMin(),
                     axis.getDimension(1).getMax()
             );
-        	axisFrame.getAxisY().attr.setAxisAutoScale(true);
+        	axisFrame.getAxisY().getAttributes().setAxisAutoScale(true);
         }
         
         
@@ -226,23 +230,11 @@ public class EmbeddedPad {
     }
     
     public EmbeddedPad setAutoScale(){
-        this.isAutoScaleX = true;
-        this.isAutoScaleY = true;
+        this.getAxisX().setAutoScale(true);
+        this.getAxisY().setAutoScale(true);
         return this;
     }
     
-    public EmbeddedPad setAxisRangeX(double xmin, double xmax){
-        this.getAxisX().setRange(xmin,xmax);
-        this.isAutoScaleX = false;
-        return this;
-    }
-    
-    
-    public EmbeddedPad setAxisRangeY(double ymin, double ymax){
-        this.getAxisY().setRange(ymin,ymax);
-        this.isAutoScaleY = false;
-        return this;
-    }
  
     public GraphicsAxis getAxisX(){
     	return this.axisFrame.getAxisX();
