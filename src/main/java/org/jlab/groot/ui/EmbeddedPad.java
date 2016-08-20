@@ -28,7 +28,21 @@ public class EmbeddedPad {
     GraphicsAxisFrame          axisFrame = new GraphicsAxisFrame();
     Color                backgroundColor = Color.WHITE;
     Map<String,IDataSetPlotter>   padDataSets = new LinkedHashMap<String,IDataSetPlotter>();
-    List<IDataSetPlotter>         padPlotters = new ArrayList<>();
+    /**
+	 * @return the padDataSets
+	 */
+	public Map<String, IDataSetPlotter> getPadDataSets() {
+		return padDataSets;
+	}
+
+	/**
+	 * @param padDataSets the padDataSets to set
+	 */
+	public void setPadDataSets(Map<String, IDataSetPlotter> padDataSets) {
+		this.padDataSets = padDataSets;
+	}
+
+	List<IDataSetPlotter>         padPlotters = new ArrayList<>();
     
     
     public EmbeddedPad(){

@@ -11,6 +11,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
 import org.jlab.groot.base.FontProperties;
@@ -77,7 +79,21 @@ public class EmbeddedPad {
     public void paint(Graphics g){
     	this.draw((Graphics2D)g);
     }
-    public void draw(Graphics2D g2d){                
+    /**
+	 * @return the datasetPlotters
+	 */
+	public List<IDataSetPlotter> getDatasetPlotters() {
+		return datasetPlotters;
+	}
+
+	/**
+	 * @param datasetPlotters the datasetPlotters to set
+	 */
+	public void setDatasetPlotters(List<IDataSetPlotter> datasetPlotters) {
+		this.datasetPlotters = datasetPlotters;
+	}
+
+	public void draw(Graphics2D g2d){                
         //axisFrame.updateMargins(g2d);
         //axisFrame.setAxisMargins(padMargins);
         //axisFrame.updateMargins(g2d);
@@ -308,4 +324,5 @@ public class EmbeddedPad {
         }
         
     }
+
 }

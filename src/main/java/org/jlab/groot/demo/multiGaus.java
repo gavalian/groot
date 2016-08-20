@@ -16,7 +16,7 @@ public class multiGaus {
 
 	public static void main(String[] args) {
 		Dimension screensize  = Toolkit.getDefaultToolkit().getScreenSize();
-		JFrame frame = new JFrame("Demo JFrame");
+		JFrame frame = new JFrame("GROOT DEMO");
 		frame.setSize((int)(screensize.getHeight()*.75*1.618), (int) (screensize.getHeight()*.75));
 		EmbeddedCanvas c1 = new EmbeddedCanvas();
 		c1.divide(4, 4);
@@ -40,7 +40,7 @@ public class multiGaus {
 			h1[i].setFillColor(30 + (i % 4) + 2);
 			
 			c1.cd(i);
-			String optStatString = "";
+			String optStatString = "1";
 			for(int j=0; j<4-i%4; j++){
 				optStatString +="1";
 			}

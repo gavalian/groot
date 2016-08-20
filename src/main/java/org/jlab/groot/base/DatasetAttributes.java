@@ -115,10 +115,21 @@ public class DatasetAttributes implements Cloneable {
             boxLineColor = new JComboBox(colorChoices);
             boxLineWidth = new JComboBox(colorChoices);
             boxLineStyle = new JComboBox(colorChoices);
+           
+            boxLineColor.addActionListener(this);
+            boxLineWidth.addActionListener(this);
+            boxLineStyle.addActionListener(this);
             
             boxMarkerColor = new JComboBox(colorChoices);
             boxMarkerSize = new JComboBox(colorChoices);
             boxMarkerStyle = new JComboBox(colorChoices);
+            
+            boxMarkerColor.addActionListener(this);
+            boxMarkerSize.addActionListener(this);
+            boxMarkerStyle.addActionListener(this);
+            boxFillColor = new JComboBox(colorChoices);
+            boxFillColor.addActionListener(this);
+
             
             this.add(labelLineColor);
             this.add(boxLineColor,"wrap, pushx, growx");
@@ -140,7 +151,6 @@ public class DatasetAttributes implements Cloneable {
             this.add(boxMarkerStyle,"wrap, growx");
             
             this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
-            boxFillColor = new JComboBox(colorChoices);
             this.add(new JLabel("Fill Color:"));
             this.add(boxFillColor,"wrap, pushx, growx");
             this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
@@ -152,6 +162,12 @@ public class DatasetAttributes implements Cloneable {
 
         public void addAttributeListener(ActionListener al){
             this.listeners.add(al);
+        }
+        
+        public void updateCanvas(){
+        	for(ActionListener actionListener:listeners){
+        		actionListener.actionPerformed(new ActionEvent(this, 0, ""));
+        	}
         }
         
         @Override
@@ -174,6 +190,7 @@ public class DatasetAttributes implements Cloneable {
             }else if(e.getSource()==boxFillColor){
             	attr.setFillColor(Integer.parseInt(colorChoices[boxFillColor.getSelectedIndex()]));
             }
+            updateCanvas();
         }
     }
     
