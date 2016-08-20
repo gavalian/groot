@@ -140,6 +140,7 @@ public class H1F  implements IDataSet {
         this.hAttr.setLineStyle(1);
         this.hAttr.setFillColor(-1);
         this.hAttr.setFillStyle(0);
+        this.hAttr.setDatasetType(DatasetAttributes.HISTOGRAM);
         //this.hAttr.setMarkerSize(6);
         //this.hAttr.setMarkerStyle(1);
         //this.hAttr.setMarkerColor(2);

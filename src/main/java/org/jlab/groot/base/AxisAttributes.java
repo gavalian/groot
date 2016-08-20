@@ -23,6 +23,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jlab.groot.graphics.EmbeddedCanvas;
+import org.jlab.groot.math.Dimension1D;
 import org.jlab.groot.ui.LatexText;
 
 import net.miginfocom.swing.MigLayout;
@@ -39,13 +40,14 @@ public class AxisAttributes {
     private int     titleFontSize    = 12;
     private boolean  axisAutoScale   = true;
     private double   axisMinimum     = 0.0;
-    private double   axisMaximum     = 1.0;
+    private double   axisMaximum     = 2.0;
     private int     labelOffset      = 4;
     private int     titleOffset      = 5;
     private boolean  axisGrid        = true;
     private int      lineColor       = 1;
     private int      lineWidth       = 1;
     private int      tickSize        = 5;
+    private boolean  log			 = false;
     private String   axisTitleString = "";
     private LatexText axisTitle      = new LatexText(axisTitleString);
     private FontProperties labelFont = new FontProperties();
@@ -372,6 +374,20 @@ public class AxisAttributes {
 		labelFont.setFontName(labelFontName);
 		labelFont.setFontSize(labelFontSize);
 		return labelFont;
+	}
+
+	public boolean isLog() {
+		return this.log;
+	}
+
+	public void setLog(boolean log) {
+		this.log = log;
+	}
+
+	public Dimension1D getRange() {
+		Dimension1D range = new Dimension1D();
+		range.setMinMax(axisMinimum, axisMaximum);
+		return range;
 	}
     
 }
