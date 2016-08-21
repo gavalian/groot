@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import org.jlab.groot.base.AxisAttributes.AxisAttributesPane;
 import org.jlab.groot.base.DatasetAttributes.DatasetAttributesPane;
 import org.jlab.groot.graphics.EmbeddedCanvas;
+import org.jlab.groot.graphics.Histogram2DPlotter;
 import org.jlab.groot.graphics.IDataSetPlotter;
 
 public class OptionsPanel extends JPanel {
@@ -41,6 +42,7 @@ public class OptionsPanel extends JPanel {
 	private void initAxes() {
 		AxisAttributesPane panex = new AxisAttributesPane(can.getPad(pad).getAxisFrame().getAxisX().getAttributes());
 		AxisAttributesPane paney = new AxisAttributesPane(can.getPad(pad).getAxisFrame().getAxisY().getAttributes());
+	
 		panex.addAttributeListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -55,6 +57,19 @@ public class OptionsPanel extends JPanel {
 		});
 		tabbedPane.add("X", panex);
 		tabbedPane.add("Y", paney);
+		if(can.getPad(pad).getDatasetPlotters().size()>0){
+			if(can.getPad(pad).getDatasetPlotters().get(0) instanceof Histogram2DPlotter){
+				AxisAttributesPane panez = new AxisAttributesPane(can.getPad(pad).getAxisFrame().getAxisZ().getAttributes());
+				panez.addAttributeListener(new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						can.repaint();
+					}
+				});
+				tabbedPane.add("Z", panez);
+			}
+		}
+		
 	}
 	
 	private void initDatasets() {
