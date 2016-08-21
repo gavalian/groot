@@ -171,7 +171,8 @@ public class ColorPalette {
     public Color getRange(double fraction){
         if(fraction>1.0) fraction = 1;
         if(fraction<0.0){
-            return new Color(128,128,128);
+//            return new Color(128,128,128);
+            return new Color(0,0,0);
         }
         /*
         if(fraction<0.0){

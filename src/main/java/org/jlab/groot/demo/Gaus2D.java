@@ -27,11 +27,14 @@ public class Gaus2D {
         GraphErrors hprofile = h2d.getProfileY();
         H1F h2p =  h2d.projectionX();
         c1.cd(0);
-        c1.getPad(0).getAxisZ().setRange(0.0, 50);
+        c1.getPad(0).getAxisZ().setRange(100, 600);
         c1.draw(h2d);
-        c1.cd(2);
-        c1.draw(h2d.projectionX());
         c1.cd(1);
+        c1.getPad(1).getAxisZ().setAutoScale(true);
+        c1.draw(h2d);
+        c1.cd(3);
+        c1.draw(h2d.projectionX());
+        c1.cd(2);
         c1.draw(h2d.projectionY());
         
     	frame.add(c1);

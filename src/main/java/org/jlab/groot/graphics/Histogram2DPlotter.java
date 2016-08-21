@@ -10,6 +10,7 @@ import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.jlab.groot.base.ColorPalette;
+import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension1D;
 import org.jlab.groot.math.Dimension2D;
@@ -77,7 +78,14 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                     double dataWeight  = this.dataSet.getData(xd, yd);
                     boolean zAxisLog = frame.getAxisZ().getLog();
                     //System.out.println("2D plotter axis Z " + zAxisLog);
-                    Color  weightColor = palette.getColor3D(dataWeight,dataRegionZ.getMax(), zAxisLog);
+                    Color  weightColor;
+                    if(frame.getAxisZ().isAutoScale()){
+                    	weightColor = palette.getColor3D(dataWeight,dataRegionZ.getMax(), zAxisLog);
+                    }else{
+                    	dataWeight -= frame.getAxisZ().getRange().getMin();
+                    	weightColor = palette.getColor3D(dataWeight,frame.getAxisZ().getRange().getMax()-frame.getAxisZ().getRange().getMin(), zAxisLog);
+                    	//System.out.println("h2d: dataweight "+dataWeight+" max: "+frame.getAxisZ().getRange());
+                    }
                     /*System.out.println("drawing point " + xd + " " + yd
                             + " xps/xpe = " + (int) xps + "  " + (int) xpe 
                             + " yps/ype = " + (int) yps + "  " + (int) ype

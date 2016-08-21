@@ -165,12 +165,17 @@ public class EmbeddedPad {
         	axisFrame.getAxisY().getAttributes().setAxisAutoScale(true);
         }
         
+        if(this.getAxisZ().isAutoScale()==false){
+            axis.getDimension(2).copy(this.getAxisZ().getRange());
+        }else{
+        	axisFrame.getAxisZ().setRange(
+                    axis.getDimension(2).getMin(),
+                    axis.getDimension(2).getMax()
+            );
+        	axisFrame.getAxisZ().getAttributes().setAxisAutoScale(true);
+        }
         
-      
-        axisFrame.getAxisZ().setRange(
-                axis.getDimension(2).getMin(),
-                axis.getDimension(2).getMax()
-        );
+        
         
         Rectangle2D rect = new Rectangle2D.Double(
                 axisFrame.getFrameDimensions().getDimension(0).getMin() + padMargins.getLeftMargin(),
