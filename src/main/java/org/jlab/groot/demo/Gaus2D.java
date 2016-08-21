@@ -21,16 +21,18 @@ public class Gaus2D {
 		EmbeddedCanvas c1 = new EmbeddedCanvas();
 		c1.divide(2,2);
 
-        H2F h2d = FunctionFactory.randomGausian2D(40, 0.4, 7.6, 800000, 2.3, 0.8);
-
+        H2F h2d = FunctionFactory.randomGausian2D(40, 0.4, 7.6, 800000, 3.3, 0.8);
+        h2d.setXTitle("Randomly Generated Function");
+        h2d.setYTitle("Randomly Generated Function");
         GraphErrors hprofile = h2d.getProfileY();
         H1F h2p =  h2d.projectionX();
         c1.cd(0);
+        c1.getPad(0).getAxisZ().setRange(0.0, 50);
         c1.draw(h2d);
-        c1.cd(1);
-        c1.draw(h2p);
         c1.cd(2);
-        c1.draw(hprofile);
+        c1.draw(h2d.projectionX());
+        c1.cd(1);
+        c1.draw(h2d.projectionY());
         
     	frame.add(c1);
 		frame.setLocationRelativeTo(null);

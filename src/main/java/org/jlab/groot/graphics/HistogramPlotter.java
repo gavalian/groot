@@ -64,7 +64,7 @@ public class HistogramPlotter implements IDataSetPlotter  {
 
     @Override
     public void draw(Graphics2D g2d, GraphicsAxisFrame frame) {
-        
+
         int npoints = dataset.getDataSize(0);
 
         double dataX  = dataset.getDataX(0);
@@ -84,7 +84,6 @@ public class HistogramPlotter implements IDataSetPlotter  {
         path.moveTo((int) xps, (int) yp);
         
         for(int p = 0; p < npoints; p++){
-            
             dataX  = dataset.getDataX(p);
             dataY  = dataset.getDataY(p);
             errorX = dataset.getDataEX(p);

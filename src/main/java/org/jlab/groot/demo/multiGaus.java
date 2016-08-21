@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.H2F;
 import org.jlab.groot.fitter.DataFitter;
 import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.math.F1D;
@@ -21,6 +22,16 @@ public class multiGaus {
 		EmbeddedCanvas c1 = new EmbeddedCanvas();
 		c1.divide(4, 4);
 		Random rand = new Random();
+		/*
+		H2F hh = new H2F("junk",10,0.,10.,10,0.,10.);
+	    H1F hp = hh.sliceX(4);
+	    //hp.fill(.3);
+	    //c1.getPad(0).getAxisY().setRange(0, 10.0);
+	    c1.draw(hp);
+	    frame.add(c1);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		*/
 		H1F[] h1 = new H1F[16];
 		for (int i = 0; i < h1.length-1; i++) {
 			h1[i] = new H1F("h" + i, "", 200, -5.0, 5.0);
@@ -63,6 +74,7 @@ public class multiGaus {
 		frame.add(c1);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
 	}
 
 }

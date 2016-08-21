@@ -184,6 +184,7 @@ public class H2F implements IDataSet {
          */
         public final void setXTitle(String xTitle) {
             //this.getXaxis().setTitle(xTitle);
+            attr.setXTitle(xTitle);
 
         }
         
@@ -194,7 +195,7 @@ public class H2F implements IDataSet {
          */
         public final void setYTitle(String yTitle) {
             //this.getYaxis().setTitle(yTitle);
-           
+           attr.setYTitle(yTitle);
         }
         
         /**
@@ -203,7 +204,7 @@ public class H2F implements IDataSet {
          */
         public String getTitle(){
             //return this.histTitle;
-            return "";//this.attr.getString(AttributeType.STRING_TITLE);
+            return attr.getTitle();//this.attr.getString(AttributeType.STRING_TITLE);
         }
         /**
          * The getter for the x-axis title.
@@ -211,7 +212,7 @@ public class H2F implements IDataSet {
          * @return		The title of the x-axis as a string
          */
         public String getXTitle() {
-            return "";//this.attr.getString(AttributeType.STRING_TITLE_X);
+            return attr.getXTitle();//this.attr.getString(AttributeType.STRING_TITLE_X);
             //return this.getXaxis().getTitle();
         }
         
@@ -221,7 +222,7 @@ public class H2F implements IDataSet {
          * @return		The title of the y-axis as a string
          */
         public String getYTitle() {
-            return "";//this.attr.getString(AttributeType.STRING_TITLE_Y);
+            return attr.getYTitle();//this.attr.getString(AttributeType.STRING_TITLE_Y);
             //return this.getYaxis().getTitle();
         }
         
@@ -232,7 +233,7 @@ public class H2F implements IDataSet {
          */
         public final void setTitle(String title) {
             //histTitle = title;
-            
+            attr.setTitle(title);
         }
         
         /**
