@@ -26,14 +26,19 @@ import net.miginfocom.swing.MigLayout;
  * @author gavalian
  */
 public class DatasetAttributes implements Cloneable {
-    
+    private int lineColorAlpha = 1;
     private int lineColor = 1;
+    private int lineAlpha = 1;
     private int lineWidth = 1;
     private int lineStyle = 1;
     private int markerColor = 1;
+    private int markerColorAlpha = 1;
+    private int markerAlpha = 1;
     private int markerSize = 1;
     private int markerStyle = 1;
     private int fillColor   = 0;
+    private int fillAlpha   = 1;
+    private int fillColorAlpha   = 1;
     private int fillStyle   = 1;
     private int datasetType  = 0;
     public final static int HISTOGRAM = 0;
@@ -91,8 +96,13 @@ public class DatasetAttributes implements Cloneable {
     public static class DatasetAttributesPane extends JPanel implements ActionListener {
         
         private DatasetAttributes attr = null;
-        private final static String[] colorChoices  = 
-                new String[]{"1","2","3","4","5","6","7","8","9"};
+        private  String[] colorChoices    = new String[50];
+        private  int[] colorChoicesInts   = new int[50];
+        private  String[] sizeChoices     = new String[10];
+        private  int[] sizeChoicesInts    = new int[10];
+        private  String[] markerChoices   = new String[5];
+        private  int[] markerChoicesInts  = new int[5];
+
         
         private JComboBox boxLineColor = null;
         private JComboBox boxLineWidth = null;
@@ -114,27 +124,48 @@ public class DatasetAttributes implements Cloneable {
         }
         
         private void initUI(){
+        	
+        	 for(int i=0; i<colorChoices.length; i++){
+             	colorChoices[i] = ""+i;
+             	colorChoicesInts[i] = i;
+             	if(i<sizeChoices.length){
+             		sizeChoices[i] = ""+i;
+             		sizeChoicesInts[i] = i;
+             	}
+             	if(i<markerChoices.length){
+             		markerChoices[i] = ""+i;
+             		markerChoicesInts[i] = i;
+             	}
+             }
+        	
             JLabel labelLineColor  = new JLabel("Line Color:");
             JLabel labelLineWidth  = new JLabel("Line Width:");
             JLabel labelLineStyle  = new JLabel("Line Style:");
             
             boxLineColor = new JComboBox(colorChoices);
-            boxLineWidth = new JComboBox(colorChoices);
-            boxLineStyle = new JComboBox(colorChoices);
-           
+            boxLineWidth = new JComboBox(sizeChoices);
+            boxLineStyle = new JComboBox(markerChoices);
+            boxLineColor.setSelectedIndex(returnIndex(colorChoicesInts,attr.getLineColor()));
+            boxLineWidth.setSelectedIndex(returnIndex(sizeChoicesInts,attr.getLineWidth()));
+            boxLineStyle.setSelectedIndex(returnIndex(markerChoicesInts,attr.getLineStyle()));
+
             boxLineColor.addActionListener(this);
             boxLineWidth.addActionListener(this);
             boxLineStyle.addActionListener(this);
             
             boxMarkerColor = new JComboBox(colorChoices);
-            boxMarkerSize = new JComboBox(colorChoices);
-            boxMarkerStyle = new JComboBox(colorChoices);
+            boxMarkerSize = new JComboBox(sizeChoices);
+            boxMarkerStyle = new JComboBox(markerChoices);
+            boxMarkerColor.setSelectedIndex(returnIndex(colorChoicesInts,attr.getMarkerColor()));
+            boxMarkerSize.setSelectedIndex(returnIndex(sizeChoicesInts,attr.getMarkerSize()));
+            boxMarkerStyle.setSelectedIndex(returnIndex(markerChoicesInts,attr.getMarkerStyle()));
             
             boxMarkerColor.addActionListener(this);
             boxMarkerSize.addActionListener(this);
             boxMarkerStyle.addActionListener(this);
             boxFillColor = new JComboBox(colorChoices);
             boxFillColor.addActionListener(this);
+            boxFillColor.setSelectedIndex(returnIndex(colorChoicesInts,attr.getFillColor()));
 
             
             if(attr.getDatasetType()==DatasetAttributes.HISTOGRAM|| attr.getDatasetType()==DatasetAttributes.FUNCTION){
@@ -162,12 +193,12 @@ public class DatasetAttributes implements Cloneable {
                 this.add(new JLabel("Fill Color:"));
                 this.add(boxFillColor,"wrap, pushx, growx");
             }
-            this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
+            //this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
             
             JButton buttonDefault = new JButton("Default");
             JButton buttonApply = new JButton("Apply");
-            this.add(buttonDefault,"skip, pushx, split2");
-            this.add(buttonApply,"pushx");
+            //this.add(buttonDefault,"skip, pushx, split2");
+            //this.add(buttonApply,"pushx");
         }
 
         public void addAttributeListener(ActionListener al){
@@ -188,15 +219,15 @@ public class DatasetAttributes implements Cloneable {
             if(e.getSource()==boxLineColor){
             	attr.setLineColor(Integer.parseInt(colorChoices[boxLineColor.getSelectedIndex()]));
             }else if(e.getSource()==boxLineWidth){
-            	attr.setLineWidth(Integer.parseInt(colorChoices[boxLineWidth.getSelectedIndex()]));
+            	attr.setLineWidth(Integer.parseInt(sizeChoices[boxLineWidth.getSelectedIndex()]));
             }else if(e.getSource()==boxLineStyle){
-            	attr.setLineStyle(Integer.parseInt(colorChoices[boxLineStyle.getSelectedIndex()]));
+            	attr.setLineStyle(Integer.parseInt(markerChoices[boxLineStyle.getSelectedIndex()]));
             }else if(e.getSource()==boxMarkerColor){
             	attr.setMarkerColor(Integer.parseInt(colorChoices[boxMarkerColor.getSelectedIndex()]));
             }else if(e.getSource()==boxMarkerSize){
-            	attr.setMarkerSize(Integer.parseInt(colorChoices[boxMarkerSize.getSelectedIndex()]));
+            	attr.setMarkerSize(Integer.parseInt(sizeChoices[boxMarkerSize.getSelectedIndex()]));
             }else if(e.getSource()==boxMarkerStyle){
-            	attr.setMarkerStyle(Integer.parseInt(colorChoices[boxMarkerStyle.getSelectedIndex()]));
+            	attr.setMarkerStyle(Integer.parseInt(markerChoices[boxMarkerStyle.getSelectedIndex()]));
             }else if(e.getSource()==boxFillColor){
             	attr.setFillColor(Integer.parseInt(colorChoices[boxFillColor.getSelectedIndex()]));
             }
@@ -214,6 +245,15 @@ public class DatasetAttributes implements Cloneable {
 
 	public int getDatasetType() {
 		return datasetType;
+	}
+	
+	private static int returnIndex(int[] array, int number){
+		for(int i=0; i<array.length; i++){
+			if(array[i] == number){
+				return i;
+			}
+		}
+		return 0;
 	}
 
 	public void setDatasetType(int datasetType) {

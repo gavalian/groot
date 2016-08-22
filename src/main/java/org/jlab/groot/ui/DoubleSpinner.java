@@ -15,9 +15,8 @@ public class DoubleSpinner extends JSpinner {
     public DoubleSpinner() {
         super();
         // Model setup
-        model = new SpinnerNumberModel(0.0, -1000.0, 1000.0, 0.1);
+        model = new SpinnerNumberModel(0.0, -10000000000.0, 10000000000.0, 1.0);
         this.setModel(model);
-
         // Step recalculation
         this.addChangeListener(new ChangeListener() {
             @Override

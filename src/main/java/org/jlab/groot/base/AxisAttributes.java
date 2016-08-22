@@ -261,8 +261,9 @@ public class AxisAttributes implements Cloneable{
             
             labelFont.setSelectedItem(attr.getLabelFontName());
             titleFont.setSelectedItem(attr.getTitleFontName());
-            labelFontSize.setSelectedItem(attr.getLabelFontSize());
-            titleFontSize.setSelectedItem(attr.getTitleFontSize());
+            labelFontSize.setSelectedIndex(returnIndex(FontProperties.getFontSizeArray(),attr.getLabelFontSize()));
+            titleFontSize.setSelectedIndex(returnIndex(FontProperties.getFontSizeArray(),attr.getTitleFontSize()));
+
             
             labelFont.addActionListener(this);
             titleFont.addActionListener(this);
@@ -294,6 +295,7 @@ public class AxisAttributes implements Cloneable{
             axisTitle.addActionListener(this);
             
             this.add(axisTitle,"wrap, pushx, growx");
+            axisTitle.setText(attr.getAxisTitleString());
             this.add(new JSeparator(),"skip, wrap, growx");
             
             axisMinimum   = new DoubleSpinner();
@@ -322,11 +324,11 @@ public class AxisAttributes implements Cloneable{
             this.add(new JLabel("Grid:"),"pushx");
             this.add(axisGrid,"wrap, pushx, growx");
             
-            this.add(new JSeparator(),"skip, wrap, growx");
+            //this.add(new JSeparator(),"skip, wrap, growx");
             JButton buttonDefault = new JButton("Default");
             JButton buttonApply   = new JButton("Apply");
-            this.add(buttonDefault,"skip, split2, pushy");
-            this.add(buttonApply,"wrap, pushy");
+            //this.add(buttonDefault,"skip, split2, pushy");
+            //this.add(buttonApply,"wrap, pushy");
             
         }
         
@@ -357,13 +359,14 @@ public class AxisAttributes implements Cloneable{
         public void stateChanged(ChangeEvent e) {
             //System.out.println("stateChanged:" + e.getSource().toString());
             if(e.getSource()==axisMinimum){
+            	axisAutoScale.setSelected(false);
+            	attr.setAxisAutoScale(false);
             	attr.setAxisMinimum((double) axisMinimum.getDouble());
-            	attr.setAxisAutoScale(false);
-            	axisAutoScale.setSelected(false);
             }else if(e.getSource()==axisMaximum){
-            	attr.setAxisMaximum((double) axisMaximum.getDouble());
-            	attr.setAxisAutoScale(false);
             	axisAutoScale.setSelected(false);
+            	attr.setAxisAutoScale(false);
+            	attr.setAxisMaximum((double) axisMaximum.getDouble());
+            	//System.out.println("Axis Maximum:"+(double) axisMaximum.getDouble());
             }else if(e.getSource()==axisAutoScale){
             	attr.setAxisAutoScale(axisAutoScale.isSelected());
             	attr.setAxisMinimum((double) axisMinimum.getDouble());
@@ -412,7 +415,15 @@ public class AxisAttributes implements Cloneable{
 	public void setLog(boolean log) {
 		this.log = log;
 	}
-
+	private static int returnIndex(String[] strings, int number){
+		for(int i=0; i<strings.length; i++){
+			if(Integer.parseInt(strings[i]) == number){
+				return i;
+			}
+		}
+		return 0;
+	}
+	
 	public Dimension1D getRange() {
 		Dimension1D range = new Dimension1D();
 		range.setMinMax(axisMinimum, axisMaximum);

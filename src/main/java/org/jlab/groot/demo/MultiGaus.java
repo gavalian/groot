@@ -13,7 +13,7 @@ import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.RandomFunc;
 
-public class multiGaus {
+public class MultiGaus {
 
 	public static void main(String[] args) {
 		Dimension screensize  = Toolkit.getDefaultToolkit().getScreenSize();
@@ -25,12 +25,12 @@ public class multiGaus {
 		/*
 		H2F hh = new H2F("junk",10,0.,10.,10,0.,10.);
 	    H1F hp = hh.sliceX(4);
-	    //hp.fill(.3);
+	    //hp.fill(.3); 
 	    //c1.getPad(0).getAxisY().setRange(0, 10.0);
 	    c1.draw(hp);
 	    frame.add(c1);
 		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		frame.setVisible(true); 
 		*/
 		H1F[] h1 = new H1F[16];
 		for (int i = 0; i < h1.length-1; i++) {

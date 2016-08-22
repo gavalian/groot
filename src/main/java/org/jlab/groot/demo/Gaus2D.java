@@ -13,7 +13,6 @@ import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.math.FunctionFactory;
 
 public class Gaus2D {
-
 	public static void main(String[] args) {
 		Dimension screensize  = Toolkit.getDefaultToolkit().getScreenSize();
 		JFrame frame = new JFrame("GROOT DEMO");
@@ -41,5 +40,4 @@ public class Gaus2D {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
-
 }
