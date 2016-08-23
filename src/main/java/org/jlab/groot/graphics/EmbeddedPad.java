@@ -44,7 +44,9 @@ public class EmbeddedPad {
      
      private FontProperties statBoxFont    = new FontProperties();
      private boolean		isSelected     = false;
-     
+     String title = "";
+     int titleFontSize = 12;
+     String titleFont = "Avenir";
      
      public EmbeddedPad(){
          
@@ -105,6 +107,7 @@ public class EmbeddedPad {
 		this.draw((Graphics2D)g);
 		this.setDimension((int)x1, (int)y1, (int)x2, (int)y2);
 	}*/
+	
 
 	public void draw(Graphics2D g2d){        
         //axisFrame.updateMargins(g2d);
@@ -413,5 +416,53 @@ public class EmbeddedPad {
 	public GraphicsAxis getAxisZ() {
     	return this.axisFrame.getAxisZ();
 	}
+
+	public String getTitle() {
+		return title;
+	}
+	public void getTitle(String title) {
+		 this.title = title;
+	}
+	
+	public int getTitleFontSize() {
+		return this.titleFontSize;
+	}
+	public String getTitleFont() {
+		return this.titleFont;
+	}
+
+	public void setTitleFontSize(int titleFontSize) {
+		 this.titleFontSize = titleFontSize;
+	}
+	public void getTitleFont(String titleFont) {
+		this.titleFont = titleFont;
+	}
+	public void setAxisTitleFontSize(int parseInt) {
+		this.getAxisX().getAttributes().setTitleFontSize(parseInt);
+		this.getAxisY().getAttributes().setTitleFontSize(parseInt);
+	}
+	public void setAxisLabelFontSize(int parseInt) {
+		this.getAxisX().getAttributes().setLabelFontSize(parseInt);
+		this.getAxisY().getAttributes().setLabelFontSize(parseInt);
+	}
+
+	public void setFontNameAll(String FontName) {
+		this.getAxisX().getAttributes().setLabelFontName(FontName);
+		this.getAxisY().getAttributes().setLabelFontName(FontName);
+		this.getAxisX().getAttributes().setTitleFontName(FontName);
+		this.getAxisY().getAttributes().setTitleFontName(FontName);
+		this.titleFont = FontName;
+		this.statBoxFont.setFontName(FontName);
+	}
+
+	public int getStatBoxFontSize() {
+		return statBoxFont.getFontSize();
+	}
+
+	public void setTitle(String title) {
+		this.title = title;		
+	}
+	
+	
 
 }

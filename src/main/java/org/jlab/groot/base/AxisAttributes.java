@@ -438,6 +438,14 @@ public class AxisAttributes implements Cloneable{
 		range.setMinMax(axisMinimum, axisMaximum);
 		return range;
 	}
+
+	public boolean getGrid() {
+		return axisGrid;
+	}
+	
+	public void setGrid(boolean axisGrid) {
+		this.axisGrid = axisGrid;
+	}
     
 }
 

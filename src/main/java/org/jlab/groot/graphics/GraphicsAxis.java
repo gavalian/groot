@@ -475,4 +475,19 @@ public class GraphicsAxis {
 	public void setAttributes(AxisAttributes attr) {
 		this.attr = attr;
 	}
+	public boolean getGrid() {
+		return attr.getGrid();
+	}
+	public void setGrid(boolean isGrid) {
+		attr.setGrid(isGrid);
+	}
+	public String getTitle() {
+		return attr.getAxisTitleString();
+	}
+	public int getTitleFontSize() {
+		return attr.getTitleFontSize();
+	}
+	public int getLabelFontSize() {
+		return attr.getLabelFontSize();
+	}
 }

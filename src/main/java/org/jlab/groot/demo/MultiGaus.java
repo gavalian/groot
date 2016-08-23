@@ -22,27 +22,16 @@ public class MultiGaus {
 		EmbeddedCanvas c1 = new EmbeddedCanvas();
 		c1.divide(4, 4);
 		Random rand = new Random();
-		/*
-		H2F hh = new H2F("junk",10,0.,10.,10,0.,10.);
-	    H1F hp = hh.sliceX(4);
-	    //hp.fill(.3); 
-	    //c1.getPad(0).getAxisY().setRange(0, 10.0);
-	    c1.draw(hp);
-	    frame.add(c1);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true); 
-		*/
 		H1F[] h1 = new H1F[16];
 		for (int i = 0; i < h1.length-1; i++) {
 			h1[i] = new H1F("h" + i, "", 200, -5.0, 5.0);
-			h1[i].setXTitle("Randomly Generated Function");
-			h1[i].setYTitle("Counts");
-			h1[i].setOptStat(1100);
+			h1[i].setTitleX("Randomly Generated Function");
+			h1[i].setTitleY("Counts");
+			h1[i].setOptStat(0);
 			F1D f1 = new F1D("f1","[amp]*gaus(x,[mean],[sigma])", -5.0, 5.0);
 			f1.setParameter(0, 120.0);
 			f1.setParameter(1, (-3.0 + rand.nextDouble() * 6));
 			f1.setParameter(2, .4 + (rand.nextDouble() * 1));
-			f1.setOptStat(1000);
 
 			RandomFunc rndm = new RandomFunc(f1);
 			for (int j = 0; j < 34000; j++) {
@@ -54,21 +43,20 @@ public class MultiGaus {
 			
 			c1.cd(i);
 			String optStatString = "";
-			for(int j=0; j<4-i%4; j++){
+			for(int j=0; j<3-i%4; j++){
 				optStatString +="1";
 			}
-			optStatString+="0";
-			c1.getPad(i).setOptStat(Integer.parseInt(optStatString));
-			//c1.getPad(i).getAxisX().setRange(-6.0, 5.0);
+			optStatString+="00";
+			f1.setOptStat(Integer.parseInt(optStatString));
+
+			c1.getPad(i).getAxisX().setRange(-6.0, 5.0);
 			//c1.getPad(i).getAxisX().setAutoScale(true);
 			//c1.getPad(i).getAxisY().setRange(0, 2000.0);
 			//c1.getPad(i).getAxisY().setAutoScale(true);
-			//System.out.println(c1.getPad(i).getAxisX());
 			c1.draw(h1[i]);
 			
-			//DataFitter fitter = new DataFitter();
-			f1.setParameter(0, h1[i].getEntries());
-			DataFitter.fit(f1, h1[i], "");
+			f1.setParameter(0, h1[i].getEntries()); //Due to initial parameter estimates not existing
+			DataFitter.fit(f1, h1[i], ""); //No options uses error for sigma
 			f1.setLineColor(30 + (i % 4) + 2);
 			f1.setLineWidth(3);
 			f1.setLineStyle(i%4);
