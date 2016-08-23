@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import net.miginfocom.swing.MigLayout;
 
@@ -109,6 +110,7 @@ public class DatasetAttributes implements Cloneable {
         private JComboBox boxMarkerStyle = null;
         
         private JComboBox boxFillColor = null;
+        private JTextField optStatTextField = null;
         
         private List<ActionListener> listeners = new ArrayList<ActionListener>();
         
@@ -162,6 +164,9 @@ public class DatasetAttributes implements Cloneable {
             boxFillColor = new JComboBox(colorChoices);
             boxFillColor.addActionListener(this);
             boxFillColor.setSelectedIndex(returnIndex(colorChoicesInts,attr.getFillColor()));
+            JLabel optStatLabel = new JLabel("StatBox Options:");
+            optStatTextField = new JTextField(10);
+            optStatTextField.setText(""+attr.getOptStat());
 
             
             if(attr.getDatasetType()==DatasetAttributes.HISTOGRAM|| attr.getDatasetType()==DatasetAttributes.FUNCTION){
@@ -189,6 +194,9 @@ public class DatasetAttributes implements Cloneable {
                 this.add(new JLabel("Fill Color:"));
                 this.add(boxFillColor,"wrap, pushx, growx");
             }
+            this.add(optStatLabel);
+            this.add(optStatTextField,"wrap, pushx, growx");
+            optStatTextField.addActionListener(this);
             //this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
             
             JButton buttonDefault = new JButton("Default");
@@ -226,6 +234,8 @@ public class DatasetAttributes implements Cloneable {
             	attr.setMarkerStyle(Integer.parseInt(markerChoices[boxMarkerStyle.getSelectedIndex()]));
             }else if(e.getSource()==boxFillColor){
             	attr.setFillColor(Integer.parseInt(colorChoices[boxFillColor.getSelectedIndex()]));
+            }else if(e.getSource()==optStatTextField){
+            	attr.setOptStat(Integer.parseInt(optStatTextField.getText()));
             }
             updateCanvas();
         }
