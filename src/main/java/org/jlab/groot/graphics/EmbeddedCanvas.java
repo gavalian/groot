@@ -39,6 +39,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -57,7 +58,7 @@ import org.jlab.groot.ui.TransferableImage;
  * @author gavalian
  */
 public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseListener, ActionListener {
-    
+    IDataSet selectedDataset = null;
     private Timer        updateTimer = null;
     private Long numberOfPaints  = (long) 0;
     private Long paintingTime    = (long) 0;
@@ -268,6 +269,8 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         int pad = this.getPadByXY(e.getX(),e.getY());
         //System.out.println("you're hovering over pad = " + pad);
     }
+    int fillcolortemp = 1;
+
     @Override
     public void mouseClicked(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -292,6 +295,38 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             dialogWin.setLocation(new Point(e.getX(),e.getY()));
             dialogWin.setVisible(true);
         }
+        if(e.getClickCount()==1&&e.getButton()==1){
+        	System.out.println("Left click!");
+        	if(selectedDataset!=null){
+				selectedDataset.getAttributes().setFillColor(fillcolortemp);
+				this.repaint();
+			}
+        	selectedDataset = null;
+        	for(EmbeddedPad pad : this.canvasPads){
+        		if(pad.getDatasetPlotters().size()>0){
+        			for(IDataSetPlotter plotter : pad.getDatasetPlotters())
+        				if(plotter instanceof HistogramPlotter){
+        					HistogramPlotter temp = (HistogramPlotter) plotter;
+        					if(temp.path.contains(e.getX(), e.getY())){
+        						System.out.println("You clicked on:"+temp.getName());
+        						if(selectedDataset != temp ){
+        							if(selectedDataset!=null){
+        								selectedDataset.getAttributes().setFillColor(fillcolortemp);
+        							}
+            						fillcolortemp = temp.getDataSet().getAttributes().getFillColor();
+            						selectedDataset = temp.getDataSet();
+            						if(fillcolortemp<10){
+            							temp.getDataSet().getAttributes().setFillColor(fillcolortemp+10);
+            						}else{
+            							temp.getDataSet().getAttributes().setFillColor(fillcolortemp-10);
+            						}
+            						this.repaint();
+        						}
+        					}
+	        		}
+        		}
+        	}
+        }
        
     }
     
@@ -311,13 +346,14 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    	
     }
+
 
     @Override
     public void mouseExited(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    	
+    	} 
     
     private void createPopupMenu(){
         this.popup = new JPopupMenu();
@@ -416,7 +452,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
          		try{
          		EmbeddedPad pad = (EmbeddedPad) clipboardContent.getTransferData(dmselFlavor);
          		for(int j=0; j<pad.getDatasetPlotters().size(); j++){
-         			this.getPad(popupPad2).getDatasetPlotters().add(pad.getDatasetPlotters().get(j));
+         			this.getPad(popupPad2).getDatasetPlotters().add(pad.getDatasetPlotters().get(j).);
          		}
          		this.update();
          		}catch(Exception e){

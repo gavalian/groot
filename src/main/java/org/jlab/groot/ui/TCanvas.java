@@ -6,8 +6,6 @@
 
 package org.jlab.groot.ui;
 
-import org.jlab.groot.graphics.FunctionPlotter;
-import org.jlab.groot.graphics.HistogramPlotter;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -168,8 +166,8 @@ public class TCanvas extends JFrame {
         
         H1F h4 = FunctionFactory.createH1F(0, 120, 5000);
         H1F h5 = FunctionFactory.createH1F(1, 120, 5000);
-        h4.setXTitle("Random Gaussian");
-        h5.setXTitle("Random Gaussian");
+        h4.setTitleX("Random Gaussian");
+        h5.setTitleX("Random Gaussian");
         func5.setRange(0.1, 5.0);
         //func5.setParStep(3, 0.0);
         //func5.setParameter(3, 2.0);

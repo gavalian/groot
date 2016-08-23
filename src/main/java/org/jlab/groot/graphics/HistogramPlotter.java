@@ -8,15 +8,12 @@ package org.jlab.groot.graphics;
 import org.jlab.groot.graphics.IDataSetPlotter;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
 
-import org.jlab.groot.base.AttributeType;
+
 import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.IDataSet;
-import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
 import org.jlab.groot.graphics.GraphicsAxisFrame;
 
@@ -24,13 +21,13 @@ import org.jlab.groot.graphics.GraphicsAxisFrame;
  *
  * @author gavalian
  */
-public class HistogramPlotter implements IDataSetPlotter  {
+public class HistogramPlotter  implements IDataSetPlotter {
     
     String       plottingOptions = "";
     IDataSet     dataset = null;
     Dimension3D  dataRegion  = new Dimension3D();
     String       datasetName = "";
-    
+    public GeneralPath path = null;
     public HistogramPlotter(IDataSet ds){
         dataset = ds;
         datasetName = ds.getName();
@@ -78,7 +75,7 @@ public class HistogramPlotter implements IDataSetPlotter  {
         //        + frame.getAxis(1).getDimension().getMin();
         double yp = frame.getAxisPointY(0.0);
         
-        GeneralPath path = new GeneralPath();
+        path = new GeneralPath();
         //Path2D path = new Path2D.Double();
         
         path.moveTo((int) xps, (int) yp);
@@ -142,5 +139,4 @@ public class HistogramPlotter implements IDataSetPlotter  {
         
         return dataRegion;
     }
-    
 }

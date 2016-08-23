@@ -64,8 +64,8 @@ public class H1F  implements IDataSet {
     	set(bins, xMin, xMax);
     	initDataStore(bins);
         this.initAttributes();
-        setXTitle(xTitle);
-        setYTitle(yTitle);
+        setTitleX(xTitle);
+        setTitleY(yTitle);
     }
     
     /**
