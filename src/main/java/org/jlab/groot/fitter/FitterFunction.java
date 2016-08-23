@@ -20,7 +20,7 @@ public class FitterFunction implements FCNBase {
    
     private Func1D    function = null;
     private IDataSet  dataset  = null;
-    private String    fitOptions = "E";
+    private String    fitOptions = "";
     private int       numberOfCalls = 0;
     private long      startTime     = 0L;
     private long      endTime       = 0L;
@@ -77,15 +77,24 @@ public class FitterFunction implements FCNBase {
         for(int np = 0; np < npoints; np++){
             double x = dataset.getDataX(np);
             double y = dataset.getDataY(np);
-            if(x>=function.getMin()&&x<=function.getMax()){
+            double yerr = dataset.getDataEY(np);
+            boolean usePoint = true;
+            if(dataset instanceof H1F&&y==0){
+            	usePoint = false;
+            }
+            if(x>=function.getMin()&&x<=function.getMax()&&usePoint){
                 double yv = function.evaluate(x);
-                double normalization = 1.0;                
+                double normalization = yerr*yerr;                
                 if(options.contains("R")==true){
                     normalization = yv;
                 }
                 
                 if(options.contains("N")==true){
                     normalization = y;
+                }
+                
+                if(options.contains("W")==true){
+                	normalization = 1.0;
                 }
                                 
                 if(normalization>0.000000000001){                    

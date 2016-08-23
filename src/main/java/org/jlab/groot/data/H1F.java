@@ -850,4 +850,8 @@ public class H1F  implements IDataSet {
         }
         return stat;
     }
+
+	public void setOptStat(int i) {
+		this.hAttr.setOptStat(i);
+	}
 }

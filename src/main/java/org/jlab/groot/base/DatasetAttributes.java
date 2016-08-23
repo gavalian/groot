@@ -26,25 +26,21 @@ import net.miginfocom.swing.MigLayout;
  * @author gavalian
  */
 public class DatasetAttributes implements Cloneable {
-    private int lineColorAlpha = 1;
     private int lineColor = 1;
-    private int lineAlpha = 1;
     private int lineWidth = 1;
     private int lineStyle = 1;
     private int markerColor = 1;
-    private int markerColorAlpha = 1;
-    private int markerAlpha = 1;
     private int markerSize = 1;
     private int markerStyle = 1;
     private int fillColor   = 0;
-    private int fillAlpha   = 1;
-    private int fillColorAlpha   = 1;
     private int fillStyle   = 1;
     private int datasetType  = 0;
     public final static int HISTOGRAM = 0;
     public final static int HISTOGRAM2D = 1;
     public final static int GRAPHERRORS = 2;
     public final static int FUNCTION = 3;
+    
+    public int optStat = 0;
 
     
     private String stringXtitle = "";
@@ -258,5 +254,13 @@ public class DatasetAttributes implements Cloneable {
 
 	public void setDatasetType(int datasetType) {
 		this.datasetType = datasetType;
+	}
+
+	public void setOptStat(int i) {
+		this.optStat = i;
+	}
+
+	public int getOptStat() {
+		return this.optStat;
 	}
 }

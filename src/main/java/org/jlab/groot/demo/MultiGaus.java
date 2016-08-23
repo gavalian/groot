@@ -37,10 +37,12 @@ public class MultiGaus {
 			h1[i] = new H1F("h" + i, "", 200, -5.0, 5.0);
 			h1[i].setXTitle("Randomly Generated Function");
 			h1[i].setYTitle("Counts");
+			h1[i].setOptStat(1100);
 			F1D f1 = new F1D("f1","[amp]*gaus(x,[mean],[sigma])", -5.0, 5.0);
 			f1.setParameter(0, 120.0);
 			f1.setParameter(1, (-3.0 + rand.nextDouble() * 6));
 			f1.setParameter(2, .4 + (rand.nextDouble() * 1));
+			f1.setOptStat(1000);
 
 			RandomFunc rndm = new RandomFunc(f1);
 			for (int j = 0; j < 34000; j++) {
@@ -65,7 +67,8 @@ public class MultiGaus {
 			c1.draw(h1[i]);
 			
 			//DataFitter fitter = new DataFitter();
-			DataFitter.fit(f1, h1[i], "Q");
+			f1.setParameter(0, h1[i].getEntries());
+			DataFitter.fit(f1, h1[i], "");
 			f1.setLineColor(30 + (i % 4) + 2);
 			f1.setLineWidth(3);
 			f1.setLineStyle(i%4);

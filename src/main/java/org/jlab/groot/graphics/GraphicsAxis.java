@@ -85,7 +85,7 @@ public class GraphicsAxis {
     	this.attr.setAxisAutoScale(false);
         this.attr.setAxisMinimum(min);
         this.attr.setAxisMaximum(max);
-        if(this.isLogarithmic==true){
+        if(this.getAttributes().isLog()==true){
             List<Double> ticks = this.attr.getRange().getDimensionTicksLog(this.numberOfMajorTicks);
             //axisLabels.updateLog(ticks);
         } else {
@@ -310,8 +310,13 @@ public class GraphicsAxis {
     }
     
     private void updateAxisDivisions(Graphics2D g2d){
-        
-        List<Double>  ticks = this.attr.getRange().getDimensionTicks(numberOfMajorTicks);
+    	 List<Double>  ticks;
+    	if(this.getLog()){
+            ticks = this.attr.getRange().getDimensionTicksLog(numberOfMajorTicks);
+    	}else{
+            ticks = this.attr.getRange().getDimensionTicks(numberOfMajorTicks);
+
+    	}
         axisTicks.init(ticks);
         axisTicks.updateFont(getLabelFont());
 
@@ -332,7 +337,12 @@ public class GraphicsAxis {
             while(fraction>0.6&&nticks>2){
                 //System.out.println("Oh yeah - " + nticks + "  fraction " + fraction );
                 nticks--;
-                ticks = this.attr.getRange().getDimensionTicks(nticks);
+                if(this.getLog()){
+                    ticks = this.attr.getRange().getDimensionTicksLog(nticks);
+            	}else{
+                    ticks = this.attr.getRange().getDimensionTicks(nticks);
+
+            	}
                 axisTicks.init(ticks);
                 //heights  = axisTicks.getTextsHeight(g2d);
                 if(this.isVertical==true){

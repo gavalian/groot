@@ -194,7 +194,42 @@ public class EmbeddedPad {
         g2d.setClip(null);
         //System.out.println("PLOTTERS SIZE = " + this.datasetPlotters.size());
         axisFrame.drawAxis(g2d, padMargins);
+    	List<List<LatexText>> toBeDrawn = new ArrayList< List<LatexText>>();
+        for(int i = 0; i<this.datasetPlotters.size(); i++){
+        	List<List<LatexText>> currentStats = this.datasetPlotters.get(i).getDataSet().getStatBox().getPaveTexts();
+        	int optStat =  this.datasetPlotters.get(i).getDataSet().getAttributes().getOptStat();
+        	int tempOpt = optStat;
+        	int counter = 0;
+        	while(tempOpt>=1 || counter>currentStats.size()){
+        		//System.out.println("Counter:"+counter);
+        		if(tempOpt%10!=0){
+        			toBeDrawn.add(currentStats.get(counter));
+        			//System.out.print("counter:"+counter);
+        			for(LatexText text : currentStats.get(counter)){
+        				System.out.print(" "+text.getTextString());
+        			}
+        		}
+        		tempOpt = tempOpt/10;
+        		counter++;
+        	}
+        }
+        if(toBeDrawn.size()>0){
+	        PaveText statBox = new PaveText(2);
+	        statBox.setPaveTexts(toBeDrawn);
+	    	statBox.setFont(this.statBoxFont.getFontName());
+	        statBox.setFontSize(this.statBoxFont.getFontSize());
+	        
+	        statBox.updateDimensions(g2d);
+	        
+	        int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength()-5);
+	        int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin()+5) ;
+	        statBox.setPosition(x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
+	        statBox.drawPave(g2d, x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
+        }
+        
+        /*
         if(this.optStat>0){
+
             if(this.datasetPlotters.get(0).getDataSet() instanceof H1F){
                 List<List<LatexText>> toBeDrawn = new ArrayList< List<LatexText>>();
             	List<List<LatexText>> currentStats = this.datasetPlotters.get(0).getDataSet().getStatBox().getPaveTexts();
@@ -205,9 +240,9 @@ public class EmbeddedPad {
             		if(tempOpt%10!=0){
             			toBeDrawn.add(currentStats.get(counter));
             			//System.out.print("counter:"+counter);
-            			/*for(LatexText text : currentStats.get(counter)){
+            			for(LatexText text : currentStats.get(counter)){
             				System.out.print(" "+text.getTextString());
-            			}*/
+            			}
             		}
             		tempOpt = tempOpt/10;
             		counter++;
@@ -225,7 +260,7 @@ public class EmbeddedPad {
                 int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin()+5) ;
                 statBox.setPosition(x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
                 statBox.drawPave(g2d, x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
-                /*
+                
                 PaveText statBox = this.datasetPlotters.get(0).getDataSet().getStatBox();
                 statBox.setFont(this.statBoxFont.getFontName());
                 statBox.setFontSize(this.statBoxFont.getFontSize());
@@ -236,18 +271,25 @@ public class EmbeddedPad {
                 int y = (int) (this.padDimensions.getDimension(1).getMin() + 10) ;
                 statBox.setPosition(x, y);
                 statBox.drawPave(g2d, x, y);
-                */
+                
             }
-        }
+
+        }*/
         }
     }
     
     public void setOptStat(int opts){
         this.optStat = opts;
+        if( this.getDatasetPlotters().size()>0){
+            this.getDatasetPlotters().get(0).getDataSet().getAttributes().setOptStat(opts);
+        }
     }
     
     public int getOptStat(){
-        return this.optStat;
+    	 if(this.getDatasetPlotters().size()>0){
+             return this.getDatasetPlotters().get(0).getDataSet().getAttributes().getOptStat();
+         }
+        return 0;
     }
     
     public EmbeddedPad setAutoScale(){
