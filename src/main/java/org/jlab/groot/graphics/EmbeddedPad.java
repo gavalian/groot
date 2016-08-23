@@ -43,7 +43,6 @@ public class EmbeddedPad {
      //Dimension3D           fixedRange      = new Dimension3D();
      
      private FontProperties statBoxFont    = new FontProperties();
-     private int            optStat        = 1;
      private boolean		isSelected     = false;
      
      
@@ -200,7 +199,7 @@ public class EmbeddedPad {
         	int optStat =  this.datasetPlotters.get(i).getDataSet().getAttributes().getOptStat();
         	int tempOpt = optStat;
         	int counter = 0;
-        	while(tempOpt>=1 || counter>currentStats.size()){
+        	while(tempOpt>=1 && counter<currentStats.size()){
         		//System.out.println("Counter:"+counter);
         		if(tempOpt%10!=0){
         			toBeDrawn.add(currentStats.get(counter));
@@ -279,7 +278,6 @@ public class EmbeddedPad {
     }
     
     public void setOptStat(int opts){
-        this.optStat = opts;
         if( this.getDatasetPlotters().size()>0){
             this.getDatasetPlotters().get(0).getDataSet().getAttributes().setOptStat(opts);
         }
@@ -386,7 +384,6 @@ public class EmbeddedPad {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        pad.setOptStat(this.optStat);
         return pad;
     }
     
