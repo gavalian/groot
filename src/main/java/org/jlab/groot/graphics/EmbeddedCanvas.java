@@ -533,5 +533,65 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
 		this.isChild = isChild;
 	}
 
+	public void setFont(String fontName) {
+		for(EmbeddedPad pad : canvasPads){
+			pad.setFontNameAll(fontName);
+		}
+	}
+
+	public void setTitleSize(int fontSize) {
+		for(EmbeddedPad pad : canvasPads){
+			pad.setTitleFontSize(fontSize);
+		}		
+	}
+
+	public void setAxisLabelSize(int fontSize) {
+		for(EmbeddedPad pad : canvasPads){
+			pad.setTitleFontSize(fontSize);
+		}	
+	}
+
+	public void setAxisTitleSize(int fontSize) {
+		for(EmbeddedPad pad : canvasPads){
+			pad.setAxisTitleFontSize(fontSize);
+		}			
+	}
+
+	public void setStatBoxFontSize(int fontSize) {
+		for(EmbeddedPad pad : canvasPads){
+			pad.setStatBoxFontSize(fontSize);
+		}			
+	}
+
+	public void setPadTitles(String title) {
+		for(EmbeddedPad pad : canvasPads){
+			pad.setTitle(title);
+		}			
+	}
+
+	public void setPadTitlesX(String title) {
+		for(EmbeddedPad pad : canvasPads){
+			pad.getAxisY().setTitle(title);
+		}			
+	}
+	
+	public void setPadTitlesY(String title) {
+		for(EmbeddedPad pad : canvasPads){
+			pad.getAxisY().setTitle(title);
+		}			
+	}
+
+	public void setGridX(boolean isGrid) {
+		for(EmbeddedPad pad : canvasPads){
+			pad.getAxisX().setGrid(isGrid);
+		}			
+	}
+
+	public void setGridY(boolean isGrid) {
+		for(EmbeddedPad pad : canvasPads){
+			pad.getAxisY().setGrid(isGrid);
+		}			
+	}
+
    
 }
