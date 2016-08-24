@@ -1,5 +1,9 @@
 package org.jlab.groot.ui;
 
-public class FitPanel {
+import org.jlab.groot.graphics.EmbeddedCanvas;
 
+public class FitPanel {
+	EmbeddedCanvas canvas;
+	int index;
+	
 }

@@ -44,6 +44,10 @@ public class EmbeddedPad {
      
      private FontProperties statBoxFont    = new FontProperties();
      private boolean		isSelected     = false;
+     int statBoxOffsetX = 0;
+     int statBoxOffsetY = 0;
+     PaveText statBox = null;
+     
      String title = "";
      int titleFontSize = 12;
      String titleFont = "Avenir";
@@ -207,24 +211,24 @@ public class EmbeddedPad {
         		if(tempOpt%10!=0){
         			toBeDrawn.add(currentStats.get(counter));
         			//System.out.print("counter:"+counter);
-        			for(LatexText text : currentStats.get(counter)){
+        			/*for(LatexText text : currentStats.get(counter)){
         				System.out.print(" "+text.getTextString());
-        			}
+        			}*/
         		}
         		tempOpt = tempOpt/10;
         		counter++;
         	}
         }
         if(toBeDrawn.size()>0){
-	        PaveText statBox = new PaveText(2);
+	        statBox = new PaveText(2);
 	        statBox.setPaveTexts(toBeDrawn);
 	    	statBox.setFont(this.statBoxFont.getFontName());
 	        statBox.setFontSize(this.statBoxFont.getFontSize());
 	        
 	        statBox.updateDimensions(g2d);
 	        
-	        int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength()-5);
-	        int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin()+5) ;
+	        int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength()-5) +statBoxOffsetX;
+	        int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin()+5) +statBoxOffsetY;
 	        statBox.setPosition(x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
 	        statBox.drawPave(g2d, x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
         }
