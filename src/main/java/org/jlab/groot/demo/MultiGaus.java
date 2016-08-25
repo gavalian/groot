@@ -49,17 +49,20 @@ public class MultiGaus {
 			optStatString+="00";
 			f1.setOptStat(Integer.parseInt(optStatString));
 			
+			c1.getPad(i).getAxisX().setRange(-6.0, 5.0);
+			c1.draw(h1[i]);
+			
 			f1.setParameter(0, h1[i].getEntries()); //Due to initial parameter estimates not existing
 			DataFitter.fit(f1, h1[i], "Q"); //No options uses error for sigma
+			c1.draw(f1,"same");
 			f1.setLineColor(30 + (i % 4) + 2);
 			f1.setLineWidth(3);
 			f1.setLineStyle(i%4);
 			
-			c1.getPad(i).getAxisX().setRange(-6.0, 5.0);
-			c1.draw(h1[i]);
-			c1.draw(f1,"same");
+			
+			//c1.draw(f1,"same");
 		}
-		c1.showFPS(false);
+		c1.showFPS(true);
 		
 		frame.add(c1);
 		frame.setLocationRelativeTo(null);
