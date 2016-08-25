@@ -18,7 +18,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -40,7 +39,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -58,20 +57,23 @@ import org.jlab.groot.ui.TransferableImage;
  *
  * @author gavalian
  */
+@SuppressWarnings("serial")
 public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseListener, ActionListener {
     IDataSet selectedDataset = null;
     private Timer        updateTimer = null;
     private Long numberOfPaints  = (long) 0;
     private Long paintingTime    = (long) 0;
+    private Long paintingTimeSum    = (long) 0;
+    private Long samples = (long)0;
     private JPopupMenu popup = null;
     private int popupPad = 0;
     private List<EmbeddedPad>    canvasPads  = new ArrayList<EmbeddedPad>();
     private int                  ec_COLUMNS  = 1;
     private int                  ec_ROWS     = 1;
-    private PadMargins           canvasPadding = new PadMargins();
+   // private PadMargins           canvasPadding = new PadMargins();
     private int                  activePad     = 0; 
     private boolean isChild = false;
-    private boolean benchmark = false;
+    private boolean showFPS = false;
     
     public EmbeddedCanvas(){
         super();
@@ -187,14 +189,18 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             
             Long et = System.currentTimeMillis();
             Long paintingTime = (et-st);
-            if(benchmark){
+            paintingTimeSum+=paintingTime;
+            samples++;
+            double average = (double)paintingTimeSum/(double)samples;
+            if(showFPS){
             	g2d.setColor(Color.WHITE);
-            	g2d.fillRect(0, 0, 50, 16);
+            	g2d.fillRect(0, 0, 70, 32);
             	g2d.setColor(Color.BLACK);
-            	g2d.drawRect(0, 0, 50, 16);
+            	g2d.drawRect(0, 0, 70, 32);
             	g2d.setColor(Color.BLUE);
             	g2d.drawString(String.format("%d FPS",(int)(1.0/(((double)paintingTime)/1000.0))), 5, 14);
-            
+            	g2d.drawString(String.format("%4.2f Avg",(1.0/((average)/1000.0))), 5, 28);
+
             	//System.out.println("Painting time: "+paintingTime+"ms");
             }
             paintingTime += paintingTime;
@@ -209,7 +215,10 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     }
         
     public void update(){
-        this.repaint();       
+		JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+		topFrame.getContentPane().setVisible(false);
+        this.repaint();   
+		topFrame.getContentPane().setVisible(true);
         //System.out.println(this.getBenchmarkString());
     }
     
@@ -231,7 +240,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         }
     }
     public void showFPS(boolean benchmark){
-    	this.benchmark = benchmark;
+    	this.showFPS = benchmark;
     }
     
     public void  initTimer(int interval){
@@ -282,7 +291,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        int pad = this.getPadByXY(e.getX(),e.getY());
+        //int pad = this.getPadByXY(e.getX(),e.getY());
         //System.out.println("you're hovering over pad = " + pad);
     }
     int fillcolortemp = 1;
@@ -294,9 +303,10 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             int pad = this.getPadByXY(e.getX(),e.getY());
             double scale = 1.5;
             //System.out.println("you double clicked on " + pad);
-            JDialog  dialogWin = new JDialog();
+            JFrame  popoutFrame = new JFrame();
             EmbeddedCanvas can = new EmbeddedCanvas();
             EmbeddedPad embeddedPad = this.getPad(pad).getCopy();
+            can.showFPS(this.showFPS);
             int xSize = (int)(this.getPad(pad).getWidth());
             int ySize = (int)(this.getPad(pad).getHeight());
 
@@ -305,11 +315,11 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             ArrayList<EmbeddedPad> pads = new ArrayList<EmbeddedPad>();
             pads.add(embeddedPad);
             can.canvasPads = pads;
-            dialogWin.setContentPane(can);
+            popoutFrame.setContentPane(can);
            // dialogWin.setSize(400, 400);
-            dialogWin.pack();
-            dialogWin.setLocation(new Point(e.getX(),e.getY()));
-            dialogWin.setVisible(true);
+            popoutFrame.pack();
+            popoutFrame.setLocation(new Point(e.getX(),e.getY()));
+            popoutFrame.setVisible(true);
         }
         if(e.getClickCount()==1&&e.getButton()==1){
         	//System.out.println("Left click!");
@@ -559,8 +569,8 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         //canvas.getPad(1).getAxisFrame().getAxisY().setAxisFontSize(18);
         //canvas.getPad(0).getAxisFrame().setDrawAxisZ(true);
         
-        H1F h1  = FunctionFactory.createDebugH1F(6);
-        H1F h2  = FunctionFactory.randomGausian(100, 0.4, 5.6, 200000, 2.3, 0.8);
+      //  H1F h1  = FunctionFactory.createDebugH1F(6);
+       // H1F h2  = FunctionFactory.randomGausian(100, 0.4, 5.6, 200000, 2.3, 0.8);
         H1F h2b = FunctionFactory.randomGausian(100, 0.4, 5.6, 80000, 4.0, 0.8);
         H2F h2d = FunctionFactory.randomGausian2D(40, 0.4, 5.6, 800000, 2.3, 0.8);
         
@@ -602,7 +612,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
 
 	public void setAxisLabelSize(int fontSize) {
 		for(EmbeddedPad pad : canvasPads){
-			pad.setTitleFontSize(fontSize);
+			pad.setAxisLabelFontSize(fontSize);
 		}	
 	}
 
