@@ -27,7 +27,7 @@ public class MultiGaus {
 			h1[i] = new H1F("h" + i, "", 200, -5.0, 5.0);
 			h1[i].setTitleX("Randomly Generated Function");
 			h1[i].setTitleY("Counts");
-			h1[i].setOptStat(0);
+			h1[i].setOptStat(0110);
 			F1D f1 = new F1D("f1","[amp]*gaus(x,[mean],[sigma])", -5.0, 5.0);
 			f1.setParameter(0, 120.0);
 			f1.setParameter(1, (-3.0 + rand.nextDouble() * 6));
@@ -59,8 +59,6 @@ public class MultiGaus {
 			f1.setLineWidth(3);
 			f1.setLineStyle(i%4);
 			
-			
-			//c1.draw(f1,"same");
 		}
 		c1.showFPS(true);
 		
