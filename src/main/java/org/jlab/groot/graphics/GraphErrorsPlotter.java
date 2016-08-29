@@ -9,6 +9,8 @@ import java.awt.BasicStroke;
 import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.Color;
 import java.awt.Graphics2D;
+
+import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
@@ -58,11 +60,11 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
             double ypL = frame.getAxisPointY(graphDataSet.getDataY(p) - graphDataSet.getDataEY(p));
             double ypH = frame.getAxisPointY(graphDataSet.getDataY(p) + graphDataSet.getDataEY(p));
             
-            g2d.setColor(Color.BLACK);
+            g2d.setColor(TStyle.getColor(this.getDataSet().getAttributes().getMarkerColor()));
             g2d.setStroke(strokeError);
             g2d.drawLine((int) xpL, (int) yp, (int) xpH, (int) yp);
             g2d.drawLine((int) xp, (int) ypL, (int) xp, (int) ypH);
-            g2d.setColor(Color.BLACK);
+            g2d.setColor(TStyle.getColor(this.getDataSet().getAttributes().getMarkerColor()));
             g2d.setStroke(strokePoint);
             g2d.drawOval((int) xp - 3, (int) yp - 3 , 6, 6);
         }

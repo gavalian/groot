@@ -44,16 +44,16 @@ public class DatasetAttributes implements Cloneable {
     public int optStat = 0;
 
     
-    private String stringXtitle = "";
-    private String stringYtitle = "";
+    private String stringTitleX = "";
+    private String stringTitleY = "";
     private String stringTitle  = "";
     
     public DatasetAttributes(){
         
     }
     
-    public void setXTitle(String title){ this.stringXtitle = title;}
-    public void setYTitle(String title){ this.stringYtitle = title;}
+    public void setTitleX(String title){ this.stringTitleX = title;}
+    public void setTitleY(String title){ this.stringTitleY = title;}
     public void setTitle(String title){ this.stringTitle = title;}
     
     
@@ -77,8 +77,8 @@ public class DatasetAttributes implements Cloneable {
     public int  getFillStyle(){return this.fillStyle;}
     
     public String getTitle() { return this.stringTitle;}
-    public String getXTitle(){ return this.stringXtitle;}
-    public String getYTitle(){ return this.stringYtitle;}
+    public String getTitleX(){ return this.stringTitleX;}
+    public String getTitleY(){ return this.stringTitleY;}
     
     @Override
     public DatasetAttributes  clone() throws CloneNotSupportedException{
@@ -92,7 +92,11 @@ public class DatasetAttributes implements Cloneable {
     
     public static class DatasetAttributesPane extends JPanel implements ActionListener {
         
-        private DatasetAttributes attr = null;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -8413019611235714087L;
+		private DatasetAttributes attr = null;
         private  String[] colorChoices    = new String[50];
         private  int[] colorChoicesInts   = new int[50];
         private  String[] sizeChoices     = new String[10];
@@ -121,7 +125,8 @@ public class DatasetAttributes implements Cloneable {
             this.initUI();
         }
         
-        private void initUI(){
+        @SuppressWarnings({"unchecked", "rawtypes"})
+		private void initUI(){
         	
         	 for(int i=0; i<colorChoices.length; i++){
              	colorChoices[i] = ""+i;

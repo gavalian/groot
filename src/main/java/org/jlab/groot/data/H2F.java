@@ -1,10 +1,6 @@
 package org.jlab.groot.data;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
-import org.jlab.groot.base.AttributeType;
-import org.jlab.groot.base.Attributes;
 import org.jlab.groot.base.DatasetAttributes;
 import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.MultiIndex;
@@ -133,12 +129,12 @@ public class H2F implements IDataSet {
 		return yAxis;
 	}
 
-        public double getMaximum(){
-            double maximum = 0.0;
-            for(int loop = 0; loop < hBuffer.length; loop++)
-                if(hBuffer[loop]>maximum) maximum = hBuffer[loop];
-            return maximum;
-        }
+    public double getMaximum(){
+        double maximum = 0.0;
+        for(int loop = 0; loop < hBuffer.length; loop++)
+            if(hBuffer[loop]>maximum) maximum = hBuffer[loop];
+        return maximum;
+    }
 
 	/**
 	 * Checks if that bin is valid (exists)
@@ -182,9 +178,8 @@ public class H2F implements IDataSet {
          * Sets the x-axis title to the specified parameter
          * @param xTitle		The desired title of the x-axis
          */
-        public final void setXTitle(String xTitle) {
-            //this.getXaxis().setTitle(xTitle);
-            attr.setXTitle(xTitle);
+        public final void setTitleX(String xTitle) {
+            attr.setTitleX(xTitle);
 
         }
         
@@ -193,9 +188,8 @@ public class H2F implements IDataSet {
          * 
          * @param yTitle		The desired title of the y-axis
          */
-        public final void setYTitle(String yTitle) {
-            //this.getYaxis().setTitle(yTitle);
-           attr.setYTitle(yTitle);
+        public final void setTitleY(String yTitle) {
+           attr.setTitleY(yTitle);
         }
         
         /**
@@ -203,17 +197,15 @@ public class H2F implements IDataSet {
          * @return Title of the histogram.
          */
         public String getTitle(){
-            //return this.histTitle;
-            return attr.getTitle();//this.attr.getString(AttributeType.STRING_TITLE);
+            return attr.getTitle();
         }
         /**
          * The getter for the x-axis title.
          * 
          * @return		The title of the x-axis as a string
          */
-        public String getXTitle() {
-            return attr.getXTitle();//this.attr.getString(AttributeType.STRING_TITLE_X);
-            //return this.getXaxis().getTitle();
+        public String getTitleX() {
+            return attr.getTitleX();
         }
         
         /**
@@ -221,9 +213,8 @@ public class H2F implements IDataSet {
          * 
          * @return		The title of the y-axis as a string
          */
-        public String getYTitle() {
-            return attr.getYTitle();//this.attr.getString(AttributeType.STRING_TITLE_Y);
-            //return this.getYaxis().getTitle();
+        public String getTitleY() {
+            return attr.getTitleY();
         }
         
         /**
@@ -232,7 +223,6 @@ public class H2F implements IDataSet {
          * @param title		The desired title of the histogram
          */
         public final void setTitle(String title) {
-            //histTitle = title;
             attr.setTitle(title);
         }
         
@@ -348,7 +338,6 @@ public class H2F implements IDataSet {
             );
             for(int bx = 0; bx < h1.getXAxis().getNBins();bx++){
                 for(int by = 0; by < h1.getYAxis().getNBins();by++){
-                    double bc = 0;
                     if(h2.getBinContent(bx, by)!=0){
                         h2div.setBinContent(bx, by, h1.getBinContent(bx, by)/h2.getBinContent(bx, by));
                     }

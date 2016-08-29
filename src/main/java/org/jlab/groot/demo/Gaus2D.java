@@ -21,8 +21,8 @@ public class Gaus2D {
 		c1.divide(2,2);
 
         H2F h2d = FunctionFactory.randomGausian2D(40, 0.4, 7.6, 800000, 3.3, 0.8);
-        h2d.setXTitle("Randomly Generated Function");
-        h2d.setYTitle("Randomly Generated Function");
+        h2d.setTitleX("Randomly Generated Function");
+        h2d.setTitleY("Randomly Generated Function");
         GraphErrors hprofile = h2d.getProfileY();
         H1F h2p =  h2d.projectionX();
         c1.cd(0);
@@ -34,7 +34,7 @@ public class Gaus2D {
         c1.cd(3);
         c1.draw(h2d.projectionX());
         c1.cd(2);
-        c1.draw(h2d.projectionY());
+        c1.draw(h2d.getProfileY());
         
     	frame.add(c1);
 		frame.setLocationRelativeTo(null);

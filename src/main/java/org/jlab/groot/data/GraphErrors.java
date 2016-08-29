@@ -5,8 +5,6 @@
  */
 package org.jlab.groot.data;
 
-import org.jlab.groot.base.AttributeType;
-import org.jlab.groot.base.Attributes;
 import org.jlab.groot.base.DatasetAttributes;
 import org.jlab.groot.ui.PaveText;
 
@@ -27,6 +25,7 @@ public class GraphErrors implements IDataSet {
     public GraphErrors(){
         initAttributes();
     }
+   
     
     public GraphErrors(String name, double[] x, double y[], double[] ex, double[] ey){
         setName(name);
@@ -127,6 +126,66 @@ public class GraphErrors implements IDataSet {
     public DataVector getVectorY(){
         return this.dataY;
     }
+    
+    
+    
+    public  void setFillColor(int color){
+        this.graphAttr.setFillColor(color);
+    }
+  
+    public int getFillColor(){
+        return this.graphAttr.getFillColor();
+    }
+    
+    public void setMarkerSize(int size){ 
+    	this.graphAttr.setMarkerSize(size);
+    }
+    
+    public int getMarkerSize(){ 
+    	return this.graphAttr.getMarkerSize();
+    }
+    
+    
+    public void setMarkerStyle(int style){
+    	this.graphAttr.setMarkerStyle(style);
+    }
+
+    public int getMarkerStyle(){
+    	return this.graphAttr.getMarkerStyle();
+    }
+    
+    public int getMarkerColor(){
+    	return this.graphAttr.getMarkerColor();
+    }
+    
+    public void setMarkerColor(int color){
+    	this.graphAttr.setMarkerColor(color);
+    }
+    
+    public String getTitle(){
+        return this.graphAttr.getTitle();
+    }
+   
+    public String getTitleX() {
+        return this.graphAttr.getTitleX();
+    }
+    
+    public String getTitleY() {
+        return this.graphAttr.getTitleY();
+    }
+    
+    public void setTitle(String title){
+         this.graphAttr.setTitle(title);
+    }
+   
+    public void setTitleX(String title) {
+         this.graphAttr.setTitleX(title);
+    }
+    
+    public void setTitleY(String title) {
+         this.graphAttr.setTitleY(title);
+    }
+    
     
     public void copy(GraphErrors gr){
         this.dataEX.clear();

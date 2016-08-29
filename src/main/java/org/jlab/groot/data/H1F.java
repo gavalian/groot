@@ -1,9 +1,5 @@
 package org.jlab.groot.data;
 
-import java.util.Map;
-import java.util.TreeMap;
-import org.jlab.groot.base.AttributeType;
-import org.jlab.groot.base.Attributes;
 import org.jlab.groot.base.DatasetAttributes;
 import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.Func1D;
@@ -24,9 +20,6 @@ public class H1F  implements IDataSet {
     Axis  yAxis;
     float[]   histogramData;
     float[]   histogramDataError;
-    String     histTitle  = "";
-    String     histXTitle = "";
-    String     histYTitle = "";
     String     histName   = "";
     int        histogramUnderFlow = 0;
     int        histogramOverFlow  = 0;
@@ -157,7 +150,7 @@ public class H1F  implements IDataSet {
      * @param xTitle		The desired title of the x-axis
      */
     public final void setTitleX(String xTitle) {
-        this.hAttr.setXTitle(xTitle);
+        this.hAttr.setTitleX(xTitle);
         //this.getXaxis().setTitle(xTitle);
         //this.hAttr.addString(AttributeType.STRING_TITLE_X, xTitle);
     }
@@ -168,7 +161,7 @@ public class H1F  implements IDataSet {
      * @param yTitle		The desired title of the y-axis
      */
     public final void setTitleY(String yTitle) {
-        this.hAttr.setYTitle(yTitle);
+        this.hAttr.setTitleY(yTitle);
         //this.getYaxis().setTitle(yTitle);
         //this.hAttr.addString(AttributeType.STRING_TITLE_Y, yTitle);
     }
@@ -187,7 +180,6 @@ public class H1F  implements IDataSet {
      * @return Title of the histogram.
      */
     public String getTitle(){
-        //return this.histTitle;
         return this.hAttr.getTitle();
     }
     /**
@@ -196,8 +188,7 @@ public class H1F  implements IDataSet {
      * @return		The title of the x-axis as a string
      */
     public String getTitleX() {
-        return this.hAttr.getXTitle();
-    	//return this.getXaxis().getTitle();
+        return this.hAttr.getTitleX();
     }
     
     /**
@@ -206,8 +197,7 @@ public class H1F  implements IDataSet {
      * @return		The title of the y-axis as a string
      */
     public String getTitleY() {
-        return this.hAttr.getYTitle();
-        //return this.getYaxis().getTitle();
+        return this.hAttr.getTitleY();
     }
     
     /**
@@ -218,24 +208,6 @@ public class H1F  implements IDataSet {
     @Override
     public final void setName(String name) {
     	histName = name;
-    }
-    
-    /**
-     * Returns the title of the histogram
-     * 
-     * @return		the title of the histogram as a string
-     */
-    public String title() {
-    	return this.hAttr.getTitle();
-    }
-    
-    /**
-     * Returns the name of the histogram
-     * 
-     * @return		the name of the histogram as a string
-     */
-    public String name() {
-    	return histName;
     }
     
     /**
@@ -464,7 +436,6 @@ public class H1F  implements IDataSet {
         StatNumber   result = new StatNumber();
         StatNumber   denom  = new StatNumber();
         for(int bin = 0; bin < h1.getXaxis().getNBins(); bin++){
-            double bc = 0;
             result.set(h1.getBinContent(bin), h1.getBinError(bin));
             denom.set(h2.getBinContent(bin), h2.getBinError(bin));
             result.divide(denom);
@@ -524,7 +495,7 @@ public class H1F  implements IDataSet {
      * @return 
      */
     public H1F histClone(String name){
-        H1F hclone = new H1F(name, this.histXTitle, this.histYTitle,
+        H1F hclone = new H1F(name, this.getTitleX(), this.getTitleY(),
         this.xAxis.getNBins(),this.xAxis.min(),this.xAxis.max());
         for(int loop = 0; loop < this.xAxis.getNBins(); loop++){
             hclone.setBinContent(loop, this.getBinContent(loop));

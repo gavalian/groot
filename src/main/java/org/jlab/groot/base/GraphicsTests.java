@@ -27,7 +27,11 @@ import org.jlab.groot.ui.PaveText;
  */
 public class GraphicsTests extends JPanel {
     
-    ColorPalette palette = new ColorPalette();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7128170889587576863L;
+	ColorPalette palette = new ColorPalette();
     GraphicsAxis    xaxis   = new GraphicsAxis();
     GraphicsAxis    yaxis   = new GraphicsAxis();
     
