@@ -41,6 +41,7 @@ public class DatasetAttributes implements Cloneable {
     public final static int GRAPHERRORS = 2;
     public final static int FUNCTION = 3;
     
+    private boolean drawAxis = false;
     public int optStat = 0;
 
     
@@ -67,7 +68,15 @@ public class DatasetAttributes implements Cloneable {
     public void setFillStyle(int style){ this.fillStyle = style;}
 
     
-    public int  getLineColor(){return this.lineColor;}
+    public boolean isDrawAxis() {
+		return drawAxis;
+	}
+
+	public void setDrawAxis(boolean drawAxis) {
+		this.drawAxis = drawAxis;
+	}
+
+	public int  getLineColor(){return this.lineColor;}
     public int  getLineWidth(){return this.lineWidth;}
     public int  getLineStyle(){return this.lineStyle;}
     public int  getMarkerColor(){return this.markerColor;}
@@ -186,11 +195,11 @@ public class DatasetAttributes implements Cloneable {
             
             if(attr.getDatasetType()==DatasetAttributes.GRAPHERRORS){
             	this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
-            	this.add(new JLabel("Maker Color:"));
+            	this.add(new JLabel("Marker Color:"));
                 this.add(boxMarkerColor,"wrap, growx");
-                this.add(new JLabel("Maker Size:"));
+                this.add(new JLabel("Marker Size:"));
                 this.add(boxMarkerSize,"wrap, growx");
-                this.add(new JLabel("Maker Style:"));
+                this.add(new JLabel("Marker Style:"));
                 this.add(boxMarkerStyle,"wrap, growx");
             }
            
@@ -278,4 +287,5 @@ public class DatasetAttributes implements Cloneable {
 	public int getOptStat() {
 		return this.optStat;
 	}
+
 }

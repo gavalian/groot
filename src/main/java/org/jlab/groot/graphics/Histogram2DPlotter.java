@@ -10,10 +10,8 @@ import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.jlab.groot.base.ColorPalette;
-import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension1D;
-import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
 import org.jlab.groot.graphics.GraphicsAxisFrame;
 
@@ -90,13 +88,15 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                             + " xps/xpe = " + (int) xps + "  " + (int) xpe 
                             + " yps/ype = " + (int) yps + "  " + (int) ype
                     );*/
-                    
                     g2d.setColor(weightColor);
                     g2d.fillRect( (int) xps, (int) ype , 
                             (int) (xpe-xps) + 1,
                             (int) (yps-ype) + 1 );
                     
                 }
+        }
+        if(this.dataSet.getAttributes().isDrawAxis()){
+        	palette.draw(g2d, 50, 50, 50, 50, frame.getAxisZ().getRange().getMin(),dataRegionZ.getMax(), frame.getAxisZ().getLog());
         }
         
     }
