@@ -49,11 +49,12 @@ public class DatasetAttributes implements Cloneable {
     private String stringTitleY = "";
     private String stringTitle  = "";
     
-    public DatasetAttributes(){
-        
+    public DatasetAttributes(int datasetType){
+        this.datasetType = datasetType;
     }
+    public DatasetAttributes(){}
     
-    public void setTitleX(String title){ this.stringTitleX = title;}
+	public void setTitleX(String title){ this.stringTitleX = title;}
     public void setTitleY(String title){ this.stringTitleY = title;}
     public void setTitle(String title){ this.stringTitle = title;}
     

@@ -19,7 +19,7 @@ public class GraphErrors implements IDataSet {
     private final DataVector dataEX = new DataVector();
     private final DataVector dataEY = new DataVector();
     private String graphName = "graphErrors";
-    private DatasetAttributes  graphAttr = new DatasetAttributes();
+    private DatasetAttributes  graphAttr = new DatasetAttributes(DatasetAttributes.GRAPHERRORS);
     
     
     public GraphErrors(){

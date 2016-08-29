@@ -490,4 +490,10 @@ public class GraphicsAxis {
 	public int getLabelFontSize() {
 		return attr.getLabelFontSize();
 	}
+	public double getMin() {
+		return attr.getAxisMinimum();
+	}
+	public double getMax() {
+		return attr.getAxisMaximum();
+	}
 }

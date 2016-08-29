@@ -1,6 +1,7 @@
 package org.jlab.groot.data;
 
 import java.util.ArrayList;
+
 import org.jlab.groot.base.DatasetAttributes;
 import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.MultiIndex;
@@ -21,8 +22,8 @@ public class H2F implements IDataSet {
 	private Axis yAxis = new Axis();
 	private float[] hBuffer;
 	private MultiIndex offset;
-        private DatasetAttributes attr = new DatasetAttributes(); 
-        private Float     maximumBinValue = 0.0f;
+    private DatasetAttributes attr = new DatasetAttributes(DatasetAttributes.HISTOGRAM2D);
+    private Float     maximumBinValue = 0.0f;
         
 	public H2F() {
 		offset = new MultiIndex(xAxis.getNBins(), yAxis.getNBins());

@@ -24,7 +24,7 @@ public class H1F  implements IDataSet {
     int        histogramUnderFlow = 0;
     int        histogramOverFlow  = 0;
     int        histogramEntries   = 0;
-    DatasetAttributes hAttr     = new DatasetAttributes();
+    DatasetAttributes hAttr     = new DatasetAttributes(DatasetAttributes.HISTOGRAM);
     
     Func1D     fittedFunction = null;
     
