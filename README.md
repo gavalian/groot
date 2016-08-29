@@ -12,7 +12,7 @@ Try out the [demo jar](https://github.com/gavalian/groot/raw/master/jars/GrootDe
 To run the example: Simply double click on the jar if you're a mac user, or if you're a linux user run ```java -jar GrootDemo.jar```
 
 #Installation
-Simply add this [library jar](https://github.com/gavalian/groot/raw/master/jars/GROOTLib_082516_01a2472.jar) to your build path in an IDE.
+Simply add this [library jar](https://github.com/gavalian/groot/raw/master/jars/) to your build path in an IDE.
 
 #Requirements
 Java 1.8 or greater
