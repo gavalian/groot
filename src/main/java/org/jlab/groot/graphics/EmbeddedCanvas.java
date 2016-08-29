@@ -215,10 +215,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     }
         
     public void update(){
-		JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-		topFrame.getContentPane().setVisible(false);
         this.repaint();   
-		topFrame.getContentPane().setVisible(true);
         //System.out.println(this.getBenchmarkString());
     }
     
