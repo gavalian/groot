@@ -19,6 +19,7 @@ public class MultiGaus {
 		JFrame frame = new JFrame("GROOT DEMO");
 		frame.setSize((int)(screensize.getHeight()*.75*1.618), (int) (screensize.getHeight()*.75));
 		EmbeddedCanvas c1 = new EmbeddedCanvas();
+		c1.showFPS(true);
 		c1.divide(4, 4);
 		Random rand = new Random();
 		H1F[] h1 = new H1F[16];
@@ -53,13 +54,12 @@ public class MultiGaus {
 			
 			f1.setParameter(0, h1[i].getEntries()); //Due to initial parameter estimates not existing
 			DataFitter.fit(f1, h1[i], "Q"); //No options uses error for sigma
-			c1.draw(f1,"same");
+			//c1.draw(f1,"same");
 			f1.setLineColor(30 + (i % 4) + 2);
 			f1.setLineWidth(3);
 			f1.setLineStyle(i%4);
 			
 		}
-		c1.showFPS(true);
 		
 		frame.add(c1);
 		frame.setLocationRelativeTo(null);
