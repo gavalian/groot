@@ -193,6 +193,14 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
                 //System.out.println(pad.getAxisFrame().getFrameMargins());
                 pad.getAxisFrame().setAxisMargins(margins);
                 pad.setMargins(margins);
+                margins.marginFit(pad.getAxisFrame().getFrameMargins());
+
+                //pad.draw(g2d);
+            }
+            for(int i = 0; i < canvasPads.size(); i ++){
+                EmbeddedPad pad = canvasPads.get(i); 
+                pad.getAxisFrame().setAxisMargins(margins);
+                pad.setMargins(margins);
                 pad.draw(g2d);
             }
             

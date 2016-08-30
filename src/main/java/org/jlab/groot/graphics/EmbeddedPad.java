@@ -49,8 +49,10 @@ public class EmbeddedPad {
      PaveText statBox = null;
      
      String title = "";
+     int titleOffset = 5;
      int titleFontSize = 12;
      String titleFont = "Avenir";
+
      
      public EmbeddedPad(){
          
@@ -180,6 +182,12 @@ public class EmbeddedPad {
             );
         	axisFrame.getAxisZ().getAttributes().setAxisAutoScale(true);
         }
+        if(title!=""){
+        	padMargins.setTopMargin(padMargins.getTopMargin()+getTitleFontSize());
+        	axisFrame.setAxisMargins(padMargins);
+        	axisFrame.updateMargins(g2d);
+        }
+
         
         
         
@@ -232,7 +240,15 @@ public class EmbeddedPad {
 	        statBox.setPosition(x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
 	        statBox.drawPave(g2d, x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
         }
-        
+        if(title!=""){
+            LatexText titleLatex = new LatexText(title);
+            titleLatex.setColor(1);
+            titleLatex.setFont(this.getTitleFont());
+            titleLatex.setFontSize(this.getTitleFontSize());
+        	padMargins.setTopMargin(padMargins.getTopMargin()+getTitleFontSize()+10);
+        	System.out.println((int)axisFrame.getFrameDimensions().getDimension(0).getMin()+ " "+(int) axisFrame.getAxisX().getAxisPosition((axisFrame.getAxisX().getRange().getMin()+.5*axisFrame.getAxisX().getRange().getLength())));
+        	titleLatex.drawString(g2d, (int) axisFrame.getAxisX().getAxisPosition((axisFrame.getAxisX().getRange().getMin()+.5*axisFrame.getAxisX().getRange().getLength())),(int)( axisFrame.getFrameDimensions().getDimension(1).getMin()+titleOffset), 1, 0);
+        }
         /*
         if(this.optStat>0){
 
@@ -386,6 +402,11 @@ public class EmbeddedPad {
         try {
 			pad.getAxisX().setAttributes((AxisAttributes) this.getAxisX().getAttributes().clone());
 			pad.getAxisY().setAttributes((AxisAttributes) this.getAxisY().getAttributes().clone());
+			pad.setTitle(title);
+			pad.setTitleOffset(titleOffset);
+			pad.setTitleFontSize(titleFontSize);
+			pad.setTitleFont(titleFont);
+
 
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
@@ -424,6 +445,18 @@ public class EmbeddedPad {
 	public String getTitle() {
 		return title;
 	}
+	public int getTitleOffset() {
+		return titleOffset;
+	}
+
+	public void setTitleOffset(int titleOffset) {
+		this.titleOffset = titleOffset;
+	}
+
+	public void setTitleFont(String titleFont) {
+		this.titleFont = titleFont;
+	}
+
 	public void getTitle(String title) {
 		 this.title = title;
 	}
