@@ -32,14 +32,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
+import javax.swing.JSeparator;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -416,15 +415,15 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         itemOptions.addActionListener(this);
         itemOpenWindow.addActionListener(this);
         itemPaste.addActionListener(this);
-        this.popup.add(itemCopy);
         this.popup.add(itemCopyPad);
         this.popup.add(itemPaste);
+        this.popup.add(new JSeparator());
+        this.popup.add(itemCopy);
         this.popup.add(itemSave);
         this.popup.add(itemSaveAs);
-       //this.popup.add(new JSeparator());
+        this.popup.add(new JSeparator());
         this.popup.add(itemFitPanel);
-        
-        //this.popup.add(new JSeparator());
+        this.popup.add(new JSeparator());
         this.popup.add(itemOptions);
         //this.popup.add(itemOpenWindow);
         //addMouseListener(this);

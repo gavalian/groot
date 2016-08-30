@@ -19,7 +19,7 @@ public class MultiGaus {
 		JFrame frame = new JFrame("GROOT DEMO");
 		frame.setSize((int)(screensize.getHeight()*.75*1.618), (int) (screensize.getHeight()*.75));
 		EmbeddedCanvas c1 = new EmbeddedCanvas();
-		c1.showFPS(true);
+		//c1.showFPS(true);
 		c1.divide(4, 4);
 		Random rand = new Random();
 		H1F[] h1 = new H1F[16];
@@ -42,6 +42,7 @@ public class MultiGaus {
 			h1[i].setFillColor(30 + (i % 4) + 2);
 			
 			c1.cd(i);
+			c1.getPad(i).setTitle("Pad "+i);
 			String optStatString = "";
 			for(int j=0; j<3-i%4; j++){
 				optStatString +="1";

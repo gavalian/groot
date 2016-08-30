@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +92,12 @@ public class OptionsPanel extends JPanel {
 		
 		//JComboBox lineWidthBox = new JComboBox(lineThickness);
 		JComboBox fontsBox	= new JComboBox(systemFonts);
-		fontsBox.setSelectedItem(""+can.getPad(pad).getAxisX().getTitleFont().toString());
+		fontsBox.setSelectedIndex(0);
+		for(int i=0; i<systemFonts.length; i++){
+			if(can.getPad(pad).getAxisX().getTitleFont().getFontName().contains(systemFonts[i])){
+				fontsBox.setSelectedIndex(i);
+			}
+		}
 		JComboBox axisFontSizeBox	= new JComboBox(fontSize);
 		axisFontSizeBox.setSelectedItem(""+can.getPad(pad).getAxisX().getLabelFontSize());
 		JComboBox axisTitleFontSizeBox = new JComboBox(fontSize);
@@ -180,7 +187,9 @@ public class OptionsPanel extends JPanel {
 					}
 					if(applyToAllCheckBoxes[9].isSelected()){
 						can.setGridY(yGridBox.isSelected());
-					}/*
+					}
+					
+					/*
 					if(applyToAllCheckBoxes[10].isSelected()){
 						canvas.getPad(i).setAxisRange("X",xSlider.getValue() * (xMax-xMin)/(double)(xSliderMax-xSliderMin) +xMin, xSlider.getUpperValue()* (xMax-xMin)/(double)(xSliderMax-xSliderMin)+xMin);
 					}
@@ -191,6 +200,17 @@ public class OptionsPanel extends JPanel {
 				}
 			}
 		};
+		ItemListener itemListener = new ItemListener(){
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				applyToAllListener.actionPerformed(new ActionEvent("", 0, ""));				
+			}
+			
+		};
+		for(int i=0; i<applyToAllOptions.length; i++){
+			applyToAllCheckBoxes[i].addItemListener(itemListener);
+		}
+		applyToAllComboCheckBox.addActionListener(applyToAllListener);
 		applyToAllButton.addActionListener(applyToAllListener);
 		applyToAllPanel.add(applyToAllComboCheckBox,BorderLayout.WEST);
 		applyToAllPanel.add(applyToAllButton,BorderLayout.EAST);
