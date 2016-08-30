@@ -6,6 +6,8 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
+import javax.swing.TransferHandler.TransferSupport;
+
 import org.jlab.groot.graphics.EmbeddedPad;
 
 /*import org.root.base.DataSetCollection;
@@ -24,7 +26,8 @@ public class TransferableImage implements Transferable {
     public void setPad(EmbeddedPad pad){
     	this.pad = pad;
     }
-     
+  
+
     public Object getTransferData( DataFlavor flavor ) 
     throws UnsupportedFlavorException, IOException {
         if ( flavor.equals( DataFlavor.imageFlavor ) && i != null ) {

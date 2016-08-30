@@ -18,9 +18,6 @@ import org.jlab.groot.fitter.DataFitter;
 import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.graphics.IDataSetPlotter;
 import org.jlab.groot.math.Func1D;
-import org.root.basic.EmbeddedPad;
-import org.root.func.F1D;
-import org.root.ui.RangeSlider;
 
 public class FitPanel extends JPanel {
 	EmbeddedCanvas canvas;
@@ -68,7 +65,7 @@ public class FitPanel extends JPanel {
 		this.add(fitFunctionPanel,BorderLayout.PAGE_START);
 	}
 	
-	private void initRangeSelector() {
+	private void initRangeSelector() {/*
 		lowerWindow = new JPanel(new GridLayout(2, 1));
 		JPanel rangeSelector = new JPanel();
 		JLabel xLabel = new JLabel("X:");
@@ -155,16 +152,16 @@ public class FitPanel extends JPanel {
 				fitFunction.setLineStyle(1);
 				canvas.cd(index);                                
 				canvas.draw(fitFunction,"same"+drawOption);
-				/*
+				
 				for(int i=0; i<canvas.getPad(index).getDataSetCount(); i++){
 					System.out.println("Dataset#:"+i);
 					Enumeration<?> blah = canvas.getPad(index).getDataSet(i).getAttributes().getProperties().propertyNames();
 					while(blah.hasMoreElements()){
 						System.out.println(blah.nextElement());
 					}
-				}*/
+				}
 				
-				/*
+				
 				ArrayList<IDataSet> nonDuplicateDataset = new ArrayList<IDataSet>();
 				ArrayList<IDataSet> datasets1 = new ArrayList<IDataSet>();
 				for(int i=0; i<canvas.getPad(index).getDataSetCount(); i++){
@@ -175,7 +172,7 @@ public class FitPanel extends JPanel {
 				}
 				canvas.getPad(index).
 				
-				*/
+				
 				parameterPanel.updateNewFunction(fitFunction);
 			}
 		});
@@ -202,22 +199,16 @@ public class FitPanel extends JPanel {
 					options ="LR";
 				}
 				String drawOption = "";
-				//System.out.println("******************BLAH "+optionCheckBoxes.size());
 				for(int i=0; i<optionCheckBoxes.size(); i++){
-					//if(optionCheckBoxes.get(0).isSelected()&&hasDrawnStats==false){
 					if(optionCheckBoxes.get(0).isSelected()){
 						drawOption = "S";
-						//hasDrawnStats = true;
-					//	System.out.println("Draw stats!");
+					
 					}
 					if(optionCheckBoxes.get(1).isSelected()){
 						options = options+"Q";
-						//System.out.println("Draw quietly!");
 					}
-					//System.out.println("Options: "+optionCheckBoxes.get(i).getName()+ " is "+optionCheckBoxes.get(i).isSelected());
 				}
-				//System.out.println("******************BLAH2");
-				//System.out.println("Fit Options:["+options+"]");
+				
 				for(int padCounter=0; padCounter<canvasPads.size();padCounter++){
 					double min  = canvas.getPad(padCounter).getAxisX().getMin();
 					double max = canvas.getPad(padCounter).getAxisX().getMax();
@@ -237,7 +228,6 @@ public class FitPanel extends JPanel {
 					IDataSet currentDataset = tempDataset.get(0);
 					fitAllFitFunctions.get(padCounter).setRange(min, max);
 				
-				//histogram.fit(fitFunction,options);
 				if(predef){
 				for(int i=0; i<fitAllFitFunctions.get(padCounter).getNParams(); i++){
 					if(i==0){
@@ -251,29 +241,25 @@ public class FitPanel extends JPanel {
 					}else if(i>3){
 						fitAllFitFunctions.get(padCounter).setParameter(i, 1.0);
 					}
-					//System.out.println("Paramter "+i+" ="+fitFunction.getParameter(i));
 
 				}}
 				fitter.fit(currentDataset, fitAllFitFunctions.get(padCounter),options);
-				//fitFunction.show(); // print on the screen fit results
 				fitAllFitFunctions.get(padCounter).setLineColor(2);
 				fitAllFitFunctions.get(padCounter).setLineWidth(5);
 				fitAllFitFunctions.get(padCounter).setLineStyle(1);
 				canvas.cd(padCounter);                                
 				canvas.draw(fitAllFitFunctions.get(padCounter),"same"+drawOption);
-				//parameterPanel.updateNewFunction(fitFunction);
 				}
 			}
 		});
 		fitButtons.add(fit);
 		fitButtons.add(fitAll);
 		lowerWindow.add(fitButtons);
-		//lowerWindow.add(button);
 		this.add(lowerWindow,BorderLayout.PAGE_END);
 		}else{
 			lowerWindow.add(fit);
 			this.add(lowerWindow,BorderLayout.PAGE_END);
 		}
-		
+		*/
 	}
 }
