@@ -9,6 +9,7 @@ import java.awt.BasicStroke;
 import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 
 import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.IDataSet;
@@ -43,9 +44,12 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
     @Override
     public void draw(Graphics2D g2d, GraphicsAxisFrame frame) {
         int npoints = graphDataSet.getDataSize(0);
-        
-        BasicStroke strokePoint = new BasicStroke(2);
-        BasicStroke strokeError = new BasicStroke(1);
+        int markerSize = this.getDataSet().getAttributes().getMarkerSize();
+        int lineThickness = this.getDataSet().getAttributes().getLineWidth();
+        int lineColor = this.getDataSet().getAttributes().getLineColor();
+        int style = this.getDataSet().getAttributes().getMarkerStyle();
+        BasicStroke strokePoint = new BasicStroke(lineThickness);
+        BasicStroke strokeError = new BasicStroke(lineThickness);
         
         for(int p = 0; p < npoints; p++){
             double xp = frame.getAxisPointX(graphDataSet.getDataX(p));
@@ -60,13 +64,33 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
             double ypL = frame.getAxisPointY(graphDataSet.getDataY(p) - graphDataSet.getDataEY(p));
             double ypH = frame.getAxisPointY(graphDataSet.getDataY(p) + graphDataSet.getDataEY(p));
             
-            g2d.setColor(TStyle.getColor(this.getDataSet().getAttributes().getMarkerColor()));
+            g2d.setColor(TStyle.getColor(lineColor));
             g2d.setStroke(strokeError);
             g2d.drawLine((int) xpL, (int) yp, (int) xpH, (int) yp);
             g2d.drawLine((int) xp, (int) ypL, (int) xp, (int) ypH);
             g2d.setColor(TStyle.getColor(this.getDataSet().getAttributes().getMarkerColor()));
             g2d.setStroke(strokePoint);
-            g2d.drawOval((int) xp - 3, (int) yp - 3 , 6, 6);
+           
+            if(style==0){
+            	g2d.fillOval((int) xp - markerSize, (int) yp - markerSize , markerSize*2, markerSize*2);
+            }else if(style==1){
+            	g2d.fillRect((int) xp - markerSize, (int) yp - markerSize , markerSize*2, markerSize*2);
+            }else if(style==2){
+             	Polygon invertedTriangle = new Polygon();
+             	invertedTriangle.addPoint((int)xp, (int)(yp-markerSize));
+             	invertedTriangle.addPoint((int)xp+markerSize, (int)(yp+markerSize));
+             	invertedTriangle.addPoint((int)xp-markerSize, (int)(yp+markerSize));
+            	g2d.fillPolygon(invertedTriangle); 
+            }else if(style==3){
+            	Polygon triangle = new Polygon();
+            	triangle.addPoint((int)xp, (int)(yp+markerSize));
+            	triangle.addPoint((int)xp+markerSize, (int)(yp-markerSize));
+            	triangle.addPoint((int)xp-markerSize, (int)(yp-markerSize));
+            	g2d.fillPolygon(triangle);
+            }else{
+            	g2d.fillOval((int) xp - markerSize, (int) yp - markerSize , markerSize*2, markerSize*2);
+            }
+            
         }
     }
 
