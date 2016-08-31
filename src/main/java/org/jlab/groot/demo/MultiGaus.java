@@ -27,7 +27,7 @@ public class MultiGaus {
 			h1[i] = new H1F("h" + i, "", 200, -5.0, 5.0);
 			h1[i].setTitleX("Randomly Generated Function");
 			h1[i].setTitleY("Counts");
-			h1[i].setOptStat(0110);
+			h1[i].setOptStat(0);
 			F1D f1 = new F1D("f1","[amp]*gaus(x,[mean],[sigma])", -5.0, 5.0);
 			f1.setParameter(0, 120.0);
 			f1.setParameter(1, (-3.0 + rand.nextDouble() * 6));
@@ -42,7 +42,7 @@ public class MultiGaus {
 			h1[i].setFillColor(30 + (i % 4) + 2);
 			
 			c1.cd(i);
-			c1.getPad(i).setTitle("Pad "+i);
+			c1.getPad(i).setTitle("OptionsPanel Demo");
 			String optStatString = "";
 			for(int j=0; j<3-i%4; j++){
 				optStatString +="1";
@@ -55,12 +55,16 @@ public class MultiGaus {
 			
 			f1.setParameter(0, h1[i].getEntries()); //Due to initial parameter estimates not existing
 			DataFitter.fit(f1, h1[i], "Q"); //No options uses error for sigma
-			//c1.draw(f1,"same");
+			c1.draw(f1,"same");
 			f1.setLineColor(30 + (i % 4) + 2);
 			f1.setLineWidth(3);
 			f1.setLineStyle(i%4);
-			
+			c1.setFont("HanziPen TC");	
+			c1.setTitleSize(16);
+			c1.setAxisTitleSize(14);
+			c1.setAxisLabelSize(12);
 		}
+		
 		
 		frame.add(c1);
 		frame.setLocationRelativeTo(null);

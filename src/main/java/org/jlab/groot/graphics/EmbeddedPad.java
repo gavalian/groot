@@ -246,7 +246,6 @@ public class EmbeddedPad {
             titleLatex.setFont(this.getTitleFont());
             titleLatex.setFontSize(this.getTitleFontSize());
         	padMargins.setTopMargin(padMargins.getTopMargin()+getTitleFontSize()+10);
-        	System.out.println((int)axisFrame.getFrameDimensions().getDimension(0).getMin()+ " "+(int) axisFrame.getAxisX().getAxisPosition((axisFrame.getAxisX().getRange().getMin()+.5*axisFrame.getAxisX().getRange().getLength())));
         	titleLatex.drawString(g2d, (int) axisFrame.getAxisX().getAxisPosition((axisFrame.getAxisX().getRange().getMin()+.5*axisFrame.getAxisX().getRange().getLength())),(int)( axisFrame.getFrameDimensions().getDimension(1).getMin()+titleOffset), 1, 0);
         }
         /*
