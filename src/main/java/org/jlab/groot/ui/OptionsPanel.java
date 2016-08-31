@@ -290,6 +290,7 @@ public class OptionsPanel extends JPanel {
 			public void actionPerformed(ActionEvent e){
 				can.getPad(pad).getAxisY().setGrid(yGridBox.isSelected());
 				can.update();
+				can.update();
 				applyToAllListener.actionPerformed(new ActionEvent("", 0, ""));
 			}
 		});

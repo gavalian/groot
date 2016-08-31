@@ -45,7 +45,7 @@ public class DatasetAttributes implements Cloneable {
     public final static int FUNCTION = 3;
     
     private boolean drawAxis = false;
-    public int optStat = 0;
+    public String optStat = "0";
 
     
     private String stringTitleX = "";
@@ -261,7 +261,7 @@ public class DatasetAttributes implements Cloneable {
             }else if(e.getSource()==boxFillColor){
             	attr.setFillColor(Integer.parseInt(colorChoices[boxFillColor.getSelectedIndex()]));
             }else if(e.getSource()==optStatTextField){
-            	attr.setOptStat(Integer.parseInt(optStatTextField.getText()));
+            	attr.setOptStat(optStatTextField.getText());
             }
             updateCanvas();
         }
@@ -292,11 +292,11 @@ public class DatasetAttributes implements Cloneable {
 		this.datasetType = datasetType;
 	}
 
-	public void setOptStat(int i) {
-		this.optStat = i;
+	public void setOptStat(String optStat) {
+		this.optStat = optStat;
 	}
 
-	public int getOptStat() {
+	public String getOptStat() {
 		return this.optStat;
 	}
 

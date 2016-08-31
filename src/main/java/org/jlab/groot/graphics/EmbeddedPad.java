@@ -211,19 +211,18 @@ public class EmbeddedPad {
     	List<List<LatexText>> toBeDrawn = new ArrayList< List<LatexText>>();
         for(int i = 0; i<this.datasetPlotters.size(); i++){
         	List<List<LatexText>> currentStats = this.datasetPlotters.get(i).getDataSet().getStatBox().getPaveTexts();
-        	int optStat =  this.datasetPlotters.get(i).getDataSet().getAttributes().getOptStat();
-        	int tempOpt = optStat;
+        	String optStat =  this.datasetPlotters.get(i).getDataSet().getAttributes().getOptStat();
         	int counter = 0;
-        	while(tempOpt>=1 && counter<currentStats.size()){
+        	for(int j=0; j<optStat.length()&&j<currentStats.size(); j++){
         		//System.out.println("Counter:"+counter);
-        		if(tempOpt%10!=0){
+        		if(Integer.parseInt(""+optStat.charAt(optStat.length()-1-j))!=0){
         			toBeDrawn.add(currentStats.get(counter));
         			//System.out.print("counter:"+counter);
         			/*for(LatexText text : currentStats.get(counter)){
         				System.out.print(" "+text.getTextString());
         			}*/
         		}
-        		tempOpt = tempOpt/10;
+        		
         		counter++;
         	}
         }
@@ -301,15 +300,20 @@ public class EmbeddedPad {
     
     public void setOptStat(int opts){
         if( this.getDatasetPlotters().size()>0){
+            this.getDatasetPlotters().get(0).getDataSet().getAttributes().setOptStat(""+opts);
+        }
+    }
+    public void setOptStat(String opts){
+        if( this.getDatasetPlotters().size()>0){
             this.getDatasetPlotters().get(0).getDataSet().getAttributes().setOptStat(opts);
         }
     }
     
-    public int getOptStat(){
+    public String getOptStat(){
     	 if(this.getDatasetPlotters().size()>0){
              return this.getDatasetPlotters().get(0).getDataSet().getAttributes().getOptStat();
          }
-        return 0;
+        return "0";
     }
     
     public EmbeddedPad setAutoScale(){
@@ -405,6 +409,9 @@ public class EmbeddedPad {
 			pad.setTitleOffset(titleOffset);
 			pad.setTitleFontSize(titleFontSize);
 			pad.setTitleFont(titleFont);
+			pad.setStatBoxFont(this.getStatBoxFontName());
+			pad.setStatBoxFontSize(this.getStatBoxFontSize());
+
 
 
 		} catch (CloneNotSupportedException e) {
@@ -415,7 +422,12 @@ public class EmbeddedPad {
     }
     
     
-    public static class EmbeddedPadConfigurationPane extends JDialog {
+    private String getStatBoxFontName() {
+		return statBoxFont.getFontName();
+	}
+
+
+	public static class EmbeddedPadConfigurationPane extends JDialog {
 
         EmbeddedPad  embeddedPad = null;
         JTabbedPane  tabbedPane  = null;
@@ -463,6 +475,7 @@ public class EmbeddedPad {
 	public int getTitleFontSize() {
 		return this.titleFontSize;
 	}
+	
 	public String getTitleFont() {
 		return this.titleFont;
 	}

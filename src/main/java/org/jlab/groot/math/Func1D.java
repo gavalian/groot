@@ -219,11 +219,15 @@ public class Func1D implements IDataSet {
         stat.addText("ndf",String.format("%.3f", (double)this.getNDF()));
         return stat;
     }
-
-	public void setOptStat(int i) {
-		this.getAttributes().setOptStat(i);
+    
+    public void setOptStat(int optStatString) {
+		this.getAttributes().setOptStat(""+optStatString);
 	}
-	public int getOptStat() {
+    
+	public void setOptStat(String optStatString) {
+		this.getAttributes().setOptStat(optStatString);
+	}
+	public String getOptStat() {
 		return this.getAttributes().getOptStat();
 	}
 	
