@@ -57,7 +57,7 @@ public class Histogram2DPlotter implements IDataSetPlotter {
         
         int npointsX = dataSet.getDataSize(0);
         int npointsY = dataSet.getDataSize(1);
-        
+        frame.setDrawAxisZ(true);
         updateRegion();
         
         for(int xd = 0; xd < dataSet.getDataSize(0); xd++){

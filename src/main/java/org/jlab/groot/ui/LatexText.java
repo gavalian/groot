@@ -14,6 +14,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedString;
 
+import org.jlab.groot.base.TStyle;
+
 /**
  *
  * @author gavalian
@@ -93,7 +95,8 @@ public class LatexText {
         }
     }
     
-    public void drawString(Graphics2D  g2d, int x, int y, int alignX, int alignY, int rotate){
+    
+public void drawString(Graphics2D  g2d, int x, int y, int alignX, int alignY, int rotate){
         
         if(rotate==LatexText.ROTATE_NONE){
             this.drawString(g2d, x, y, alignX, alignY);

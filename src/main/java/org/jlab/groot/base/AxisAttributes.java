@@ -51,6 +51,8 @@ public class AxisAttributes implements Cloneable{
     private int      lineWidth       = 1;
     private int      tickSize        = 5;
     private boolean  log			 = false;
+    private boolean  showAxis		 = true;
+
     private String   axisTitleString = "";
     private LatexText axisTitle      = new LatexText(axisTitleString);
     private FontProperties labelFont = new FontProperties();
@@ -445,6 +447,13 @@ public class AxisAttributes implements Cloneable{
 	
 	public void setGrid(boolean axisGrid) {
 		this.axisGrid = axisGrid;
+	}
+
+	public boolean showAxis() {
+		return showAxis;
+	}
+	public void setShowAxis(boolean showAxis){
+		this.showAxis = showAxis;
 	}
     
 }

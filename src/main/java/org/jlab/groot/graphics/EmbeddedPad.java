@@ -39,7 +39,8 @@ public class EmbeddedPad {
      Color                backgroundColor  = Color.WHITE;
      private  PadMargins  padMargins       = new PadMargins();
      List<IDataSetPlotter> datasetPlotters = new ArrayList<IDataSetPlotter>();
-     
+     boolean 				preliminary = true;
+     int 				preliminarySize = 36;
      //Dimension3D           fixedRange      = new Dimension3D();
      
      private FontProperties statBoxFont    = new FontProperties();
@@ -187,6 +188,10 @@ public class EmbeddedPad {
         	axisFrame.setAxisMargins(padMargins);
         	axisFrame.updateMargins(g2d);
         }
+        /*if(this.getAxisZ().getAttributes().showAxis()){
+        	padMargins.setRightMargin(padMargins.getRightMargin()+10);
+        	axisFrame
+        }*/
 
         
         
