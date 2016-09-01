@@ -29,9 +29,10 @@ public class GraphicsAxis {
     public static int  AXISTYPE_COLOR       = 1;
     public static int  AXISTYPE_HORIZONTAL  = 2;
     public static int  AXISTYPE_VERTICAL    = 3;        
-    private int    axisType                 = 2;
+    private int        axisType             = 2;
     
-   // private final  Dimension1D                  axisRange   = new Dimension1D();
+   
+	// private final  Dimension1D                  axisRange   = new Dimension1D();
     private final  Dimension1D              axisDimension   = new Dimension1D();
     
     private        int                 numberOfMajorTicks   = 10;
@@ -279,7 +280,7 @@ public class GraphicsAxis {
     private void drawColorAxis(Graphics2D g2d, int x, int y){
 
         this.setAxisDivisions(10);
-        axisTicks.updateFont(getLabelFont());
+        axisTicks.updateFont(this.attr.getLabelFont());
         this.updateAxisDivisions(g2d);
 
         List<Double>     ticks = axisTicks.getAxisTicks();

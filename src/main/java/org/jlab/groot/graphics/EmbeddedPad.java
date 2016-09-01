@@ -377,6 +377,9 @@ public class EmbeddedPad {
         }
         if(ds instanceof H2F){
             this.addPlotter(new Histogram2DPlotter(ds));
+            axisFrame.getAxisZ().getAttributes().setShowAxis(true);
+        }else{
+            axisFrame.getAxisZ().getAttributes().setShowAxis(false);
         }
         if(ds instanceof GraphErrors){
             this.addPlotter(new GraphErrorsPlotter(ds));
@@ -494,15 +497,19 @@ public class EmbeddedPad {
 	public void setAxisTitleFontSize(int parseInt) {
 		this.getAxisX().getAttributes().setTitleFontSize(parseInt);
 		this.getAxisY().getAttributes().setTitleFontSize(parseInt);
+		this.getAxisZ().getAttributes().setTitleFontSize(parseInt);
+
 	}
 	public void setAxisLabelFontSize(int parseInt) {
 		this.getAxisX().getAttributes().setLabelFontSize(parseInt);
 		this.getAxisY().getAttributes().setLabelFontSize(parseInt);
+		this.getAxisZ().getAttributes().setLabelFontSize(parseInt);
 	}
 
 	public void setFontNameAll(String FontName) {
 		this.getAxisX().getAttributes().setLabelFontName(FontName);
 		this.getAxisY().getAttributes().setLabelFontName(FontName);
+		this.getAxisZ().getAttributes().setLabelFontName(FontName);
 		this.getAxisX().getAttributes().setTitleFontName(FontName);
 		this.getAxisY().getAttributes().setTitleFontName(FontName);
 		this.titleFont = FontName;

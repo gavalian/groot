@@ -279,7 +279,8 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         int  row = (int) (y/rowSize);
         int  colSize = (int) this.getWidth()/this.ec_COLUMNS;
         int  col = (int) (x/colSize);
-        return row*ec_ROWS + col;
+        //System.out.println("x:"+x+" y:"+y+" rowSize:"+rowSize+" colSize:"+colSize+" row:"+row+" col:"+col+" can:"+(row*ec_ROWS + col)+" rows:"+ec_ROWS+" cols:"+ec_COLUMNS);
+        return row*ec_COLUMNS + col;
     }
 
     public void draw(DataGroup group){

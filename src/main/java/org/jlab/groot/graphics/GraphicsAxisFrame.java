@@ -23,7 +23,8 @@ public class GraphicsAxisFrame {
     private PadMargins           axisFrameMargins       = new PadMargins();
     private List<GraphicsAxis>      axisFrameAxis       = new ArrayList<GraphicsAxis>();
     private boolean                 drawAxisZ           = false;
-    
+    private boolean                 drawFrame           = true;
+
     private int                     colorAxisOffset     = 4;
     private int                     colorAxisSize       = 8;
     
@@ -101,16 +102,21 @@ public class GraphicsAxisFrame {
         */
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(1));
+        if(drawFrame){
         g2d.drawRect(
                 (int) getAxisX().getDimension().getMin(),
                 (int) getAxisY().getDimension().getMax(),
                 (int) getAxisX().getDimension().getLength(),
                 (int) Math.abs(getAxisY().getDimension().getLength())
                 );
-        axisFrameAxis.get(0).drawAxis(g2d, (int) xcorner, (int) ycorner);
-        axisFrameAxis.get(1).drawAxis(g2d, (int) xcorner, (int) ycorner);
-        
-        if(this.drawAxisZ==true){
+        }
+        if(axisFrameAxis.get(0).getAttributes().showAxis()){
+        	axisFrameAxis.get(0).drawAxis(g2d, (int) xcorner, (int) ycorner);
+        }
+        if(axisFrameAxis.get(1).getAttributes().showAxis()){
+            axisFrameAxis.get(1).drawAxis(g2d, (int) xcorner, (int) ycorner);
+        }
+        if(axisFrameAxis.get(2).getAttributes().showAxis()){
             int xc = (int) this.axisFrameDimension.getDimension(0).getMax() 
                     - this.axisFrameMargins.getRightMargin();
             axisFrameAxis.get(2).drawAxis(g2d, (int) xc, (int) ycorner);
@@ -122,7 +128,15 @@ public class GraphicsAxisFrame {
     }
     
     
-    public GraphicsAxis  getAxisX(){
+    public boolean isDrawFrame() {
+		return drawFrame;
+	}
+
+	public void setDrawFrame(boolean drawFrame) {
+		this.drawFrame = drawFrame;
+	}
+
+	public GraphicsAxis  getAxisX(){
         return this.axisFrameAxis.get(0);
     }
     
