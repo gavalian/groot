@@ -39,6 +39,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -375,7 +376,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     
     @Override
     public void mousePressed(MouseEvent e) {
-    	 if (e.isPopupTrigger()) {
+    	 if (SwingUtilities.isRightMouseButton(e)) {
              popupPad = getPadByXY(e.getX(),e.getY());
              //System.out.println("POP-UP coordinates = " + e.getX() + " " + e.getY() + "  pad = " + popupPad);
              popup.show(EmbeddedCanvas.this, e.getX(), e.getY());
