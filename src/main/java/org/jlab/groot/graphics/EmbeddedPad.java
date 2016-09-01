@@ -413,14 +413,13 @@ public class EmbeddedPad {
         try {
 			pad.getAxisX().setAttributes((AxisAttributes) this.getAxisX().getAttributes().clone());
 			pad.getAxisY().setAttributes((AxisAttributes) this.getAxisY().getAttributes().clone());
+			pad.getAxisZ().setAttributes((AxisAttributes) this.getAxisZ().getAttributes().clone());
 			pad.setTitle(title);
 			pad.setTitleOffset(titleOffset);
 			pad.setTitleFontSize(titleFontSize);
 			pad.setTitleFont(titleFont);
 			pad.setStatBoxFont(this.getStatBoxFontName());
 			pad.setStatBoxFontSize(this.getStatBoxFontSize());
-
-
 
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
