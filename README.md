@@ -12,7 +12,7 @@ Try out the [demo jar](https://github.com/gavalian/groot/raw/master/jars/GrootDe
 To run the example: Simply double click on the jar if you're a mac user, or if you're a linux user run ```java -jar GrootDemo.jar```
 
 <img src="https://github.com/gavalian/groot/blob/master/images/multipad.png" width="800">
-<img src="https://github.com/gavalian/groot/blob/master/images/Histogram2D.png" width="400">
+<img src="https://github.com/gavalian/groot/blob/master/images/histogram2d_demo.png" width="400">
 <img src="https://github.com/gavalian/groot/blob/master/images/copyPaste.png" width="400">
 <img src="https://github.com/gavalian/groot/blob/master/images/totalcs_ppbar.png" width="800">
 
