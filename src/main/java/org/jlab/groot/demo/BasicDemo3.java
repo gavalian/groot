@@ -1,30 +1,25 @@
 package org.jlab.groot.demo;
 
 import java.util.Random;
+
 import javax.swing.JFrame;
 
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.H2F;
 import org.jlab.groot.graphics.EmbeddedCanvas;
+import org.jlab.groot.math.FunctionFactory;
 
-public class BasicDemo {
+public class BasicDemo3 {
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Basic GROOT Demo");
 		EmbeddedCanvas canvas = new EmbeddedCanvas();
 		frame.setSize(800,500);
-		H1F histogram = new H1F("histogram",100,-5,5); 
-		Random randomGenerator = new Random();
-		for(int i=0; i<5000; i++){
-			histogram.fill(randomGenerator.nextGaussian());
-		}
-		histogram.setTitleX("Randomly Generated Function");
-		histogram.setTitleY("Counts");
-		canvas.getPad(0).setTitle("BasicDemo Test");
-		histogram.setLineWidth(2);
-		histogram.setLineColor(21);
-		histogram.setFillColor(34);
-		histogram.setOptStat(1110);
-		canvas.draw(histogram);
+		H2F histogram2d = FunctionFactory.randomGausian2D(40, 0.4, 7.6, 800000, 3.3, 0.8);
+		histogram2d.setTitleX("Randomly Generated Function");
+		histogram2d.setTitleY("Randomly Generated Function");		
+		canvas.getPad(0).setTitle("Histogram2D Demo");
+		canvas.draw(histogram2d);
 		canvas.setFont("HanziPen TC");  
 		canvas.setTitleSize(32);
 		canvas.setAxisTitleSize(24);
