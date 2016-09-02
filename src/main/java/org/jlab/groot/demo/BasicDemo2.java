@@ -14,11 +14,9 @@ public class BasicDemo2 {
 	    double barberx[] = {3.95,4.05,4.15,4.25,4.35,4.45,4.55,4.65,4.75};
 	    double barbery[] = {.8,3.1,10.0,29.8,31.2,42.5,28.5,39.8,29.7};
 	    double barberyerr[] = {0.0,2.0,4.0,6.0,6.5,8.0,6.0,7.0,6.5};
-	    double barberxbin[] = {.05,.05,.05,.05,.05,.05,.05,.05,.05};
 	    double bodenkampx[] = {((5.102+4.740)/2.0),((5.464+5.102)/2.0),((5.464+5.826)/2.0),((5.826+6.188)/2.0),((6.188+6.550)/2.0)};
 	    double bodenkampy[] = {75.8,82.1,65.0,89.6,84.9};
 	    double bodenkampyerr[] = {13.4,16.7,13.5,17.5,15.7};
-	    double bodenkampxbin[] = {((5.102-4.740)/2.0),((5.464-5.102)/2.0),((5.826-5.464)/2.0),((6.188-5.826)/2.0),((6.550-6.188)/2.0)};
 
 	    JFrame frame = new JFrame("Basic GROOT Demo 2");
 		EmbeddedCanvas canvas = new EmbeddedCanvas();
