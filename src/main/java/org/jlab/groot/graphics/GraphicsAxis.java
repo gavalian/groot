@@ -17,7 +17,6 @@ import org.jlab.groot.base.ColorPalette;
 import org.jlab.groot.base.FontProperties;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.math.Dimension1D;
-import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.ui.LatexText;
 
 /**
@@ -422,7 +421,7 @@ public class GraphicsAxis {
      * @param args 
      */
     public static void main(String[] args){
-        GraphicsAxis  axis = new GraphicsAxis();
+        GraphicsAxis  axis = new GraphicsAxis(GraphicsAxis.AXISTYPE_HORIZONTAL);
         axis.setDimension(20, 100);
         axis.setRange(0.0, 120.0);
         //axis.setLog(true);        

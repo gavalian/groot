@@ -32,8 +32,8 @@ public class GraphicsTests extends JPanel {
 	 */
 	private static final long serialVersionUID = 7128170889587576863L;
 	ColorPalette palette = new ColorPalette();
-    GraphicsAxis    xaxis   = new GraphicsAxis();
-    GraphicsAxis    yaxis   = new GraphicsAxis();
+    GraphicsAxis    xaxis   = new GraphicsAxis(GraphicsAxis.AXISTYPE_HORIZONTAL);
+    GraphicsAxis    yaxis   = new GraphicsAxis(GraphicsAxis.AXISTYPE_VERTICAL);
     
     public GraphicsTests(){
         super();

@@ -2,12 +2,23 @@ package org.jlab.groot.demo;
 
 import javax.swing.JFrame;
 
+import org.jlab.groot.base.GStyle;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.graphics.EmbeddedCanvas;
 
 public class BasicDemo2 {
 
 	public static void main(String[] args) {
+		GStyle.getGraphErrorsAttributes().setMarkerStyle(0);
+		GStyle.getGraphErrorsAttributes().setMarkerColor(3);
+		GStyle.getGraphErrorsAttributes().setMarkerSize(7);
+		GStyle.getGraphErrorsAttributes().setLineColor(3);
+		GStyle.getGraphErrorsAttributes().setLineWidth(3);
+		GStyle.getAxisAttributesX().setTitleFontSize(32);
+		GStyle.getAxisAttributesX().setLabelFontSize(28);
+		GStyle.getAxisAttributesY().setTitleFontSize(32);
+		GStyle.getAxisAttributesY().setLabelFontSize(28);
+		
 	    double barberx[] = {3.95,4.05,4.15,4.25,4.35,4.45,4.55,4.65,4.75};
 	    double barbery[] = {.8,3.1,10.0,29.8,31.2,42.5,28.5,39.8,29.7};
 	    double barberyerr[] = {0.0,2.0,4.0,6.0,6.5,8.0,6.0,7.0,6.5};
@@ -35,23 +46,15 @@ public class BasicDemo2 {
 		
 		barber.setMarkerColor(2);
 		barber.setLineColor(2);
-		barber.setMarkerStyle(0);
-		barber.setMarkerSize(7);
-		
-		barber.setLineThickness(3);
+	
 		bodemkamp.setMarkerColor(4);
 		bodemkamp.setLineColor(4);
-		bodemkamp.setMarkerStyle(0);
-		bodemkamp.setMarkerSize(7);
-		bodemkamp.setLineThickness(3);
 		
 		canvas.draw(barber);
 		canvas.draw(bodemkamp,"same");
 
 		canvas.setFont("HanziPen TC");  
 		canvas.setTitleSize(48);
-		canvas.setAxisTitleSize(32);
-		canvas.setAxisLabelSize(28);
 		canvas.setStatBoxFontSize(18);
 		
 		frame.add(canvas);
