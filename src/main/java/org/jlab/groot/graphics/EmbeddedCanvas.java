@@ -16,6 +16,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -23,11 +24,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,6 +47,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jlab.groot.base.PadMargins;
+import org.jlab.groot.data.DataParser;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
@@ -514,8 +518,17 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
          			e.printStackTrace();
          		}
          	}
+         	if(flavors[i].equals(DataFlavor.stringFlavor)){
+				try {
+					String blah = (String)clipboardContent.getTransferData(DataFlavor.stringFlavor);
+					DataParser parser = new DataParser(blah);
+		 			this.getPad(popupPad2).draw(parser.getGraphErrors(),"same");
+		 			this.update();
+				} catch (UnsupportedFlavorException | IOException e) {
+					e.printStackTrace();
+				}
+         	}
          }
-            //System.out.println("flavor[" + i + "] = " + flavors[i]);		
 	}
 
 	private void openOptionsPanel(int popupPad2) {
