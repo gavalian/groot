@@ -388,6 +388,15 @@ public class EmbeddedPad {
         axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleX());
     }
     
+    public void remove(IDataSet ds){
+    	for(IDataSetPlotter plotter :this.datasetPlotters ){
+    		if(plotter.getDataSet().equals(ds)){
+    			this.datasetPlotters.remove(plotter);
+    			break;
+    		}
+    	}
+    }
+    
     /**
      * returns copy of embedded pad with all plotters included.
      * @return 

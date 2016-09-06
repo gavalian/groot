@@ -11,6 +11,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class OptionsPanel extends JPanel {
 	int pad;
 	EmbeddedCanvas can = null;
 	JTabbedPane tabbedPane = null;
+	JTabbedPane datasetPanes = null;
 	public OptionsPanel(EmbeddedCanvas can, int pad){
 		this.can = can;
 		this.pad = pad;
@@ -534,24 +536,74 @@ public class OptionsPanel extends JPanel {
 			}
 		}
 		tabbedPane.add("Axes",axes);
-		
 	}
 	
 	private void initDatasets() {
 		List<IDataSetPlotter> datasets = can.getPad(pad).getDatasetPlotters();
-		JTabbedPane datasetPanes = new JTabbedPane();
+		ArrayList<DatasetAttributesPane> datasetPaneList = new ArrayList<DatasetAttributesPane>();
+		datasetPanes = new JTabbedPane();
 		for(IDataSetPlotter dataset : datasets){
-			DatasetAttributesPane tempPane  = new DatasetAttributesPane(dataset.getDataSet().getAttributes());
+			DatasetAttributesPane tempPane = new DatasetAttributesPane(dataset.getDataSet().getAttributes());
 			tempPane.addAttributeListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					can.repaint();
 				}
 			});
+			datasetPaneList.add(tempPane);
 			datasetPanes.add(dataset.getName(),tempPane);
+			ActionListener removeButtonListener = new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					for(int i=0; i<datasetPaneList.size(); i++){
+						if(e.getSource().equals(datasetPaneList.get(i).buttonRemove)){
+							int tabSelectionIndex = datasetPanes.getSelectedIndex();
+							datasetPanes.setSelectedIndex((tabSelectionIndex>=1)?tabSelectionIndex-1:0);
+							datasetPanes.remove(i);
+							datasetPaneList.remove(i);
+							datasetPanes.repaint();
+							can.getPad(pad).remove(datasets.get(i).getDataSet());
+							break;
+						}
+					}
+					can.update();
+				}
+				
+			};
+			
+			ActionListener defaultButtonListener  = new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					for(int i=0; i<datasetPaneList.size(); i++){
+						if(e.getSource().equals(datasetPaneList.get(i).buttonDefault)){
+							int tabSelectionIndex = datasetPanes.getSelectedIndex();
+							datasets.get(i).getDataSet().getAttributes().setDefault();
+							DatasetAttributesPane pane = new DatasetAttributesPane(datasets.get(i).getDataSet().getAttributes());
+							pane.buttonRemove.addActionListener(removeButtonListener);
+							pane.buttonDefault.addActionListener(this);
+							pane.addAttributeListener(new ActionListener(){
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									can.repaint();
+								}
+							});
+							//datasetPanes.setSelectedIndex((tabSelectionIndex>=1)?tabSelectionIndex-1:0);
+							datasetPaneList.remove(i);
+							datasetPanes.setComponentAt(i, pane);
+							datasetPaneList.add(i,pane);
+							datasetPanes.repaint();
+							break;
+						}
+					}
+					can.update();
+				}
+				
+			};
+			tempPane.buttonRemove.addActionListener(removeButtonListener);
+			tempPane.buttonDefault.addActionListener(defaultButtonListener);
+			
 		}
 		tabbedPane.add("Datasets",datasetPanes);
-
 	}
-
+	
 }

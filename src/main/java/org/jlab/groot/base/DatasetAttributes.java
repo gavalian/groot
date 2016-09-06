@@ -56,6 +56,24 @@ public class DatasetAttributes implements Cloneable {
         this.datasetType = datasetType;
         init(datasetType);
     }
+    
+    public void setAttributes(DatasetAttributes attr){
+    	datasetType = attr.getDatasetType();
+    	lineColor = attr.getLineColor();
+    	lineWidth = attr.getLineWidth();
+    	lineStyle = attr.getLineStyle();
+    	markerColor = attr.getMarkerColor();
+    	markerStyle = attr.getMarkerStyle();
+    	markerSize = attr.getMarkerSize();
+    	fillColor = attr.getFillColor();
+    	fillStyle = attr.getFillStyle();
+    	optStat = attr.getOptStat();
+    	drawAxis = attr.isDrawAxis();
+    	stringTitleX = attr.getTitleX();
+    	stringTitleY = attr.getTitleY();
+    	stringTitle = attr.getTitle();
+    }
+    
     private void init(int datasetType2) {
     	if(datasetType2 == DatasetAttributes.HISTOGRAM){
     		this.setLineWidth(1);
@@ -136,7 +154,8 @@ public class DatasetAttributes implements Cloneable {
     }
     
     public static class DatasetAttributesPane extends JPanel implements ActionListener {
-        
+    	public JButton buttonDefault;
+        public JButton buttonRemove;
         /**
 		 * 
 		 */
@@ -257,10 +276,10 @@ public class DatasetAttributes implements Cloneable {
             optStatTextField.addActionListener(this);
             //this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
             
-            JButton buttonDefault = new JButton("Default");
-            JButton buttonApply = new JButton("Apply");
-            //this.add(buttonDefault,"skip, pushx, split2");
-            //this.add(buttonApply,"pushx");
+            buttonDefault = new JButton("Default");
+            buttonRemove = new JButton("Remove Dataset");
+            this.add(buttonDefault,"skip, pushx, split2");
+            this.add(buttonRemove,"pushx");
         }
 
         public void addAttributeListener(ActionListener al){
@@ -275,7 +294,7 @@ public class DatasetAttributes implements Cloneable {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(e.getActionCommand().compareTo("Apply")==0){
+            if(e.getActionCommand().compareTo("Default")==0){
                 
             }
             if(e.getSource()==boxLineColor){
@@ -330,6 +349,17 @@ public class DatasetAttributes implements Cloneable {
 
 	public String getOptStat() {
 		return this.optStat;
+	}
+	public void setDefault() {
+		if(this.datasetType == DatasetAttributes.FUNCTION){
+			this.setAttributes(GStyle.getFunctionAttributes());
+		}else if(this.datasetType == DatasetAttributes.HISTOGRAM){
+			this.setAttributes(GStyle.getH1FAttributes());
+		}else if(this.datasetType == DatasetAttributes.HISTOGRAM2D){
+			this.setAttributes(GStyle.getH2FAttributes());
+		}else if(this.datasetType == DatasetAttributes.GRAPHERRORS){
+			this.setAttributes(GStyle.getGraphErrorsAttributes());
+		}
 	}
 
 }
