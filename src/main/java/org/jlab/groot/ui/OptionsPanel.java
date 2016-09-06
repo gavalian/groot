@@ -503,6 +503,7 @@ public class OptionsPanel extends JPanel {
 
 	
 	private void initAxes() {
+		JTabbedPane axes = new JTabbedPane();
 		AxisAttributesPane panex = new AxisAttributesPane(can.getPad(pad).getAxisFrame().getAxisX().getAttributes());
 		AxisAttributesPane paney = new AxisAttributesPane(can.getPad(pad).getAxisFrame().getAxisY().getAttributes());
 	
@@ -518,8 +519,8 @@ public class OptionsPanel extends JPanel {
 				can.repaint();
 			}
 		});
-		tabbedPane.add("X", panex);
-		tabbedPane.add("Y", paney);
+		axes.add("X Axis", panex);
+		axes.add("Y Axis", paney);
 		if(can.getPad(pad).getDatasetPlotters().size()>0){
 			if(can.getPad(pad).getDatasetPlotters().get(0) instanceof Histogram2DPlotter){
 				AxisAttributesPane panez = new AxisAttributesPane(can.getPad(pad).getAxisFrame().getAxisZ().getAttributes());
@@ -529,14 +530,16 @@ public class OptionsPanel extends JPanel {
 						can.repaint();
 					}
 				});
-				tabbedPane.add("Z", panez);
+				axes.add("Z Axis", panez);
 			}
 		}
+		tabbedPane.add("Axes",axes);
 		
 	}
 	
 	private void initDatasets() {
 		List<IDataSetPlotter> datasets = can.getPad(pad).getDatasetPlotters();
+		JTabbedPane datasetPanes = new JTabbedPane();
 		for(IDataSetPlotter dataset : datasets){
 			DatasetAttributesPane tempPane  = new DatasetAttributesPane(dataset.getDataSet().getAttributes());
 			tempPane.addAttributeListener(new ActionListener(){
@@ -545,8 +548,10 @@ public class OptionsPanel extends JPanel {
 					can.repaint();
 				}
 			});
-			tabbedPane.add(dataset.getName(),tempPane);
+			datasetPanes.add(dataset.getName(),tempPane);
 		}
+		tabbedPane.add("Datasets",datasetPanes);
+
 	}
 
 }
