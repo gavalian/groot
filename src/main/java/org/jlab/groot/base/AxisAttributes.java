@@ -197,8 +197,8 @@ public class AxisAttributes implements Cloneable{
 		return tickSize;
 	}
 	 @Override
-	public Object clone() throws CloneNotSupportedException {
-	        return super.clone();
+	public AxisAttributes clone() throws CloneNotSupportedException {
+	        return (AxisAttributes) super.clone();
 	    }
 
 	public void setLabelFontName(String fn){this.labelFontName = fn;}

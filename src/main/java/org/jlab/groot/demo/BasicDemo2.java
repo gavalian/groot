@@ -1,11 +1,8 @@
 package org.jlab.groot.demo;
 
-import java.util.Random;
-
 import javax.swing.JFrame;
 
 import org.jlab.groot.data.GraphErrors;
-import org.jlab.groot.data.H1F;
 import org.jlab.groot.graphics.EmbeddedCanvas;
 
 public class BasicDemo2 {

@@ -15,6 +15,7 @@ import java.util.List;
 import org.jlab.groot.base.AxisAttributes;
 import org.jlab.groot.base.ColorPalette;
 import org.jlab.groot.base.FontProperties;
+import org.jlab.groot.base.GStyle;
 import org.jlab.groot.math.Dimension1D;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.ui.LatexText;
@@ -45,15 +46,48 @@ public class GraphicsAxis {
     
     /**
      * default 
+     * @param AXISTYPE 
      */
-    public GraphicsAxis(){        
+    public GraphicsAxis(int AXISTYPE){  
+    	this.axisType = AXISTYPE;
+    	if(axisType==GraphicsAxis.AXISTYPE_COLOR){
+    		isVertical = true;
+    		isColorAxis = true;
+    	}
+    	if(axisType==GraphicsAxis.AXISTYPE_VERTICAL){
+    		isVertical = true;
+    	}
+ 
         this.setDimension( 0, 100);
         this.setRange( 0.0, 1.0);
-        this.attr.setAxisAutoScale(true);
-        //this.axisLabels.setFontName("Avenir");
-        //this.axisLabels.setFontSize(12);
+        initAttributes();
     }
-    /**
+    private void initAttributes() {
+    	if(this.axisType == GraphicsAxis.AXISTYPE_HORIZONTAL){
+    		try {
+    			this.attr = GStyle.getAxisAttributesX().clone();
+    		} catch (CloneNotSupportedException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    	}else if(this.axisType == GraphicsAxis.AXISTYPE_VERTICAL){
+    		try {
+    			this.attr = GStyle.getAxisAttributesY().clone();
+    		} catch (CloneNotSupportedException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    	}
+    	else if(this.axisType == GraphicsAxis.AXISTYPE_COLOR){
+    		try {
+    			this.attr = GStyle.getAxisAttributesZ().clone();
+    		} catch (CloneNotSupportedException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    	}
+	}
+	/**
      * sets the dimension for the axis for plotting.
      * @param xmin
      * @param xmax

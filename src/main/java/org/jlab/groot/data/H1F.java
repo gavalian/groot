@@ -1,6 +1,7 @@
 package org.jlab.groot.data;
 
 import org.jlab.groot.base.DatasetAttributes;
+import org.jlab.groot.base.GStyle;
 import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.Func1D;
 import org.jlab.groot.math.StatNumber;
@@ -128,17 +129,12 @@ public class H1F  implements IDataSet {
     }
     
     public final void initAttributes(){
-        this.hAttr.setLineWidth(1);
-        this.hAttr.setLineColor(1);
-        this.hAttr.setLineStyle(1);
-        this.hAttr.setFillColor(-1);
-        this.hAttr.setFillStyle(0);
-        this.hAttr.setDatasetType(DatasetAttributes.HISTOGRAM);
-        //this.hAttr.setMarkerSize(6);
-        //this.hAttr.setMarkerStyle(1);
-        //this.hAttr.setMarkerColor(2);
-        //this.hAttr.addString(AttributeType.STRING_TITLE_X, "");
-        //this.hAttr.addString(AttributeType.STRING_TITLE_Y, "");  
+    	try {
+    		this.hAttr = GStyle.getH1FAttributes().clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     public final void setTitle(String title){

@@ -8,6 +8,7 @@ package org.jlab.groot.math;
 import org.jlab.groot.base.AttributeType;
 import org.jlab.groot.base.Attributes;
 import org.jlab.groot.base.DatasetAttributes;
+import org.jlab.groot.base.GStyle;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.ui.PaveText;
 
@@ -39,11 +40,12 @@ public class Func1D implements IDataSet {
     }
     
     private void initAttributes(){
-    	funcAttr.setDatasetType(DatasetAttributes.FUNCTION);
-        /*funcAttr.add(AttributeType.LINE_COLOR, 2);
-        funcAttr.add(AttributeType.LINE_WIDTH, 2);
-        funcAttr.add(AttributeType.LINE_STYLE, 1);
-                */
+    	try {
+			this.funcAttr = GStyle.getFunctionAttributes().clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
     }
     
     public final void setRange(double min, double max){

@@ -29,12 +29,12 @@ public class GraphicsAxisFrame {
     private int                     colorAxisSize       = 8;
     
     public GraphicsAxisFrame(){
-        axisFrameAxis.add(new GraphicsAxis());
-        axisFrameAxis.add(new GraphicsAxis());
-        axisFrameAxis.add(new GraphicsAxis());
-        axisFrameAxis.get(1).setVertical(true);
-        axisFrameAxis.get(2).setAxisType(GraphicsAxis.AXISTYPE_COLOR);
-        axisFrameAxis.get(2).setAxisFontSize(10);
+        axisFrameAxis.add(new GraphicsAxis(GraphicsAxis.AXISTYPE_HORIZONTAL));
+        axisFrameAxis.add(new GraphicsAxis(GraphicsAxis.AXISTYPE_VERTICAL));
+        axisFrameAxis.add(new GraphicsAxis(GraphicsAxis.AXISTYPE_COLOR));
+        //axisFrameAxis.get(1).setVertical(true);
+        //axisFrameAxis.get(2).setAxisType(GraphicsAxis.AXISTYPE_COLOR);
+        //axisFrameAxis.get(2).setAxisFontSize(10);
     }
     
     public Dimension2D getFrameDimensions(){

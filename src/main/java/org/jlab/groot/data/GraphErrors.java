@@ -6,6 +6,7 @@
 package org.jlab.groot.data;
 
 import org.jlab.groot.base.DatasetAttributes;
+import org.jlab.groot.base.GStyle;
 import org.jlab.groot.ui.PaveText;
 
 /**
@@ -20,7 +21,7 @@ public class GraphErrors implements IDataSet {
     private final DataVector dataEX = new DataVector();
     private final DataVector dataEY = new DataVector();
     private String graphName = "graphErrors";
-    private DatasetAttributes  graphAttr = new DatasetAttributes(DatasetAttributes.GRAPHERRORS);
+    private DatasetAttributes  graphAttr = null;
     
     
     public GraphErrors(){
@@ -43,14 +44,12 @@ public class GraphErrors implements IDataSet {
     }
     
     private void initAttributes(){
-        graphAttr.setLineColor(1);
-        graphAttr.setLineWidth(2);
-        graphAttr.setLineStyle(1);
-        graphAttr.setMarkerColor(1);
-        graphAttr.setMarkerSize(6);
-        graphAttr.setMarkerStyle(0);
-        graphAttr.setDatasetType(DatasetAttributes.GRAPHERRORS);
-                
+    	try {
+			graphAttr = GStyle.getGraphErrorsAttributes().clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     public final void addPoint(double x, double y, double ex, double ey){

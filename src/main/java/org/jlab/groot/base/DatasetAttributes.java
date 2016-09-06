@@ -54,8 +54,40 @@ public class DatasetAttributes implements Cloneable {
     
     public DatasetAttributes(int datasetType){
         this.datasetType = datasetType;
+        init(datasetType);
     }
-    public DatasetAttributes(){}
+    private void init(int datasetType2) {
+    	if(datasetType2 == DatasetAttributes.HISTOGRAM){
+    		this.setLineWidth(1);
+            this.setLineColor(1);
+            this.setLineStyle(1);
+            this.setFillColor(-1);
+            this.setFillStyle(0);
+    	}
+    	if(datasetType2 == DatasetAttributes.HISTOGRAM2D){
+    		this.setLineWidth(1);
+            this.setLineColor(1);
+            this.setLineStyle(1);
+            this.setFillColor(-1);
+            this.setFillStyle(0);
+    	}
+    	if(datasetType2 == DatasetAttributes.FUNCTION){
+    		this.setLineWidth(1);
+            this.setLineColor(1);
+            this.setLineStyle(1);
+            this.setFillColor(-1);
+            this.setFillStyle(0);
+    	}
+    	if(datasetType2 == DatasetAttributes.GRAPHERRORS){
+    		this.setLineColor(1);
+    		this.setLineWidth(2);
+    		this.setLineStyle(1);
+    		this.setMarkerColor(1);
+    		this.setMarkerSize(6);
+    		this.setMarkerStyle(0);
+    	}
+	}
+	public DatasetAttributes(){}
     
 	public void setTitleX(String title){ this.stringTitleX = title;}
     public void setTitleY(String title){ this.stringTitleY = title;}
