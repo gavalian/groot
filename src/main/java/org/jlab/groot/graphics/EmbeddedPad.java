@@ -78,7 +78,7 @@ public class EmbeddedPad {
     
     public void setAxisRange(double xmin, double xmax, double ymin, double ymax){
     	this.getAxisX().setRange(xmin, xmax);
-    	this.getAxisY().setRange(xmin, xmax);
+    	this.getAxisY().setRange(ymin, ymax);
     }
     
     public void setMargins(PadMargins margins){
