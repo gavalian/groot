@@ -118,9 +118,7 @@ public class GROOTDemo {
 			//f1.setParameter(3, h2[i].getEntries()*.66); //Due to initial parameter estimates not existing
 
 			DataFitter.fit(f1, h2[i], "Q"); //No options uses error for sigma
-			DataFitter.fit(f1, h2[i], "Q"); //No options uses error for sigma
-			DataFitter.fit(f1, h2[i], "Q"); //No options uses error for sigma
-
+			
 			can2.draw(f1,"same");
 			f1.setLineColor(20 + (i % 3) + 2);
 			f1.setLineWidth(6);

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Dimension1D {
 
-    private final double SMALL_NUMBER = 10e-25;
+    public final double SMALL_NUMBER = 10e-25;
     double dimMin  = 0.0;    
     double dimMax  = 1.0;
     
@@ -54,9 +54,9 @@ public class Dimension1D {
     }
     
     public double getFraction(double point){
-        if(this.isLog==false)
+        if(this.isLog==false){
             return (point-this.dimMin)/(this.dimMax-this.dimMin);
-        
+        }
         double min = this.dimMin;
         double datapoint = point;
         if(datapoint<SMALL_NUMBER){
@@ -72,8 +72,21 @@ public class Dimension1D {
         return frac;
     }
     
-    public double getPoint(double fraction){        
-        return this.dimMin+(this.dimMax-this.dimMin)*fraction;
+    public double getPoint(double fraction){
+    	if(this.isLog){
+    		//System.out.println("Log and fraction"+fraction);
+    		double axisMinimum = this.dimMin;
+            //System.out.println("LOG");
+            if(axisMinimum<SMALL_NUMBER){
+                axisMinimum = 0.1;
+            }
+            
+            double orderMax = Math.log10(this.dimMax);
+            double orderMin = Math.log10(axisMinimum);
+    		return orderMin+(orderMax-orderMin)*Math.log10(fraction);
+    	}else{
+    		return this.dimMin+(this.dimMax-this.dimMin)*fraction;
+    	}
     }
     
     public double getLength(){

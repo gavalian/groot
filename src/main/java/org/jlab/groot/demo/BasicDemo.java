@@ -14,7 +14,7 @@ public class BasicDemo {
 		frame.setSize(800,500);
 		H1F histogram = new H1F("histogram",100,-5,5); 
 		Random randomGenerator = new Random();
-		for(int i=0; i<5000; i++){
+		for(int i=0; i<50000; i++){
 			histogram.fill(randomGenerator.nextGaussian());
 		}
 		histogram.setTitleX("Randomly Generated Function");

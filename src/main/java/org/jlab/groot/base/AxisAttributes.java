@@ -36,8 +36,11 @@ import net.miginfocom.swing.MigLayout;
  * @author gavalian
  */
 public class AxisAttributes implements Cloneable{
-    
-    private String  labelFontName    = "Avenir";
+	
+    private Dimension1D              axisDimension   = new Dimension1D();
+	Dimension1D range = new Dimension1D();
+
+	private String  labelFontName    = "Avenir";
     private int     labelFontSize    = 12;
     private String  titleFontName    = "Avenir";
     private int     titleFontSize    = 12;
@@ -63,6 +66,10 @@ public class AxisAttributes implements Cloneable{
     public AxisAttributes(){
         
     }
+    
+    public Dimension1D getAxisDimension() {
+  		return axisDimension;
+  	}
     
     /**
 	 * @return the labelOffset
@@ -227,7 +234,6 @@ public class AxisAttributes implements Cloneable{
     
     public static class AxisAttributesPane extends JPanel implements ActionListener, ChangeListener {
         AxisAttributes attr = null;
-        
         DoubleSpinner   axisMinimum = null;
         DoubleSpinner   axisMaximum = null;
         JCheckBox  axisAutoScale = null;
@@ -336,8 +342,8 @@ public class AxisAttributes implements Cloneable{
             this.add(new JLabel("Show Axis:"),"skip,split4");
             this.add(axisShow);
             
-            //this.add(new JLabel("Log:"),"skip, split4");
-            //this.add(axisLog);
+            this.add(new JLabel("Log:"),"skip, split4");
+            this.add(axisLog);
             
             //this.add(new JSeparator(),"skip, wrap, growx");
             JButton buttonDefault = new JButton("Default");
@@ -433,6 +439,8 @@ public class AxisAttributes implements Cloneable{
 
 	public void setLog(boolean log) {
 		this.log = log;
+		this.axisDimension.setLog(log);
+		this.getRange().setLog(log);
 	}
 	private static int returnIndex(String[] strings, int number){
 		for(int i=0; i<strings.length; i++){
@@ -444,7 +452,6 @@ public class AxisAttributes implements Cloneable{
 	}
 	
 	public Dimension1D getRange() {
-		Dimension1D range = new Dimension1D();
 		range.setMinMax(axisMinimum, axisMaximum);
 		return range;
 	}
