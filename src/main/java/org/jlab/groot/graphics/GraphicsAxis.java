@@ -547,4 +547,10 @@ public class GraphicsAxis {
 	public double getMax() {
 		return attr.getAxisMaximum();
 	}
+	public void setShowAxis(boolean b) {
+		this.attr.setShowAxis(b);
+	}
+	public boolean isShowAxis(){
+		return this.attr.showAxis();
+	}
 }

@@ -46,6 +46,7 @@ while(<$original_pom>){
 		}
 		print $build_history "".$new_version." ".$date ." ".$hash." ".$username." ".$message." \n"; 
 		print "New version:".$new_version."\n";
+		chomp($new_version);
 		print $new_pom "    <version>".$new_version."-SNAPSHOT"."</version>"."\n"
 	}else{
 		print $new_pom $_."\n";
@@ -54,5 +55,5 @@ while(<$original_pom>){
 system("mv pom.xml pom_old.xml");
 system("mv pom_new.xml pom.xml");
 system("mvn3 package");
-system("cp target/*.jar jars/")
+system("mv target/*.jar jars/")
 
