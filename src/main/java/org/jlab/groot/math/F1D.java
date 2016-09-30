@@ -113,6 +113,7 @@ public class F1D extends Func1D {
     }
     
     
+    @Override
     public String getExpression(){
         return this.expressionString;
     }

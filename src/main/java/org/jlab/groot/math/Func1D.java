@@ -97,6 +97,10 @@ public class Func1D implements IDataSet {
         return 1;
     }
     
+    public String getExpression(){
+        return "";
+    }
+    
     public double getIntegral(){
         int nsamples = 400;
         double step = this.getRange().getLength()/nsamples;
@@ -165,7 +169,8 @@ public class Func1D implements IDataSet {
     @Override
     public String toString(){
         StringBuilder str = new StringBuilder();
-        str.append(String.format("FUNCTION (%s) RANGE %9.4f %9.4f\n", getName(),getMin(),getMax()));
+        str.append(String.format("FUNCTION (%s) RANGE %9.4f %9.4f (exp:%s)\n", 
+                getName(),getMin(),getMax(),getExpression()));
         str.append("-----\n");
         str.append(userPars.toString());
         return str.toString();

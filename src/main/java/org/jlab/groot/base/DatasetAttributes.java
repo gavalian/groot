@@ -130,30 +130,30 @@ public class DatasetAttributes implements Cloneable {
 		this.drawAxis = drawAxis;
 	}
 
-	public int  getLineColor(){return this.lineColor;}
-    public int  getLineWidth(){return this.lineWidth;}
-    public int  getLineStyle(){return this.lineStyle;}
-    public int  getMarkerColor(){return this.markerColor;}
-    public int  getMarkerSize(){return this.markerSize;}
-    public int  getMarkerStyle(){return this.markerStyle;}
-    public int  getFillColor() {return this.fillColor;}
-    public int  getFillStyle(){return this.fillStyle;}
-    
-    public String getTitle() { return this.stringTitle;}
-    public String getTitleX(){ return this.stringTitleX;}
-    public String getTitleY(){ return this.stringTitleY;}
-    
-    @Override
-    public DatasetAttributes  clone() throws CloneNotSupportedException{
-        return (DatasetAttributes) super.clone();
-    }
-    
-    public JPanel getPane(){
-        DatasetAttributesPane pane = new DatasetAttributesPane(this);
-        return pane;
-    }
-    
-    public static class DatasetAttributesPane extends JPanel implements ActionListener {
+        public int  getLineColor(){return this.lineColor;}
+        public int  getLineWidth(){return this.lineWidth;}
+        public int  getLineStyle(){return this.lineStyle;}
+        public int  getMarkerColor(){return this.markerColor;}
+        public int  getMarkerSize(){return this.markerSize;}
+        public int  getMarkerStyle(){return this.markerStyle;}
+        public int  getFillColor() {return this.fillColor;}
+        public int  getFillStyle(){return this.fillStyle;}
+        
+        public String getTitle() { return this.stringTitle;}
+        public String getTitleX(){ return this.stringTitleX;}
+        public String getTitleY(){ return this.stringTitleY;}
+        
+        @Override
+        public DatasetAttributes  clone() throws CloneNotSupportedException{
+            return (DatasetAttributes) super.clone();
+        }
+        
+        public JPanel getPane(){
+            DatasetAttributesPane pane = new DatasetAttributesPane(this);
+            return pane;
+        }
+        
+        public static class DatasetAttributesPane extends JPanel implements ActionListener {
     	public JButton buttonDefault;
         public JButton buttonRemove;
         /**
