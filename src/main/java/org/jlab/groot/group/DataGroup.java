@@ -23,6 +23,7 @@ public class DataGroup {
     
     Map<String,IDataSet> dataGroup      = new LinkedHashMap<String,IDataSet>();
     Map<String,Integer>  dataGroupOrder = new LinkedHashMap<String,Integer>();
+    
     int  numberOfRows    = 1;
     int  numberOfColumns = 1;
     
@@ -38,6 +39,12 @@ public class DataGroup {
     
     public final void setName(String name){ this.dataGroupName = name;}
     public String getName(){ return this.dataGroupName;}
+    
+    public DataGroup(String name, int ncols, int nrows){
+        this.dataGroupName   = name;
+        this.numberOfColumns = ncols;
+        this.numberOfRows    = nrows;
+    }
     
     public DataGroup(int ncols, int nrows){
         this.numberOfColumns = ncols;
