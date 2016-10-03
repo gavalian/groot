@@ -37,7 +37,7 @@ public class TDirectory extends Directory<IDataSet> {
         
         List<String>  objectList = this.getCompositeObjectList(this);
         for(String object : objectList){
-            System.out.println("writing object ---> " + object);
+            //System.out.println("writing object ---> " + object);
             IDataSet ds = getObject(object);
             if(ds!=null){
                 ds.setName(object);
@@ -60,17 +60,17 @@ public class TDirectory extends Directory<IDataSet> {
         int nevents = reader.getEventCount();
         for(int i = 0; i < nevents; i++){
             byte[] eventBuffer = reader.readEvent(i);
-            System.out.println(" EVENT # " + i + "  SIZE = " + eventBuffer.length);
+            //System.out.println(" EVENT # " + i + "  SIZE = " + eventBuffer.length);
             HipoEvent    event = new HipoEvent(eventBuffer);
-            System.out.println(event.toString());
+            //System.out.println(event.toString());
             IDataSet h1 = DataSetSerializer.deserializeDataSet(event);
             String h1name = h1.getName();
-            System.out.println("name -> : " + h1name + " -> " + this.stringDirectoryFromPath(h1name)
-            + " obj ---> " + this.stringObjectFromPath(h1name));
+            //System.out.println("name -> : " + h1name + " -> " + this.stringDirectoryFromPath(h1name)
+            //+ " obj ---> " + this.stringObjectFromPath(h1name));
             String dirname = this.stringDirectoryFromPath(h1name);
             mkdir(dirname);
             cd(dirname);
-            pwd();
+            //pwd();
             h1.setName(this.stringObjectFromPath(h1name));
             addDataSet(h1);
             this.ls();
@@ -86,6 +86,7 @@ public class TDirectory extends Directory<IDataSet> {
         dir.mkdir("/calibration/ECOUT");
         
         dir.cd("/calibration/PCAL");
+        
         H1F h1pcal = new H1F("h1pcal",100,0.0,2.0);
         for(int i = 0; i < 600; i++) h1pcal.fill(Math.random()+Math.random());
         dir.addDataSet(h1pcal);
