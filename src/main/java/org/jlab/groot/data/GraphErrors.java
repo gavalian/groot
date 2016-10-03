@@ -7,6 +7,7 @@ package org.jlab.groot.data;
 
 import org.jlab.groot.base.DatasetAttributes;
 import org.jlab.groot.base.GStyle;
+import org.jlab.groot.math.Func1D;
 import org.jlab.groot.ui.PaveText;
 
 /**
@@ -16,19 +17,18 @@ import org.jlab.groot.ui.PaveText;
 public class GraphErrors implements IDataSet {
     
     public static final String[] MARKERNAME = {"Circle","Square","Triangle","Inverted Triangle"};
-	private final DataVector dataX = new DataVector();
+    private final DataVector dataX = new DataVector();
     private final DataVector dataY = new DataVector();
     private final DataVector dataEX = new DataVector();
     private final DataVector dataEY = new DataVector();
     private String graphName = "graphErrors";
     private DatasetAttributes  graphAttr = null;
     
+    private Func1D  fitFunction = null;
     
     public GraphErrors(){
         initAttributes();
     }
-    
-   
     
     public GraphErrors(String name, double[] x, double y[], double[] ex, double[] ey){
         setName(name);
@@ -47,9 +47,9 @@ public class GraphErrors implements IDataSet {
     }
     
     public GraphErrors(String name) {
-        setName(name);
+        graphName = name;
         initAttributes();
-	}
+    }
 
 
 	private void initAttributes(){
@@ -58,9 +58,16 @@ public class GraphErrors implements IDataSet {
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-    }
+                }
+        }
     
+        public Func1D getFunction(){return fitFunction;}
+        
+        public void setFunction(Func1D func){
+            fitFunction = func;
+            func.getAttributes().setOptStat(this.getAttributes().getOptStat());
+        }
+        
     public final void addPoint(double x, double y, double ex, double ey){
         dataX.add(x);
         dataY.add(y);

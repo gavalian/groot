@@ -39,6 +39,7 @@ public class DatasetAttributes implements Cloneable {
     private int fillColor   = 0;
     private int fillStyle   = 1;
     private int datasetType  = 0;
+    
     public final static int HISTOGRAM = 0;
     public final static int HISTOGRAM2D = 1;
     public final static int GRAPHERRORS = 2;

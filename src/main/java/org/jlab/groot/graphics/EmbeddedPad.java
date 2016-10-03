@@ -383,6 +383,10 @@ public class EmbeddedPad {
         }
         if(ds instanceof GraphErrors){
             this.addPlotter(new GraphErrorsPlotter(ds));
+            GraphErrors gr = (GraphErrors) ds;
+            if(gr.getFunction()!=null){
+                this.addPlotter(new FunctionPlotter(gr.getFunction()));
+            }
         }
         axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleY());
         axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleX());

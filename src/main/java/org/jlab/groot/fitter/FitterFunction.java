@@ -7,6 +7,7 @@
 package org.jlab.groot.fitter;
 
 import org.freehep.math.minuit.FCNBase;
+import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Func1D;
@@ -43,6 +44,11 @@ public class FitterFunction implements FCNBase {
             H1F h = (H1F) data;
             h.setFunction(func);
         }
+        if(data instanceof GraphErrors){
+            GraphErrors graph = (GraphErrors) data;
+            graph.setFunction(func);
+        }
+        
         startTime = System.currentTimeMillis();
     }
     

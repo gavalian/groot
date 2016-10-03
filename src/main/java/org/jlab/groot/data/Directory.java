@@ -52,13 +52,19 @@ public class Directory<T> {
     }
     
     private void mkdir_s(String name){
+        //System.out.println(" creating directory " + name + " in directory " + getDir().getDirectoryPath());
         if(currentDirectory==null){
-            Directory dir = new Directory(this,name);
-            directoryMap.put(name, dir);
+            if(directoryMap.containsKey(name)==false){
+                Directory dir = new Directory(this,name);
+                directoryMap.put(name, dir);
+            }
         } else {
             if(currentDirectory.getDirectoryMap().containsKey(name)==false){
+                //System.out.println(" creating : " + name);
                 Directory dir = new Directory(currentDirectory,name);
                 currentDirectory.getDirectoryMap().put(name, dir);
+            } else {
+                //System.out.println(" There is no need to create : " + name);
             }
         }
     }
@@ -66,8 +72,11 @@ public class Directory<T> {
      * create a directory in current directory.
      * @param name directory name to create
      */
-    public void mkdir(String name){
+    public synchronized void mkdir(String name){
+        
         if(name.contains("/")==false){ mkdir_s(name);return;}
+        
+        //System.out.println("aa");
         
         String  path    = null;
         boolean rootRef = false;
@@ -78,13 +87,14 @@ public class Directory<T> {
             path    = name.substring(1, name.length());
             rootRef = true;
         }
-        
+        //System.out.println("path = " + );
         Directory saveDir = currentDirectory;
+        
         String[] tokens = path.split("/");
         
         if(rootRef==true) cd();
             
-        for(String token : tokens){           
+        for(String token : tokens){       
             mkdir_s(token);
             cd(token);
         }
@@ -291,11 +301,14 @@ public class Directory<T> {
     
     private String getDirectoryList(Directory dir){
         StringBuilder str = new StringBuilder();
-        /*for(Object entry : dir.getDirectoryMap().entrySet()){
-            str.append("\t");
-            str.append(entry);
+        
+        
+        for(Object entry : dir.getDirectoryMap().entrySet()){
+            Map.Entry<String,Directory> object = (Map.Entry<String,Directory>) entry;
+            str.append("\t <dir> ");
+            str.append(object.getKey());
             str.append("\n");
-        }*/
+        }
         /*
         for(String entry : ){
             str.append("\t\t");
@@ -318,7 +331,12 @@ public class Directory<T> {
      */
     public void tree(){
         Directory dir = getDir();
-        
+        List<String> objectList = dir.getCompositeObjectList(dir);
+        int counter = 0;
+        for(String item : objectList){
+            System.out.println( counter + " : " + item);
+            counter++;
+        }
     }
     /**
      * returns object 
