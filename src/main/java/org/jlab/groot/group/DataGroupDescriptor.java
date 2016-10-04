@@ -63,4 +63,19 @@ public class DataGroupDescriptor {
         }
         return str.toString();
     }
+    
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        str.append(getName());
+        str.append("\n");
+        int icounter = 0;
+        for(Map.Entry<Integer,List<String>> entry : groupContent.entrySet()){
+            str.append(String.format("\t --> %5d\n", entry.getKey()));
+            for(int i = 0; i < entry.getValue().size();i++){
+                str.append(String.format("\t\t ==> %5d : %s\n", i,entry.getValue().get(i)));
+            }
+        }
+        return str.toString();
+    }
 }

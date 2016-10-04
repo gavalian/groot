@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.jlab.groot.base.DatasetAttributes;
+import org.jlab.groot.group.DataGroupDescriptor;
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.Func1D;
 import org.jlab.hipo.data.HipoEvent;
@@ -160,6 +161,42 @@ public class DataSetSerializer {
         }
         
         return nodes;
+    }
+    
+    
+    public static List<HipoNode>  serializeDataGroupDescriptor(DataGroupDescriptor desc){
+        List<HipoNode>  nodes = new ArrayList<>();
+        
+        HipoNode  header   = new HipoNode(1200,1,HipoNodeType.INT,3);
+        HipoNode  descName = new HipoNode(1200,2,desc.getName());
+        header.setInt(0, 120);
+        header.setInt(1, desc.getCols());
+        header.setInt(2, desc.getRows());
+        int npads = desc.getCols()*desc.getRows();
+        nodes.add(header);
+        nodes.add(descName);
+        
+        for(int i = 0; i < npads; i++){
+            String encoded = desc.getEncodedString(i);
+            HipoNode node = new HipoNode(1200,20+i,encoded);
+            nodes.add(node);
+        }
+        return nodes;
+    }
+    
+    public static DataGroupDescriptor  deserializeDataGroupDescriptor(HipoEvent event){
+        Map<Integer,HipoNode> nodes = event.getGroup(1200);
+        String name = nodes.get(2).getString();
+        int   ncols = nodes.get(1).getInt(1);
+        int   nrows = nodes.get(1).getInt(2);
+        DataGroupDescriptor desc = new DataGroupDescriptor(name,ncols,nrows);
+        for(Map.Entry<Integer,HipoNode> entry : nodes.entrySet()){
+            if(entry.getKey()>=20){
+                int order = entry.getKey() - 20;
+                desc.addEncoded(order, entry.getValue().getString());
+            }
+        }
+        return desc;
     }
     
     public static List<HipoNode>  serializeAttributes(int group, DatasetAttributes attr){

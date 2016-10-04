@@ -288,6 +288,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     }
 
     public void draw(DataGroup group){
+        
         int nrows = group.getRows();
         int ncols = group.getColumns();
         this.divide(ncols, nrows);
@@ -295,11 +296,20 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         int nds   = nrows*ncols;
         for(int i = 0; i < nds; i++){
             List<IDataSet> dsList = group.getData(i);
+            //System.out.println(" pad = " + i + " size = " + dsList.size());
             this.cd(i);
             for(IDataSet ds : dsList){
+                //System.out.println("\t --> " + ds.getName());
                 this.draw(ds, "same");
             }
         }
+        
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                repaint();        
+            }
+        });
+
     }
     
     @Override

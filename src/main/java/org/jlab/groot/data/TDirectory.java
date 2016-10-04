@@ -9,11 +9,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.jlab.groot.fitter.DataFitter;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.group.DataGroupDescriptor;
-import org.jlab.groot.math.F1D;
-import org.jlab.groot.ui.TCanvas;
 import org.jlab.hipo.data.HipoEvent;
 import org.jlab.hipo.data.HipoNode;
 import org.jlab.hipo.io.HipoReader;
@@ -41,6 +38,7 @@ public class TDirectory extends Directory<IDataSet> {
         } else {
             System.out.println("[TDirectory] --> error : data group descriptos does not exist ["+name+"]");
         }
+        //System.out.println(groupDescriptors.get(name));
     }
     
     public DataGroup getDataGroup(String name){
@@ -49,12 +47,13 @@ public class TDirectory extends Directory<IDataSet> {
         DataGroup          group = new DataGroup(name,desc.getCols(),desc.getRows());
         
         int groupSize = desc.getCols()*desc.getRows();
+        
         for(int i = 0; i < groupSize; i++){
             List<String>  items = desc.getList(i);
             String encoded = desc.getEncodedString(i);
             //System.out.println(i + " : " + encoded);
             for(String item : items){
-                System.out.println("getting object : " + item);
+                //System.out.println("getting object : " + item + "  for pad " + i);
                 IDataSet ds = this.getObject(item);
                 if(ds!=null){
                     group.addDataSet(ds, i);
@@ -90,6 +89,15 @@ public class TDirectory extends Directory<IDataSet> {
             } else {
                 System.out.println("[TDirectory::writeFile] error getting object : " + object);
             }
+        }
+        System.out.println("---> writing data group descriptors, size = " + groupDescriptors.size());
+        for(Map.Entry<String,DataGroupDescriptor> entry : groupDescriptors.entrySet()){
+            List<HipoNode>  nodes = DataSetSerializer.serializeDataGroupDescriptor(entry.getValue());
+            HipoEvent       event = new HipoEvent();
+            event.addNodes(nodes);
+            event.updateNodeIndex();
+            System.out.println(event);
+            writer.writeEvent(event.getDataBuffer());
         }
         writer.close();
     }
@@ -132,24 +140,35 @@ public class TDirectory extends Directory<IDataSet> {
 
         HipoReader reader = new HipoReader();
         reader.open(filename);
+        
         clear();
+        this.groupDescriptors.clear();
+        
         int nevents = reader.getEventCount();
         for(int i = 0; i < nevents; i++){
             byte[] eventBuffer = reader.readEvent(i);
             //System.out.println(" EVENT # " + i + "  SIZE = " + eventBuffer.length);
             HipoEvent    event = new HipoEvent(eventBuffer);
-            //System.out.println(event.toString());
-            IDataSet h1 = DataSetSerializer.deserializeDataSet(event);
-            String h1name = h1.getName();
-            //System.out.println("name -> : " + h1name + " -> " + this.stringDirectoryFromPath(h1name)
-            //+ " obj ---> " + this.stringObjectFromPath(h1name));
-            String dirname = this.stringDirectoryFromPath(h1name);
-            mkdir(dirname);
-            cd(dirname);
-            //pwd();
-            h1.setName(this.stringObjectFromPath(h1name));
-            addDataSet(h1);
-            this.ls();
+            
+            if(event.hasGroup(1200)==true){
+                System.out.println("--> reading data group descriptor");
+                System.out.println(event);
+                DataGroupDescriptor desc = DataSetSerializer.deserializeDataGroupDescriptor(event);
+                this.groupDescriptors.put(desc.getName(), desc);
+            } else {            
+                //System.out.println(event.toString());
+                IDataSet h1 = DataSetSerializer.deserializeDataSet(event);
+                String h1name = h1.getName();
+                //System.out.println("name -> : " + h1name + " -> " + this.stringDirectoryFromPath(h1name)
+                //+ " obj ---> " + this.stringObjectFromPath(h1name));
+                String dirname = this.stringDirectoryFromPath(h1name);
+                mkdir(dirname);
+                cd(dirname);
+                //pwd();
+                h1.setName(this.stringObjectFromPath(h1name));
+                addDataSet(h1);
+                this.ls();
+            }
         }
     }
     

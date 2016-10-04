@@ -34,10 +34,13 @@ public class TDirectoryDemo {
         h1.setFillColor(33);
         h2.setFillColor(34);
         h3.setFillColor(36);
+        h4.setFillColor(35);
+        h5.setFillColor(38);
+        
         dir.mkdir("/calibration/FTOF");
         dir.cd("/calibration/FTOF");
         
-        dir.addDataSet(h1,h2,h3);
+        dir.addDataSet(h1,h2,h3,h4,h5);
         
         TCanvas c1 = new TCanvas("c1",800,500);
         c1.draw(h1);
@@ -47,8 +50,10 @@ public class TDirectoryDemo {
         dir.addGroup("FTOFCALIB", 0, "/calibration/FTOF/h1");
         dir.addGroup("FTOFCALIB", 0, "/calibration/FTOF/h2");
         dir.addGroup("FTOFCALIB", 1, "/calibration/FTOF/h3");
-        dir.addGroup("FTOFCALIB", 3, "/calibration/FTOF/h4");
-        //dir.addGroup("FTOFCALIB", 3, "/calibration/FTOF/h2");
+        dir.addGroup("FTOFCALIB", 2, "/calibration/FTOF/h4");
+        dir.addGroup("FTOFCALIB", 3, "/calibration/FTOF/h5");
+        dir.addGroup("FTOFCALIB", 3, "/calibration/FTOF/h2");
+        dir.addGroup("FTOFCALIB", 3, "/calibration/FTOF/h1");
         
         DataGroup group = dir.getDataGroup("FTOFCALIB");
         

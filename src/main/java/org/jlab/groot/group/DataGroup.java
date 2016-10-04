@@ -24,6 +24,8 @@ public class DataGroup {
     Map<String,IDataSet> dataGroup      = new LinkedHashMap<String,IDataSet>();
     Map<String,Integer>  dataGroupOrder = new LinkedHashMap<String,Integer>();
     
+    Map<Integer, List<IDataSet>> dataGroupSets = new LinkedHashMap<Integer, List<IDataSet>>();
+    
     int  numberOfRows    = 1;
     int  numberOfColumns = 1;
     
@@ -52,6 +54,13 @@ public class DataGroup {
     }
     
     public void addDataSet(IDataSet ds, int order){
+        
+        if(dataGroupSets.containsKey(order)==false){
+           dataGroupSets.put(order, new ArrayList<IDataSet>());
+        }
+        
+        dataGroupSets.get(order).add(ds);
+        /*
         if(dataGroup.containsKey(ds.getName())==true){
             System.out.println("[warning] --> object with name " + ds.getName()
             + " already exists..");
@@ -59,7 +68,8 @@ public class DataGroup {
         }
         
         dataGroup.put(ds.getName(), ds);
-        dataGroupOrder.put(ds.getName(), order);        
+        dataGroupOrder.put(ds.getName(), order); 
+        */
     }
     
     public int getColumns(){
@@ -74,8 +84,7 @@ public class DataGroup {
         if(this.dataGroup.containsKey(name)==false){
             System.out.println("[error] ---> requested data set does not exist");
             return null;
-        }
-        
+        }        
         return this.dataGroup.get(name);
     }
     
@@ -130,16 +139,18 @@ public class DataGroup {
         }
         return null;
     }
-    
-    
-    
+        
     public List<IDataSet>  getData(int order){
+        if(dataGroupSets.containsKey(order)==false) 
+            return new ArrayList<IDataSet>();
+        return dataGroupSets.get(order);
+        /*
         List<IDataSet> dataList = new ArrayList<IDataSet>();
         for(Map.Entry<String,Integer> entry : dataGroupOrder.entrySet()){
             if(entry.getValue()==order){
                 dataList.add(dataGroup.get(entry.getKey()));
             }
         }
-        return dataList;
+        return dataList;*/
     }
 }
