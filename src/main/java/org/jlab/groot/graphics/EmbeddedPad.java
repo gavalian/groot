@@ -5,7 +5,6 @@
  */
 package org.jlab.groot.graphics;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
@@ -16,7 +15,7 @@ import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
 
 import org.jlab.groot.base.AxisAttributes;
-import org.jlab.groot.base.FontProperties;
+import org.jlab.groot.base.PadAttributes;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
@@ -34,26 +33,13 @@ import org.jlab.groot.ui.PaveText;
  */
 public class EmbeddedPad {
  
+	 PadAttributes attr = new PadAttributes();
 	 Dimension2D            padDimensions  = new Dimension2D();
      GraphicsAxisFrame          axisFrame  = new GraphicsAxisFrame();
-     Color                backgroundColor  = Color.WHITE;
-     private  PadMargins  padMargins       = new PadMargins();
      List<IDataSetPlotter> datasetPlotters = new ArrayList<IDataSetPlotter>();
      boolean 				preliminary = true;
      int 				preliminarySize = 36;
-     //Dimension3D           fixedRange      = new Dimension3D();
-     
-     private FontProperties statBoxFont    = new FontProperties();
-     private boolean		isSelected     = false;
-     int statBoxOffsetX = 0;
-     int statBoxOffsetY = 0;
      PaveText statBox = null;
-     
-     String title = "";
-     int titleOffset = 5;
-     int titleFontSize = 12;
-     String titleFont = "Avenir";
-
      
      public EmbeddedPad(){
          
@@ -82,7 +68,7 @@ public class EmbeddedPad {
     }
     
     public void setMargins(PadMargins margins){
-        this.padMargins.copy(margins);
+        this.attr.getPadMargins().copy(margins);
         //System.out.println(" PAD - > " + padMargins);
     }
     
@@ -120,7 +106,7 @@ public class EmbeddedPad {
         //axisFrame.updateMargins(g2d);
         //axisFrame.setAxisMargins(padMargins);
         //axisFrame.updateMargins(g2d);
-        g2d.setColor(backgroundColor);
+        g2d.setColor(this.attr.getBackgroundColor());
         /*g2d.fillRect( 
                 (int) padDimensions.getDimension(0).getMin(),
                 (int) padDimensions.getDimension(1).getMin(),
@@ -164,7 +150,7 @@ public class EmbeddedPad {
         	sum += datasetPlotters.get(0).getDataSet().getDataY(i);
         }
         
-        if(this.getAxisY().isAutoScale()==false|| sum==0.0){
+        if(this.getAxisY().isAutoScale()==false || sum==0.0){
             axis.getDimension(1).copy(this.getAxisY().getRange());
         }else{
         	axisFrame.getAxisY().setRange(
@@ -183,9 +169,13 @@ public class EmbeddedPad {
             );
         	axisFrame.getAxisZ().getAttributes().setAxisAutoScale(true);
         }
-        if(title!=""){
-        	padMargins.setTopMargin(padMargins.getTopMargin()+getTitleFontSize());
-        	axisFrame.setAxisMargins(padMargins);
+        if(this.attr.getTitle()!=""){
+        	this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin()+getTitleFontSize());
+        	axisFrame.setAxisMargins(this.attr.getPadMargins());
+        	axisFrame.updateMargins(g2d);
+        }else{
+        	this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin()-getTitleFontSize());
+        	axisFrame.setAxisMargins(this.attr.getPadMargins());
         	axisFrame.updateMargins(g2d);
         }
         /*if(this.getAxisZ().getAttributes().showAxis()){
@@ -197,12 +187,12 @@ public class EmbeddedPad {
         
         
         Rectangle2D rect = new Rectangle2D.Double(
-                axisFrame.getFrameDimensions().getDimension(0).getMin() + padMargins.getLeftMargin(),
-                axisFrame.getFrameDimensions().getDimension(1).getMin() + padMargins.getTopMargin(),
+                axisFrame.getFrameDimensions().getDimension(0).getMin() + this.attr.getPadMargins().getLeftMargin(),
+                axisFrame.getFrameDimensions().getDimension(1).getMin() + this.attr.getPadMargins().getTopMargin(),
                 axisFrame.getFrameDimensions().getDimension(0).getLength() 
-                        - padMargins.getLeftMargin() - padMargins.getRightMargin(),
+                        - this.attr.getPadMargins().getLeftMargin() - this.attr.getPadMargins().getRightMargin(),
                 axisFrame.getFrameDimensions().getDimension(1).getLength() - 
-                        padMargins.getTopMargin() - padMargins.getBottomMargin()
+                        this.attr.getPadMargins().getTopMargin() - this.attr.getPadMargins().getBottomMargin()
         );
         
         g2d.setClip(rect);
@@ -212,7 +202,7 @@ public class EmbeddedPad {
         }
         g2d.setClip(null);
         //System.out.println("PLOTTERS SIZE = " + this.datasetPlotters.size());
-        axisFrame.drawAxis(g2d, padMargins);
+        axisFrame.drawAxis(g2d, this.attr.getPadMargins());
     	List<List<LatexText>> toBeDrawn = new ArrayList< List<LatexText>>();
         for(int i = 0; i<this.datasetPlotters.size(); i++){
         	List<List<LatexText>> currentStats = this.datasetPlotters.get(i).getDataSet().getStatBox().getPaveTexts();
@@ -231,26 +221,28 @@ public class EmbeddedPad {
         		counter++;
         	}
         }
+    	axisFrame.updateMargins(g2d);
+
         if(toBeDrawn.size()>0){
 	        statBox = new PaveText(2);
 	        statBox.setPaveTexts(toBeDrawn);
-	    	statBox.setFont(this.statBoxFont.getFontName());
-	        statBox.setFontSize(this.statBoxFont.getFontSize());
+	    	statBox.setFont(this.attr.getStatBoxFont().getFontName());
+	        statBox.setFontSize(this.attr.getStatBoxFont().getFontSize());
 	        
 	        statBox.updateDimensions(g2d);
 	        
-	        int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength()-5) +statBoxOffsetX;
-	        int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin()+5) +statBoxOffsetY;
-	        statBox.setPosition(x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
-	        statBox.drawPave(g2d, x-padMargins.getRightMargin(), y+padMargins.getTopMargin());
+	        int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength()-5) +this.attr.getStatBoxOffsetX();
+	        int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin()+5) +this.attr.getStatBoxOffsetY();
+	        statBox.setPosition(x-this.attr.getPadMargins().getRightMargin(), y+this.attr.getPadMargins().getTopMargin());
+	        statBox.drawPave(g2d, x-this.attr.getPadMargins().getRightMargin(), y+this.attr.getPadMargins().getTopMargin());
         }
-        if(title!=""){
-            LatexText titleLatex = new LatexText(title);
+        if(this.attr.getTitle()!=""){
+            LatexText titleLatex = new LatexText(this.attr.getTitle());
             titleLatex.setColor(1);
             titleLatex.setFont(this.getTitleFont());
             titleLatex.setFontSize(this.getTitleFontSize());
-        	padMargins.setTopMargin(padMargins.getTopMargin()+getTitleFontSize()+10);
-        	titleLatex.drawString(g2d, (int) axisFrame.getAxisX().getAxisPosition((axisFrame.getAxisX().getRange().getMin()+.5*axisFrame.getAxisX().getRange().getLength())),(int)( axisFrame.getFrameDimensions().getDimension(1).getMin()+titleOffset), 1, 0);
+        	this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin()+getTitleFontSize()+10);
+        	titleLatex.drawString(g2d, (int) axisFrame.getAxisX().getAxisPosition((axisFrame.getAxisX().getRange().getMin()+.5*axisFrame.getAxisX().getRange().getLength())),(int)( axisFrame.getFrameDimensions().getDimension(1).getMin()+this.attr.getTitleOffset()), 1, 0);
         }
         /*
         if(this.optStat>0){
@@ -337,11 +329,11 @@ public class EmbeddedPad {
     }
     
     public void setStatBoxFont(String name){
-        this.statBoxFont.setFontName(name);
+    	this.attr.getStatBoxFont().setFontName(name);
     }
     
     public void setStatBoxFontSize(int size){
-        this.statBoxFont.setFontSize(size);
+    	this.attr.getStatBoxFont().setFontSize(size);
     }
     
     public void setAxisFont(String name){
@@ -364,6 +356,13 @@ public class EmbeddedPad {
         if(options.contains("same")==false){
             this.datasetPlotters.clear();
         }
+        if(datasetPlotters.isEmpty()){
+        	axisFrame.getAxisY().setTitle(ds.getAttributes().getTitleY());
+        	axisFrame.getAxisX().setTitle(ds.getAttributes().getTitleX());
+        }else{
+        	axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleY());
+        	axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleX());
+        }
         if(ds instanceof Func1D){
             this.addPlotter(new FunctionPlotter(ds));
         }
@@ -376,8 +375,8 @@ public class EmbeddedPad {
             }
         }
         if(ds instanceof H2F){
-            this.addPlotter(new Histogram2DPlotter(ds));
             axisFrame.getAxisZ().getAttributes().setShowAxis(true);
+            this.addPlotter(new Histogram2DPlotter(ds));
         }else{
             axisFrame.getAxisZ().getAttributes().setShowAxis(false);
         }
@@ -388,8 +387,8 @@ public class EmbeddedPad {
                 this.addPlotter(new FunctionPlotter(gr.getFunction()));
             }
         }
-        axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleY());
-        axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleX());
+        //axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleY());
+        //axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleX());
     }
     
     public void remove(IDataSet ds){
@@ -427,10 +426,10 @@ public class EmbeddedPad {
 			pad.getAxisX().setAttributes((AxisAttributes) this.getAxisX().getAttributes().clone());
 			pad.getAxisY().setAttributes((AxisAttributes) this.getAxisY().getAttributes().clone());
 			pad.getAxisZ().setAttributes((AxisAttributes) this.getAxisZ().getAttributes().clone());
-			pad.setTitle(title);
-			pad.setTitleOffset(titleOffset);
-			pad.setTitleFontSize(titleFontSize);
-			pad.setTitleFont(titleFont);
+			pad.setTitle(this.attr.getTitle());
+			pad.setTitleOffset(this.attr.getTitleOffset());
+			pad.setTitleFontSize(this.getTitleFontSize());
+			pad.setTitleFont(this.getTitleFont());
 			pad.setStatBoxFont(this.getStatBoxFontName());
 			pad.setStatBoxFontSize(this.getStatBoxFontSize());
 
@@ -443,7 +442,7 @@ public class EmbeddedPad {
     
     
     private String getStatBoxFontName() {
-		return statBoxFont.getFontName();
+		return this.attr.getStatBoxFont().getFontName();
 	}
 
 
@@ -474,37 +473,37 @@ public class EmbeddedPad {
 	}
 
 	public String getTitle() {
-		return title;
+		return this.attr.getTitle();
 	}
 	public int getTitleOffset() {
-		return titleOffset;
+		return this.attr.getTitleOffset();
 	}
 
 	public void setTitleOffset(int titleOffset) {
-		this.titleOffset = titleOffset;
+		this.attr.setTitleOffset(titleOffset);
 	}
 
 	public void setTitleFont(String titleFont) {
-		this.titleFont = titleFont;
+		this.attr.setTitleFontName(titleFont);
 	}
 
 	public void getTitle(String title) {
-		 this.title = title;
+		 this.attr.setTitle(title);
 	}
 	
 	public int getTitleFontSize() {
-		return this.titleFontSize;
+		return this.attr.getTitleFontSize();
 	}
 	
 	public String getTitleFont() {
-		return this.titleFont;
+		return this.attr.getTitleFontName();
 	}
 
 	public void setTitleFontSize(int titleFontSize) {
-		 this.titleFontSize = titleFontSize;
+		 this.attr.setTitleFontSize(titleFontSize);
 	}
 	public void getTitleFont(String titleFont) {
-		this.titleFont = titleFont;
+		this.attr.setTitleFontName(titleFont);
 	}
 	public void setAxisTitleFontSize(int parseInt) {
 		this.getAxisX().getAttributes().setTitleFontSize(parseInt);
@@ -524,16 +523,16 @@ public class EmbeddedPad {
 		this.getAxisZ().getAttributes().setLabelFontName(FontName);
 		this.getAxisX().getAttributes().setTitleFontName(FontName);
 		this.getAxisY().getAttributes().setTitleFontName(FontName);
-		this.titleFont = FontName;
-		this.statBoxFont.setFontName(FontName);
+		this.attr.setTitleFontName(FontName);
+		this.attr.getStatBoxFont().setFontName(FontName);
 	}
 
 	public int getStatBoxFontSize() {
-		return statBoxFont.getFontSize();
+		return this.attr.getStatBoxFont().getFontSize();
 	}
 
 	public void setTitle(String title) {
-		this.title = title;		
+		this.attr.setTitle(title);		
 	}
 	
 	
