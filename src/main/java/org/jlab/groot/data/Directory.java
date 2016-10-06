@@ -6,10 +6,14 @@
 package org.jlab.groot.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  *
@@ -447,6 +451,51 @@ public class Directory<T> {
         boolean status = cd(name);
         currentDirectory = saveDir;
         return status;
+    }
+    
+    public DefaultMutableTreeNode getTreeNode(){
+        DefaultMutableTreeNode  root = new DefaultMutableTreeNode("Root");
+        List<String>            objects = this.getCompositeObjectList(this);
+        System.out.println("Get Tree Nodes : Size = " + objects.size());
+        DefaultMutableTreeNode node = getNodes(root,objects,1);
+        return node;
+    }
+    
+    public DefaultMutableTreeNode  getNodes(DefaultMutableTreeNode node,List<String> objects, int depth){        
+        String name = node.toString();
+        System.out.println(" level = " + depth);
+        Set<String> keys = this.getChildrenList(name, objects, depth);
+        for(String key : keys){
+            System.out.println("---> adding : " + key);
+            DefaultMutableTreeNode child = new DefaultMutableTreeNode(key);
+            node.add(child);
+            getNodes(child,objects,depth+1);
+        }
+        return node;
+    }
+    
+    public Set<String>  getChildrenList(String parent, List<String> list, int depth){
+        
+        Set<String>  children = new HashSet<String>();
+        
+        if(depth<1) return children;
+        
+        for(String object : list){
+            
+            String[] tokens = object.split("/");
+            if(depth==1){
+                if(tokens.length>0){
+                    children.add(tokens[1]);
+                }
+            } else {
+                if(tokens.length>depth){
+                    if(tokens[depth-1].compareTo(parent)==0){
+                        children.add(tokens[depth]);
+                    }
+                }
+            }
+        }
+        return children;
     }
     
     public static void main(String[] args){

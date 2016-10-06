@@ -5,6 +5,8 @@
  */
 package org.jlab.groot.demo;
 
+import java.util.List;
+import java.util.Set;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.TDirectory;
 import org.jlab.groot.group.DataGroup;
@@ -38,10 +40,13 @@ public class TDirectoryDemo {
         h5.setFillColor(38);
         
         dir.mkdir("/calibration/FTOF");
+        dir.mkdir("/calibration/ECAL");
         dir.cd("/calibration/FTOF");
         
-        dir.addDataSet(h1,h2,h3,h4,h5);
+        dir.addDataSet(h1,h2,h3);
         
+        dir.cd("/calibration/ECAL");
+        dir.addDataSet(h4,h5);
         TCanvas c1 = new TCanvas("c1",800,500);
         c1.draw(h1);
         
@@ -50,16 +55,24 @@ public class TDirectoryDemo {
         dir.addGroup("FTOFCALIB", 0, "/calibration/FTOF/h1");
         dir.addGroup("FTOFCALIB", 0, "/calibration/FTOF/h2");
         dir.addGroup("FTOFCALIB", 1, "/calibration/FTOF/h3");
-        dir.addGroup("FTOFCALIB", 2, "/calibration/FTOF/h4");
-        dir.addGroup("FTOFCALIB", 3, "/calibration/FTOF/h5");
+        dir.addGroup("FTOFCALIB", 2, "/calibration/ECAL/h4");
+        dir.addGroup("FTOFCALIB", 3, "/calibration/ECAL/h5");
         dir.addGroup("FTOFCALIB", 3, "/calibration/FTOF/h2");
         dir.addGroup("FTOFCALIB", 3, "/calibration/FTOF/h1");
         
+        List<String> dirObjects = dir.getCompositeObjectList(dir);
+        
+        Set<String> nodes = dir.getChildrenList("calibration", dirObjects, 2);
+        System.out.println(" SIZE = " + nodes.size());
+        for(String obj : nodes){
+            System.out.println(" --- " + obj);
+        }
         DataGroup group = dir.getDataGroup("FTOFCALIB");
         
         c1.getCanvas().draw(group);
         
         dir.writeFile("dirDemo.hipo");
+        
         //dir.addDataSet(h2);
         //dir.addDataSet(h3);
     }

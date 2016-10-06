@@ -127,6 +127,10 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         }         
     }
     
+    public void drawNext(IDataSet ds){
+        draw(ds,"");
+        cd(this.activePad + 1);
+    }
     
     public void draw(IDataSet ds){
         draw(ds,"");
