@@ -169,14 +169,16 @@ public class EmbeddedPad {
             );
         	axisFrame.getAxisZ().getAttributes().setAxisAutoScale(true);
         }
+        
         if(this.attr.getTitle()!=""){
         	this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin()+getTitleFontSize());
         	axisFrame.setAxisMargins(this.attr.getPadMargins());
         	axisFrame.updateMargins(g2d);
         }else{
+        	/*
         	this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin()-getTitleFontSize());
         	axisFrame.setAxisMargins(this.attr.getPadMargins());
-        	axisFrame.updateMargins(g2d);
+        	axisFrame.updateMargins(g2d);*/
         }
         /*if(this.getAxisZ().getAttributes().showAxis()){
         	padMargins.setRightMargin(padMargins.getRightMargin()+10);
