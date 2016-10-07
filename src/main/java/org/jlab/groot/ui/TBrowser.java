@@ -148,11 +148,22 @@ public class TBrowser extends JFrame {
     }
     
     public static void main(String[] args){
+       
+        String filename = args[0];
+        
+        TDirectory dir = new TDirectory();
+        
+        dir.readFile(filename);
+        
+        TBrowser browser = new TBrowser(dir);
+        
+        /*
         TBrowser br = new TBrowser();
         TDirectory dir = new TDirectory();
         dir.mkdir("/calibration/FTOF");
         dir.mkdir("/calibration/ECAL");
         dir.mkdir("/calibration/PCAL");
+        
         H1F  h1    = FunctionFactory.randomGausian( 80, 0.1, 5.0,  8000, 2.2, 0.5);
         H1F  h2    = FunctionFactory.randomGausian(120, 0.1, 5.0, 20000, 3.5, 0.4);
         H1F  h3    = FunctionFactory.randomGausian(160, 0.1, 5.0, 14000, 2.6, 0.3);
@@ -181,7 +192,7 @@ public class TBrowser extends JFrame {
         dir.addDataSet(h5,h6);
         
         br.setDirectory(dir);
-        
+        */
         /*
         DefaultMutableTreeNode node = dir.getTreeNode();
         br.updateTreeModel(node);
