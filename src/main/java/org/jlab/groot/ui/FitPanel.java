@@ -115,7 +115,7 @@ public class FitPanel extends JPanel {
 		fitSettings = new JPanel(new GridLayout(2, 1));
 		fitSettings.add(fitMethod);
 		fitSettings.add(fitOptions);
-		//parameterPanel = new ParameterPanel(this.canvas,this.index,this.fitFunction);
+		parameterPanel = new ParameterPanel(this.canvas,this.index,this.fitFunction);
 		tabbedPane.add("Minimizer Settings", fitSettings);
 		tabbedPane.add("Parameter Settings", blankPanel);
 
@@ -129,7 +129,7 @@ public class FitPanel extends JPanel {
 		        	
 		        }
 		        if(tabbedPane.getSelectedIndex()==1){
-		     //   	tabbedPane.setComponentAt(1, parameterPanel);
+		        	tabbedPane.setComponentAt(1, parameterPanel);
 		        }
 		        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(tabbedPane);
 				topFrame.pack();  
