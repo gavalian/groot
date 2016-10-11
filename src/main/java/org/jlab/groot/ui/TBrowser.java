@@ -22,7 +22,6 @@ import javax.swing.JTree;
 import javax.swing.border.BevelBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.IDataSet;
@@ -44,6 +43,7 @@ public class TBrowser extends JFrame {
     private TDirectory      browserDir = null;
     
     JTabbedPane tabbedPane;
+    
     List<EmbeddedCanvas>  canvasList = new ArrayList<EmbeddedCanvas>();
     
     public TBrowser(){
@@ -149,15 +149,17 @@ public class TBrowser extends JFrame {
     
     public static void main(String[] args){
        
-        String filename = args[0];
+        if(args.length>0){
+            String filename = args[0];
+            
+            TDirectory dir = new TDirectory();
+            
+            dir.readFile(filename);
+            
+            TBrowser browser = new TBrowser(dir);
+        } else {
         
-        TDirectory dir = new TDirectory();
         
-        dir.readFile(filename);
-        
-        TBrowser browser = new TBrowser(dir);
-        
-        /*
         TBrowser br = new TBrowser();
         TDirectory dir = new TDirectory();
         dir.mkdir("/calibration/FTOF");
@@ -192,7 +194,7 @@ public class TBrowser extends JFrame {
         dir.addDataSet(h5,h6);
         
         br.setDirectory(dir);
-        */
+        }
         /*
         DefaultMutableTreeNode node = dir.getTreeNode();
         br.updateTreeModel(node);

@@ -73,6 +73,12 @@ public class Tree implements ITree {
         return iconMap;
     }
     
+    public void resetBranches(double number){
+        for(Map.Entry<String,Branch> entry : this.treeBranches.entrySet()){
+            entry.getValue().setValue(number);
+        }
+    }
+    
     @Override
     public Branch getBranch(String name) {
         return this.treeBranches.get(name);
@@ -87,6 +93,17 @@ public class Tree implements ITree {
     public boolean readNext() {
         return false;
     }    
+    
+    public void print(){
+        StringBuilder str = new StringBuilder();
+        for(Map.Entry<String,Branch> entry : treeBranches.entrySet()){
+            str.append(entry.getValue().toString());
+            str.append("  ");
+            str.append(entry.getValue().getValue());
+            str.append("\n");
+        }
+        System.out.println( str.toString());
+    }
     
     @Override
     public String toString(){

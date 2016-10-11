@@ -56,6 +56,7 @@ public class Branch {
         str.append(String.format("* %-20s ", getName()));
         str.append(String.format("* %-40s ", getDescription()));
         str.append(String.format("* %10s *", getUnit()));
+        //str.append();
         return str.toString();
     }
 }
