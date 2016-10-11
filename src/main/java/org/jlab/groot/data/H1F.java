@@ -601,7 +601,7 @@ public class H1F  implements IDataSet {
         int npoints = this.getDataSize(0);// this.getDataSize();
         for(int loop = 0; loop < npoints; loop++){
             graph.addPoint(this.getDataX(loop), this.getDataY(loop), 
-                    this.getDataEX(loop),this.getDataEY(loop));
+                    this.getDataEX(loop)/2.0,this.getDataEY(loop));
         }
         return graph;
     }
