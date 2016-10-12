@@ -184,5 +184,11 @@ public class TreeTextFile extends Tree {
             tree.readEntry(i);
             tree.print();
         }
+        
+        DataVector vec = tree.getDataVector("(ad+ac)/ad", "ac>0.5&&ad>0.5", 24);
+        System.out.println(vec.getSize());
+        for(int i = 0; i < vec.getSize(); i++){
+            System.out.println(" element " + i + " =  " + vec.getValue(i));
+        }
     }
 }

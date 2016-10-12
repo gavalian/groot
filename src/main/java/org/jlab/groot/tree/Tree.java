@@ -163,9 +163,26 @@ public class Tree implements ITree {
     }
     
     public DataVector  getDataVector(String expression, String tcut){
+        return getDataVector(expression,tcut,-1);
+    }
+    
+    public DataVector  getDataVector(String expression, String tcut, int limit){
         DataVector vec = new DataVector();
+        int nentries = getEntries();
+        TreeExpression exp = new TreeExpression("oper",expression,getListOfBranches());
+        TreeCut        cut = new TreeCut("cut",tcut,getListOfBranches());
+        
+        for(int i = 0; i < nentries; i++){
+            readEntry(i);
+            if(cut.isValid(this)==true){
+                double result = exp.getValue(this);
+                vec.add(result);
+            }
+            if(limit>0&&i>limit) return vec;
+        }
         return vec;
     }
+    
     
     public boolean hasBranch(String name){
         return this.treeBranches.containsKey(name);
