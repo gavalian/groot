@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
+import org.jlab.groot.data.DataVector;
 
 /**
  *
@@ -92,7 +93,11 @@ public class Tree implements ITree {
     @Override
     public boolean readNext() {
         return false;
-    }    
+    }
+    
+    public Map<String,Branch>  getBranches(){
+        return this.treeBranches;
+    }
     
     public void print(){
         StringBuilder str = new StringBuilder();
@@ -157,6 +162,11 @@ public class Tree implements ITree {
         return vector;
     }
     
+    public DataVector  getDataVector(String expression, String tcut){
+        DataVector vec = new DataVector();
+        return vec;
+    }
+    
     public boolean hasBranch(String name){
         return this.treeBranches.containsKey(name);
     }
@@ -179,6 +189,16 @@ public class Tree implements ITree {
             rootcuts.add(new DefaultMutableTreeNode(entry.getKey()));
         }
         return root;
-    }        
+    }
+
+    @Override
+    public int getEntries() {
+        return 0;
+    }
+
+    @Override
+    public int readEntry(int entry) {
+        return 0;
+    }
         
 }
