@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
+import net.objecthunter.exp4j.function.Function;
+import org.jlab.groot.math.FunctionFactory;
 
 /**
  *
@@ -23,6 +25,37 @@ public class TreeExpression {
     Expression expr = null;
     private boolean  isCutActive = true;
     
+    Function funcVec3m = new Function("vec3m", 3) {
+            @Override
+            public double apply(double... args) {
+                return Math.sqrt(args[0]*args[0] + args[1]*args[1] + args[2]*args[2]);
+            }
+    };
+    
+    Function funcVec3t = new Function("vec3t", 3) {
+            @Override
+            public double apply(double... args) {
+                if(args[2]==0.0) return 0.0;
+                return Math.sqrt(args[0]*args[0] + args[1]*args[1] + args[2]*args[2])/args[2];
+            }
+    };
+    
+    Function funcVec3p = new Function("vec3p", 3) {
+            @Override
+            public double apply(double... args) {
+                if(args[2]==0.0) return 0.0;
+                return Math.atan2(args[1],args[0]);
+            }
+    };
+    
+    Function funcVec3pt = new Function("vec3pt", 3) {
+            @Override
+            public double apply(double... args) {
+                if(args[2]==0.0) return 0.0;
+                return Math.sqrt(args[0]*args[0] + args[1]*args[1]);
+            }
+    };
+    
     public TreeExpression(String name, String exp, List<String> branches){
         cutName       = name;
         cutExpression = exp;
@@ -36,7 +69,8 @@ public class TreeExpression {
     final void init(){
         String[] variables = new String[expVariables.size()];
         for(int i=0; i < variables.length; i++) variables[i] = expVariables.get(i);        
-        ExpressionBuilder builder = new ExpressionBuilder(cutExpression);                
+        ExpressionBuilder builder = new ExpressionBuilder(cutExpression)
+                .function(funcVec3m).function(funcVec3p).function(funcVec3t);
         builder.variables(variables);
         expr = builder.build();        
     }

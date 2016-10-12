@@ -151,7 +151,8 @@ public class TreeTextFile extends Tree {
     @Override
     public boolean readNext() {
         if(this.currentData>=this.dataVectors.size()) return false;
-        
+        this.readEntry(currentData);
+        currentData++;
         return true;
     }
     
@@ -185,8 +186,8 @@ public class TreeTextFile extends Tree {
             tree.print();
         }
         
-        DataVector vec = tree.getDataVector("(ad+ac)/ad", "ac>0.5&&ad>0.5", 24);
-        System.out.println(vec.getSize());
+        DataVector vec = tree.getDataVector("vec3m(ac,ad,ae)", "ac>0.5&&ad>0.5", 10);
+        System.out.println(" datavector size =  " + vec.getSize());
         for(int i = 0; i < vec.getSize(); i++){
             System.out.println(" element " + i + " =  " + vec.getValue(i));
         }
