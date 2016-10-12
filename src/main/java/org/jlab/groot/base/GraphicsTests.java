@@ -85,7 +85,7 @@ public class GraphicsTests extends JPanel {
         g2d.drawOval(200,200, 40, 40);        
         g2d.fillOval(203,203, 34, 34);
         
-        WobbleStroke  stroke = new WobbleStroke(5f,2f);
+        WobbleStroke  stroke = new WobbleStroke(1f,6f);
         g2d.setStroke(stroke);
         g2d.drawLine(0, 0, 200, 200);
 //this.drawGraphicsFrame(g2d);

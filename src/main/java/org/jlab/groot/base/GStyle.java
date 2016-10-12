@@ -1,6 +1,9 @@
 package org.jlab.groot.base;
 
+import java.awt.BasicStroke;
+
 public class GStyle {
+    
 	static DatasetAttributes H1FAttributes 			= new DatasetAttributes(DatasetAttributes.HISTOGRAM);
 	static DatasetAttributes H2FAttributes 			= new DatasetAttributes(DatasetAttributes.HISTOGRAM2D);
 	static DatasetAttributes GraphErrorsAttributes 	= new DatasetAttributes(DatasetAttributes.GRAPHERRORS);
@@ -8,7 +11,25 @@ public class GStyle {
 	static AxisAttributes AxisAttributesX 			= new AxisAttributes();
 	static AxisAttributes AxisAttributesY 			= new AxisAttributes();
 	static AxisAttributes AxisAttributesZ 			= new AxisAttributes();
-
+        
+        public static float[]  dashPattern1 = new float[]{10.0f,5.0f};
+        public static float[]  dashPattern2 = new float[]{10.0f,5.0f,2.0f,5.0f};
+        public static float[]  dashPattern3 = new float[]{2.0f,5.0f,2.0f,5.0f};
+        
+        public static BasicStroke getStroke(int type){
+            switch (type){
+                
+                case 0 : return new BasicStroke(1, BasicStroke.CAP_BUTT,
+                        BasicStroke.JOIN_MITER, 20.0f, dashPattern1, 0.0f);
+                case 1: return new BasicStroke(1, BasicStroke.CAP_BUTT,
+                        BasicStroke.JOIN_MITER, 20.0f, dashPattern2, 0.0f);
+                case 2: return new BasicStroke(1, BasicStroke.CAP_BUTT,
+                        BasicStroke.JOIN_MITER, 20.0f, dashPattern3, 0.0f);
+                default : return new BasicStroke(1, BasicStroke.CAP_BUTT,
+                        BasicStroke.JOIN_MITER, 20.0f, dashPattern1, 0.0f);
+            }
+        }
+        
 	public static AxisAttributes getAxisAttributesZ() {
 		return AxisAttributesZ;
 	}

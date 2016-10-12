@@ -51,7 +51,7 @@ public class FunctionPlotter implements IDataSetPlotter {
     public IDataSet getDataSet() {
         return this.functionData;
     }
-
+    
     @Override
     public void draw(Graphics2D g2d, GraphicsAxisFrame frame) {
         int npoints = functionData.getDataSize(0);
@@ -71,7 +71,7 @@ public class FunctionPlotter implements IDataSetPlotter {
         g2d.setColor(TStyle.getColor(lineColor));
         g2d.setStroke(new BasicStroke(lineWidth));
         if(lineStyle==3){
-            WobbleStroke  stroke = new WobbleStroke(5f,2f);
+            WobbleStroke  stroke = new WobbleStroke(lineWidth);
             g2d.setStroke(stroke);
         }
         g2d.draw(path);

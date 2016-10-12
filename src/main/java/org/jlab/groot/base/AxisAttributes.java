@@ -37,10 +37,12 @@ import net.miginfocom.swing.MigLayout;
  */
 public class AxisAttributes implements Cloneable{
 	
-    private Dimension1D              axisDimension   = new Dimension1D();
-	Dimension1D range = new Dimension1D();
+    private Dimension1D  axisDimension   = new Dimension1D();
+    //private Dimension1D  axisDimension   = new Dimension1D();
+    
+    Dimension1D                    range = new Dimension1D();
 
-	private String  labelFontName    = "Avenir";
+    private String  labelFontName    = "Avenir";
     private int     labelFontSize    = 12;
     private String  titleFontName    = "Avenir";
     private int     titleFontSize    = 12;
@@ -60,41 +62,40 @@ public class AxisAttributes implements Cloneable{
     private LatexText axisTitle      = new LatexText(axisTitleString);
     private FontProperties labelFont = new FontProperties();
     private FontProperties titleFont = new FontProperties();
-
-    private EmbeddedCanvas can      = null;
+    private EmbeddedCanvas can       = null;
     
     public AxisAttributes(){
         
     }
     
     public Dimension1D getAxisDimension() {
-  		return axisDimension;
-  	}
+        return axisDimension;
+    }
     
     /**
-	 * @return the labelOffset
-	 */
-	public int getLabelOffset() {
-		return labelOffset;
-	}
-
-	/**
-	 * @param labelOffset the labelOffset to set
-	 */
-	public void setLabelOffset(int labelOffset) {
-		this.labelOffset = labelOffset;
-	}
-
-	/**
-	 * @return the titleOffset
-	 */
-	public int getTitleOffset() {
-		return titleOffset;
-	}
-
-	/**
-	 * @param titleOffset the titleOffset to set
-	 */
+     * @return the labelOffset
+     */
+    public int getLabelOffset() {
+        return labelOffset;
+    }
+    
+    /**
+     * @param labelOffset the labelOffset to set
+     */
+    public void setLabelOffset(int labelOffset) {
+        this.labelOffset = labelOffset;
+    }
+    
+    /**
+     * @return the titleOffset
+     */
+    public int getTitleOffset() {
+        return titleOffset;
+    }
+    
+    /**
+     * @param titleOffset the titleOffset to set
+     */
 	public void setTitleOffset(int titleOffset) {
 		this.titleOffset = titleOffset;
 	}

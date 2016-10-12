@@ -232,13 +232,13 @@ public class EmbeddedPad {
 	        statBox.setFontSize(this.attr.getStatBoxFont().getFontSize());
 	        
 	        statBox.updateDimensions(g2d);
-	        
+	        statBox.setBackground(255, 255, 255, 200);
 	        int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength()-5) +this.attr.getStatBoxOffsetX();
 	        int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin()+5) +this.attr.getStatBoxOffsetY();
 	        statBox.setPosition(x-this.attr.getPadMargins().getRightMargin(), y+this.attr.getPadMargins().getTopMargin());
 	        statBox.drawPave(g2d, x-this.attr.getPadMargins().getRightMargin(), y+this.attr.getPadMargins().getTopMargin());
         }
-        if(this.attr.getTitle()!=""){
+        if( !"".equals(this.attr.getTitle())){
             LatexText titleLatex = new LatexText(this.attr.getTitle());
             titleLatex.setColor(1);
             titleLatex.setFont(this.getTitleFont());

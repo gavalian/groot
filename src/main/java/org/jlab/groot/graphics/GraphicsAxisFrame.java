@@ -103,23 +103,36 @@ public class GraphicsAxisFrame {
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(1));
         if(drawFrame){
-        g2d.drawRect(
-                (int) getAxisX().getDimension().getMin(),
-                (int) getAxisY().getDimension().getMax(),
-                (int) getAxisX().getDimension().getLength(),
-                (int) Math.abs(getAxisY().getDimension().getLength())
-                );
+            g2d.drawRect(
+                    (int) getAxisX().getDimension().getMin(),
+                    (int) getAxisY().getDimension().getMax(),
+                    (int) getAxisX().getDimension().getLength(),
+                    (int) Math.abs(getAxisY().getDimension().getLength())
+            );
         }
-        if(axisFrameAxis.get(0).getAttributes().showAxis()){
-        	axisFrameAxis.get(0).drawAxis(g2d, (int) xcorner, (int) ycorner);
+        
+        if(axisFrameAxis.get(0).getAttributes().showAxis()){            
+            axisFrameAxis.get(0).drawAxis(g2d, (int) xcorner, (int) ycorner, (int) Math.abs(getAxisY().getDimension().getLength()) );
         }
+        
         if(axisFrameAxis.get(1).getAttributes().showAxis()){
-            axisFrameAxis.get(1).drawAxis(g2d, (int) xcorner, (int) ycorner);
+            axisFrameAxis.get(1).drawAxis(g2d, (int) xcorner, (int) ycorner, (int) getAxisX().getDimension().getLength());
         }
         if(axisFrameAxis.get(2).getAttributes().showAxis()){
             int xc = (int) this.axisFrameDimension.getDimension(0).getMax() 
                     - this.axisFrameMargins.getRightMargin();
             axisFrameAxis.get(2).drawAxis(g2d, (int) xc, (int) ycorner);
+        }
+        
+        g2d.setColor(Color.BLACK);
+        g2d.setStroke(new BasicStroke(1));
+        if(drawFrame){
+            g2d.drawRect(
+                    (int) getAxisX().getDimension().getMin(),
+                    (int) getAxisY().getDimension().getMax(),
+                    (int) getAxisX().getDimension().getLength(),
+                    (int) Math.abs(getAxisY().getDimension().getLength())
+            );
         }
     }
     

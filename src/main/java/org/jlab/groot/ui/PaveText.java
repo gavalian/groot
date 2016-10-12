@@ -59,6 +59,9 @@ public class PaveText {
         this.backgroundColor = new Color(r,g,b);
     }
     
+    public void setBackground(int r, int g, int b, int alpha){
+        this.backgroundColor = new Color(r,g,b,alpha);
+    }
     
     public void drawPave(Graphics2D g2d, int x , int y){
         
