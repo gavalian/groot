@@ -51,6 +51,8 @@ public class LatexTextTools {
         table.put("#larrow"   , "\u2190");
         table.put("#uarrow"   , "\u2191");
         table.put("#darrow"   , "\u2193");
+        table.put("#overline" , "\u0305");
+        table.put("#bar"   , "\u0304");
         
         return table;
     }
