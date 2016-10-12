@@ -63,11 +63,17 @@ public class FontProperties {
         fontSet.add("Charter");
         fontSet.add("Courier");
         fontSet.add("HanziPen TC");
+        fontSet.add("Hannotate TC");
         fontSet.add("Helvetica");
         fontSet.add("Helvetica Neue");
+        fontSet.add("Kaiti TC");
+        fontSet.add("Kefa");
+        fontSet.add("Krungthep");
         fontSet.add("Menlo");
         fontSet.add("Monaco");
+        fontSet.add("Noteworthy");
         fontSet.add("Monospaced");
+        fontSet.add("PT Mono");
         fontSet.add("SansSerif");
         fontSet.add("Times");
         fontSet.add("Times New Roman");
