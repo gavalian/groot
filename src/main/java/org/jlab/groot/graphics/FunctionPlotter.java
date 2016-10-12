@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import org.jlab.groot.base.AttributeType;
 import org.jlab.groot.base.TStyle;
+import org.jlab.groot.base.WobbleStroke;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension2D;
 import org.jlab.groot.math.Dimension3D;
@@ -65,9 +66,14 @@ public class FunctionPlotter implements IDataSetPlotter {
         }
         int lineColor = functionData.getAttributes().getLineColor();
         int lineWidth = functionData.getAttributes().getLineWidth();
-
+        int lineStyle = functionData.getAttributes().getLineStyle();
+        
         g2d.setColor(TStyle.getColor(lineColor));
         g2d.setStroke(new BasicStroke(lineWidth));
+        if(lineStyle==3){
+            WobbleStroke  stroke = new WobbleStroke(5f,2f);
+            g2d.setStroke(stroke);
+        }
         g2d.draw(path);
     }
 
