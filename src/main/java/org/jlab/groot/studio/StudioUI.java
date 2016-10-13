@@ -40,7 +40,7 @@ import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeAnalyzer;
 import org.jlab.groot.ui.CutPanel;
 import org.jlab.groot.ui.DescriptorPanel;
-
+import org.jlab.groot.ui.TreeEditor;
 import org.jlab.groot.graphics.HistogramPlotter;
 import org.jlab.groot.tree.TreeTextFile;
 
@@ -189,7 +189,9 @@ public class StudioUI implements MouseListener,ActionListener {
         }        
     }
     
-    
+    public boolean isTree(String item){
+    	return this.studioTree.getName()==item;
+    }
     
     public void addCut(){
         System.out.println("doing some stuff...");
@@ -213,6 +215,7 @@ public class StudioUI implements MouseListener,ActionListener {
     public static void main(String[] args){
         TreeTextFile tree = new TreeTextFile("T");
         tree.readFile("/Users/gavalian/Desktop/pp_10k.txt");
+        //tree.readFile("/Users/wphelps/Desktop/GROOTTree/pp_10k.txt");
         //StudioUI sui = new StudioUI(new RandomTree());
         StudioUI sui = new StudioUI(tree);
     }
@@ -226,7 +229,19 @@ public class StudioUI implements MouseListener,ActionListener {
                 System.out.println(path.getLastPathComponent().toString());
                 scanTreeItem(path.getLastPathComponent().toString());                
                 String cutString = path.getLastPathComponent().toString();
+                if(isTree(path.getLastPathComponent().toString())){
+                	JFrame editorFrame = new JFrame("Tree Editor:"+path.getLastPathComponent().toString());
+                	TreeEditor editor = new TreeEditor(this.studioTree);
+                	editorFrame.add(editor);
+                	editorFrame.pack();
+                	editorFrame.setLocationRelativeTo(this.frame);
+                	editorFrame.setVisible(true);
+                }
                 this.updateTree();
+                
+                /*if(path.getLastPathComponent() instanceof Tree){
+                	//path.getLastPathComponent());
+                }*/
 
                 //if(cutString.contains("Selector")==true){
                 //    addCut();
@@ -237,11 +252,12 @@ public class StudioUI implements MouseListener,ActionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        
+        //this.updateTree();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        //this.updateTree();
         
     }
 

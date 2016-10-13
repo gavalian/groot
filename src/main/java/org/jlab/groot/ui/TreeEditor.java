@@ -19,10 +19,10 @@ public class TreeEditor extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Tree tree;
 	JTable table;
-	int maxNColumns = 25;
+	int maxNColumns = 15;
 	int maxNRows = 1000;
 
-	TreeEditor(Tree tree) {
+	public TreeEditor(Tree tree) {
 		this.tree = tree;
 		init();
 	}
