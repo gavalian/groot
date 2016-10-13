@@ -43,6 +43,7 @@ import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.tree.RandomTree;
 import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeAnalyzer;
+import org.jlab.groot.tree.TreeFile;
 import org.jlab.groot.ui.CutPanel;
 import org.jlab.groot.ui.DescriptorPanel;
 import org.jlab.groot.ui.TreeEditor;
@@ -228,11 +229,15 @@ public class StudioUI implements MouseListener,ActionListener {
     }
     public void openHipoFile(String file) {
     	System.out.println("Open new hipo File:"+file);
-		
+    	  TreeFile tree = new TreeFile("T");
+          tree.openFile(file);
+          StudioUI sui = new StudioUI(tree);
 	}
     public void openASCIIFile(String file) {
     	System.out.println("Open new ASCII File:"+file);
-		
+    	  TreeTextFile tree = new TreeTextFile("T");
+          tree.readFile(file);
+          StudioUI sui = new StudioUI(tree);
 	}
     public void createNewGraphErrors() {
     	System.out.println("Create new graph errors");
