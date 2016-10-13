@@ -11,12 +11,15 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -24,9 +27,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -162,13 +167,104 @@ public class StudioUI implements MouseListener,ActionListener {
         
         menuBar = new JMenuBar();
         JMenu  menuFile = new JMenu("File");
-        JMenuItem menuFileOpen = new JMenuItem("Open...");
-        menuFile.add(menuFileOpen);
-        menuBar.add(menuFile);
+        JMenuItem menuFileOpen = new JMenuItem("Open ASCII File...");
+        JMenuItem menuFileOpenHipo = new JMenuItem("Open HIPO File...");
+        JMenuItem newHistogram = new JMenuItem("New Histogram...");
+        JMenuItem newHistogram2D = new JMenuItem("New 2D Histogram...");
+        JMenuItem newGraphErrors = new JMenuItem("New GraphErrors...");
+        JMenuItem exit = new JMenuItem("Exit");
         
+        menuFileOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				String file = chooseFile("Select ASCII File to Open",true);
+				openASCIIFile(file);
+			}
+		});
+        
+        menuFileOpenHipo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				String file = chooseFile("Select HIPO File to Open",true);
+				openHipoFile(file);
+			}
+		});
+        
+		exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+		exit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				System.exit(0);
+			}
+		});
+		
+		newHistogram.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				addDescriptor(1);
+			}
+		});
+		
+		newHistogram2D.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				addDescriptor(2);
+			}
+		});
+		
+		newGraphErrors.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				createNewGraphErrors();
+			}
+		});
+        
+        menuFile.add(menuFileOpen);
+        menuFile.add(menuFileOpenHipo);
+        menuFile.add(new JSeparator());
+        menuFile.add(newHistogram);
+        menuFile.add(newHistogram2D);
+        menuFile.add(newGraphErrors);
+        menuFile.add(new JSeparator());
+        menuFile.add(exit);
+
+        menuBar.add(menuFile);        
         studioPane.add(toolBar.getToolBar(),BorderLayout.PAGE_START);
         frame.setJMenuBar(menuBar);
     }
+    public void openHipoFile(String file) {
+    	System.out.println("Open new hipo File:"+file);
+		
+	}
+    public void openASCIIFile(String file) {
+    	System.out.println("Open new ASCII File:"+file);
+		
+	}
+    public void createNewGraphErrors() {
+    	System.out.println("Create new graph errors");
+	}
+    public void createNewHistogram() {
+    	System.out.println("Create new Histogram");
+		
+	}
+	public void createNewHistogram2D() {
+    	System.out.println("Create new Histogram 2D");
+		
+	}
+	public String chooseFile(String name, boolean open) {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(chooser.getCurrentDirectory());
+		chooser.setDialogTitle(name);
+		chooser.setAcceptAllFileFilterUsed(true);
+
+		if (open) {
+			if (chooser.showOpenDialog(new JFrame()) == JFileChooser.APPROVE_OPTION) {
+				return chooser.getSelectedFile().toString();
+			} else {
+				return null;
+			}
+		} else {
+			if (chooser.showSaveDialog(new JFrame()) == JFileChooser.APPROVE_OPTION) {
+				return chooser.getSelectedFile().toString();
+			} else {
+				return null;
+			}
+		}
+	}
     
     public void scanTreeItem(String item){
         if(this.studioTree.hasBranch(item)==true){
@@ -214,8 +310,8 @@ public class StudioUI implements MouseListener,ActionListener {
     
     public static void main(String[] args){
         TreeTextFile tree = new TreeTextFile("T");
-        tree.readFile("/Users/gavalian/Desktop/pp_10k.txt");
-        //tree.readFile("/Users/wphelps/Desktop/GROOTTree/pp_10k.txt");
+        //tree.readFile("/Users/gavalian/Desktop/pp_10k.txt");
+        tree.readFile("/Users/wphelps/Desktop/GROOTTree/pp_10k_wlab.txt");
         //StudioUI sui = new StudioUI(new RandomTree());
         StudioUI sui = new StudioUI(tree);
     }
@@ -237,7 +333,7 @@ public class StudioUI implements MouseListener,ActionListener {
                 	editorFrame.setLocationRelativeTo(this.frame);
                 	editorFrame.setVisible(true);
                 }
-                this.updateTree();
+                //this.updateTree();
                 
                 /*if(path.getLastPathComponent() instanceof Tree){
                 	//path.getLastPathComponent());
@@ -270,13 +366,10 @@ public class StudioUI implements MouseListener,ActionListener {
     public void mouseExited(MouseEvent e) {
     }
 
-    public void addDescriptor(){
+    public void addDescriptor(int dim){
         // panel = new DescriptorPanel(studioTree,analyzer,2);
         JFrame frame = new JFrame("Edit Histogram");
-
-        DescriptorPanel panel = new DescriptorPanel(studioTree,analyzer);
-        
-
+        DescriptorPanel panel = new DescriptorPanel(studioTree,analyzer,dim);
         frame.add(panel);
         frame.pack();
         frame.setLocationRelativeTo(this.frame);
@@ -288,7 +381,7 @@ public class StudioUI implements MouseListener,ActionListener {
     public void actionPerformed(ActionEvent e) {
         System.out.println("Action appeared = " + e.getActionCommand());
         if(e.getActionCommand().compareTo("Add Descriptor")==0){
-            this.addDescriptor();
+            this.addDescriptor(1);
         }
         if(e.getActionCommand().compareTo("Add Cut")==0){
             this.addCut();
