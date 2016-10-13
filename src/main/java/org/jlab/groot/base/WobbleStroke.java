@@ -32,7 +32,7 @@ public class WobbleStroke implements Stroke {
     public WobbleStroke(int lw){
         width = lw;
         this.detail = (float) 1.0;//(((float) lw)*1.5);
-        this.amplitude = (float) (((float) lw)*1.3);
+        this.amplitude = (float) 2.0;
     }
     
     @Override
