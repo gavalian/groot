@@ -18,8 +18,8 @@ import org.jlab.groot.math.FunctionFactory;
  */
 public class TreeExpression {
     
-    String  cutName = "";
-    String  cutExpression = "";
+    String  expName = "";
+    String  treeExpression = "";
     List<String> expVariables = new ArrayList<String>();
     
     Expression expr = null;
@@ -56,9 +56,19 @@ public class TreeExpression {
             }
     };
     
+    Function funcVec3dist = new Function("vec3dist", 6) {
+            @Override
+            public double apply(double... args) {
+                if(args[2]==0.0) return 0.0;
+                return Math.sqrt( (args[0] - args[3])*(args[0] - args[3])
+                        + (args[1] - args[4])*(args[1] - args[4]) 
+                        + (args[2] - args[5])*(args[2] - args[5]));
+            }
+    };
+        
     public TreeExpression(String name, String exp, List<String> branches){
-        cutName       = name;
-        cutExpression = exp;
+        expName       = name;
+        treeExpression = exp;
         expVariables.clear();
         for(String br : branches){
             expVariables.add(br);
@@ -69,7 +79,7 @@ public class TreeExpression {
     final void init(){
         String[] variables = new String[expVariables.size()];
         for(int i=0; i < variables.length; i++) variables[i] = expVariables.get(i);        
-        ExpressionBuilder builder = new ExpressionBuilder(cutExpression)
+        ExpressionBuilder builder = new ExpressionBuilder(treeExpression)
                 .function(funcVec3m).function(funcVec3p).function(funcVec3t);
         builder.variables(variables);
         expr = builder.build();        

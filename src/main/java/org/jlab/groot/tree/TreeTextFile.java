@@ -143,6 +143,12 @@ public class TreeTextFile extends Tree {
        System.out.println("[TreeTextFile::init] ---> initializing branches. count = " + this.getBranches().size());
     }
     
+    public double[] getRow(){
+        double[] data = new double[getBranches().size()];
+        
+        return data;
+    }
+    
     @Override
     public void reset(){
         this.currentData = 0;
