@@ -73,7 +73,7 @@ public class StudioUI implements MouseListener,ActionListener {
     
     public StudioUI(Tree tree){
         frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         studioTree = tree;
         frame.setSize(800, 800);
         frame.setMinimumSize(new Dimension(300,300));
