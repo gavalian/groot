@@ -74,7 +74,9 @@ public class FontProperties {
         fontSet.add("Noteworthy");
         fontSet.add("Monospaced");
         fontSet.add("PT Mono");
+        fontSet.add("PT Sans Narrow");
         fontSet.add("SansSerif");
+        fontSet.add("Snell Roundhand");
         fontSet.add("Times");
         fontSet.add("Times New Roman");
         fontSet.add("Veranda");

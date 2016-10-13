@@ -24,6 +24,14 @@ public class DataVector {
     private Boolean isVectorOrdered = true;
     private Boolean isFixedLength   = false;
     
+    
+    public DataVector(int size){
+        isFixedLength = true;
+        for(int i = 0; i < size; i++){
+            datavec.add(0.0);
+        }
+    }
+    
     public DataVector(){
         
     }
@@ -62,18 +70,21 @@ public class DataVector {
      * @param value next value to the data vector.
      */
     public void add(double value) {
-        
-        /**
-         * If the vector is ordered at this point check if the next element
-         * is compliant with the order, if not set the ordered flag to FALSE.
-         * No checks will be performed from that point on.
-         */
-        if(isVectorOrdered==true){
-            if(!datavec.isEmpty()) 
-                if(value<datavec.get(datavec.size()-1))
-                    isVectorOrdered = false;
+        if(this.isFixedLength==false){
+            /**
+             * If the vector is ordered at this point check if the next element
+             * is compliant with the order, if not set the ordered flag to FALSE.
+             * No checks will be performed from that point on.
+             */
+            if(isVectorOrdered==true){
+                if(!datavec.isEmpty()) 
+                    if(value<datavec.get(datavec.size()-1))
+                        isVectorOrdered = false;
+            }
+            datavec.add(value); 
+        } else {
+            System.out.println("[DataVector] error : add function does not work with fixed length vectors");
         }
-        datavec.add(value); 
     }
     /**
      * calculate the minimum value in the data.
@@ -99,6 +110,7 @@ public class DataVector {
         }
         return max;
     }
+    
     public void copy(DataVector vec){
         this.datavec.clear();
         for(int loop = 0; loop < vec.getSize(); loop++){
@@ -279,6 +291,16 @@ public class DataVector {
         } else {
             System.out.println("[DataVector] --> warning : vector has size "
                     + getSize() + ". index="+index + " is out of bounds.");
+        }
+    }
+    
+    public void setValue(int index, double value){
+        if(this.isFixedLength==true){
+            if(index>=0&&index<this.datavec.size()){
+                datavec.set(index, value);
+            }
+        } else {
+            System.out.println("[DataVector] error : setValue works only for fixed length vectors.");
         }
     }
 }
