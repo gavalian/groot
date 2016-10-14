@@ -16,12 +16,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -64,6 +66,8 @@ public class StudioUI implements MouseListener, ActionListener {
 	JMenuBar menuBar = null;
 	StudioToolBar toolBar = null;
 	TreeAnalyzer analyzer = new TreeAnalyzer();
+	Boolean previewMode = true;
+	int previewEvents = 1000;
 
 	public StudioUI(Tree tree) {
 		frame = new JFrame();
@@ -125,9 +129,7 @@ public class StudioUI implements MouseListener, ActionListener {
 	}
 
 	private void initMenu() {
-
 		statusPane = new JPanel();
-
 		statusPane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -165,6 +167,29 @@ public class StudioUI implements MouseListener, ActionListener {
 		JMenuItem newGraphErrors = new JMenuItem("New GraphErrors...");
 		JMenuItem exit = new JMenuItem("Exit");
 		JMenuItem closeWindow = new JMenuItem("Close Window");
+		
+		JMenu menuEdit = new JMenu("Edit");
+		JCheckBoxMenuItem menuPreviewMode = new JCheckBoxMenuItem("Preview Mode");
+		menuEdit.add(menuPreviewMode);
+		menuPreviewMode.setSelected(previewMode);
+		menuPreviewMode.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menuPreviewMode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				previewMode = menuPreviewMode.isSelected();
+			}
+		});
+		
+		JMenu menuHelp = new JMenu("Help");
+		JMenuItem about = new JMenuItem("About...");
+		menuHelp.add(about);
+		about.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				JOptionPane.showMessageDialog(null, "GROOT Documentation\n https://github.com/gavalian/groot/wiki\n  Bug Reporting:\n https://github.com/gavalian/groot/issues\n Gagik Gavalian and Will Phelps\n gavalian@jlab.org , wphelps@jlab.org", "About",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+
 
 		closeWindow.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -240,6 +265,8 @@ public class StudioUI implements MouseListener, ActionListener {
 		menuFile.add(exit);
 
 		menuBar.add(menuFile);
+		menuBar.add(menuEdit);
+		menuBar.add(menuHelp);
 		studioPane.add(toolBar.getToolBar(), BorderLayout.PAGE_START);
 		frame.setJMenuBar(menuBar);
 	}
@@ -296,7 +323,13 @@ public class StudioUI implements MouseListener, ActionListener {
 			// List<Double> vector =
 			// studioTree.getVector(item,studioTree.getSelector());
 			System.out.println("getting vector for item = " + item);
-			DataVector vec = studioTree.getDataVector(item, "aa>0");
+			DataVector vec;
+			if(this.previewMode){
+				vec = studioTree.getDataVector(item, "aa>0",previewEvents);
+			}else{
+				vec = studioTree.getDataVector(item, "aa>0");
+			}
+			
 			System.out.println("result = " + vec.getSize());
 			H1F h1d = H1F.create(item, 100, vec);
 			h1d.setTitle(item);
@@ -327,6 +360,21 @@ public class StudioUI implements MouseListener, ActionListener {
 		frame.setVisible(true);
 	}
 
+	public void addDescriptor(int dim) {
+		// panel = new DescriptorPanel(studioTree,analyzer,2);
+		JFrame frame = new JFrame("Edit Histogram");
+		DescriptorPanel panel = new DescriptorPanel(studioTree, analyzer, dim);
+		frame.add(panel);
+		frame.pack();
+		frame.setLocationRelativeTo(this.frame);
+		frame.setMinimumSize(frame.getSize());
+		frame.setVisible(true);
+	}
+	
+	/*public void fillDescriptors(){
+		this.analyzer.
+	}*/
+	
 	public void updateTree() {
 		DefaultTreeModel model = new DefaultTreeModel(studioTree.getTree());
 		this.jtree.setModel(model);
@@ -359,7 +407,7 @@ public class StudioUI implements MouseListener, ActionListener {
 					editorFrame.setLocationRelativeTo(this.frame);
 					editorFrame.setVisible(true);
 				}
-				// this.updateTree();
+				this.updateTree();
 
 				/*
 				 * if(path.getLastPathComponent() instanceof Tree){
@@ -393,16 +441,6 @@ public class StudioUI implements MouseListener, ActionListener {
 	public void mouseExited(MouseEvent e) {
 	}
 
-	public void addDescriptor(int dim) {
-		// panel = new DescriptorPanel(studioTree,analyzer,2);
-		JFrame frame = new JFrame("Edit Histogram");
-		DescriptorPanel panel = new DescriptorPanel(studioTree, analyzer, dim);
-		frame.add(panel);
-		frame.pack();
-		frame.setLocationRelativeTo(this.frame);
-		frame.setMinimumSize(frame.getSize());
-		frame.setVisible(true);
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
