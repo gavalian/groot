@@ -51,7 +51,7 @@ import org.jlab.groot.tree.TreeTextFile;
  * @author gavalian
  */
 public class StudioUI implements MouseListener, ActionListener {
-
+	
 	JSplitPane splitPane = null;
 	JPanel navigationPane = null;
 	EmbeddedCanvas drawCanvas = null;
@@ -70,16 +70,16 @@ public class StudioUI implements MouseListener, ActionListener {
 	int previewEvents = 1000;
 
 	public StudioUI(Tree tree) {
-		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame = new JFrame("GROOT Studio");
 		studioTree = tree;
-		frame.setSize(800, 800);
 		frame.setMinimumSize(new Dimension(300, 300));
 		initUI();
 
 		frame.pack();
-		frame.setSize(900, 700);
+		Dimension screensize  = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setSize((int)(screensize.getHeight()*.75*1.618), (int) (screensize.getHeight()*.75));
 		splitPane.setDividerLocation(0.4);
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 
@@ -325,9 +325,9 @@ public class StudioUI implements MouseListener, ActionListener {
 			System.out.println("getting vector for item = " + item);
 			DataVector vec;
 			if(this.previewMode){
-				vec = studioTree.getDataVector(item, "aa>0",previewEvents);
+				vec = studioTree.getDataVector(item, "",previewEvents);
 			}else{
-				vec = studioTree.getDataVector(item, "aa>0");
+				vec = studioTree.getDataVector(item, "");
 			}
 			
 			System.out.println("result = " + vec.getSize());

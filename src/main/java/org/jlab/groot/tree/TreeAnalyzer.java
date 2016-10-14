@@ -15,7 +15,6 @@ import org.jlab.groot.data.IDataSet;
  * @author gavalian
  */
 public class TreeAnalyzer {
-    
     List<DatasetDescriptor>   datasets = new ArrayList<DatasetDescriptor>();
     
     public TreeAnalyzer(){
