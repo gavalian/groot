@@ -6,6 +6,7 @@
 package org.jlab.groot.studio;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -51,7 +52,7 @@ import org.jlab.groot.tree.TreeTextFile;
  * @author gavalian
  */
 public class StudioUI implements MouseListener, ActionListener {
-	
+
 	JSplitPane splitPane = null;
 	JPanel navigationPane = null;
 	EmbeddedCanvas drawCanvas = null;
@@ -76,8 +77,8 @@ public class StudioUI implements MouseListener, ActionListener {
 		initUI();
 
 		frame.pack();
-		Dimension screensize  = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setSize((int)(screensize.getHeight()*.75*1.618), (int) (screensize.getHeight()*.75));
+		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setSize((int) (screensize.getHeight() * .75 * 1.618), (int) (screensize.getHeight() * .75));
 		splitPane.setDividerLocation(0.4);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
@@ -97,32 +98,27 @@ public class StudioUI implements MouseListener, ActionListener {
 		JPanel canvasPane = new JPanel();
 		canvasPane.setLayout(new BorderLayout());
 		canvasPane.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-		// canvasPane.setBorder(new EmptyBorder(5,5,5,5));
 		drawCanvas = new EmbeddedCanvas();// 500,500,2,2);
 		canvasPane.add(drawCanvas, BorderLayout.CENTER);
-
-		// splitPane.setLeftComponent(navigationPane);
 		splitPane.setRightComponent(canvasPane);
 
 		DefaultMutableTreeNode top = studioTree.getTree();
 
 		jtree = new JTree(top);
 		jtree.addMouseListener(this);
-		JScrollPane treeView = new JScrollPane(jtree);
+		jtree.setMinimumSize(new Dimension(100, 50));
 
 		DefaultMutableTreeNode topa = analyzer.getTree();
 		jtreeAnalyzer = new JTree(topa);
-		JScrollPane treeViewAnalyzer = new JScrollPane(jtreeAnalyzer);
-		treeViewAnalyzer.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		JSplitPane splitPaneNavigation = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		splitPaneNavigation.setTopComponent(jtree);
-		splitPaneNavigation.setBottomComponent(jtreeAnalyzer);
-		splitPane.setLeftComponent(splitPaneNavigation);
-		// JSplitPane treeSplit =
+		JScrollPane scrollPane = new JScrollPane(jtree);
+		JScrollPane scrollPane2 = new JScrollPane(jtreeAnalyzer);
+		JSplitPane secondSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		secondSplitPane.setTopComponent(scrollPane);
+		secondSplitPane.setBottomComponent(scrollPane2);
 
-		navigationPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		navigationPane.setLayout(new BorderLayout());
-		navigationPane.add(treeView, BorderLayout.CENTER);
+		secondSplitPane.setDividerLocation(0.5);
+
+		splitPane.setLeftComponent(secondSplitPane);
 		splitPane.setDividerLocation(0.5);
 		studioPane.add(splitPane, BorderLayout.CENTER);
 		frame.add(studioPane);
@@ -167,7 +163,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		JMenuItem newGraphErrors = new JMenuItem("New GraphErrors...");
 		JMenuItem exit = new JMenuItem("Exit");
 		JMenuItem closeWindow = new JMenuItem("Close Window");
-		
+
 		JMenu menuEdit = new JMenu("Edit");
 		JCheckBoxMenuItem menuPreviewMode = new JCheckBoxMenuItem("Preview Mode");
 		menuEdit.add(menuPreviewMode);
@@ -179,17 +175,17 @@ public class StudioUI implements MouseListener, ActionListener {
 				previewMode = menuPreviewMode.isSelected();
 			}
 		});
-		
+
 		JMenu menuHelp = new JMenu("Help");
 		JMenuItem about = new JMenuItem("About...");
 		menuHelp.add(about);
 		about.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				JOptionPane.showMessageDialog(null, "GROOT Documentation\n https://github.com/gavalian/groot/wiki\n  Bug Reporting:\n https://github.com/gavalian/groot/issues\n Gagik Gavalian and Will Phelps\n gavalian@jlab.org , wphelps@jlab.org", "About",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null,
+						"GROOT Documentation\n https://github.com/gavalian/groot/wiki\n  Bug Reporting:\n https://github.com/gavalian/groot/issues\n Gagik Gavalian and Will Phelps\n gavalian@jlab.org , wphelps@jlab.org",
+						"About", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-
 
 		closeWindow.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -205,7 +201,7 @@ public class StudioUI implements MouseListener, ActionListener {
 				new StudioUI(studioTree);
 			}
 		});
-		
+
 		menuFileOpen.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuFileOpen.addActionListener(new ActionListener() {
@@ -213,10 +209,10 @@ public class StudioUI implements MouseListener, ActionListener {
 				String file = chooseFile("Select ASCII File to Open", true);
 				openASCIIFile(file);
 			}
-		});  
+		});
 
-		menuFileOpenHipo.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.SHIFT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menuFileOpenHipo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+				KeyEvent.SHIFT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuFileOpenHipo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				String file = chooseFile("Select HIPO File to Open", true);
@@ -232,8 +228,8 @@ public class StudioUI implements MouseListener, ActionListener {
 			}
 		});
 
-		newHistogram.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.SHIFT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		newHistogram.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
+				KeyEvent.SHIFT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		newHistogram.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				addDescriptor(1);
@@ -296,7 +292,7 @@ public class StudioUI implements MouseListener, ActionListener {
 	public void createNewHistogram2D() {
 		System.out.println("Create new Histogram 2D");
 	}
-	
+
 	public String chooseFile(String name, boolean open) {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(chooser.getCurrentDirectory());
@@ -324,12 +320,12 @@ public class StudioUI implements MouseListener, ActionListener {
 			// studioTree.getVector(item,studioTree.getSelector());
 			System.out.println("getting vector for item = " + item);
 			DataVector vec;
-			if(this.previewMode){
-				vec = studioTree.getDataVector(item, "",previewEvents);
-			}else{
+			if (this.previewMode) {
+				vec = studioTree.getDataVector(item, "", previewEvents);
+			} else {
 				vec = studioTree.getDataVector(item, "");
 			}
-			
+
 			System.out.println("result = " + vec.getSize());
 			H1F h1d = H1F.create(item, 100, vec);
 			h1d.setTitle(item);
@@ -370,11 +366,11 @@ public class StudioUI implements MouseListener, ActionListener {
 		frame.setMinimumSize(frame.getSize());
 		frame.setVisible(true);
 	}
-	
-	/*public void fillDescriptors(){
-		this.analyzer.
-	}*/
-	
+
+	/*
+	 * public void fillDescriptors(){ this.analyzer. }
+	 */
+
 	public void updateTree() {
 		DefaultTreeModel model = new DefaultTreeModel(studioTree.getTree());
 		this.jtree.setModel(model);
@@ -407,7 +403,6 @@ public class StudioUI implements MouseListener, ActionListener {
 					editorFrame.setLocationRelativeTo(this.frame);
 					editorFrame.setVisible(true);
 				}
-				this.updateTree();
 
 				/*
 				 * if(path.getLastPathComponent() instanceof Tree){
@@ -440,7 +435,6 @@ public class StudioUI implements MouseListener, ActionListener {
 	@Override
 	public void mouseExited(MouseEvent e) {
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
