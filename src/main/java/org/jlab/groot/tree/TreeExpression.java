@@ -76,6 +76,16 @@ public class TreeExpression {
         init();
     }
     
+    public TreeExpression( String exp, List<String> branches){
+        expName       = "exp";
+        treeExpression = exp;
+        expVariables.clear();
+        for(String br : branches){
+            expVariables.add(br);
+        }
+        init();
+    }
+    
     final void init(){
         String[] variables = new String[expVariables.size()];
         for(int i=0; i < variables.length; i++) variables[i] = expVariables.get(i);        

@@ -51,16 +51,16 @@ public class DescriptorPanel extends JPanel {
 		this.nDim = nDim;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
-		init();
+		//init();
 	}
 	
 	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer){
 		this.nDim = 1;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
-		init();
+		//init();
 	}
-	
+	/*
 	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, DatasetDescriptor descriptor){
 		this.nDim = 1;
 		this.tree = tree;
@@ -90,10 +90,10 @@ public class DescriptorPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(descriptor==null){
-					descriptor =  new DatasetDescriptor(name.getText(),Integer.parseInt(binTextFieldX.getText()), Double.parseDouble(minTextFieldX.getText()),Double.parseDouble(maxTextFieldX.getText()));
+					//descriptor =  new DatasetDescriptor(name.getText(),Integer.parseInt(binTextFieldX.getText()), Double.parseDouble(minTextFieldX.getText()),Double.parseDouble(maxTextFieldX.getText()));
 					for(int i=0; i<cutBoxes.size(); i++){
 						if(cutBoxes.get(i).isSelected()){
-							descriptor.addCut(cutMap.get(cutStrings.get(i)).getExpression());
+							//descriptor.addCut(cutMap.get(cutStrings.get(i)).getExpression());
 						}
 					}
 					treeAnalyzer.addDescriptor(descriptor);
@@ -219,6 +219,6 @@ public class DescriptorPanel extends JPanel {
 		
 	}
 	
-	
+	*/
 	
 }

@@ -45,7 +45,7 @@ public class TreeAnalyzer {
         DefaultMutableTreeNode root         = new DefaultMutableTreeNode("Analyzer");
         
         for(DatasetDescriptor desc : datasets){
-            root.add(new DefaultMutableTreeNode(desc.getName()));
+            //root.add(new DefaultMutableTreeNode(desc.getName()));
         }
         return root;
      }
