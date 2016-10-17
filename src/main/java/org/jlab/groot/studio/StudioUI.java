@@ -72,6 +72,18 @@ public class StudioUI implements MouseListener, ActionListener {
 
 	public StudioUI(Tree tree) {
 		frame = new JFrame("GROOT Studio");
+                frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                        if (JOptionPane.showConfirmDialog(frame, 
+                                "Are you sure to close this window?", "Really Closing?", 
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                            frame.setVisible(false);
+                            //System.exit(0);
+                        }
+                    }
+                });
 		studioTree = tree;
 		frame.setMinimumSize(new Dimension(300, 300));
 		initUI();

@@ -22,13 +22,12 @@ public class DatasetDescriptor {
     List<TreeCut>               treeCuts = new ArrayList<TreeCut>();
     List<TreeExpression> treeExpressions = new ArrayList<TreeExpression>();
     private int           descriptorType = 0;
-        
+    
     public DatasetDescriptor(String name, int type){
         this.descName = name;
         
     }
-    
-    
+        
     public DatasetDescriptor(String name, int nbins, double min, double max, String exp, ITree tree){
         this.descName = name;
         this.setExpression(exp, tree);
@@ -130,4 +129,5 @@ public class DatasetDescriptor {
     }
     
     public IDataSet getDataSet(){return descDataset.get(0);}
+    
 }
