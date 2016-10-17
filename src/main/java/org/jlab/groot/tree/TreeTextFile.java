@@ -92,13 +92,17 @@ public class TreeTextFile extends Tree {
                             dataVectors.add(vector);
                         }
                         
-                        if(firstLineRead==0){
+                        if(firstLineRead==0&&this.getListOfBranches().size()==0){
                             int size = vector.getSize();
                             String[] names = this.generateBranchNames(size);
                             this.initBranches(names);
                             firstLineRead++;
                         }
                     }
+                }else{
+                	line = line.replace("#!","");
+                    String[] labels = line.split(":");
+                    initBranches(labels);   
                 }
                 lineNumber++;
             }   

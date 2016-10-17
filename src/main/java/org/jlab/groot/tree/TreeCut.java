@@ -113,7 +113,7 @@ public class TreeCut {
     final void init(){
         String[] variables = new String[cutVariables.size()];
         for(int i=0; i < variables.length; i++) variables[i] = cutVariables.get(i);
-        
+        if(cutExpression.length()>0){
         ExpressionBuilder builder = new ExpressionBuilder(cutExpression)
                 .operator(operatorAND)
                 .operator(operatorOR)
@@ -121,16 +121,21 @@ public class TreeCut {
                 .operator(operatorLT)
                 .operator(operatorEQ);
         builder.variables(variables);
-        expr = builder.build();        
+        expr = builder.build();
+        }        
     }
     
-    public boolean isValid(ITree tree){        
+    public boolean isValid(ITree tree){
+        if(expr!=null){
         for(int i = 0; i < cutVariables.size(); i++){
             expr.setVariable(cutVariables.get(i), 
                     tree.getBranch(cutVariables.get(i)).getValue().doubleValue());
         }
-        double result = expr.evaluate();
-        if(result>0.0) return true;
-        return false;
+        	double result = expr.evaluate();
+        	if(result>0.0) return true;
+            return false;
+        }else{
+        	return true;
+        }
     }
 }
