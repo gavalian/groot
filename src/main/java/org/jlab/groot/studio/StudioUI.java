@@ -44,6 +44,7 @@ import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.graphics.EmbeddedCanvasTabbed;
+import org.jlab.groot.tree.DynamicTree;
 import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeAnalyzer;
 import org.jlab.groot.tree.TreeFile;
@@ -128,14 +129,74 @@ public class StudioUI implements MouseListener, ActionListener {
 		jtree = new JTree(top);
 		jtree.addMouseListener(this);
 		jtree.setMinimumSize(new Dimension(100, 50));
-
-		DefaultMutableTreeNode topa = analyzer.getTree();
-		jtreeAnalyzer = new JTree(topa);
+		
+		//DefaultMutableTreeNode topa = analyzer.getTree();
+		//jtreeAnalyzer = new JTree(topa);
 		JScrollPane scrollPane = new JScrollPane(jtree);
-		JScrollPane scrollPane2 = new JScrollPane(jtreeAnalyzer);
 		JSplitPane secondSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JSplitPane thirdSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+
 		secondSplitPane.setTopComponent(scrollPane);
-		secondSplitPane.setBottomComponent(scrollPane2);
+		//DynamicTree tree = new DynamicTree();
+		//JScrollPane scrollPane2 = new JScrollPane(jtreeAnalyzer);
+		/*JScrollPane scrollPane2 = new JScrollPane(tree);
+		DefaultMutableTreeNode node = tree.addObject("Tree");
+		tree.addObject(node,"tree1");
+		tree.addObject(node,"tree2");
+		tree.addObject(node,"tree3");*/
+		thirdSplitPane.setTopComponent(studioTree.getSelector().getTree());
+		thirdSplitPane.setBottomComponent(analyzer.getTree());
+		analyzer.getTree().getTree().addMouseListener(new MouseListener(){
+		
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("Mouse clicked!");
+				if (e.getClickCount() == 2) {
+					TreePath path = analyzer.getTree().getTree().getPathForLocation(e.getX(), e.getY());
+					if (path != null) {
+						System.out.println(path.getLastPathComponent().toString());
+						for(int i=0; i<analyzer.getDescriptors().size(); i++){
+							if(analyzer.getDescriptors().get(i).getDescName() == path.getLastPathComponent().toString()){
+								drawCanvasTabbed.getCanvas().drawNext(analyzer.getDescriptors().get(i).getDataSet());
+								drawCanvasTabbed.getCanvas().update();
+							}
+						}
+						//scanTreeItem(path.getLastPathComponent().toString());
+						//String cutString = path.getLastPathComponent().toString();
+					}
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		thirdSplitPane.setDividerLocation(0.5);
+
+
+
+		secondSplitPane.setBottomComponent(thirdSplitPane);
 
 		secondSplitPane.setDividerLocation(0.5);
 
@@ -301,7 +362,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		newGraphErrors.addActionListener(new ActionListener() {
                         @Override
 			public void actionPerformed(ActionEvent event) {
-				createNewGraphErrors();
+				addDescriptor(3);
 			}
 		});
 
@@ -438,12 +499,12 @@ public class StudioUI implements MouseListener, ActionListener {
 	 * public void fillDescriptors(){ this.analyzer. }
 	 */
 
-	public void updateTree() {
+	/*public void updateTree() {
 		DefaultTreeModel model = new DefaultTreeModel(studioTree.getTree());
 		this.jtree.setModel(model);
 		DefaultTreeModel modelAnalyzer = new DefaultTreeModel(this.analyzer.getTree());
 		this.jtreeAnalyzer.setModel(modelAnalyzer);
-	}
+	}*/
 
 	public static void main(String[] args) {
 		TreeTextFile tree = new TreeTextFile("T");
