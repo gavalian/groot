@@ -17,17 +17,27 @@ import java.util.Map;
 public class TreeSelector {
     
     Map<String,TreeCut>  treeCuts = new LinkedHashMap<String,TreeCut>();
-    
+    DynamicTree tree = new DynamicTree("Cuts");
+    public DynamicTree getTree() {
+		return tree;
+	}
+
+	public void setTree(DynamicTree tree) {
+		this.tree = tree;
+	}
+	
     public TreeSelector(){
         
     }
     
     public void addCut(String name, String expression, List<String> branches){
         treeCuts.put(name, new TreeCut(name,expression,branches));
+        tree.addObject(name);
     }
     
     public void addCut(TreeCut cut){
         this.treeCuts.put(cut.getName(), cut);
+        tree.addObject(cut.getName());
     }
     
     public TreeCut getCut(String cut){

@@ -129,9 +129,6 @@ public class CutPanel extends JPanel{
 					selector.addCut(new TreeCut(cutNameTextField.getText(),cutTextArea.getText(),branches));
 				}
 				SwingUtilities.getWindowAncestor(cutNameTextField).dispose();
-				selector.addCut(new TreeCut(cutNameTextField.getText(),cutTextArea.getText(),branches));
-				//cutNameTextField.
-
 			}
 		});
 		

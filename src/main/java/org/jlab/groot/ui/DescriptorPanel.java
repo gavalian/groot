@@ -127,7 +127,7 @@ public class DescriptorPanel extends JPanel {
 		saveAndClose.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(descriptor==null){
+				//if(descriptor==null){
 					if(type==DatasetDescriptor.DESCRIPTOR_H1){
 						String expressionx = branchVariableFieldX.getText();
 						int binsx = Integer.parseInt(binTextFieldX.getText());
@@ -164,9 +164,9 @@ public class DescriptorPanel extends JPanel {
 						}
 					}
 					treeAnalyzer.addDescriptor(descriptor);
-				}else{
+				/*}else{
 					System.out.println("Nope");
-				}
+				}*/
 				
 				System.out.println("Save and close descriptor!");
 				SwingUtilities.getWindowAncestor(branchVariableFieldX).dispose();

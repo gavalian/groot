@@ -27,7 +27,7 @@ public class Tree implements ITree {
     private  Map<String,Branch>     treeBranches    = new LinkedHashMap<String,Branch>();
     private  TreeSelector           defaultSelector = new TreeSelector();
     private  static Map<String,ImageIcon>  treeNodeIcons   = Tree.initTreeIcons();
-            
+          
     public Tree(String name){
         this.treeName = name;
     }
