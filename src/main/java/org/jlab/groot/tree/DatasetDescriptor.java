@@ -17,7 +17,7 @@ public class DatasetDescriptor {
     public static int DESCRIPTOR_GRXY_XY_EX_EY = 5;
     
     
-    String                      descName = "somename";
+    String                      descName = "Dataset Name";
     List<IDataSet>              descDataset = new ArrayList<IDataSet>();
     List<TreeCut>               treeCuts = new ArrayList<TreeCut>();
     List<TreeExpression> treeExpressions = new ArrayList<TreeExpression>();
@@ -129,5 +129,45 @@ public class DatasetDescriptor {
     }
     
     public IDataSet getDataSet(){return descDataset.get(0);}
+
+	public String getDescName() {
+		return descName;
+	}
+
+	public void setDescName(String descName) {
+		this.descName = descName;
+	}
+
+	public List<IDataSet> getDescDataset() {
+		return descDataset;
+	}
+
+	public void setDescDataset(List<IDataSet> descDataset) {
+		this.descDataset = descDataset;
+	}
+
+	public List<TreeCut> getTreeCuts() {
+		return treeCuts;
+	}
+
+	public void setTreeCuts(List<TreeCut> treeCuts) {
+		this.treeCuts = treeCuts;
+	}
+
+	public List<TreeExpression> getTreeExpressions() {
+		return treeExpressions;
+	}
+
+	public void setTreeExpressions(List<TreeExpression> treeExpressions) {
+		this.treeExpressions = treeExpressions;
+	}
+
+	public int getDescriptorType() {
+		return descriptorType;
+	}
+
+	public void setDescriptorType(int descriptorType) {
+		this.descriptorType = descriptorType;
+	}
     
 }
