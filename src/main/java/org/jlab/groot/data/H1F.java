@@ -426,7 +426,7 @@ public class H1F  implements IDataSet {
             return null;
         }
         
-        H1F h1div = new H1F(h1.getName()+"_DIV",
+        H1F h1div = new H1F(h1.getName()+"_DIV_"+h2.getName(),
                 h1.getXaxis().getNBins(),
                 h1.getXaxis().min(),h1.getXaxis().max());
         StatNumber   result = new StatNumber();
@@ -439,6 +439,50 @@ public class H1F  implements IDataSet {
             h1div.setBinError(bin, result.error());
         }
         return h1div;
+    }
+    /**
+     * Adds two histograms. Returns a new histogram.
+     * @param h1 first histogram
+     * @param h2 second histogram
+     * @return sum of two histograms
+     */
+    public static H1F add(H1F h1, H1F h2){
+        if(h1.getXaxis().getNBins()!=h2.getXaxis().getNBins()){
+            System.out.println("[H1D::divide] error : histograms have inconsistent bins");
+            return null;
+        }
+        H1F h1div = new H1F(h1.getName()+"_ADD_"+h2.getName(),
+                h1.getXaxis().getNBins(),
+                h1.getXaxis().min(),h1.getXaxis().max());
+        StatNumber   result = new StatNumber();
+        StatNumber   denom  = new StatNumber();
+        for(int bin = 0; bin < h1.getXaxis().getNBins(); bin++){
+            result.set(h1.getBinContent(bin), h1.getBinError(bin));
+            denom.set(h2.getBinContent(bin), h2.getBinError(bin));
+            result.add(denom);
+            h1div.setBinContent(bin, result.number());
+            h1div.setBinError(bin, result.error());
+        }
+        return h1div;
+    }
+    /**
+     * returns a new histogram with a content of h1 where the integral is normalized
+     * to histogram h2.
+     * @param h1 histogram to normalize
+     * @param h2 histogram for normalization 
+     * @return histogram with bin content of h1 normalized to h2 integral
+     */
+    public static H1F normalized(H1F h1, H1F h2){
+        H1F h1norm = new H1F(h1.getName()+"_NORM_"+h2.getName(),
+                h1.getXaxis().getNBins(),
+                h1.getXaxis().min(),h1.getXaxis().max());
+        double integral_h1 = h1.integral();
+        double integral_h2 = h2.integral();
+        double ratio = integral_h2/integral_h1;
+        for(int bin = 0; bin < h1.getXaxis().getNBins(); bin++){
+            h1norm.setBinContent(bin, h1.getBinContent(bin)*ratio);
+        }
+        return h1norm;
     }
     /**
      * Divides the current histogram object by the parameter 1-D histogram. 

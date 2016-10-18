@@ -16,8 +16,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,7 +39,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import org.jlab.groot.data.DataVector;
+import org.jlab.groot.data.DatasetOperations;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.graphics.EmbeddedCanvasTabbed;
 import org.jlab.groot.tree.Tree;
@@ -183,7 +187,22 @@ public class StudioUI implements MouseListener, ActionListener {
 
 		JMenu menuEdit = new JMenu("Edit");
 		JCheckBoxMenuItem menuPreviewMode = new JCheckBoxMenuItem("Preview Mode");
+                JMenuItem menuOperations  = new JMenuItem("Operations");
+                menuOperations.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+                            JDialog dialog = DatasetOperations.createOperations(frame, drawCanvasTabbed.getCanvas().getObjectMap());
+                            dialog.setVisible(true);
+                            System.out.println("Finished operation");
+                            List<IDataSet> results =  ((DatasetOperations) dialog.getContentPane()).getResults();
+                            for(int i = 0; i < results.size(); i++){
+                                drawCanvasTabbed.getCanvas().drawNext(results.get(i));
+                            }
+			}
+		});
+                
 		menuEdit.add(menuPreviewMode);
+                menuEdit.add(menuOperations);
+                
 		menuPreviewMode.setSelected(previewMode);
 		menuPreviewMode.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
