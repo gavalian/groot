@@ -200,6 +200,17 @@ public class StudioUI implements MouseListener, ActionListener {
 			}
 		});
                 
+                
+                JMenu menuRun = new JMenu("Run");
+                JMenuItem menuItemPlay = new JMenuItem("Play");
+                menuItemPlay.addActionListener(new ActionListener() {
+                        @Override
+			public void actionPerformed(ActionEvent event) {
+                            processPlay();
+			}
+		});
+                menuRun.add(menuItemPlay);
+                
 		menuEdit.add(menuPreviewMode);
                 menuEdit.add(menuOperations);
                 
@@ -207,6 +218,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		menuPreviewMode.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuPreviewMode.addActionListener(new ActionListener() {
+                        @Override
 			public void actionPerformed(ActionEvent event) {
 				previewMode = menuPreviewMode.isSelected();
 			}
@@ -216,6 +228,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		JMenuItem about = new JMenuItem("About...");
 		menuHelp.add(about);
 		about.addActionListener(new ActionListener() {
+                        @Override
 			public void actionPerformed(ActionEvent event) {
 				JOptionPane.showMessageDialog(null,
 						"GROOT Documentation\n https://github.com/gavalian/groot/wiki\n  Bug Reporting:\n https://github.com/gavalian/groot/issues\n Gagik Gavalian and Will Phelps\n gavalian@jlab.org , wphelps@jlab.org",
@@ -226,6 +239,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		closeWindow.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		closeWindow.addActionListener(new ActionListener() {
+                        @Override
 			public void actionPerformed(ActionEvent event) {
 				frame.dispose();
 			}
@@ -233,6 +247,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		newStudioWindow.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		newStudioWindow.addActionListener(new ActionListener() {
+                        @Override
 			public void actionPerformed(ActionEvent event) {
 				new StudioUI(studioTree);
 			}
@@ -241,6 +256,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		menuFileOpen.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuFileOpen.addActionListener(new ActionListener() {
+                        @Override
 			public void actionPerformed(ActionEvent event) {
 				String file = chooseFile("Select ASCII File to Open", true);
 				openASCIIFile(file);
@@ -250,6 +266,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		menuFileOpenHipo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 				KeyEvent.SHIFT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuFileOpenHipo.addActionListener(new ActionListener() {
+                        @Override
 			public void actionPerformed(ActionEvent event) {
 				String file = chooseFile("Select HIPO File to Open", true);
 				openHipoFile(file);
@@ -259,6 +276,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		exit.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		exit.addActionListener(new ActionListener() {
+                        @Override
 			public void actionPerformed(ActionEvent event) {
 				System.exit(0);
 			}
@@ -267,18 +285,21 @@ public class StudioUI implements MouseListener, ActionListener {
 		newHistogram.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
 				KeyEvent.SHIFT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		newHistogram.addActionListener(new ActionListener() {
+                        @Override
 			public void actionPerformed(ActionEvent event) {
 				addDescriptor(1);
 			}
 		});
 
 		newHistogram2D.addActionListener(new ActionListener() {
+                        @Override
 			public void actionPerformed(ActionEvent event) {
 				addDescriptor(2);
 			}
 		});
 
 		newGraphErrors.addActionListener(new ActionListener() {
+                        @Override
 			public void actionPerformed(ActionEvent event) {
 				createNewGraphErrors();
 			}
@@ -298,6 +319,7 @@ public class StudioUI implements MouseListener, ActionListener {
 
 		menuBar.add(menuFile);
 		menuBar.add(menuEdit);
+                menuBar.add(menuRun);
 		menuBar.add(menuHelp);
 		studioPane.add(toolBar.getToolBar(), BorderLayout.PAGE_START);
 		frame.setJMenuBar(menuBar);
@@ -376,6 +398,15 @@ public class StudioUI implements MouseListener, ActionListener {
 		}
 	}
 
+        public void processPlay(){
+            System.out.println("---> Replaying all the descriptors from the tree");
+            if(this.previewMode==true){
+                this.analyzer.process(studioTree, 1000);
+            } else {
+                this.analyzer.process(studioTree, 1000);
+            }
+        }
+        
 	public boolean isTree(String item) {
 		return this.studioTree.getName() == item;
 	}
