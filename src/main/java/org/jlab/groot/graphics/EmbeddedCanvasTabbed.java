@@ -62,14 +62,23 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
         buttonDivide.setActionCommand("divide");
         buttonDivide.addActionListener(this);
         
+        JButton buttonClear = new JButton("O");
+        buttonClear.setActionCommand("clear");
+        buttonClear.addActionListener(this);
+        
         actionPanel.add(buttonAdd);
         actionPanel.add(buttonRemove);
         actionPanel.add(buttonDivide);
+        actionPanel.add(buttonClear);
     }
     
     public EmbeddedCanvas getCanvas(){
         int    index = tabbedPane.getSelectedIndex();
         String title = tabbedPane.getTitleAt(index);
+        return this.tabbedCanvases.get(title);
+    }
+    
+    public EmbeddedCanvas getCanvas(String title){
         return this.tabbedCanvases.get(title);
     }
     
@@ -120,6 +129,10 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
                 this.getCanvas().divide(Integer.parseInt(stringCOLS), Integer.parseInt(stringROWS));
                 //System.out.println("----> Splitting " + columns.getSelectedItem() + " " + rows.getSelectedItem());
             }
+        }
+        
+        if(e.getActionCommand().compareTo("clear")==0){
+            getCanvas().clear();
         }
     }
     

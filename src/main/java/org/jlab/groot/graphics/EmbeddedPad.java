@@ -33,17 +33,17 @@ import org.jlab.groot.ui.PaveText;
  */
 public class EmbeddedPad {
  
-	 PadAttributes attr = new PadAttributes();
-	 Dimension2D            padDimensions  = new Dimension2D();
-     GraphicsAxisFrame          axisFrame  = new GraphicsAxisFrame();
-     List<IDataSetPlotter> datasetPlotters = new ArrayList<IDataSetPlotter>();
-     boolean 				preliminary = true;
-     int 				preliminarySize = 36;
-     PaveText statBox = null;
+    PadAttributes attr = new PadAttributes();
+    Dimension2D            padDimensions  = new Dimension2D();
+    GraphicsAxisFrame          axisFrame  = new GraphicsAxisFrame();
+    List<IDataSetPlotter> datasetPlotters = new ArrayList<IDataSetPlotter>();
+    boolean 				preliminary = true;
+    int 				preliminarySize = 36;
+    PaveText statBox = null;
      
-     public EmbeddedPad(){
-         
-     }
+    public EmbeddedPad(){
+        
+    }
     
     public EmbeddedPad(int x, int y, int width, int height){
         this.setDimension(x, y, width, height);        
@@ -60,6 +60,10 @@ public class EmbeddedPad {
         );
         //System.out.println(padDimensions);
         return this;
+    }
+    
+    public void clear(){
+        this.datasetPlotters.clear();
     }
     
     public void setAxisRange(double xmin, double xmax, double ymin, double ymax){
