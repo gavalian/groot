@@ -57,8 +57,7 @@ public class DatasetDescriptor {
         }
     }
     
-    public final void setExpression(String expressions, ITree tree){
-        
+    public final void setExpression(String expressions, ITree tree){        
         String[] tokens = expressions.split(":");
         treeExpressions.clear();
         for(String item : tokens){
@@ -96,7 +95,7 @@ public class DatasetDescriptor {
         
         if(descriptorType==DatasetDescriptor.DESCRIPTOR_H1){
             double value = treeExpressions.get(0).getValue(tree);
-            H1F h1 = (H1F) this.descDataset;
+            H1F h1 = (H1F) this.descDataset.get(0);
             h1.fill(value);
             return;
         }
@@ -104,7 +103,7 @@ public class DatasetDescriptor {
         if(descriptorType==DatasetDescriptor.DESCRIPTOR_H2){
             double valueX = treeExpressions.get(0).getValue(tree);
             double valueY = treeExpressions.get(1).getValue(tree);
-            H2F h2 = (H2F) this.descDataset;
+            H2F h2 = (H2F) this.descDataset.get(0);
             h2.fill(valueX,valueY);
             return;
         }
@@ -113,7 +112,7 @@ public class DatasetDescriptor {
             double x  = treeExpressions.get(0).getValue(tree);
             double y  = treeExpressions.get(1).getValue(tree);
             double ey = treeExpressions.get(2).getValue(tree);
-            GraphErrors graph = (GraphErrors) this.descDataset;
+            GraphErrors graph = (GraphErrors) this.descDataset.get(0);
             graph.addPoint(x, y, 0.0, ey);
         }
         
@@ -122,10 +121,9 @@ public class DatasetDescriptor {
             double y  = treeExpressions.get(1).getValue(tree);
             double ex = treeExpressions.get(2).getValue(tree);
             double ey = treeExpressions.get(3).getValue(tree);
-            GraphErrors graph = (GraphErrors) this.descDataset;
+            GraphErrors graph = (GraphErrors) this.descDataset.get(0);
             graph.addPoint(x, y, ex, ey);
-        }        
-         
+        }                 
     }
     
     public IDataSet getDataSet(){return descDataset.get(0);}

@@ -464,8 +464,9 @@ public class StudioUI implements MouseListener, ActionListener {
             if(this.previewMode==true){
                 this.analyzer.process(studioTree, 1000);
             } else {
-                this.analyzer.process(studioTree, 1000);
+                this.analyzer.process(studioTree);
             }
+            System.out.println("---> done replaying");
         }
         
 	public boolean isTree(String item) {
