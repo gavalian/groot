@@ -39,6 +39,7 @@ import javax.swing.tree.TreePath;
 import org.jlab.groot.data.DataVector;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.graphics.EmbeddedCanvas;
+import org.jlab.groot.graphics.EmbeddedCanvasTabbed;
 import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeAnalyzer;
 import org.jlab.groot.tree.TreeFile;
@@ -56,6 +57,8 @@ public class StudioUI implements MouseListener, ActionListener {
 	JSplitPane splitPane = null;
 	JPanel navigationPane = null;
 	EmbeddedCanvas drawCanvas = null;
+        EmbeddedCanvasTabbed drawCanvasTabbed = null;
+        
 	JFrame frame = null;
 	Tree studioTree = null;
 
@@ -111,7 +114,9 @@ public class StudioUI implements MouseListener, ActionListener {
 		canvasPane.setLayout(new BorderLayout());
 		canvasPane.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 		drawCanvas = new EmbeddedCanvas();// 500,500,2,2);
-		canvasPane.add(drawCanvas, BorderLayout.CENTER);
+                drawCanvasTabbed = new EmbeddedCanvasTabbed();
+                
+		canvasPane.add(drawCanvasTabbed, BorderLayout.CENTER);
 		splitPane.setRightComponent(canvasPane);
 
 		DefaultMutableTreeNode top = studioTree.getTree();
@@ -345,10 +350,10 @@ public class StudioUI implements MouseListener, ActionListener {
 			h1d.setOptStat(11111);
 			h1d.setLineColor(1);
 			h1d.setFillColor(43);
-			drawCanvas.draw(h1d);
+			drawCanvasTabbed.getCanvas().drawNext(h1d);
 			// this.drawCanvas.drawNext(h1d);
 			// this.drawCanvas.getPad(0).addPlotter(new HistogramPlotter(h1d));
-			this.drawCanvas.update();
+			this.drawCanvasTabbed.getCanvas().update();
 		}
 	}
 
