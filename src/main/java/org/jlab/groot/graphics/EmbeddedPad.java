@@ -9,7 +9,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
@@ -64,6 +66,14 @@ public class EmbeddedPad {
     
     public void clear(){
         this.datasetPlotters.clear();
+    }
+    
+    public Map<String,IDataSet>  getObjectMap(){        
+        Map<String,IDataSet> objects = new LinkedHashMap<String,IDataSet>();
+        for(IDataSetPlotter plotter : this.datasetPlotters){
+            objects.put(plotter.getName(), plotter.getDataSet());
+        }
+        return objects;
     }
     
     public void setAxisRange(double xmin, double xmax, double ymin, double ymax){

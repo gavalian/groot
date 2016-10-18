@@ -29,7 +29,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -116,7 +118,10 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         }
         activePad = 0;
     }
-    
+    /**
+     * changes current active drawing pad to index=pad
+     * @param pad index of the pad
+     */
     public void cd(int pad){
         if(pad<0){
             activePad = 0;
@@ -126,7 +131,9 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             activePad = pad;
         }         
     }
-    
+    /**
+     * Clears content of all pads.
+     */
     public void clear(){
         for(EmbeddedPad pad : this.canvasPads){
             pad.clear();
@@ -134,20 +141,48 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         cd(0);
         this.update();
     }
-    
+    /**
+     * returns all objects plotted on current canvas
+     * @return Map<String,IDataSet> of objects
+     */
+    public Map<String,IDataSet>  getObjectMap(){
+        Map<String,IDataSet> canvasObjects = new LinkedHashMap<String,IDataSet>();
+        for(int i = 0; i < this.canvasPads.size(); i++){
+            Map<String,IDataSet> objects = this.canvasPads.get(i).getObjectMap();
+            for(Map.Entry<String,IDataSet> entry : objects.entrySet()){
+                canvasObjects.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return canvasObjects;
+    }
+    /**
+     * draws data set on current pad and advances active pad by one. 
+     * @param ds data set to be drawn
+     */
     public void drawNext(IDataSet ds){
         draw(ds,"");
         cd(this.activePad + 1);
     }
-    
+    /**
+     * draws dataset on current active pad with no options
+     * @param ds data set to be drawn
+     */
     public void draw(IDataSet ds){
         draw(ds,"");
     }
-    
+    /**
+     * draws data set on current active pad with given options
+     * @param ds data set to be drawn 
+     * @param options drawing options
+     */
     public void draw(IDataSet ds, String options){
         this.getPad(activePad).draw(ds, options);
     }
-    
+    /**
+     * updates pad margins when the canvas is resized and sets boundaries for each pad
+     * @param w width of current canvas
+     * @param h height of current canvas
+     */
     private void updateCanvasPads(int w, int h){
         int pcounter = 0;
         int startX   = 5;
@@ -242,15 +277,26 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             System.out.println(e);
         }
     }
-        public EmbeddedPad  getPad(int index){
+    /**
+     * returns EmbeddedPad object with given index
+     * @param index index of the EmbeddedPad
+     * @return 
+     */
+    public EmbeddedPad  getPad(int index){
         return this.canvasPads.get(index);
     }
-        
+    /**
+     * forces repaint method for the entire canvas
+     */
     public void update(){
         this.repaint();   
         //System.out.println(this.getBenchmarkString());
     }
-    
+    /**
+     * returns benchmark string containing number of repaint operations
+     * performed as well as the time it took to repaint.
+     * @return 
+     */
     public String getBenchmarkString(){
         StringBuilder str = new StringBuilder();
         double time = (double) paintingTime;
@@ -268,6 +314,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             pad.setAxisFontSize(size);
         }
     }
+    
     public void showFPS(boolean benchmark){
     	this.showFPS = benchmark;
     }
