@@ -219,4 +219,12 @@ public class GraphErrors implements IDataSet {
             );
         }
     }
+
+    @Override
+    public void reset() {
+        this.dataX.clear();
+        this.dataY.clear();
+        this.dataEX.clear();
+        this.dataEY.clear();
+    }
 }

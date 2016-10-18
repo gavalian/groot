@@ -96,7 +96,7 @@ public class DatasetOperations extends JPanel {
         H1F h2 = (H1F) datasetObjects.get(op2);
         
         H1F h3 = H1F.divide(h1, h2);
-        h3.setFillColor(42);
+        h3.setFillColor(45);
         h3.setTitleX(h1.getName()+"_divided_"+h2.getName());
         //h3.setName(h1.getName()+"_divided_"+h2.getName());
         results.add(h3);
@@ -112,7 +112,7 @@ public class DatasetOperations extends JPanel {
         H1F h2 = (H1F) datasetObjects.get(op2);
         
         H1F h3 = H1F.add(h1, h2);
-        h3.setFillColor(42);
+        h3.setFillColor(45);
         h3.setTitleX(h1.getName()+"_add_"+h2.getName());
         //h3.setName(h1.getName()+"_divided_"+h2.getName());
         results.add(h3);
@@ -128,7 +128,7 @@ public class DatasetOperations extends JPanel {
         H1F h2 = (H1F) datasetObjects.get(op2);
         
         H1F h3 = H1F.normalized(h1, h2);
-        h3.setFillColor(42);
+        h3.setFillColor(45);
         h3.setTitleX(h1.getName()+"_normalized_"+h2.getName());
         //h3.setName(h1.getName()+"_divided_"+h2.getName());
         results.add(h3);

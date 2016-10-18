@@ -15,6 +15,7 @@ import org.jlab.groot.ui.PaveText;
  */
 public interface IDataSet {    
     void        setName(String name);
+    void        reset();
     String      getName();
     int         getDataSize(int axis);
     DatasetAttributes  getAttributes();

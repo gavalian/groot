@@ -612,6 +612,7 @@ public class H2F implements IDataSet {
     /**
      * Resets the content of the histogram, sets all bin contents to 0
      */
+    @Override
     public void reset(){
         for(int bin = 0; bin < this.hBuffer.length; bin++){
             this.hBuffer[bin] = 0.0f;
