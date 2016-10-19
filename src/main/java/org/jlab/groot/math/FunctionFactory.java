@@ -17,6 +17,71 @@ import org.jlab.groot.data.H2F;
 public class FunctionFactory {
     
     public static Map<String,Func1D>  funcionDesk = new LinkedHashMap<String,Func1D>();
+    public static double PI_OVER_2 = Math.PI / 2.0;
+    
+    
+    /**
+     * Fast acos using 8 term polynomial approximation from Abramowitz and Stegun, pg. 81.
+     *
+     * <p>Note: Accuracy to within 3 x 10^-8 radians.</p>
+     *
+     * @param   x
+     * @return  arccos(x)
+     */
+    public static double acos( double x )
+    {
+        return PI_OVER_2 - asin( x );
+    }
+    
+    
+    /**
+     * Fast asin using 8 term polynomial approximation from Abramowitz and Stegun, pg. 81.
+     *
+     * <p>Note: Accuracy to within 3 x 10^-8 radians.</p>
+     *
+     * @param   x
+     * @return  arcsin(x)
+     */
+    public static double asin( double x )
+    {
+        boolean isNeg = x < 0;
+        x = Math.abs( x );
+
+        double y1 = x * ( -.0170881256 + ( x * ( .0066700901 + ( x * -.0012624911 ) ) ) );
+        double y2 = x * ( -.0501743046 + ( x * ( .0308918810 + y1 ) ) );
+        double y = 1.5707963050 + ( x * ( -.2145988016 + ( x * ( .0889789874 + y2 ) ) ) );
+        double theta = PI_OVER_2 - ( Math.sqrt( 1.0 - x ) * y );
+
+        if ( isNeg )
+        {
+            theta = -theta;
+        }
+
+        return theta;
+    }
+     /**
+     * Fast asin using 4 term polynomial approximation from Abramowitz and Stegun, pg. 81.
+     *
+     * <p>Note: Accuracy to within 7 x 10^-5 radians.</p>
+     *
+     * @param   x
+     * @return  arcsin(x)
+     */
+    public static double asin_4( double x )
+    {
+        boolean isNeg = x < 0;
+        x = Math.abs( x );
+
+        double y = 1.5707288 + ( x * ( -.2121144 + ( x * ( .0742610 + ( x * -.0187293 ) ) ) ) );
+        double theta = PI_OVER_2 - ( Math.sqrt( 1.0 - x ) * y );
+
+        if ( isNeg )
+        {
+            theta = -theta;
+        }
+
+        return theta;
+    }
     
     public static void registerFunction(Func1D func){
         if(FunctionFactory.funcionDesk.containsKey(func.getName())==true){
@@ -108,5 +173,36 @@ public class FunctionFactory {
             return func3;
         }
         return null;
+    }
+    
+    public static void main(String[] args){
+
+        int n_iter = 10000000;
+        
+        Long start_time = System.currentTimeMillis();
+        for(int i = 0; i < n_iter; i++){
+            double num  = Math.random()*2.0-1.0;
+            double acos = Math.acos(num);
+        }
+        Long end_time = System.currentTimeMillis();
+        double   time = ((double) (end_time - start_time ))/n_iter;
+        System.out.println(String.format("Math  :   %9.5f msec/call",time*1000.0 ));
+        start_time = System.currentTimeMillis();
+        for(int i = 0; i < n_iter; i++){
+            double num  = Math.random()*2.0-1.0;
+            double acos = FunctionFactory.acos(num);
+        }
+        end_time = System.currentTimeMillis();
+        double timeF = ((double) (end_time - start_time ))/n_iter;
+        System.out.println(String.format("Func  :   %9.5f msec/call",timeF*1000.0 ));
+        System.out.println(String.format("Speed :   %9.5f", time/timeF));
+        double divergence = 0.0;
+        for(int i = 0; i < n_iter; i++){
+            double num  = Math.random()*2.0-1.0;
+            double acosF = FunctionFactory.acos(num);
+            double acosM = Math.acos(num);
+            divergence += Math.abs(acosF-acosM);
+        }
+        System.out.println(String.format("Divergence : %.8f", divergence));
     }
 }
