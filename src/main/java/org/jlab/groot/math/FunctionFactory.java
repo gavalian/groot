@@ -91,7 +91,46 @@ public class FunctionFactory {
         FunctionFactory.funcionDesk.put(func.getName(), func);
     }
     
+     public static double atan( double x )
+    {
+    	double h = Math.sqrt( x * x + 1 );
+    	
+    	return asin( x / h );
+    }
     
+    public static double atan2( double y, double x )
+    {
+    	if ( x > 0 )
+    	{
+    		return atan( y / x);
+    	}
+    	else if ( x < 0 )
+    	{
+    		if ( y >= 0 )
+    		{
+    			return Math.PI + atan( y / x );
+    		}
+    		else
+    		{
+    			return -Math.PI + atan( y / x );
+    		}
+    	}
+    	else
+    	{
+    		if ( y > 0 )
+    		{
+    			return Math.PI / 2;
+    		}
+    		else if ( y < 0 )
+    		{
+    			return -Math.PI / 2;
+    		}
+    		else
+    		{
+    			return 0;  // undefined
+    		}
+    	}
+    }
     public static double  gauss(double x, double mean, double sigma){
         return Math.exp(-(x-mean)*(x-mean)/(2.0*sigma*sigma));
     }
@@ -177,12 +216,15 @@ public class FunctionFactory {
     
     public static void main(String[] args){
 
-        int n_iter = 10000000;
+       // int n_iter = 10000000;
+        int n_iter = 1000;
         
         Long start_time = System.currentTimeMillis();
         for(int i = 0; i < n_iter; i++){
             double num  = Math.random()*2.0-1.0;
-            double acos = Math.acos(num);
+            double num2  = Math.random()*2.0-1.0;
+//            double acos = Math.acos(num);
+            double atan = Math.atan2(num,num2);
         }
         Long end_time = System.currentTimeMillis();
         double   time = ((double) (end_time - start_time ))/n_iter;
@@ -190,7 +232,9 @@ public class FunctionFactory {
         start_time = System.currentTimeMillis();
         for(int i = 0; i < n_iter; i++){
             double num  = Math.random()*2.0-1.0;
-            double acos = FunctionFactory.acos(num);
+            double num2  = Math.random()*2.0-1.0;
+            //double acos = FunctionFactory.acos(num);
+            double atan = FunctionFactory.atan2(num,num2);
         }
         end_time = System.currentTimeMillis();
         double timeF = ((double) (end_time - start_time ))/n_iter;
@@ -199,8 +243,10 @@ public class FunctionFactory {
         double divergence = 0.0;
         for(int i = 0; i < n_iter; i++){
             double num  = Math.random()*2.0-1.0;
-            double acosF = FunctionFactory.acos(num);
-            double acosM = Math.acos(num);
+            //double acosF = FunctionFactory.acos(num);
+            //double acosM = Math.acos(num);
+            double acosF = FunctionFactory.atan(num);
+            double acosM = Math.atan(num);
             divergence += Math.abs(acosF-acosM);
         }
         System.out.println(String.format("Divergence : %.8f", divergence));
