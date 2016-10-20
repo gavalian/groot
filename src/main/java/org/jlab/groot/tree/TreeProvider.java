@@ -16,6 +16,7 @@ import org.jlab.groot.graphics.EmbeddedCanvas;
  */
 public interface TreeProvider {
     
+    Tree        tree();
     TreeModel   getTreeModel();
     void        actionTreeNode(TreePath path, EmbeddedCanvas canvas, int limit);
     void        setSource(String filename);

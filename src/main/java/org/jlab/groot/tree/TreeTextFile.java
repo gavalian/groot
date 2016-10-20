@@ -226,6 +226,11 @@ public class TreeTextFile extends Tree implements TreeProvider {
         return null;
     }
     
+    @Override
+    public Tree tree() {
+        return this;
+    }
+    
     public static void main(String[] args){
         TreeTextFile tree = new TreeTextFile("T");
         tree.readFile("/Users/gavalian/Desktop/pp_10k.txt");
@@ -241,4 +246,6 @@ public class TreeTextFile extends Tree implements TreeProvider {
             System.out.println(" element " + i + " =  " + vec.getValue(i));
         }
     }
+
+    
 }
