@@ -39,16 +39,31 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
         this.setMinimumSize(new Dimension(200,200));
         this.setSize(400, 500);
         initUI();
+        initBottomBar();
+        addCanvas();
+    }
+    
+    public EmbeddedCanvasTabbed(String... canvases){
+        super();
+        this.setLayout(new BorderLayout());
+        this.setMinimumSize(new Dimension(200,200));
+        this.setSize(400, 500);
+        this.initUI();
+        for(String canvas : canvases){
+            addCanvas(canvas);
+        }
     }
     
     private void initUI(){
-        tabbedPane = new JTabbedPane();
+        this.tabbedPane = new JTabbedPane();
+        this.add(tabbedPane,BorderLayout.CENTER);
+    }
+        
+    private void initBottomBar(){
         actionPanel = new JPanel();
         actionPanel.setLayout(new FlowLayout());
-        
-        this.add(tabbedPane,BorderLayout.CENTER);
+                
         this.add(actionPanel,BorderLayout.PAGE_END);
-        this.addCanvas();
         
         JButton buttonAdd = new JButton("+");
         buttonAdd.setActionCommand("add canvas");
@@ -82,13 +97,13 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
         return this.tabbedCanvases.get(title);
     }
     
-    public void addCanvas(){ 
+    public final void addCanvas(){ 
         String name = "canvas" + canvasOrder;
         canvasOrder++;
         addCanvas(name);
     }
     
-    public void addCanvas(String name){        
+    public final void addCanvas(String name){        
         EmbeddedCanvas canvas = new EmbeddedCanvas();
         this.tabbedCanvases.put(name, canvas);
         tabbedPane.addTab(name, canvas);
@@ -138,11 +153,11 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
     
     public static void main(String[] args){
         JFrame frame = new JFrame();
-        EmbeddedCanvasTabbed canvasTab = new EmbeddedCanvasTabbed();
+        EmbeddedCanvasTabbed canvasTab = new EmbeddedCanvasTabbed("TDC","ADC","VALUES");
         frame.add(canvasTab);
         frame.pack();
+        frame.setMinimumSize(new Dimension(300,300));
         frame.setVisible(true);
     }
-
     
 }

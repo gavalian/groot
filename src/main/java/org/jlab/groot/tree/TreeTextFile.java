@@ -12,13 +12,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JDialog;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 import org.jlab.groot.data.DataVector;
+import org.jlab.groot.data.H1F;
+import org.jlab.groot.graphics.EmbeddedCanvas;
 
 /**
  *
  * @author gavalian
  */
-public class TreeTextFile extends Tree {
+public class TreeTextFile extends Tree implements TreeProvider {
     
     private static int TREEFILE_CSV       = 1;
     private static int TREEFILE_SPACE     = 2;
@@ -185,6 +191,39 @@ public class TreeTextFile extends Tree {
             icounter++;
         }
         return 1;
+    }
+       
+
+    @Override
+    public TreeModel getTreeModel() {
+        return new DefaultTreeModel(getTree());
+    }
+
+    @Override
+    public void actionTreeNode(TreePath path, EmbeddedCanvas canvas, int limit) {
+        String variable = path.getLastPathComponent().toString();
+        DataVector vec = getDataVector(variable, "", limit);
+        H1F h1d = H1F.create(variable, 100, vec);
+        h1d.setTitle(variable);
+        h1d.setTitleX(variable);
+        h1d.setOptStat(11111);
+        h1d.setLineColor(1);
+        h1d.setFillColor(43);
+        canvas.drawNext(h1d);
+        // this.drawCanvas.drawNext(h1d);
+        // this.drawCanvas.getPad(0).addPlotter(new HistogramPlotter(h1d));
+        canvas.update();
+    }
+
+    @Override
+    public void setSource(String filename) {
+        this.readFile(filename);
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public JDialog treeConfigure() {
+        return null;
     }
     
     public static void main(String[] args){
