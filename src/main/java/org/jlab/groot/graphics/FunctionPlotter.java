@@ -70,6 +70,11 @@ public class FunctionPlotter implements IDataSetPlotter {
         
         g2d.setColor(TStyle.getColor(lineColor));
         g2d.setStroke(new BasicStroke(lineWidth));
+        if(lineStyle==2){
+        	final float dash1[] = {20.0f};
+            g2d.setStroke(new BasicStroke(lineWidth,BasicStroke.CAP_BUTT,
+                    BasicStroke.JOIN_MITER,20.0f,dash1,0.0f));
+        }
         if(lineStyle==3){
             WobbleStroke  stroke = new WobbleStroke(lineWidth);
             g2d.setStroke(stroke);
