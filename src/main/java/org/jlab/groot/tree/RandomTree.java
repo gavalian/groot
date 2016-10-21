@@ -62,7 +62,7 @@ public class RandomTree extends Tree {
         
         JFrame frame = new JFrame();
          DefaultMutableTreeNode top =
-                 tree.getTree();
+                 tree.getRootNode();
 
          JTree jtree = new JTree(top);
          

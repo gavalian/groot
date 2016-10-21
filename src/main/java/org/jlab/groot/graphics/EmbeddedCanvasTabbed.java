@@ -153,7 +153,8 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
     
     public static void main(String[] args){
         JFrame frame = new JFrame();
-        EmbeddedCanvasTabbed canvasTab = new EmbeddedCanvasTabbed("TDC","ADC","VALUES");
+        //EmbeddedCanvasTabbed canvasTab = new EmbeddedCanvasTabbed("TDC","ADC","VALUES");
+        EmbeddedCanvasTabbed canvasTab = new EmbeddedCanvasTabbed();
         frame.add(canvasTab);
         frame.pack();
         frame.setMinimumSize(new Dimension(300,300));

@@ -64,6 +64,17 @@ public class DataVector {
     
     public int  size(){ return datavec.size();}
     public void clear() { datavec.clear();}
+    
+    public void addDataVector(DataVector vec){
+        if(vec.getSize()!=this.getSize()){
+            System.out.println("[addDataVector] error adding vectors. sizes are different");
+            return;
+        }
+        
+        for(int i = 0; i < this.getSize(); i++){
+            this.datavec.set(i, this.getValue(i)+vec.getValue(i));
+        }
+    }
     /**
      * Add value to the vector and ensure that the vector is ordered. If the value
      * does not appear to be in ordered mode, then set the flag ordered to FALSE.

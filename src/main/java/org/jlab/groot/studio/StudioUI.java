@@ -124,7 +124,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		canvasPane.add(drawCanvasTabbed, BorderLayout.CENTER);
 		splitPane.setRightComponent(canvasPane);
 
-		DefaultMutableTreeNode top = studioTree.getTree();
+		DefaultMutableTreeNode top = studioTree.getRootNode();
 
 		jtree = new JTree(top);
 		jtree.addMouseListener(this);

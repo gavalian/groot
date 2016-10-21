@@ -192,6 +192,30 @@ public class H2F implements IDataSet {
         return 0.0;
     }
     /**
+     * creates 2D histogram from given DataVectors, min and max are determined
+     * by data vectors.
+     * @param name name of 2D histogram
+     * @param binsX number of bins in X
+     * @param binsY number of bins in Y
+     * @param vecX DataVector with x-points
+     * @param vecY DataVector with y-points
+     * @return histogram 2D
+     */
+    public static H2F create(String name, int binsX, int binsY, DataVector vecX, DataVector vecY){
+        
+        double minX = vecX.getMin();
+        double maxX = vecX.getMax();
+        double minY = vecY.getMin();
+        double maxY = vecY.getMax();
+        
+        H2F h2 = new H2F(name,"",binsX,minX,maxX,binsY,minY,maxY);
+        
+        for(int i = 0; i < vecX.getSize(); i++){
+            h2.fill(vecX.getValue(i),vecY.getValue(i));
+        }
+        return h2;
+    }
+    /**
      * Sets the x-axis title to the specified parameter
      * @param xTitle		The desired title of the x-axis
      */
