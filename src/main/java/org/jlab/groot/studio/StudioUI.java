@@ -535,9 +535,9 @@ public class StudioUI implements MouseListener, ActionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("Mouse clicked!");
+		//System.out.println("Mouse clicked!");
 		if (e.getClickCount() == 2) {
-			System.out.println("Mouse Double clicked!");
+			//System.out.println("Mouse Double clicked!");
 			TreePath path = this.studioTree.getTree().getTree().getPathForLocation(e.getX(), e.getY());
 			if (path != null) {
 				System.out.println(path.getLastPathComponent().toString());

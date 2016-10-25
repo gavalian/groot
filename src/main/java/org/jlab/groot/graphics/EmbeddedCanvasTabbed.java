@@ -8,16 +8,23 @@ package org.jlab.groot.graphics;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
+import org.jlab.groot.tree.Tree;
 
 /**
  *
@@ -28,7 +35,8 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
     private JTabbedPane   tabbedPane = null; 
     private JPanel       actionPanel = null;
     private int          canvasOrder = 1;
-    
+    private int iconSizeX = 35;
+    private int iconSizeY = 35;
     private Map<String,EmbeddedCanvas>  tabbedCanvases = new LinkedHashMap<String,EmbeddedCanvas>();
 
     private int isDynamic = 0;
@@ -64,20 +72,37 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
         actionPanel.setLayout(new FlowLayout());
                 
         this.add(actionPanel,BorderLayout.PAGE_END);
-        
-        JButton buttonAdd = new JButton("+");
+        ImageIcon newTabIcon = new ImageIcon();
+        ImageIcon removeTabIcon = new ImageIcon();
+        ImageIcon editTabIcon = new ImageIcon();
+        ImageIcon clearTabIcon = new ImageIcon();
+		try {
+			Image addImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/tree/canvas_add.png"));
+			Image clearImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/tree/1477453861_star_full.png"));
+			Image deleteImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/tree/canvas_delete.png"));
+			Image editImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/tree/1477454132_calendar.png"));
+			newTabIcon.setImage(addImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
+			clearTabIcon.setImage(clearImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
+			editTabIcon.setImage(editImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
+			removeTabIcon.setImage(deleteImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+        JButton buttonAdd = new JButton(newTabIcon);
         buttonAdd.setActionCommand("add canvas");
         buttonAdd.addActionListener(this);
         
-        JButton buttonRemove = new JButton("-");
+        JButton buttonRemove = new JButton(removeTabIcon);
         buttonRemove.setActionCommand("remove canvas");
         buttonRemove.addActionListener(this);
         
-        JButton buttonDivide = new JButton("/");
+        JButton buttonDivide = new JButton(editTabIcon);
         buttonDivide.setActionCommand("divide");
         buttonDivide.addActionListener(this);
         
-        JButton buttonClear = new JButton("O");
+        JButton buttonClear = new JButton(clearTabIcon);
         buttonClear.setActionCommand("clear");
         buttonClear.addActionListener(this);
         
