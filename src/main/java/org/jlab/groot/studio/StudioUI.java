@@ -77,6 +77,8 @@ public class StudioUI implements MouseListener, ActionListener {
 	TreeAnalyzer analyzer = new TreeAnalyzer();
 	Boolean previewMode = true;
 	int previewEvents = 1000;
+	JSplitPane secondSplitPane = null;
+	JSplitPane thirdSplitPane = null;
 
 	public StudioUI(Tree tree) {
 		frame = new JFrame("GROOT Studio");
@@ -100,6 +102,8 @@ public class StudioUI implements MouseListener, ActionListener {
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setSize((int) (screensize.getHeight() * .75 * 1.618), (int) (screensize.getHeight() * .75));
 		splitPane.setDividerLocation(0.4);
+		secondSplitPane.setDividerLocation(0.4);
+		thirdSplitPane.setDividerLocation(0.2);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
@@ -124,17 +128,18 @@ public class StudioUI implements MouseListener, ActionListener {
 		canvasPane.add(drawCanvasTabbed, BorderLayout.CENTER);
 		splitPane.setRightComponent(canvasPane);
 
-		DefaultMutableTreeNode top = studioTree.getRootNode();
 
-		jtree = new JTree(top);
-		jtree.addMouseListener(this);
-		jtree.setMinimumSize(new Dimension(100, 50));
+		//DefaultMutableTreeNode top = studioTree.getTree();
+		DynamicTree top = studioTree.getTree();
+		//jtree = new JTree(top);
+		top.getTree().addMouseListener(this);
+		//top.setMinimumSize(new Dimension(100, 50));
 		
 		//DefaultMutableTreeNode topa = analyzer.getTree();
 		//jtreeAnalyzer = new JTree(topa);
-		JScrollPane scrollPane = new JScrollPane(jtree);
-		JSplitPane secondSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		JSplitPane thirdSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JScrollPane scrollPane = new JScrollPane(top);
+		secondSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		thirdSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
 		secondSplitPane.setTopComponent(scrollPane);
 		//DynamicTree tree = new DynamicTree();
@@ -192,13 +197,11 @@ public class StudioUI implements MouseListener, ActionListener {
 			}
 			
 		});
-		thirdSplitPane.setDividerLocation(0.5);
 
 
 
 		secondSplitPane.setBottomComponent(thirdSplitPane);
-
-		secondSplitPane.setDividerLocation(0.5);
+		
 
 		splitPane.setLeftComponent(secondSplitPane);
 		splitPane.setDividerLocation(0.5);
@@ -519,7 +522,7 @@ public class StudioUI implements MouseListener, ActionListener {
 	public void mouseClicked(MouseEvent e) {
 
 		if (e.getClickCount() == 2) {
-			TreePath path = jtree.getPathForLocation(e.getX(), e.getY());
+			TreePath path = this.studioTree.getTree().getTree().getPathForLocation(e.getX(), e.getY());
 			if (path != null) {
 				System.out.println(path.getLastPathComponent().toString());
 				scanTreeItem(path.getLastPathComponent().toString());

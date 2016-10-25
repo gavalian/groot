@@ -14,6 +14,8 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+
 import org.jlab.groot.data.DataVector;
 
 /**
@@ -326,28 +328,21 @@ public class Tree implements ITree {
     public boolean hasBranch(String name){
         return this.treeBranches.containsKey(name);
     }
-    /**
-     * returns a root node to be placed in the tree model
-     * @return root tree node
-     */
-    public DefaultMutableTreeNode getRootNode() {
-        
+    
+    public DynamicTree getTree() {
+    	DynamicTree tree = new DynamicTree(getName());
+
         DefaultMutableTreeNode root         = new DefaultMutableTreeNode(getName());
-        DefaultMutableTreeNode rootbranch   = new DefaultMutableTreeNode("Branches");
-        DefaultMutableTreeNode rootcuts     = new DefaultMutableTreeNode("Selector");
-        root.add(rootbranch);
-        root.add(rootcuts);
-        
+        //DefaultMutableTreeNode rootbranch   = new DefaultMutableTreeNode("Branches");
+        //root.add(rootbranch);
+
+        //tree.addObject(rootbranch);
         List<String> branches = getListOfBranches();
         for(String item : branches){
-            rootbranch.add(new DefaultMutableTreeNode(item));
+        	tree.addObject(item);
+            //rootbranch.add(new DefaultMutableTreeNode(item));
         }
-        
-        Map<String,TreeCut> cuts = this.defaultSelector.getSelectorCuts();
-        for(Map.Entry<String,TreeCut> entry : cuts.entrySet()){
-            rootcuts.add(new DefaultMutableTreeNode(entry.getKey()));
-        }
-        return root;
+        return tree;
     }
 
     @Override
