@@ -528,7 +528,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		GStyle.getH1FAttributes().setOptStat("1110");
 		TreeTextFile tree = new TreeTextFile("TextTree");
 		// tree.readFile("/Users/gavalian/Desktop/pp_10k.txt");
-		tree.readFile("/Users/wphelps/Desktop/GROOTTree/pp_10k_wlab.txt");
+		tree.readFile("src/main/resources/sample_data/studio_data/pp_10k_wlab.txt");
 		// StudioUI sui = new StudioUI(new RandomTree());
 		StudioUI sui = new StudioUI(tree);
 	}
