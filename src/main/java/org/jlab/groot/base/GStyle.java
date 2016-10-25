@@ -8,9 +8,9 @@ public class GStyle {
 	static DatasetAttributes H2FAttributes 			= new DatasetAttributes(DatasetAttributes.HISTOGRAM2D);
 	static DatasetAttributes GraphErrorsAttributes 	= new DatasetAttributes(DatasetAttributes.GRAPHERRORS);
 	static DatasetAttributes FunctionAttributes 	= new DatasetAttributes(DatasetAttributes.FUNCTION);
-	static AxisAttributes AxisAttributesX 			= new AxisAttributes();
-	static AxisAttributes AxisAttributesY 			= new AxisAttributes();
-	static AxisAttributes AxisAttributesZ 			= new AxisAttributes();
+	static AxisAttributes AxisAttributesX 			= new AxisAttributes(AxisAttributes.X);
+	static AxisAttributes AxisAttributesY 			= new AxisAttributes(AxisAttributes.Y);
+	static AxisAttributes AxisAttributesZ 			= new AxisAttributes(AxisAttributes.Z);
         
         public static float[]  dashPattern1 = new float[]{10.0f,5.0f};
         public static float[]  dashPattern2 = new float[]{10.0f,5.0f,2.0f,5.0f};

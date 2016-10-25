@@ -157,6 +157,7 @@ public class DatasetAttributes implements Cloneable {
         
         public static class DatasetAttributesPane extends JPanel implements ActionListener {
     	public JButton buttonDefault;
+    	public JButton buttonSetDefault;
         public JButton buttonRemove;
         /**
 		 * 
@@ -284,8 +285,24 @@ public class DatasetAttributes implements Cloneable {
             //this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
             
             buttonDefault = new JButton("Default");
-            buttonRemove = new JButton("Remove Dataset");
-            this.add(buttonDefault,"skip, pushx, split2");
+            buttonRemove = new JButton("Delete");
+            buttonSetDefault = new JButton("Set Default");
+            buttonSetDefault.addActionListener(e -> {
+            	 if(this.attr.datasetType == DatasetAttributes.FUNCTION){
+                     GStyle.getFunctionAttributes().setAttributes(this.attr);
+                 }
+                 if(this.attr.datasetType == DatasetAttributes.HISTOGRAM){
+                     GStyle.getH1FAttributes().setAttributes(this.attr);
+                 }
+                 if(this.attr.datasetType == DatasetAttributes.HISTOGRAM2D){
+                     GStyle.getH2FAttributes().setAttributes(this.attr);
+                 }
+                 if(this.attr.datasetType == DatasetAttributes.GRAPHERRORS){
+                     GStyle.getGraphErrorsAttributes().setAttributes(this.attr);
+                 }
+            });
+            this.add(buttonSetDefault,"skip,pushx,split3");
+            this.add(buttonDefault,"pushx");
             this.add(buttonRemove,"pushx");
         }
 
@@ -301,9 +318,6 @@ public class DatasetAttributes implements Cloneable {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(e.getActionCommand().compareTo("Default")==0){
-                
-            }
             if(e.getSource()==boxLineColor){
             	attr.setLineColor(Integer.parseInt(colorChoices[boxLineColor.getSelectedIndex()]));
             }else if(e.getSource()==boxLineWidth){

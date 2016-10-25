@@ -26,7 +26,7 @@ import org.jlab.groot.ui.LatexText;
  */
 public class GraphicsAxis {
     
-    private AxisAttributes attr		    = new AxisAttributes();
+    private AxisAttributes attr		    = new AxisAttributes(AxisAttributes.X);
     public static int  AXISTYPE_COLOR       = 1;
     public static int  AXISTYPE_HORIZONTAL  = 2;
     public static int  AXISTYPE_VERTICAL    = 3;        
@@ -235,7 +235,7 @@ public class GraphicsAxis {
     public int getAxisBounds(Graphics2D g2d){
         
         double axisBounds = 0.0;
-        
+        axisTicks.updateFont(getLabelFont());
         List<LatexText> axisTexts = axisTicks.getAxisTexts();
         
         double maxW = 0.0;
