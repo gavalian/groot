@@ -48,7 +48,7 @@ public class GROOTDemo {
 			h1[i].setFillColor(30 + (i % 4) + 2);
 			
 			can1.cd(i);
-			can1.getPad(i).setTitle("OptionsPanel Demo");
+			//can1.getPad(i).setTitle("OptionsPanel Demo");
 			String optStatString = "";
 			for(int j=0; j<3-i%4; j++){
 				optStatString +="1";
@@ -100,7 +100,7 @@ public class GROOTDemo {
 			h2[i].setFillColor(30 + (i % 3) + 2);
 			
 			can2.cd(i);
-			can2.getPad(i).setTitle("OptionsPanel Demo");
+			can2.getPad(i).setTitle("OptionsPanel Demo2");
 			String optStatString = "";
 			for(int j=0; j<3-i%3; j++){
 				optStatString +="1";

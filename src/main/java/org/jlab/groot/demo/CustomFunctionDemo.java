@@ -40,8 +40,9 @@ public class CustomFunctionDemo {
 		f1.setLineWidth(7);
 		f1.setOptStat(111110);
 		
-		DataFitter.fit(f1, histogram, "Q");
+		//DataFitter.fit(f1, histogram, "Q");
 		canvas.draw(histogram);
+		canvas.draw(f1,"");
 		
 		canvas.setFont("Avenir");  
 		canvas.setTitleSize(32);

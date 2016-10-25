@@ -42,7 +42,7 @@ public class BasicDemo2 {
 		
 		barber.setTitleX("E#gamma [GeV]");
 		barber.setTitleY("#sigma [nb]");
-		canvas.getPad(0).setTitle("Total Cross Section #gammap#rarrowpppbar");
+		canvas.getPad(0).setTitle("Total Cross Section #gammap#rarrowppp#bar");
 		
 		barber.setMarkerColor(2);
 		barber.setLineColor(2);
