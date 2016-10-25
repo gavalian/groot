@@ -6,6 +6,7 @@
 package org.jlab.groot.studio;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -83,6 +84,7 @@ public class StudioUI implements MouseListener, ActionListener {
 	JSplitPane secondSplitPane = null;
 	JSplitPane thirdSplitPane = null;
 	JScrollPane scrollPane = null;
+	JCheckBoxMenuItem menuPreviewMode;
 
 	public StudioUI(Tree tree) {
 		frame = new JFrame("GROOT Studio");
@@ -260,17 +262,11 @@ public class StudioUI implements MouseListener, ActionListener {
 		JMenuItem closeWindow = new JMenuItem("Close Window");
 
 		JMenu menuEdit = new JMenu("Edit");
-		JCheckBoxMenuItem menuPreviewMode = new JCheckBoxMenuItem("Preview Mode");
+		menuPreviewMode = new JCheckBoxMenuItem("Preview Mode");
                 JMenuItem menuOperations  = new JMenuItem("Operations");
                 menuOperations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-                            JDialog dialog = DatasetOperations.createOperations(frame, drawCanvasTabbed.getCanvas().getObjectMap());
-                            dialog.setVisible(true);
-                            System.out.println("Finished operation");
-                            List<IDataSet> results =  ((DatasetOperations) dialog.getContentPane()).getResults();
-                            for(int i = 0; i < results.size(); i++){
-                                drawCanvasTabbed.getCanvas().drawNext(results.get(i));
-                            }
+                            datasetOperationDialog();
 			}
 		});
                 
@@ -295,6 +291,7 @@ public class StudioUI implements MouseListener, ActionListener {
                         @Override
 			public void actionPerformed(ActionEvent event) {
 				previewMode = menuPreviewMode.isSelected();
+				toolBar.fastButton.setSelected(previewMode);
 			}
 		});
 
@@ -423,6 +420,15 @@ public class StudioUI implements MouseListener, ActionListener {
 	}
 	public void createNewHistogram2D() {
 		System.out.println("Create new Histogram 2D");
+	}
+	public void datasetOperationDialog() {
+		JDialog dialog = DatasetOperations.createOperations(frame, drawCanvasTabbed.getCanvas().getObjectMap());
+        dialog.setVisible(true);
+        System.out.println("Finished operation");
+        List<IDataSet> results =  ((DatasetOperations) dialog.getContentPane()).getResults();
+        for(int i = 0; i < results.size(); i++){
+            drawCanvasTabbed.getCanvas().drawNext(results.get(i));
+        }				
 	}
 
 	public String chooseFile(String name, boolean open) {
@@ -608,6 +614,23 @@ public class StudioUI implements MouseListener, ActionListener {
 		}
 		if (e.getActionCommand().compareTo("Add Cut") == 0) {
 			this.addCut();
+		}
+		if (e.getActionCommand().compareTo("Add GraphErrors") == 0) {
+			this.addDescriptor(3);
+		}
+		if (e.getActionCommand().compareTo("Play") == 0) {
+			this.processPlay();
+		}
+		if (e.getActionCommand().compareTo("Preview Mode") == 0) {
+			this.previewMode = this.toolBar.fastButton.isSelected();
+			menuPreviewMode.setSelected(previewMode);
+		}
+		
+		if (e.getActionCommand().compareTo("Import ASCII") == 0) {
+			this.openASCIIFile(this.chooseFile("Import ASCII File", true));
+		}
+		if (e.getActionCommand().compareTo("Action Jack") == 0) {
+			datasetOperationDialog();
 		}
 	}
 }

@@ -27,7 +27,7 @@ import org.jlab.groot.tree.Tree;
 public class StudioToolBar {
     private int iconSizeX = 35;
     private int iconSizeY = 35;
-
+    public JToggleButton fastButton;
     private JToolBar  toolbar = null;
     Map<String,JButton>   toolBarButtons = new HashMap<String,JButton>();
             
@@ -71,19 +71,28 @@ public class StudioToolBar {
         JButton cutButton = new JButton(cutIcon);
         JButton playButton = new JButton(playIcon);
         JButton importButton = new JButton(importIcon);
-        JToggleButton fastButton = new JToggleButton(fastIcon);
+        fastButton = new JToggleButton(fastIcon);
         JButton operationButton = new JButton(operationIcon);
 
         histogramButton.setToolTipText("Add Histogram");
         cutButton.setToolTipText("Add Cut");
         
-        histogramButton.setActionCommand("Add Descriptor");        
-        histogramButton.addActionListener(listener);
-        
+        histogramButton.setActionCommand("Add Descriptor");
         cutButton.setActionCommand("Add Cut");
-        cutButton.addActionListener(listener);
         graphErrorsButton.setActionCommand("Add GraphErrors");
+        importButton.setActionCommand("Import ASCII");
+        fastButton.setActionCommand("Preview Mode");
+        playButton.setActionCommand("Play");
+        operationButton.setActionCommand("Action Jack");
+        
+        histogramButton.addActionListener(listener);
+        cutButton.addActionListener(listener);
         graphErrorsButton.addActionListener(listener);
+        importButton.addActionListener(listener);
+        fastButton.addActionListener(listener);
+        playButton.addActionListener(listener);
+        operationButton.addActionListener(listener);
+
         toolbar.add(importButton);
         //toolbar.add(new JSeparator());
         toolbar.add(histogramButton);
