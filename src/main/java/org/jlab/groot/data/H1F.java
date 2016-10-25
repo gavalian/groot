@@ -165,6 +165,10 @@ public class H1F  implements IDataSet {
     public static H1F  create(String name, int bins, DataVector vec){
         double min = vec.getMin();
         double max = vec.getMax();
+        if(min==max){
+        	min = .9999*min;
+        	max = 1.0001*max; 
+        }
         H1F h = new H1F(name,"",bins,min,max);
         for(int i = 0; i < vec.getSize(); i++){
             h.fill(vec.getValue(i));
