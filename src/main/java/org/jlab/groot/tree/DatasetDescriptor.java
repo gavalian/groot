@@ -25,7 +25,10 @@ public class DatasetDescriptor {
     
     public DatasetDescriptor(String name, int type){
         this.descName = name;
-        
+        this.descriptorType = type;
+        GraphErrors graph = new GraphErrors(name);
+        this.descDataset.add(graph);
+
     }
         
     public DatasetDescriptor(String name, int nbins, double min, double max, String exp, ITree tree){
@@ -53,8 +56,16 @@ public class DatasetDescriptor {
         this.descName = name;
         this.setExpression(exp, tree);        
         if(treeExpressions.size()==2){
-            
+            this.descriptorType = DatasetDescriptor.DESCRIPTOR_GRXY_XY;
         }
+        if(treeExpressions.size()==3){
+            this.descriptorType = DatasetDescriptor.DESCRIPTOR_GRXY_XY_EY;
+        }
+        if(treeExpressions.size()==4){
+            this.descriptorType = DatasetDescriptor.DESCRIPTOR_GRXY_XY_EX_EY;
+        }
+        GraphErrors graph = new GraphErrors(name);
+        this.descDataset.add(graph);
     }
     
     public final void setExpression(String expressions, ITree tree){        
@@ -106,6 +117,12 @@ public class DatasetDescriptor {
             H2F h2 = (H2F) this.descDataset.get(0);
             h2.fill(valueX,valueY);
             return;
+        }
+        if(descriptorType==DatasetDescriptor.DESCRIPTOR_GRXY_XY){
+            double x  = treeExpressions.get(0).getValue(tree);
+            double y  = treeExpressions.get(1).getValue(tree);
+            GraphErrors graph = (GraphErrors) this.descDataset.get(0);
+            graph.addPoint(x, y, 0.0, 0.0);
         }
         
         if(descriptorType==DatasetDescriptor.DESCRIPTOR_GRXY_XY_EY){
