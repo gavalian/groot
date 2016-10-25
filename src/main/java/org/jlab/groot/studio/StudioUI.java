@@ -13,6 +13,7 @@ import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -165,8 +166,15 @@ public class StudioUI implements MouseListener, ActionListener {
 						System.out.println(path.getLastPathComponent().toString());
 						for(int i=0; i<analyzer.getDescriptors().size(); i++){
 							if(analyzer.getDescriptors().get(i).getDescName() == path.getLastPathComponent().toString()){
-								drawCanvasTabbed.getCanvas().drawNext(analyzer.getDescriptors().get(i).getDataSet());
-								drawCanvasTabbed.getCanvas().update();
+								System.out.println(e.getModifiers());
+								if((e.getModifiers() & InputEvent.SHIFT_MASK) != 0){
+									System.out.println("Drawing same");
+									drawCanvasTabbed.getCanvas().draw(analyzer.getDescriptors().get(i).getDataSet(),"same");
+									drawCanvasTabbed.getCanvas().update();
+								}else{
+									drawCanvasTabbed.getCanvas().drawNext(analyzer.getDescriptors().get(i).getDataSet());
+									drawCanvasTabbed.getCanvas().update();
+								}
 							}
 						}
 						//scanTreeItem(path.getLastPathComponent().toString());
@@ -438,7 +446,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		}
 	}
 
-	public void scanTreeItem(String item) {
+	public H1F scanTreeItem(String item) {
 		if (this.studioTree.hasBranch(item) == true) {
 			// List<Double> vector =
 			// studioTree.getVector(item,studioTree.getSelector());
@@ -455,14 +463,12 @@ public class StudioUI implements MouseListener, ActionListener {
 			h1d.setTitle(item);
 			h1d.setTitleX(item);
 			h1d.setTitleY("Entries");
+			return h1d;
 			//h1d.setOptStat(11111);
 			//h1d.setLineColor(1);
 			//h1d.setFillColor(43);
-			drawCanvasTabbed.getCanvas().drawNext(h1d);
-			// this.drawCanvas.drawNext(h1d);
-			// this.drawCanvas.getPad(0).addPlotter(new HistogramPlotter(h1d));
-			this.drawCanvasTabbed.getCanvas().update();
 		}
+		return null;
 	}
 
         public void processPlay(){
@@ -541,7 +547,17 @@ public class StudioUI implements MouseListener, ActionListener {
 			TreePath path = this.studioTree.getTree().getTree().getPathForLocation(e.getX(), e.getY());
 			if (path != null) {
 				System.out.println(path.getLastPathComponent().toString());
-				scanTreeItem(path.getLastPathComponent().toString());
+				H1F histogram = scanTreeItem(path.getLastPathComponent().toString());
+					if(histogram!=null){
+					if((e.getModifiers() & InputEvent.SHIFT_MASK) != 0){
+						System.out.println("Drawing same");
+						drawCanvasTabbed.getCanvas().draw(histogram,"same");
+						drawCanvasTabbed.getCanvas().update();
+					}else{
+						drawCanvasTabbed.getCanvas().drawNext(histogram);
+						drawCanvasTabbed.getCanvas().update();
+					}
+				}
 				String cutString = path.getLastPathComponent().toString();
 				if (isTree(path.getLastPathComponent().toString())) {
 					JFrame editorFrame = new JFrame("Tree Editor:" + path.getLastPathComponent().toString());
