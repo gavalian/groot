@@ -38,6 +38,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+
+import org.jlab.groot.base.GStyle;
 import org.jlab.groot.data.DataVector;
 import org.jlab.groot.data.DatasetOperations;
 import org.jlab.groot.data.H1F;
@@ -79,6 +81,7 @@ public class StudioUI implements MouseListener, ActionListener {
 	int previewEvents = 1000;
 	JSplitPane secondSplitPane = null;
 	JSplitPane thirdSplitPane = null;
+	JScrollPane scrollPane = null;
 
 	public StudioUI(Tree tree) {
 		frame = new JFrame("GROOT Studio");
@@ -137,7 +140,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		
 		//DefaultMutableTreeNode topa = analyzer.getTree();
 		//jtreeAnalyzer = new JTree(topa);
-		JScrollPane scrollPane = new JScrollPane(top);
+		scrollPane = new JScrollPane(top);
 		secondSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		thirdSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
@@ -197,7 +200,6 @@ public class StudioUI implements MouseListener, ActionListener {
 			}
 			
 		});
-
 
 
 		secondSplitPane.setBottomComponent(thirdSplitPane);
@@ -391,7 +393,7 @@ public class StudioUI implements MouseListener, ActionListener {
 	public void openHipoFile(String file) {
 		if (file != null) {
 			System.out.println("Open new hipo File:" + file);
-			TreeFile tree = new TreeFile("T");
+			TreeFile tree = new TreeFile("HipoTree");
 			tree.openFile(file);
 			new StudioUI(tree);
 		}
@@ -399,7 +401,7 @@ public class StudioUI implements MouseListener, ActionListener {
 	public void openASCIIFile(String file) {
 		if (file != null) {
 			System.out.println("Open new ASCII File:" + file);
-			TreeTextFile tree = new TreeTextFile("T");
+			TreeTextFile tree = new TreeTextFile("TextTree");
 			tree.readFile(file);
 			new StudioUI(tree);
 		}
@@ -452,9 +454,10 @@ public class StudioUI implements MouseListener, ActionListener {
 			H1F h1d = H1F.create(item, 100, vec);
 			h1d.setTitle(item);
 			h1d.setTitleX(item);
-			h1d.setOptStat(11111);
-			h1d.setLineColor(1);
-			h1d.setFillColor(43);
+			h1d.setTitleY("Entries");
+			//h1d.setOptStat(11111);
+			//h1d.setLineColor(1);
+			//h1d.setFillColor(43);
 			drawCanvasTabbed.getCanvas().drawNext(h1d);
 			// this.drawCanvas.drawNext(h1d);
 			// this.drawCanvas.getPad(0).addPlotter(new HistogramPlotter(h1d));
@@ -511,7 +514,19 @@ public class StudioUI implements MouseListener, ActionListener {
 	}*/
 
 	public static void main(String[] args) {
-		TreeTextFile tree = new TreeTextFile("T");
+		GStyle.getGraphErrorsAttributes().setMarkerStyle(0);
+		GStyle.getGraphErrorsAttributes().setMarkerColor(3);
+		GStyle.getGraphErrorsAttributes().setMarkerSize(7);
+		GStyle.getGraphErrorsAttributes().setLineColor(3);
+		GStyle.getGraphErrorsAttributes().setLineWidth(0);
+		GStyle.getFunctionAttributes().setLineWidth(6);
+		GStyle.getAxisAttributesX().setTitleFontSize(32);
+		GStyle.getAxisAttributesX().setLabelFontSize(28);
+		GStyle.getAxisAttributesY().setTitleFontSize(32);
+		GStyle.getAxisAttributesY().setLabelFontSize(28);
+		GStyle.getH1FAttributes().setFillColor(44);
+		GStyle.getH1FAttributes().setOptStat("11110");
+		TreeTextFile tree = new TreeTextFile("TextTree");
 		// tree.readFile("/Users/gavalian/Desktop/pp_10k.txt");
 		tree.readFile("/Users/wphelps/Desktop/GROOTTree/pp_10k_wlab.txt");
 		// StudioUI sui = new StudioUI(new RandomTree());
@@ -520,8 +535,9 @@ public class StudioUI implements MouseListener, ActionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
+		System.out.println("Mouse clicked!");
 		if (e.getClickCount() == 2) {
+			System.out.println("Mouse Double clicked!");
 			TreePath path = this.studioTree.getTree().getTree().getPathForLocation(e.getX(), e.getY());
 			if (path != null) {
 				System.out.println(path.getLastPathComponent().toString());

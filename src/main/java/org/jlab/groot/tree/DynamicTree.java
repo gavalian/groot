@@ -102,8 +102,9 @@ public class DynamicTree extends JPanel {
  
         //Make sure the user can see the lovely new node.
         if (shouldBeVisible) {
-            tree.scrollPathToVisible(new TreePath(childNode.getPath()));
+            //tree.scrollPathToVisible(new TreePath(childNode.getPath()));
         }
+        tree.setSelectionPath(new TreePath(childNode.getPath()));
         return childNode;
     }
  
