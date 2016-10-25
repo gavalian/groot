@@ -76,6 +76,16 @@ public class FunctionPlotter implements IDataSetPlotter {
                     BasicStroke.JOIN_MITER,20.0f,dash1,0.0f));
         }
         if(lineStyle==3){
+        	final float dash1[] = {5.0f};
+            g2d.setStroke(new BasicStroke(lineWidth,BasicStroke.CAP_BUTT,
+                    BasicStroke.JOIN_MITER,5.0f,dash1,0.0f));
+        }
+        if(lineStyle==4){
+        	final float dash1[] = {20.0f,5.0f};
+            g2d.setStroke(new BasicStroke(lineWidth,BasicStroke.CAP_BUTT,
+                    BasicStroke.JOIN_MITER,20.0f,dash1,0.0f));
+        }
+        if(lineStyle==5){
             WobbleStroke  stroke = new WobbleStroke(lineWidth);
             g2d.setStroke(stroke);
         }
