@@ -72,7 +72,7 @@ public class StudioUI implements MouseListener, ActionListener {
         EmbeddedCanvasTabbed drawCanvasTabbed = null;
         
 	JFrame frame = null;
-	Tree studioTree = null;
+	TreeProvider studioTree = null;
 
 	JTree jtree = null;
 	JTree jtreeAnalyzer = null;
@@ -104,7 +104,7 @@ public class StudioUI implements MouseListener, ActionListener {
                         }
                     }
                 });
-		studioTree = tree.tree();
+		studioTree = tree;
 		frame.setMinimumSize(new Dimension(300, 300));
 		initUI();
 
@@ -140,7 +140,7 @@ public class StudioUI implements MouseListener, ActionListener {
 
 
 		//DefaultMutableTreeNode top = studioTree.getTree();
-		DynamicTree top = studioTree.getDynamicTree();
+		DynamicTree top = studioTree.tree().getDynamicTree();
 		//jtree = new JTree(top);
 		top.getTree().addMouseListener(this);
 		//top.setMinimumSize(new Dimension(100, 50));
@@ -159,7 +159,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		tree.addObject(node,"tree1");
 		tree.addObject(node,"tree2");
 		tree.addObject(node,"tree3");*/
-		thirdSplitPane.setTopComponent(studioTree.getSelector().getTree());
+		thirdSplitPane.setTopComponent(studioTree.tree().getSelector().getTree());
 		thirdSplitPane.setBottomComponent(analyzer.getTree());
 		analyzer.getTree().getTree().addMouseListener(new MouseListener(){
 		
@@ -404,7 +404,7 @@ public class StudioUI implements MouseListener, ActionListener {
 			System.out.println("Open new hipo File:" + file);
 			TreeFile tree = new TreeFile("HipoTree");
 			tree.openFile(file);
-			new StudioUI(tree);
+			//new StudioUI(tree);
 		}
 	}
 	public void openASCIIFile(String file) {
@@ -458,15 +458,15 @@ public class StudioUI implements MouseListener, ActionListener {
 	}
 
 	public H1F scanTreeItem(String item) {
-		if (this.studioTree.hasBranch(item) == true) {
+		if (this.studioTree.tree().hasBranch(item) == true) {
 			// List<Double> vector =
 			// studioTree.getVector(item,studioTree.getSelector());
 			System.out.println("getting vector for item = " + item);
 			DataVector vec;
 			if (this.previewMode) {
-				vec = studioTree.getDataVector(item, "", previewEvents);
+				vec = studioTree.tree().getDataVector(item, "", previewEvents);
 			} else {
-				vec = studioTree.getDataVector(item, "");
+				vec = studioTree.tree().getDataVector(item, "");
 			}
 
 			System.out.println("result = " + vec.getSize());
@@ -483,7 +483,7 @@ public class StudioUI implements MouseListener, ActionListener {
 	}
 	
 	public H2F scanTreeItemH2F(String item) {
-		if (this.studioTree.hasBranch(item) == true&&this.studioTree.hasBranch(lastLeaf) == true) {
+		if (this.studioTree.tree().hasBranch(item) == true&&this.studioTree.tree().hasBranch(lastLeaf) == true) {
 			System.out.println("Scan tree item h2f");
 			// List<Double> vector =
 			// studioTree.getVector(item,studioTree.getSelector());
@@ -492,11 +492,11 @@ public class StudioUI implements MouseListener, ActionListener {
 			DataVector vec2;
 
 			if (this.previewMode) {
-				vec1 = studioTree.getDataVector(item, "", previewEvents);
-				vec2 = studioTree.getDataVector(lastLeaf, "", previewEvents);
+				vec1 = studioTree.tree().getDataVector(item, "", previewEvents);
+				vec2 = studioTree.tree().getDataVector(lastLeaf, "", previewEvents);
 			} else {
-				vec1 = studioTree.getDataVector(item, "");
-				vec2 = studioTree.getDataVector(lastLeaf, "");
+				vec1 = studioTree.tree().getDataVector(item, "");
+				vec2 = studioTree.tree().getDataVector(lastLeaf, "");
 
 			}
 
@@ -516,20 +516,20 @@ public class StudioUI implements MouseListener, ActionListener {
         public void processPlay(){
             System.out.println("---> Replaying all the descriptors from the tree");
             if(this.previewMode==true){
-                this.analyzer.process(studioTree, 1000);
+                this.analyzer.process(studioTree.tree(), 1000);
             } else {
-                this.analyzer.process(studioTree);
+                this.analyzer.process(studioTree.tree());
             }
             System.out.println("---> done replaying");
         }
         
 	public boolean isTree(String item) {
-		return this.studioTree.getName() == item;
+		return this.studioTree.tree().getName() == item;
 	}
 
 	public void addCut() {
 		System.out.println("doing some stuff...");
-		CutPanel cutPane = new CutPanel(studioTree);
+		CutPanel cutPane = new CutPanel(studioTree.tree());
 		JFrame frame = new JFrame("Cut Editor");
 		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(cutPane);
@@ -542,7 +542,7 @@ public class StudioUI implements MouseListener, ActionListener {
 	public void addDescriptor(int dim) {
 		// panel = new DescriptorPanel(studioTree,analyzer,2);
 		JFrame frame = new JFrame("Edit Histogram");
-		DescriptorPanel panel = new DescriptorPanel(studioTree, analyzer, dim);
+		DescriptorPanel panel = new DescriptorPanel(studioTree.tree(), analyzer, dim);
 		frame.add(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(this.frame);
@@ -586,7 +586,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		//System.out.println("Mouse clicked!");
 		if (e.getClickCount() == 2) {
 			//System.out.println("Mouse Double clicked!");
-			TreePath path = this.studioTree.getDynamicTree().getTree().getPathForLocation(e.getX(), e.getY());
+			TreePath path = this.studioTree.tree().getDynamicTree().getTree().getPathForLocation(e.getX(), e.getY());
 			if (path != null) {
 				System.out.println(path.getLastPathComponent().toString());
 				H1F histogram = scanTreeItem(path.getLastPathComponent().toString());
@@ -610,7 +610,7 @@ public class StudioUI implements MouseListener, ActionListener {
 				String cutString = path.getLastPathComponent().toString();
 				if (isTree(path.getLastPathComponent().toString())) {
 					JFrame editorFrame = new JFrame("Tree Editor:" + path.getLastPathComponent().toString());
-					TreeEditor editor = new TreeEditor(this.studioTree);
+					TreeEditor editor = new TreeEditor(this.studioTree.tree());
 					editorFrame.add(editor);
 					editorFrame.pack();
 					editorFrame.setLocationRelativeTo(this.frame);
