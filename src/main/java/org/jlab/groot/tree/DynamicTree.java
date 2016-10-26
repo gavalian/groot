@@ -2,6 +2,8 @@ package org.jlab.groot.tree;
 
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -20,6 +22,15 @@ public class DynamicTree extends JPanel {
     public JTree getTree() {
 		return tree;
 	}
+    public static void main(String[] args){
+    	JFrame testFrame = new JFrame();
+    	DynamicTree blah = new DynamicTree("Blah");
+    	DefaultMutableTreeNode blah1 = blah.addObject("blah1");
+    	blah.addObject(blah1,"blah2");
+    	testFrame.add(blah);
+    	testFrame.pack();
+    	testFrame.setVisible(true);
+    }
 
 	public void setTree(JTree tree) {
 		this.tree = tree;
