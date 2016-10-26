@@ -94,11 +94,13 @@ public class StudioToolBar {
         operationButton.addActionListener(listener);
 
         toolbar.add(importButton);
+        toolbar.addSeparator();
         //toolbar.add(new JSeparator());
         toolbar.add(histogramButton);
         toolbar.add(graphErrorsButton);
         toolbar.add(cutButton);
         toolbar.add(operationButton);
+        toolbar.addSeparator();
         //toolbar.add(new JSeparator());
         toolbar.add(playButton);
         toolbar.add(fastButton);

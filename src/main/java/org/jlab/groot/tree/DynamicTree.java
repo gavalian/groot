@@ -99,7 +99,7 @@ public class DynamicTree extends JPanel {
     //It is key to invoke this on the TreeModel, and NOT DefaultMutableTreeNode
         treeModel.insertNodeInto(childNode, parent, 
                                  parent.getChildCount());
- 
+        
         //Make sure the user can see the lovely new node.
         if (shouldBeVisible) {
             //tree.scrollPathToVisible(new TreePath(childNode.getPath()));

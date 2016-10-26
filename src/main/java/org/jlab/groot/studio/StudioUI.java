@@ -427,13 +427,15 @@ public class StudioUI implements MouseListener, ActionListener {
 	}
 	public void datasetOperationDialog() {
 		JDialog dialog = DatasetOperations.createOperations(frame, drawCanvasTabbed.getCanvas().getObjectMap());
-        System.out.println("Finished operation");
-        List<IDataSet> results =  ((DatasetOperations) dialog.getContentPane()).getResults();
-        for(int i = 0; i < results.size(); i++){
-            drawCanvasTabbed.getCanvas().drawNext(results.get(i));
-        }	
-        dialog.setLocationRelativeTo(this.frame);
-        dialog.setVisible(true);
+                dialog.setLocationRelativeTo(this.frame);
+                dialog.setVisible(true);
+                List<IDataSet> results =  ((DatasetOperations) dialog.getContentPane()).getResults();
+                System.out.println("Finished operation result size = " + results.size());
+                for(int i = 0; i < results.size(); i++){
+                    drawCanvasTabbed.getCanvas().drawNext(results.get(i));
+                }	
+                //dialog.setLocationRelativeTo(this.frame);
+                //dialog.setVisible(true);
 	}
 
 	public String chooseFile(String name, boolean open) {
