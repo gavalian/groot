@@ -670,5 +670,10 @@ public class StudioUI implements MouseListener, ActionListener {
 		if (e.getActionCommand().compareTo("Action Jack") == 0) {
 			datasetOperationDialog();
 		}
+		if (e.getActionCommand().compareTo("Edit Tree") == 0) {
+			JDialog dialog = studioTree.treeConfigure();
+			dialog.setLocationRelativeTo(frame);
+			dialog.setVisible(true);
+		}
 	}
 }

@@ -43,6 +43,8 @@ public class StudioToolBar {
         ImageIcon importIcon = new ImageIcon();
         ImageIcon fastIcon = new ImageIcon();
         ImageIcon operationIcon = new ImageIcon();
+        ImageIcon editTreeIcon = new ImageIcon();
+
 
         try {
 			Image graphErrorsImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/tree/grapherrors.png"));
@@ -52,6 +54,7 @@ public class StudioToolBar {
 			Image importImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/tree/import.png"));
 			Image fastImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/tree/fast.png"));
 			Image operationImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/tree/operations.png"));
+			Image editTreeImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/tree/edit_tree.png"));
 
 			grapherrorsIcon.setImage(graphErrorsImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
 	        cutIcon.setImage(cutImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
@@ -60,7 +63,8 @@ public class StudioToolBar {
 	        importIcon.setImage(importImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
 	        fastIcon.setImage(fastImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
 	        operationIcon.setImage(operationImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
-
+	        editTreeIcon.setImage(editTreeImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
+	        
 		} catch (IOException e) {
 			System.out.println("Error: Could not load icons!");
 			e.printStackTrace();
@@ -73,6 +77,7 @@ public class StudioToolBar {
         JButton importButton = new JButton(importIcon);
         fastButton = new JToggleButton(fastIcon);
         JButton operationButton = new JButton(operationIcon);
+        JButton editTreeButton = new JButton(editTreeIcon);
 
         histogramButton.setToolTipText("Add Histogram");
         cutButton.setToolTipText("Add Cut");
@@ -84,6 +89,7 @@ public class StudioToolBar {
         fastButton.setActionCommand("Preview Mode");
         playButton.setActionCommand("Play");
         operationButton.setActionCommand("Action Jack");
+        editTreeButton.setActionCommand("Edit Tree");
         
         histogramButton.addActionListener(listener);
         cutButton.addActionListener(listener);
@@ -92,6 +98,7 @@ public class StudioToolBar {
         fastButton.addActionListener(listener);
         playButton.addActionListener(listener);
         operationButton.addActionListener(listener);
+        editTreeButton.addActionListener(listener);
 
         toolbar.add(importButton);
         toolbar.addSeparator();
@@ -101,9 +108,12 @@ public class StudioToolBar {
         toolbar.add(cutButton);
         toolbar.add(operationButton);
         toolbar.addSeparator();
+        toolbar.add(editTreeButton);
+        toolbar.addSeparator();
         //toolbar.add(new JSeparator());
         toolbar.add(playButton);
         toolbar.add(fastButton);
+        
 
         
     }
