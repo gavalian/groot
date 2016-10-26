@@ -51,6 +51,7 @@ public class TreeFile extends Tree {
         headerRecord.addEvent(event.getDataBuffer());
         
         writer = new HipoWriter();
+        writer.addHeader(str.toString());
         
         
     }
@@ -67,7 +68,7 @@ public class TreeFile extends Tree {
         }
     }
     
-    public void addRow(double[] row){
+    public void addRow(double[] row){        
         DataVector vec = new DataVector();
         for(int i = 0; i < row.length; i++) vec.add(row[i]);
     }

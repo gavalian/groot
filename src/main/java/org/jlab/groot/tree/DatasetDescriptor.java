@@ -2,13 +2,14 @@ package org.jlab.groot.tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JDialog;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
 
 import org.jlab.groot.data.IDataSet;
 
-public class DatasetDescriptor {
+public class DatasetDescriptor extends AbstractDescriptor {
     
     public static int DESCRIPTOR_H1 = 1;
     public static int DESCRIPTOR_H2 = 2;
@@ -184,5 +185,57 @@ public class DatasetDescriptor {
 	public void setDescriptorType(int descriptorType) {
 		this.descriptorType = descriptorType;
 	}
-    
+
+    @Override
+    public void processTreeEvent(Tree tree) {
+        
+        boolean cutsPassed = true;
+        for(TreeCut cut : this.treeCuts){
+            if(cut.isValid(tree)==false) return;
+        }
+        
+        if(descriptorType==DatasetDescriptor.DESCRIPTOR_H1){
+            double value = treeExpressions.get(0).getValue(tree);
+            H1F h1 = (H1F) this.descDataset.get(0);
+            h1.fill(value);
+            return;
+        }
+        
+        if(descriptorType==DatasetDescriptor.DESCRIPTOR_H2){
+            double valueX = treeExpressions.get(0).getValue(tree);
+            double valueY = treeExpressions.get(1).getValue(tree);
+            H2F h2 = (H2F) this.descDataset.get(0);
+            h2.fill(valueX,valueY);
+            return;
+        }
+        if(descriptorType==DatasetDescriptor.DESCRIPTOR_GRXY_XY){
+            double x  = treeExpressions.get(0).getValue(tree);
+            double y  = treeExpressions.get(1).getValue(tree);
+            GraphErrors graph = (GraphErrors) this.descDataset.get(0);
+            graph.addPoint(x, y, 0.0, 0.0);
+        }
+        
+        if(descriptorType==DatasetDescriptor.DESCRIPTOR_GRXY_XY_EY){
+            double x  = treeExpressions.get(0).getValue(tree);
+            double y  = treeExpressions.get(1).getValue(tree);
+            double ey = treeExpressions.get(2).getValue(tree);
+            GraphErrors graph = (GraphErrors) this.descDataset.get(0);
+            graph.addPoint(x, y, 0.0, ey);
+        }
+        
+        if(descriptorType==DatasetDescriptor.DESCRIPTOR_GRXY_XY_EX_EY){
+            double x  = treeExpressions.get(0).getValue(tree);
+            double y  = treeExpressions.get(1).getValue(tree);
+            double ex = treeExpressions.get(2).getValue(tree);
+            double ey = treeExpressions.get(3).getValue(tree);
+            GraphErrors graph = (GraphErrors) this.descDataset.get(0);
+            graph.addPoint(x, y, ex, ey);
+        }                 
+    }
+
+    @Override
+    public JDialog edit() {
+        return null;
+    }
+        
 }
