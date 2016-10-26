@@ -35,6 +35,6 @@ public abstract class AbstractDescriptor {
     public List<IDataSet> getData(){ return this.descriptorDatasets;}
     
     public abstract void           processTreeEvent(Tree tree);
-    public abstract JDialog        edit();
+    public abstract JDialog        edit(Tree tree);
     
 }

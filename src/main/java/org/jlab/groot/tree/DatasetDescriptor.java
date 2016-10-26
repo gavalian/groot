@@ -232,9 +232,9 @@ public class DatasetDescriptor extends AbstractDescriptor {
             graph.addPoint(x, y, ex, ey);
         }                 
     }
-
+    
     @Override
-    public JDialog edit() {
+    public JDialog edit(Tree tree) {
         return null;
     }
         
