@@ -158,6 +158,9 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
             String[] options = new String[]{"1","2","3","4","5","6","7"};
             JComboBox columns = new JComboBox(options);
             JComboBox    rows = new JComboBox(options);
+            columns.setSelectedIndex(this.getCanvas().getNColumns()-1);
+            rows.setSelectedIndex(this.getCanvas().getNRows()-1);
+
             Object[] message = {
                 "Columns:", columns,
                 "Rows:", rows

@@ -110,13 +110,20 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     }
     
     public final void divide(int columns, int rows){
-        canvasPads.clear();
+    	//canvasPads.clear();
         ec_COLUMNS = columns;
         ec_ROWS    = rows;
-        for(int i = 0; i < columns*rows; i++){
-            canvasPads.add(new EmbeddedPad());
+        if((columns*rows) > (canvasPads.size()-1)){
+        	this.activePad = canvasPads.size()-1;
+        }else{
+        	this.activePad = columns*rows-1;
         }
-        activePad = 0;
+        for(int i = 0; i < columns*rows; i++){
+        	if(i>(canvasPads.size()-1)){
+        		canvasPads.add(new EmbeddedPad());
+        	}
+        }
+        //activePad = 0;
     }
     /**
      * changes current active drawing pad to index=pad
@@ -205,6 +212,14 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
                 pcounter++;
             }
         }
+    }
+    
+    public int getNColumns(){
+    	return ec_COLUMNS;
+    }
+    
+    public int getNRows(){
+    	return ec_ROWS;
     }
     
     /**

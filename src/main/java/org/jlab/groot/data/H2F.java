@@ -207,7 +207,14 @@ public class H2F implements IDataSet {
         double maxX = vecX.getMax();
         double minY = vecY.getMin();
         double maxY = vecY.getMax();
-        
+        if(minX==maxX){
+        	minX = .9999*minX;
+        	maxX = 1.0001*maxX; 
+        }
+        if(minY==maxY){
+        	minY = .9999*minY;
+        	maxY = 1.0001*maxY; 
+        }
         H2F h2 = new H2F(name,"",binsX,minX,maxX,binsY,minY,maxY);
         
         for(int i = 0; i < vecX.getSize(); i++){
