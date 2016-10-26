@@ -122,6 +122,10 @@ public class DataVector {
         return max;
     }
     
+    public int  getBinSuggestion(){
+        return 100;
+    }
+    
     public void copy(DataVector vec){
         this.datavec.clear();
         for(int loop = 0; loop < vec.getSize(); loop++){

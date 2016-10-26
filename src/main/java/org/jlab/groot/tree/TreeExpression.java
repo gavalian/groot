@@ -103,4 +103,17 @@ public class TreeExpression {
         double result = expr.evaluate();
         return result;
     }
+    
+    public static boolean validateExpression(String expression,  List<String> branches){
+        String[] variables = new String[branches.size()];
+        for(int i=0; i < branches.size(); i++) variables[i] = branches.get(i);
+        ExpressionBuilder builder = new ExpressionBuilder(expression);
+        builder.variables(variables);
+        try {
+            Expression expr = builder.build(); 
+        } catch(Exception e){
+            return false;
+        }
+        return true;
+    }
 }
