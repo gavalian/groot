@@ -1,5 +1,6 @@
 package org.jlab.groot.ui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -20,6 +21,7 @@ import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeAnalyzer;
 import org.jlab.groot.tree.DatasetDescriptor;
 import org.jlab.groot.tree.TreeCut;
+import org.jlab.groot.tree.TreeExpression;
 
 public class DescriptorPanel extends JPanel {
 	int type = 1;
@@ -271,6 +273,12 @@ public class DescriptorPanel extends JPanel {
 		minTextFieldY.setColumns(5);
 		maxTextFieldY.setText("");
 		maxTextFieldY.setColumns(5);
+		branchVariableFieldX.addActionListener((e)->{
+			validateExpression(0);
+		});
+		branchVariableFieldY.addActionListener((e)->{
+			validateExpression(1);
+		});
 		/*
 		if(descriptor!=null){
 			name.setText(descriptor.getName());
@@ -343,6 +351,23 @@ public class DescriptorPanel extends JPanel {
 		}
 		
 		
+	}
+
+	private void validateExpression(int i) {
+		if(i==0){
+			if(TreeExpression.validateExpression(this.branchVariableFieldX.getText(), this.tree.getListOfBranches())){
+				this.branchVariableFieldX.setForeground(Color.GREEN);
+			}else{
+				this.branchVariableFieldX.setForeground(Color.RED);
+			}
+		}
+		if(i==1){
+			if(TreeExpression.validateExpression(this.branchVariableFieldX.getText(), this.tree.getListOfBranches())){
+				this.branchVariableFieldY.setForeground(Color.GREEN);
+			}else{
+				this.branchVariableFieldY.setForeground(Color.RED);
+			}
+		}
 	}
 	
 	
