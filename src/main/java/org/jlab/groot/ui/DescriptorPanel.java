@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -19,6 +20,7 @@ import javax.swing.border.TitledBorder;
 
 import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeAnalyzer;
+import org.jlab.groot.data.DataVector;
 import org.jlab.groot.tree.DatasetDescriptor;
 import org.jlab.groot.tree.TreeCut;
 import org.jlab.groot.tree.TreeExpression;
@@ -357,6 +359,13 @@ public class DescriptorPanel extends JPanel {
 		if(i==0){
 			if(TreeExpression.validateExpression(this.branchVariableFieldX.getText(), this.tree.getListOfBranches())){
 				this.branchVariableFieldX.setForeground(Color.GREEN);
+				this.tree.scanTree(this.branchVariableFieldX.getText(), "", 1000, true);
+				List<DataVector> vecs = this.tree.getScanResults();
+				if(vecs.size()>=1){
+					this.minTextFieldX.setText(String.format("%4.2f",vecs.get(0).getMin()));
+					this.maxTextFieldX.setText(String.format("%4.2f",vecs.get(0).getMax()));
+					this.binTextFieldX.setText(String.format("%d",vecs.get(0).getBinSuggestion()));
+				}
 			}else{
 				this.branchVariableFieldX.setForeground(Color.RED);
 			}
@@ -364,6 +373,13 @@ public class DescriptorPanel extends JPanel {
 		if(i==1){
 			if(TreeExpression.validateExpression(this.branchVariableFieldX.getText(), this.tree.getListOfBranches())){
 				this.branchVariableFieldY.setForeground(Color.GREEN);
+				this.tree.scanTree(this.branchVariableFieldY.getText(), "", 1000, true);
+				List<DataVector> vecs = this.tree.getScanResults();
+				if(vecs.size()>=1){
+					this.minTextFieldY.setText(String.format("%4.2f",vecs.get(0).getMin()));
+					this.maxTextFieldY.setText(String.format("%4.2f",vecs.get(0).getMax()));
+					this.binTextFieldY.setText(String.format("%d",vecs.get(0).getBinSuggestion()));
+				}
 			}else{
 				this.branchVariableFieldY.setForeground(Color.RED);
 			}
