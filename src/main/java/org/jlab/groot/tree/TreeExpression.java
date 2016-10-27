@@ -105,6 +105,9 @@ public class TreeExpression {
     }
     
     public static boolean validateExpression(String expression,  List<String> branches){
+    	if(expression.isEmpty()){
+    		return false;
+    	}
         String[] variables = new String[branches.size()];
         for(int i=0; i < branches.size(); i++) variables[i] = branches.get(i);
         ExpressionBuilder builder = new ExpressionBuilder(expression);

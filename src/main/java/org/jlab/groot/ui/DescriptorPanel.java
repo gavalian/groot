@@ -1,14 +1,22 @@
 package org.jlab.groot.ui;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+import javax.swing.ComboBoxEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -17,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 
 import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeAnalyzer;
@@ -33,8 +42,25 @@ public class DescriptorPanel extends JPanel {
 	ArrayList<String> branches;
 	ArrayList<String> cutStrings;
 	ArrayList<JCheckBox> cutBoxes = new ArrayList<JCheckBox>();
-	Map<String,TreeCut> cutMap;
-	
+	Map<String, TreeCut> cutMap;
+
+	private int iconSizeX = 15;
+	private int iconSizeY = 15;
+	ImageIcon checkIcon = new ImageIcon();
+	ImageIcon xIcon = new ImageIcon();
+
+	// checkImage = checkImage.getScaledInstance(iconSizeX, iconSizeY,
+	// Image.SCALE_SMOOTH);
+	// xImage = xImage.getScaledInstance(iconSizeX, iconSizeY,
+	// Image.SCALE_SMOOTH);
+
+	JComboBox branchComboBoxX = new JComboBox();
+	JComboBox branchComboBoxY = new JComboBox();
+	JLabel validationLabelCheck = null;
+	JLabel validationLabelX = null;
+	JLabel validationPlaceHolderX = null;
+	JLabel validationPlaceHolderY = null;
+
 	JTextField name = new JTextField();
 	JTextField descriptorName = new JTextField();
 	JTextField branchVariableFieldX = new JTextField();
@@ -42,7 +68,7 @@ public class DescriptorPanel extends JPanel {
 	JTextField binTextFieldX = new JTextField();
 	JTextField minTextFieldX = new JTextField();
 	JTextField maxTextFieldX = new JTextField();
-	
+
 	JTextField branchVariableFieldY = new JTextField();
 	JTextField branchVariableFieldYerr = new JTextField();
 	JTextField binTextFieldY = new JTextField();
@@ -52,51 +78,61 @@ public class DescriptorPanel extends JPanel {
 	JPanel histogramOptions = new JPanel();
 	JPanel cutOptions = new JPanel();
 
-	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, DatasetDescriptor descriptor){
+	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, DatasetDescriptor descriptor) {
 		this.type = descriptor.getDescriptorType();
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
 		init();
 	}
-	
-	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer,int type){
+
+	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, int type) {
 		this.type = type;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
 		init();
 	}
-	
-	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer){
+
+	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer) {
 		this.type = 1;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
 		init();
 	}
-	
-	private void init(){
-		if(this.descriptor==null){
+
+	private void init() {
+		try {
+			Image checkImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/general/checkmark.png"));
+			Image xImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/general/xmark.png"));
+			checkIcon = new ImageIcon(checkImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
+			xIcon = new ImageIcon(xImage.getScaledInstance(iconSizeX, iconSizeY, Image.SCALE_SMOOTH));
+		} catch (Exception e) {
+
+		}
+		validationPlaceHolderX = new JLabel();
+		validationPlaceHolderY = new JLabel();
+		if (this.descriptor == null) {
 			this.descriptor = new DatasetDescriptor("Dataset Name", this.type);
 		}
 		JLabel typeLabel = new JLabel("Dataset Type:");
-		String[] types = {"1D Histogram","2D Histogram", "GraphErrors"};
+		String[] types = {"1D Histogram", "2D Histogram", "GraphErrors"};
 		JComboBox typeComboBox = new JComboBox(types);
-		if(this.type==DatasetDescriptor.DESCRIPTOR_H1){
+		if (this.type == DatasetDescriptor.DESCRIPTOR_H1) {
 			typeComboBox.setSelectedIndex(0);
-		}else if(this.type==DatasetDescriptor.DESCRIPTOR_H2){
+		} else if (this.type == DatasetDescriptor.DESCRIPTOR_H2) {
 			typeComboBox.setSelectedIndex(1);
-		}else{
+		} else {
 			typeComboBox.setSelectedIndex(2);
 		}
 		descriptorName = new JTextField(20);
 		descriptorName.setText(this.descriptor.getDescName());
-		
+
 		JPanel headerPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridy = 0;
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.fill = GridBagConstraints.BOTH;
-		headerPanel.add(typeLabel,c);
+		headerPanel.add(typeLabel, c);
 		headerPanel.add(typeComboBox, c);
 		c.gridy++;
 		headerPanel.add(new JLabel("Dataset Name:"), c);
@@ -112,66 +148,70 @@ public class DescriptorPanel extends JPanel {
 		this.add(headerPanel, c1);
 		this.initHistogramOptions();
 		c1.gridy++;
-		this.add(histogramOptions,c1);
+		this.add(histogramOptions, c1);
 		cutMap = tree.getSelector().getSelectorCuts();
 		cutStrings = new ArrayList<String>();
 		Object[] keys = cutMap.keySet().toArray();
-		for(int i=0; i<cutMap.keySet().size(); i++){
-			cutStrings.add((String)keys[i]);
+		for (int i = 0; i < cutMap.keySet().size(); i++) {
+			cutStrings.add((String) keys[i]);
 		}
 		initDatasetCreationPane();
 		initCutOptions();
-		if(cutStrings!=null&&cutStrings.size()>0){
+		if (cutStrings != null && cutStrings.size() > 0) {
 			c1.gridy++;
-			this.add(this.cutOptions,c1);
+			this.add(this.cutOptions, c1);
 		}
 		JButton saveAndClose = new JButton("Apply");
 		c1.gridy++;
-		this.add(saveAndClose,c1);
-		saveAndClose.addActionListener(new ActionListener(){
+		this.add(saveAndClose, c1);
+		saveAndClose.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//if(descriptor==null){
-					if(type==DatasetDescriptor.DESCRIPTOR_H1){
-						String expressionx = branchVariableFieldX.getText();
-						int binsx = Integer.parseInt(binTextFieldX.getText());
-						Double minx = Double.parseDouble(minTextFieldX.getText());
-						Double maxx = Double.parseDouble(maxTextFieldX.getText());
-						descriptor = new DatasetDescriptor(descriptorName.getText(),binsx,minx,maxx,expressionx,tree);
-					}else if(type==DatasetDescriptor.DESCRIPTOR_H2){
-						String expressionx = branchVariableFieldX.getText();
-						int binsx = Integer.parseInt(binTextFieldX.getText());
-						Double minx = Double.parseDouble(minTextFieldX.getText());
-						Double maxx = Double.parseDouble(maxTextFieldX.getText());
-						String expressiony = branchVariableFieldY.getText();
-						int binsy = Integer.parseInt(binTextFieldY.getText());
-						Double miny = Double.parseDouble(minTextFieldY.getText());
-						Double maxy = Double.parseDouble(maxTextFieldY.getText());
-						descriptor = new DatasetDescriptor(descriptorName.getText(),binsx,minx,maxx,binsy,miny,maxy,expressionx+":"+expressiony,tree);
-					}else{
-						String x = branchVariableFieldX.getText();
-						String xerr = branchVariableFieldXerr.getText();
-						String y = branchVariableFieldY.getText();
-						String yerr = branchVariableFieldYerr.getText();
-						if((xerr==""||xerr=="0")&&(yerr==""||yerr=="0")){
-							descriptor = new DatasetDescriptor(descriptorName.getText(),x+":"+y,tree);
-						}else if((xerr==""||xerr=="0")){
-							descriptor = new DatasetDescriptor(descriptorName.getText(),x+":"+y+":"+yerr,tree);
-						}else{
-							descriptor = new DatasetDescriptor(descriptorName.getText(),x+":"+y+":"+xerr+":"+yerr,tree);
-						}
+				// if(descriptor==null){
+				if (type == DatasetDescriptor.DESCRIPTOR_H1) {
+					String expressionx = branchVariableFieldX.getText();
+					int binsx = Integer.parseInt(binTextFieldX.getText());
+					Double minx = Double.parseDouble(minTextFieldX.getText());
+					Double maxx = Double.parseDouble(maxTextFieldX.getText());
+					descriptor = new DatasetDescriptor(descriptorName.getText(), binsx, minx, maxx, expressionx, tree);
+				} else if (type == DatasetDescriptor.DESCRIPTOR_H2) {
+					String expressionx = branchVariableFieldX.getText();
+					int binsx = Integer.parseInt(binTextFieldX.getText());
+					Double minx = Double.parseDouble(minTextFieldX.getText());
+					Double maxx = Double.parseDouble(maxTextFieldX.getText());
+					String expressiony = branchVariableFieldY.getText();
+					int binsy = Integer.parseInt(binTextFieldY.getText());
+					Double miny = Double.parseDouble(minTextFieldY.getText());
+					Double maxy = Double.parseDouble(maxTextFieldY.getText());
+					descriptor = new DatasetDescriptor(descriptorName.getText(), binsx, minx, maxx, binsy, miny, maxy,
+							expressionx + ":" + expressiony, tree);
+				} else {
+					String x = branchVariableFieldX.getText();
+					String xerr = branchVariableFieldXerr.getText();
+					String y = branchVariableFieldY.getText();
+					String yerr = branchVariableFieldYerr.getText();
+					if ((xerr == "" || xerr == "0") && (yerr == "" || yerr == "0")) {
+						descriptor = new DatasetDescriptor(descriptorName.getText(), x + ":" + y, tree);
+					} else if ((xerr == "" || xerr == "0")) {
+						descriptor = new DatasetDescriptor(descriptorName.getText(), x + ":" + y + ":" + yerr, tree);
+					} else {
+						descriptor = new DatasetDescriptor(descriptorName.getText(),
+								x + ":" + y + ":" + xerr + ":" + yerr, tree);
 					}
-					//descriptor =  new DatasetDescriptor(name.getText(),Integer.parseInt(binTextFieldX.getText()), Double.parseDouble(minTextFieldX.getText()),Double.parseDouble(maxTextFieldX.getText()));
-					for(int i=0; i<cutBoxes.size(); i++){
-						if(cutBoxes.get(i).isSelected()){
-							descriptor.addCut(cutMap.get(cutStrings.get(i)));
-						}
+				}
+				// descriptor = new
+				// DatasetDescriptor(name.getText(),Integer.parseInt(binTextFieldX.getText()),
+				// Double.parseDouble(minTextFieldX.getText()),Double.parseDouble(maxTextFieldX.getText()));
+				for (int i = 0; i < cutBoxes.size(); i++) {
+					if (cutBoxes.get(i).isSelected()) {
+						descriptor.addCut(cutMap.get(cutStrings.get(i)));
 					}
-					treeAnalyzer.addDescriptor(descriptor);
-				/*}else{
-					System.out.println("Nope");
-				}*/
-				
+				}
+				treeAnalyzer.addDescriptor(descriptor);
+				/*
+				 * }else{ System.out.println("Nope"); }
+				 */
+
 				System.out.println("Save and close descriptor!");
 				SwingUtilities.getWindowAncestor(branchVariableFieldX).dispose();
 
@@ -179,82 +219,85 @@ public class DescriptorPanel extends JPanel {
 		});
 
 	}
-	
+
 	private void initDatasetCreationPane() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/*
-	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, DatasetDescriptor descriptor){
-		this.nDim = 1;
-		this.tree = tree;
-		this.treeAnalyzer = treeAnalyzer;
-		this.descriptor = descriptor;
-		init();
-	}
-	
-	private void init(){
-		initHistogramOptions();
-		initCutOptions();
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
-		int gridy = 0;
-		c.gridy = gridy++;
-		this.add(histogramOptions,c);
-		if(cutStrings!=null&&cutStrings.size()>0){
-			c.gridy = gridy++;
-			this.add(cutOptions,c);
-		}
-		
-		JButton saveAndClose = new JButton("Apply");
-		c.gridy = gridy++;
-		this.add(saveAndClose, c);
-		saveAndClose.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(descriptor==null){
-					//descriptor =  new DatasetDescriptor(name.getText(),Integer.parseInt(binTextFieldX.getText()), Double.parseDouble(minTextFieldX.getText()),Double.parseDouble(maxTextFieldX.getText()));
-					for(int i=0; i<cutBoxes.size(); i++){
-						if(cutBoxes.get(i).isSelected()){
-							//descriptor.addCut(cutMap.get(cutStrings.get(i)).getExpression());
-						}
-					}
-					treeAnalyzer.addDescriptor(descriptor);
-				}else{
-					System.out.println("Nope");
-				}
-				
-				System.out.println("Save and close descriptor!");
-				SwingUtilities.getWindowAncestor(name).dispose();
-
-			}
-		});
-		
-	}*/
+	 * public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer,
+	 * DatasetDescriptor descriptor){ this.nDim = 1; this.tree = tree;
+	 * this.treeAnalyzer = treeAnalyzer; this.descriptor = descriptor; init(); }
+	 * 
+	 * private void init(){ initHistogramOptions(); initCutOptions();
+	 * this.setLayout(new GridBagLayout()); GridBagConstraints c = new
+	 * GridBagConstraints(); c.fill = GridBagConstraints.HORIZONTAL; int gridy =
+	 * 0; c.gridy = gridy++; this.add(histogramOptions,c);
+	 * if(cutStrings!=null&&cutStrings.size()>0){ c.gridy = gridy++;
+	 * this.add(cutOptions,c); }
+	 * 
+	 * JButton saveAndClose = new JButton("Apply"); c.gridy = gridy++;
+	 * this.add(saveAndClose, c); saveAndClose.addActionListener(new
+	 * ActionListener(){
+	 * 
+	 * @Override public void actionPerformed(ActionEvent e) {
+	 * if(descriptor==null){ //descriptor = new
+	 * DatasetDescriptor(name.getText(),Integer.parseInt(binTextFieldX.getText()
+	 * ), Double.parseDouble(minTextFieldX.getText()),Double.parseDouble(
+	 * maxTextFieldX.getText())); for(int i=0; i<cutBoxes.size(); i++){
+	 * if(cutBoxes.get(i).isSelected()){
+	 * //descriptor.addCut(cutMap.get(cutStrings.get(i)).getExpression()); } }
+	 * treeAnalyzer.addDescriptor(descriptor); }else{
+	 * System.out.println("Nope"); }
+	 * 
+	 * System.out.println("Save and close descriptor!");
+	 * SwingUtilities.getWindowAncestor(name).dispose();
+	 * 
+	 * } });
+	 * 
+	 * }
+	 */
 	private void initCutOptions() {
-		if(cutStrings!=null&&cutStrings.size()>0){
+		if (cutStrings != null && cutStrings.size() > 0) {
 			cutOptions.setLayout(new GridBagLayout());
 			cutOptions.setBorder(new TitledBorder("Cuts"));
 			GridBagConstraints c = new GridBagConstraints();
 			int gridy = 0;
-			for(int i=0; i<cutStrings.size(); i++){
-				System.out.println("Cut "+i+" "+cutStrings.get(i));
+			for (int i = 0; i < cutStrings.size(); i++) {
+				System.out.println("Cut " + i + " " + cutStrings.get(i));
 				cutBoxes.add(new JCheckBox(cutStrings.get(i)));
-				c.gridy=i;
+				cutBoxes.get(i).addActionListener((e)->{this.validateExpression(0);this.validateExpression(1);});
+				c.gridy = i;
 				cutOptions.add(cutBoxes.get(i), c);
 			}
 		}
 	}
 
-	
-	private void initHistogramOptions(){
+	private void initHistogramOptions() {
 		branches = (ArrayList<String>) tree.getListOfBranches();
-		/*for(int i=0; i<branches.size(); i++){
-			branchVariableSelectorX.addItem(branches.get(i));
-			branchVariableSelectorY.addItem(branches.get(i));
-		}*/
+		/*
+		 * for(int i=0; i<branches.size(); i++){
+		 * branchVariableSelectorX.addItem(branches.get(i));
+		 * branchVariableSelectorY.addItem(branches.get(i)); }
+		 */
+		branchComboBoxX = new JComboBox(tree.getListOfBranches().toArray());
+		branchComboBoxX.setMaximumSize(new Dimension(52, branchComboBoxX.getPreferredSize().height));
+		branchComboBoxX.setPreferredSize(new Dimension(52, branchComboBoxX.getPreferredSize().height));
+		branchComboBoxX.setMinimumSize(new Dimension(52, branchComboBoxX.getPreferredSize().height));
+		branchComboBoxX.addActionListener((e) -> {
+			branchVariableFieldX.setText(branchVariableFieldX.getText() + branchComboBoxX.getSelectedItem());
+			this.validateExpression(0);
+		});
+		branchComboBoxY = new JComboBox(tree.getListOfBranches().toArray());
+		branchComboBoxY.setMaximumSize(new Dimension(52, branchComboBoxY.getPreferredSize().height));
+		branchComboBoxY.setPreferredSize(new Dimension(52, branchComboBoxY.getPreferredSize().height));
+		branchComboBoxY.setMinimumSize(new Dimension(52, branchComboBoxY.getPreferredSize().height));
+		branchComboBoxY.addActionListener((e) -> {
+			branchVariableFieldY.setText(branchVariableFieldY.getText() + branchComboBoxY.getSelectedItem());
+			this.validateExpression(1);
+		});
+
 		this.branchVariableFieldX.setText("");
 		this.branchVariableFieldY.setText("");
 		this.branchVariableFieldXerr.setText("");
@@ -275,32 +318,65 @@ public class DescriptorPanel extends JPanel {
 		minTextFieldY.setColumns(5);
 		maxTextFieldY.setText("");
 		maxTextFieldY.setColumns(5);
-		branchVariableFieldX.addActionListener((e)->{
+		branchVariableFieldX.addActionListener((e) -> {
 			validateExpression(0);
 		});
-		branchVariableFieldY.addActionListener((e)->{
+		branchVariableFieldY.addActionListener((e) -> {
 			validateExpression(1);
 		});
-		/*
-		if(descriptor!=null){
-			name.setText(descriptor.getName());
-			name.setColumns(15);
-			binTextFieldX.setText(""+descriptor.getNBinsX());
-			binTextFieldX.setColumns(5);
-			minTextFieldX.setText(""+descriptor.getMinX());
-			minTextFieldX.setColumns(5);
-			maxTextFieldX.setText(""+descriptor.getMaxX());
-			maxTextFieldX.setColumns(5);
-			if(nDim>1){
-				binTextFieldY.setText(""+descriptor.getNBinsY());
-				binTextFieldY.setColumns(5);
-				minTextFieldY.setText(""+descriptor.getMinY());
-				minTextFieldY.setColumns(5);
-				maxTextFieldY.setText(""+descriptor.getMaxY());
-				maxTextFieldY.setColumns(5);
+		branchVariableFieldX.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
 			}
-		}*/
-		
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				//System.out.println("key pressed:" + e.getKeyChar() + " " + branchVariableFieldX.getText());
+				validateExpression(0);
+
+			}
+
+		});
+		branchVariableFieldY.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				validateExpression(1);
+			}
+
+		});
+		/*
+		 * if(descriptor!=null){ name.setText(descriptor.getName());
+		 * name.setColumns(15);
+		 * binTextFieldX.setText(""+descriptor.getNBinsX());
+		 * binTextFieldX.setColumns(5);
+		 * minTextFieldX.setText(""+descriptor.getMinX());
+		 * minTextFieldX.setColumns(5);
+		 * maxTextFieldX.setText(""+descriptor.getMaxX());
+		 * maxTextFieldX.setColumns(5); if(nDim>1){
+		 * binTextFieldY.setText(""+descriptor.getNBinsY());
+		 * binTextFieldY.setColumns(5);
+		 * minTextFieldY.setText(""+descriptor.getMinY());
+		 * minTextFieldY.setColumns(5);
+		 * maxTextFieldY.setText(""+descriptor.getMaxY());
+		 * maxTextFieldY.setColumns(5); } }
+		 */
+
 		histogramOptions.setLayout(new GridBagLayout());
 		histogramOptions.setBorder(new TitledBorder("Histogram Options"));
 		GridBagConstraints c = new GridBagConstraints();
@@ -309,83 +385,138 @@ public class DescriptorPanel extends JPanel {
 		c.weighty = 1.0;
 		int gridy = 0;
 		c.gridy = gridy++;
-		
-		if(type==DatasetDescriptor.DESCRIPTOR_H1){
+
+		if (type == DatasetDescriptor.DESCRIPTOR_H1) {
 			c.gridy = gridy++;
 			histogramOptions.add(new JLabel("Variable:"), c);
-			histogramOptions.add(branchVariableFieldX,c);
+			histogramOptions.add(branchVariableFieldX, c);
+			histogramOptions.add(branchComboBoxX, c);
+			histogramOptions.add(validationPlaceHolderX, c);
 			c.gridy = gridy++;
 			histogramOptions.add(new JLabel("#Bins:"), c);
-			histogramOptions.add(binTextFieldX,c);
+			c.gridwidth = 3;
+			histogramOptions.add(binTextFieldX, c);
+			c.gridwidth = 1;
 			c.gridy = gridy++;
 			histogramOptions.add(new JLabel("Min:"), c);
-			histogramOptions.add(minTextFieldX,c);
+			c.gridwidth = 3;
+			histogramOptions.add(minTextFieldX, c);
+			c.gridwidth = 1;
 			c.gridy = gridy++;
 			histogramOptions.add(new JLabel("Max:"), c);
-			histogramOptions.add(maxTextFieldX,c);
-		}else if(type==DatasetDescriptor.DESCRIPTOR_H2){
-			c.gridwidth=1;
+			c.gridwidth = 3;
+			histogramOptions.add(maxTextFieldX, c);
+			c.gridwidth = 1;
+		} else if (type == DatasetDescriptor.DESCRIPTOR_H2) {
+			c.gridwidth = 1;
 			c.gridy = gridy++;
 			histogramOptions.add(new JLabel("Variable:"), c);
-			histogramOptions.add(branchVariableFieldX,c);
-			histogramOptions.add(branchVariableFieldY,c);
+			histogramOptions.add(branchVariableFieldX, c);
+			histogramOptions.add(branchComboBoxX, c);
+			histogramOptions.add(validationPlaceHolderX, c);
+			histogramOptions.add(branchVariableFieldY, c);
+			histogramOptions.add(branchComboBoxY, c);
+			histogramOptions.add(validationPlaceHolderY, c);
 			c.gridy = gridy++;
 			histogramOptions.add(new JLabel("#Bins:"), c);
-			histogramOptions.add(binTextFieldX,c);
-			histogramOptions.add(binTextFieldY,c);
+			c.gridwidth = 3;
+			histogramOptions.add(binTextFieldX, c);
+			histogramOptions.add(binTextFieldY, c);
+			c.gridwidth = 1;
 			c.gridy = gridy++;
 			histogramOptions.add(new JLabel("Min:"), c);
-			histogramOptions.add(minTextFieldX,c);
-			histogramOptions.add(minTextFieldY,c);
+			c.gridwidth = 3;
+			histogramOptions.add(minTextFieldX, c);
+			histogramOptions.add(minTextFieldY, c);
+			c.gridwidth = 1;
 			c.gridy = gridy++;
 			histogramOptions.add(new JLabel("Max:"), c);
-			histogramOptions.add(maxTextFieldX,c);
-			histogramOptions.add(maxTextFieldY,c);
-		}else{
+			c.gridwidth = 3;
+			histogramOptions.add(maxTextFieldX, c);
+			histogramOptions.add(maxTextFieldY, c);			
+			c.gridwidth = 3;
+
+		} else {
 			c.gridy = gridy++;
 			histogramOptions.add(new JLabel("Variable:"), c);
-			histogramOptions.add(branchVariableFieldX,c);
-			histogramOptions.add(branchVariableFieldY,c);
+			histogramOptions.add(branchVariableFieldX, c);
+			histogramOptions.add(branchComboBoxX, c);
+			histogramOptions.add(branchVariableFieldY, c);
+			histogramOptions.add(branchComboBoxY, c);
 			c.gridy = gridy++;
 			histogramOptions.add(new JLabel("Variable Error:"), c);
-			histogramOptions.add(branchVariableFieldXerr,c);
-			histogramOptions.add(branchVariableFieldYerr,c);
+			histogramOptions.add(branchVariableFieldXerr, c);
+			histogramOptions.add(branchVariableFieldYerr, c);
 		}
-		
-		
+		validateExpression(0);
+		validateExpression(1);
 	}
 
 	private void validateExpression(int i) {
-		if(i==0){
-			if(TreeExpression.validateExpression(this.branchVariableFieldX.getText(), this.tree.getListOfBranches())){
-				this.branchVariableFieldX.setForeground(Color.GREEN);
-				this.tree.scanTree(this.branchVariableFieldX.getText(), "", 1000, true);
-				List<DataVector> vecs = this.tree.getScanResults();
-				if(vecs.size()>=1){
-					this.minTextFieldX.setText(String.format("%4.2f",vecs.get(0).getMin()));
-					this.maxTextFieldX.setText(String.format("%4.2f",vecs.get(0).getMax()));
-					this.binTextFieldX.setText(String.format("%d",vecs.get(0).getBinSuggestion()));
+		String cuts = "";
+		for (int j = 0; j < cutBoxes.size(); j++) {
+			if (cutBoxes.get(j).isSelected()) {
+				if(cuts==""){
+					cuts += cutMap.get(cutStrings.get(j)).getExpression();
+				}else{
+					cuts += "&&"+cutMap.get(cutStrings.get(j)).getExpression();
 				}
-			}else{
-				this.branchVariableFieldX.setForeground(Color.RED);
 			}
 		}
-		if(i==1){
-			if(TreeExpression.validateExpression(this.branchVariableFieldX.getText(), this.tree.getListOfBranches())){
-				this.branchVariableFieldY.setForeground(Color.GREEN);
-				this.tree.scanTree(this.branchVariableFieldY.getText(), "", 1000, true);
-				List<DataVector> vecs = this.tree.getScanResults();
-				if(vecs.size()>=1){
-					this.minTextFieldY.setText(String.format("%4.2f",vecs.get(0).getMin()));
-					this.maxTextFieldY.setText(String.format("%4.2f",vecs.get(0).getMax()));
-					this.binTextFieldY.setText(String.format("%d",vecs.get(0).getBinSuggestion()));
+		System.out.println("cuts:["+cuts+"]");
+		if (i == 0) {
+			boolean passed = TreeExpression.validateExpression(this.branchVariableFieldX.getText(), this.tree.getListOfBranches());
+			if (passed) {
+				try {
+					
+					this.tree.scanTree(this.branchVariableFieldX.getText(), cuts, 1000, true);
+					List<DataVector> vecs = this.tree.getScanResults();
+					if (vecs.size() >= 1) {
+						this.minTextFieldX.setText(String.format("%4.2f", vecs.get(0).getMin()));
+						this.maxTextFieldX.setText(String.format("%4.2f", vecs.get(0).getMax()));
+						this.binTextFieldX.setText(String.format("%d", vecs.get(0).getBinSuggestion()));
+					}
+				} catch (Exception e) {
+					passed = false;
 				}
+			} 
+			if(!passed) {
+				validationPlaceHolderX.setIcon(xIcon);
+				validationPlaceHolderX.repaint();
+				this.minTextFieldX.setText("");
+				this.maxTextFieldX.setText("");
+				this.binTextFieldX.setText("");
 			}else{
-				this.branchVariableFieldY.setForeground(Color.RED);
+				validationPlaceHolderX.setIcon(checkIcon);
+				validationPlaceHolderX.repaint();
+			}
+		}
+		if (i == 1) {
+			boolean passed = TreeExpression.validateExpression(this.branchVariableFieldY.getText(), this.tree.getListOfBranches());
+			if (passed) {
+				try {
+					this.tree.scanTree(this.branchVariableFieldY.getText(), cuts, 1000, true);
+					List<DataVector> vecs = this.tree.getScanResults();
+					if (vecs.size() >= 1) {
+						this.minTextFieldY.setText(String.format("%4.2f", vecs.get(0).getMin()));
+						this.maxTextFieldY.setText(String.format("%4.2f", vecs.get(0).getMax()));
+						this.binTextFieldY.setText(String.format("%d", vecs.get(0).getBinSuggestion()));
+					}
+				} catch (Exception e) {
+					passed = false;
+				}
+			} 
+			if(!passed) {
+				validationPlaceHolderY.setIcon(xIcon);
+				validationPlaceHolderY.repaint();
+				this.minTextFieldY.setText("");
+				this.maxTextFieldY.setText("");
+				this.binTextFieldY.setText("");
+			}else{
+				validationPlaceHolderY.setIcon(checkIcon);
+				validationPlaceHolderY.repaint();
 			}
 		}
 	}
-	
-	
-	
+
 }
