@@ -110,20 +110,28 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     }
     
     public final void divide(int columns, int rows){
-    	//canvasPads.clear();
         ec_COLUMNS = columns;
         ec_ROWS    = rows;
-        if((columns*rows) > (canvasPads.size()-1)){
-        	this.activePad = canvasPads.size()-1;
-        }else{
-        	this.activePad = columns*rows-1;
-        }
         for(int i = 0; i < columns*rows; i++){
         	if(i>(canvasPads.size()-1)){
         		canvasPads.add(new EmbeddedPad());
         	}
         }
-        //activePad = 0;
+        if(canvasPads.size()>columns*rows){
+        	for(int i=canvasPads.size()-1; i>=columns*rows; i--){
+        		canvasPads.remove(i);
+        	}
+        }
+        this.update();
+        for(int i=0; i<canvasPads.size(); i++){
+        	if(canvasPads.get(i).getDatasetPlotters().size()==0){
+        		cd(i);
+        		break;
+        	}
+        	if(i==canvasPads.size()-1){
+        		cd(0);
+        	}
+        }
     }
     /**
      * changes current active drawing pad to index=pad
@@ -241,10 +249,12 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             g2d.fillRect(0, 0, w, h);
             updateCanvasPads(w,h);
             
+            
             PadMargins  margins = new PadMargins();
             
             for(int i = 0; i < canvasPads.size(); i ++){
                 EmbeddedPad pad = canvasPads.get(i);
+                canvasPads.get(i).getAxisFrame().updateLabelFont();
                 pad.getAxisFrame().updateMargins(g2d);
                 //pad.getAxisFrame().setAxisMargins(pad.getAxisFrame().getFrameMargins());
                 margins.marginFit(pad.getAxisFrame().getFrameMargins());
