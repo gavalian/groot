@@ -472,7 +472,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		}
 		if (vec.size()>=1) {
 			System.out.println("result = " + vec.get(0).size());
-			H1F h1d = H1F.create(item.toString(),vec.get(0).getBinSuggestion(), vec.get(0));
+			H1F h1d = H1F.create(item.getLastPathComponent().toString(),vec.get(0).getBinSuggestion(), vec.get(0));
 			h1d.setTitle(item.getLastPathComponent().toString());
 			h1d.setTitleX(item.getLastPathComponent().toString());
 			h1d.setTitleY("Entries");
@@ -495,7 +495,7 @@ public class StudioUI implements MouseListener, ActionListener {
 			vec = studioTree.actionTreeNode(paths, -1);
 		}
 		if (vec.size() ==2) {
-			H2F h2d = H2F.create(item.toString(), vec.get(0).getBinSuggestion(), vec.get(1).getBinSuggestion(), vec.get(0), vec.get(1));
+			H2F h2d = H2F.create(item.getLastPathComponent().toString()+"_vs_"+lastLeaf.getLastPathComponent().toString(), vec.get(0).getBinSuggestion(), vec.get(1).getBinSuggestion(), vec.get(0), vec.get(1));
 			h2d.setTitle(item.getLastPathComponent().toString()+":"+lastLeaf.toString());
 			h2d.setTitleX(item.getLastPathComponent().toString());
 			h2d.setTitleY(lastLeaf.getLastPathComponent().toString());

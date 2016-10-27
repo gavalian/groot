@@ -1,7 +1,5 @@
 package org.jlab.groot.ui;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.ComboBoxEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 
 import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeAnalyzer;
@@ -267,7 +263,10 @@ public class DescriptorPanel extends JPanel {
 			for (int i = 0; i < cutStrings.size(); i++) {
 				System.out.println("Cut " + i + " " + cutStrings.get(i));
 				cutBoxes.add(new JCheckBox(cutStrings.get(i)));
-				cutBoxes.get(i).addActionListener((e)->{this.validateExpression(0);this.validateExpression(1);});
+				cutBoxes.get(i).addActionListener((e) -> {
+					this.validateExpression(0);
+					this.validateExpression(1);
+				});
 				c.gridy = i;
 				cutOptions.add(cutBoxes.get(i), c);
 			}
@@ -338,7 +337,8 @@ public class DescriptorPanel extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
-				//System.out.println("key pressed:" + e.getKeyChar() + " " + branchVariableFieldX.getText());
+				// System.out.println("key pressed:" + e.getKeyChar() + " " +
+				// branchVariableFieldX.getText());
 				validateExpression(0);
 
 			}
@@ -433,7 +433,7 @@ public class DescriptorPanel extends JPanel {
 			histogramOptions.add(new JLabel("Max:"), c);
 			c.gridwidth = 3;
 			histogramOptions.add(maxTextFieldX, c);
-			histogramOptions.add(maxTextFieldY, c);			
+			histogramOptions.add(maxTextFieldY, c);
 			c.gridwidth = 3;
 
 		} else {
@@ -456,19 +456,20 @@ public class DescriptorPanel extends JPanel {
 		String cuts = "";
 		for (int j = 0; j < cutBoxes.size(); j++) {
 			if (cutBoxes.get(j).isSelected()) {
-				if(cuts==""){
+				if (cuts == "") {
 					cuts += cutMap.get(cutStrings.get(j)).getExpression();
-				}else{
-					cuts += "&&"+cutMap.get(cutStrings.get(j)).getExpression();
+				} else {
+					cuts += "&&" + cutMap.get(cutStrings.get(j)).getExpression();
 				}
 			}
 		}
-		System.out.println("cuts:["+cuts+"]");
+		System.out.println("cuts:[" + cuts + "]");
 		if (i == 0) {
-			boolean passed = TreeExpression.validateExpression(this.branchVariableFieldX.getText(), this.tree.getListOfBranches());
+			boolean passed = TreeExpression.validateExpression(this.branchVariableFieldX.getText(),
+					this.tree.getListOfBranches());
 			if (passed) {
 				try {
-					
+
 					this.tree.scanTree(this.branchVariableFieldX.getText(), cuts, 1000, true);
 					List<DataVector> vecs = this.tree.getScanResults();
 					if (vecs.size() >= 1) {
@@ -479,20 +480,21 @@ public class DescriptorPanel extends JPanel {
 				} catch (Exception e) {
 					passed = false;
 				}
-			} 
-			if(!passed) {
+			}
+			if (!passed) {
 				validationPlaceHolderX.setIcon(xIcon);
 				validationPlaceHolderX.repaint();
 				this.minTextFieldX.setText("");
 				this.maxTextFieldX.setText("");
 				this.binTextFieldX.setText("");
-			}else{
+			} else {
 				validationPlaceHolderX.setIcon(checkIcon);
 				validationPlaceHolderX.repaint();
 			}
 		}
 		if (i == 1) {
-			boolean passed = TreeExpression.validateExpression(this.branchVariableFieldY.getText(), this.tree.getListOfBranches());
+			boolean passed = TreeExpression.validateExpression(this.branchVariableFieldY.getText(),
+					this.tree.getListOfBranches());
 			if (passed) {
 				try {
 					this.tree.scanTree(this.branchVariableFieldY.getText(), cuts, 1000, true);
@@ -505,14 +507,14 @@ public class DescriptorPanel extends JPanel {
 				} catch (Exception e) {
 					passed = false;
 				}
-			} 
-			if(!passed) {
+			}
+			if (!passed) {
 				validationPlaceHolderY.setIcon(xIcon);
 				validationPlaceHolderY.repaint();
 				this.minTextFieldY.setText("");
 				this.maxTextFieldY.setText("");
 				this.binTextFieldY.setText("");
-			}else{
+			} else {
 				validationPlaceHolderY.setIcon(checkIcon);
 				validationPlaceHolderY.repaint();
 			}
