@@ -560,11 +560,11 @@ public class StudioUI implements MouseListener, ActionListener {
 		GStyle.getGraphErrorsAttributes().setLineColor(3);
 		GStyle.getGraphErrorsAttributes().setLineWidth(2);
 		GStyle.getFunctionAttributes().setLineWidth(6);
-		GStyle.getAxisAttributesX().setTitleFontSize(32);
-		GStyle.getAxisAttributesX().setLabelFontSize(28);
-		GStyle.getAxisAttributesY().setTitleFontSize(32);
-		GStyle.getAxisAttributesY().setLabelFontSize(28);
-		GStyle.getH1FAttributes().setFillColor(44);
+		GStyle.getAxisAttributesX().setTitleFontSize(14);
+		GStyle.getAxisAttributesX().setLabelFontSize(12);
+		GStyle.getAxisAttributesY().setTitleFontSize(14);
+		GStyle.getAxisAttributesY().setLabelFontSize(12);
+		GStyle.getH1FAttributes().setFillColor(43);
 		GStyle.getH1FAttributes().setOptStat("1110");
 		TreeTextFile tree = new TreeTextFile("TextTree");
 		// tree.readFile("/Users/gavalian/Desktop/pp_10k.txt");
