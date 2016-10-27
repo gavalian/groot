@@ -470,11 +470,11 @@ public class StudioUI implements MouseListener, ActionListener {
 		} else {
 			vec = studioTree.actionTreeNode(paths, -1);
 		}
-		if (vec != null) {
+		if (vec.size()>=1) {
 			System.out.println("result = " + vec.get(0).size());
 			H1F h1d = H1F.create(item.toString(), 100, vec.get(0));
-			h1d.setTitle(item.toString());
-			h1d.setTitleX(item.toString());
+			h1d.setTitle(item.getLastPathComponent().toString());
+			h1d.setTitleX(item.getLastPathComponent().toString());
 			h1d.setTitleY("Entries");
 			return h1d;
 		}
@@ -494,11 +494,11 @@ public class StudioUI implements MouseListener, ActionListener {
 		} else {
 			vec = studioTree.actionTreeNode(paths, -1);
 		}
-		if (vec != null) {
+		if (vec.size() ==2) {
 			H2F h2d = H2F.create(item.toString(), 100, 100, vec.get(0), vec.get(1));
-			h2d.setTitle(item.toString()+":"+lastLeaf.toString());
-			h2d.setTitleX(item.toString());
-			h2d.setTitleY(lastLeaf.toString());
+			h2d.setTitle(item.getLastPathComponent().toString()+":"+lastLeaf.toString());
+			h2d.setTitleX(item.getLastPathComponent().toString());
+			h2d.setTitleY(lastLeaf.getLastPathComponent().toString());
 			return h2d;
 		}
 		return null;
