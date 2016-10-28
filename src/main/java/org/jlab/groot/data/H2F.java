@@ -191,6 +191,18 @@ public class H2F implements IDataSet {
         }
         return 0.0;
     }
+    
+    public void modify(DataVector vecX, DataVector vecY, double xmin, double xmax, double ymin, double ymax){
+        int nbinsX = xAxis.getNBins();
+        int nbinsY = yAxis.getNBins();
+        
+        xAxis.set(nbinsX, xmin, xmax);
+        yAxis.set(nbinsY, ymin, ymax);
+        this.reset();
+        for(int loop = 0; loop < vecX.getSize(); loop++){
+            this.fill(vecX.getValue(loop),vecY.getValue(loop));
+        }
+    }
     /**
      * creates 2D histogram from given DataVectors, min and max are determined
      * by data vectors.
