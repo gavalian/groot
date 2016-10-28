@@ -52,8 +52,6 @@ public class DescriptorPanel extends JPanel {
 
 	JComboBox branchComboBoxX = new JComboBox();
 	JComboBox branchComboBoxY = new JComboBox();
-	JLabel validationLabelCheck = null;
-	JLabel validationLabelX = null;
 	JLabel validationPlaceHolderX = null;
 	JLabel validationPlaceHolderY = null;
 

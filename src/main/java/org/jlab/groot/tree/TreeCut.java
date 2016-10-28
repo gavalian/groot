@@ -68,19 +68,14 @@ public class TreeCut {
             return 0.0;
         }
     };    
-    /*
+    
     public static boolean validateExpression(String expression,  List<String> branches){
     	if(expression.isEmpty()){
     		return false;
     	}
         String[] variables = new String[branches.size()];
         for(int i=0; i < branches.size(); i++) variables[i] = branches.get(i);
-        ExpressionBuilder builder = new ExpressionBuilder(expression)
-        .operator(operatorAND)
-        .operator(operatorOR)
-        .operator(operatorGT)
-        .operator(operatorLT)
-        .operator(operatorEQ);
+        ExpressionBuilder builder = new ExpressionBuilder(expression);
         builder.variables(variables);
         try {
             Expression expr = builder.build(); 
@@ -88,7 +83,7 @@ public class TreeCut {
             return false;
         }
         return true;
-    }*/
+    }
     /*
     public DataCut(String name, String exp){
         cutName = name;
