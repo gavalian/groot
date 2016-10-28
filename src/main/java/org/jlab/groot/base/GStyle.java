@@ -16,6 +16,8 @@ public class GStyle {
         public static float[]  dashPattern2 = new float[]{10.0f,5.0f,2.0f,5.0f};
         public static float[]  dashPattern3 = new float[]{2.0f,5.0f,2.0f,5.0f};
         
+        public static Integer    graphicsFrameLineWidth = 1;
+        
         public static BasicStroke getStroke(int type){
             switch (type){
                 
@@ -28,6 +30,14 @@ public class GStyle {
                 default : return new BasicStroke(1, BasicStroke.CAP_BUTT,
                         BasicStroke.JOIN_MITER, 20.0f, dashPattern1, 0.0f);
             }
+        }
+        
+        public static void setGraphicsFrameLineWidth(int lineWidth){
+            graphicsFrameLineWidth = lineWidth;
+        }
+        
+        public static int getGraphicsFrameLineWidth(){
+            return graphicsFrameLineWidth;
         }
         
 	public static AxisAttributes getAxisAttributesZ() {

@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import org.jlab.groot.base.GStyle;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.math.Dimension2D;
 
@@ -125,7 +126,8 @@ public class GraphicsAxisFrame {
         }
         
         g2d.setColor(Color.BLACK);
-        g2d.setStroke(new BasicStroke(1));
+        int lineWidth = GStyle.getGraphicsFrameLineWidth();
+        g2d.setStroke(new BasicStroke(lineWidth));
         if(drawFrame){
             g2d.drawRect(
                     (int) getAxisX().getDimension().getMin(),
