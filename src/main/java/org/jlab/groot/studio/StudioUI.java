@@ -82,6 +82,10 @@ public class StudioUI implements MouseListener, ActionListener {
 	JScrollPane scrollPane = null;
 	JCheckBoxMenuItem menuPreviewMode;
 	TreePath lastLeaf = null;
+	JLabel statusLabel = new JLabel("Status:");
+	JLabel processedLabel = new JLabel("Processed:");
+
+	
 
 	public StudioUI(TreeProvider tree) {
 		frame = new JFrame("GROOT Studio");
@@ -233,8 +237,8 @@ public class StudioUI implements MouseListener, ActionListener {
 		statusPane1.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 		statusPane2.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 		statusPane3.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-		statusPane1.add(new JLabel("Status:"));
-		statusPane2.add(new JLabel("Processed:"));
+		statusPane1.add(statusLabel);
+		statusPane2.add(processedLabel);
 		statusPane3.add(new JLabel("Memory:"));
 		statusPane.add(statusPane1, c);
 		statusPane.add(statusPane2, c);
@@ -498,13 +502,20 @@ public class StudioUI implements MouseListener, ActionListener {
 	}
 
 	public void processPlay() {
+		statusLabel.setText("Status:Running");
+		processedLabel.setText("Processed: 0 events");
 		System.out.println("---> Replaying all the descriptors from the tree");
+		
 		if (this.previewMode == true) {
 			this.analyzer.process(studioTree.tree(), 1000);
+			processedLabel.setText("Processed: 1000 events");
 		} else {
 			this.analyzer.process(studioTree.tree());
+			processedLabel.setText("Processed: "+studioTree.tree().getEntries()+" events");
 		}
 		System.out.println("---> done replaying");
+		statusLabel.setText("Status: Finished Running");
+
 	}
 
 	public boolean isTree(String item) {
