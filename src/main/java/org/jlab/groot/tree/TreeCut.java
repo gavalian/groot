@@ -29,7 +29,7 @@ public class TreeCut {
     	return (ArrayList<String>) cutVariables;
     }
     
-    Operator operatorGT = new Operator(">", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
+    static Operator operatorGT = new Operator(">", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
             @Override
             public double apply(final double... args) {
                 if(args[0]>args[1]) return 1.0;
@@ -37,7 +37,7 @@ public class TreeCut {
             }
     };
     
-    Operator operatorLT = new Operator("<", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
+    static Operator operatorLT = new Operator("<", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
         @Override
         public double apply(final double... args) {
             if(args[0]<args[1]) return 1.0;
@@ -45,7 +45,7 @@ public class TreeCut {
         }
     };
 
-    Operator operatorEQ = new Operator("==", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
+    static Operator operatorEQ = new Operator("==", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
         @Override
         public double apply(final double... args) {
             if(args[0]==args[1]) return 1.0;
@@ -53,7 +53,7 @@ public class TreeCut {
         }
     };
 
-    Operator operatorAND = new Operator("&&", 2, true, Operator.PRECEDENCE_ADDITION) {
+    static Operator operatorAND = new Operator("&&", 2, true, Operator.PRECEDENCE_ADDITION) {
         @Override
         public double apply(final double... args) {
             if(args[0]>0.0&&args[1]>0.0) return 1.0;
@@ -61,7 +61,7 @@ public class TreeCut {
         }
     };
     
-    Operator operatorOR = new Operator("||", 2, true, Operator.PRECEDENCE_ADDITION) {
+    static Operator operatorOR = new Operator("||", 2, true, Operator.PRECEDENCE_ADDITION) {
         @Override
         public double apply(final double... args) {
             if(args[0]>0.0||args[1]>0.0) return 1.0;
@@ -75,7 +75,12 @@ public class TreeCut {
     	}
         String[] variables = new String[branches.size()];
         for(int i=0; i < branches.size(); i++) variables[i] = branches.get(i);
-        ExpressionBuilder builder = new ExpressionBuilder(expression);
+        ExpressionBuilder builder = new ExpressionBuilder(expression)
+        		.operator(operatorAND)
+                .operator(operatorOR)
+                .operator(operatorGT)
+                .operator(operatorLT)
+                .operator(operatorEQ);
         builder.variables(variables);
         try {
             Expression expr = builder.build(); 
