@@ -401,6 +401,15 @@ public class H1F  implements IDataSet {
         }
     }
     
+    public void modify(DataVector vec, double rmin, double rmax){
+        int nbins = xAxis.getNBins();
+        xAxis.set(nbins, rmin, rmax);
+        this.reset();
+        for(int loop = 0; loop < vec.getSize(); loop++){
+            this.fill(vec.getValue(loop));
+        }
+    }
+    
     public void add(H1F h){
         if(h.getAxis().getNBins()==this.getXaxis().getNBins()){
             for(int loop = 0; loop < this.histogramData.length; loop++){
