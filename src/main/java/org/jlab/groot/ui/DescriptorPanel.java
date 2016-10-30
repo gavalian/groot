@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -26,6 +27,8 @@ import javax.swing.border.TitledBorder;
 import org.jlab.groot.tree.Tree;
 import org.jlab.groot.tree.TreeAnalyzer;
 import org.jlab.groot.data.DataVector;
+import org.jlab.groot.data.H1F;
+import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.tree.DatasetDescriptor;
 import org.jlab.groot.tree.TreeCut;
 import org.jlab.groot.tree.TreeExpression;
@@ -44,6 +47,7 @@ public class DescriptorPanel extends JPanel {
 	private int iconSizeY = 15;
 	ImageIcon checkIcon = new ImageIcon();
 	ImageIcon xIcon = new ImageIcon();
+	boolean initialized = false;
 
 	// checkImage = checkImage.getScaledInstance(iconSizeX, iconSizeY,
 	// Image.SCALE_SMOOTH);
@@ -52,8 +56,10 @@ public class DescriptorPanel extends JPanel {
 
 	JComboBox branchComboBoxX = new JComboBox();
 	JComboBox branchComboBoxY = new JComboBox();
-	JLabel validationPlaceHolderX = null;
-	JLabel validationPlaceHolderY = null;
+	JLabel validationPlaceHolderX = new JLabel();
+	JLabel validationPlaceHolderY = new JLabel();
+	JCheckBox previewCheckBox = new JCheckBox("Show Preview");
+	JCheckBox estimateCheckBox = new JCheckBox("Estimate Range/Binning");
 
 	JTextField name = new JTextField();
 	JTextField descriptorName = new JTextField();
@@ -71,11 +77,15 @@ public class DescriptorPanel extends JPanel {
 
 	JPanel histogramOptions = new JPanel();
 	JPanel cutOptions = new JPanel();
+	JPanel leftPanel = new JPanel();
+	EmbeddedCanvas previewCanvas = new EmbeddedCanvas();
 
 	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, DatasetDescriptor descriptor) {
 		this.type = descriptor.getDescriptorType();
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
+		previewCheckBox.setSelected(true);
+		estimateCheckBox.setSelected(true);
 		init();
 	}
 
@@ -83,6 +93,8 @@ public class DescriptorPanel extends JPanel {
 		this.type = type;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
+		previewCheckBox.setSelected(true);
+		estimateCheckBox.setSelected(true);
 		init();
 	}
 
@@ -90,10 +102,22 @@ public class DescriptorPanel extends JPanel {
 		this.type = 1;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
+		previewCheckBox.setSelected(true);
+		estimateCheckBox.setSelected(true);
 		init();
 	}
 
 	private void init() {
+		this.removeAll();
+		leftPanel.removeAll();
+		this.repaint();
+		if(!initialized) previewCheckBox.addActionListener(e -> {System.out.println("init!");init();});
+		leftPanel.setLayout(new GridBagLayout());
+		GridBagConstraints cMain = new GridBagConstraints();
+		cMain.gridy = 0;
+		cMain.weightx = 1.0;
+		cMain.weighty = 1.0;
+		cMain.fill = GridBagConstraints.BOTH;
 		try {
 			Image checkImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/general/checkmark.png"));
 			Image xImage = ImageIO.read(Tree.class.getClassLoader().getResource("icons/general/xmark.png"));
@@ -102,8 +126,6 @@ public class DescriptorPanel extends JPanel {
 		} catch (Exception e) {
 
 		}
-		validationPlaceHolderX = new JLabel();
-		validationPlaceHolderY = new JLabel();
 		if (this.descriptor == null) {
 			this.descriptor = new DatasetDescriptor("Dataset Name", this.type);
 		}
@@ -134,28 +156,47 @@ public class DescriptorPanel extends JPanel {
 		headerPanel.setBorder(new TitledBorder("Main"));
 
 		this.setLayout(new GridBagLayout());
-		GridBagConstraints c1 = new GridBagConstraints();
-		c1.gridy = 0;
-		c1.weightx = 1.0;
-		c1.weighty = 1.0;
-		c1.fill = GridBagConstraints.BOTH;
-		this.add(headerPanel, c1);
-		this.initHistogramOptions();
-		c1.gridy++;
-		this.add(histogramOptions, c1);
+
+		leftPanel.add(headerPanel, cMain);
+		if(!initialized)this.initHistogramOptions();
+		cMain.gridy++;
+		leftPanel.add(histogramOptions, cMain);
 		cutMap = tree.getSelector().getSelectorCuts();
 		cutStrings = new ArrayList<String>();
 		Object[] keys = cutMap.keySet().toArray();
 		for (int i = 0; i < cutMap.keySet().size(); i++) {
 			cutStrings.add((String) keys[i]);
 		}
-		initDatasetCreationPane();
-		initCutOptions();
+		JPanel previewOptions = new JPanel(new GridBagLayout());
+		GridBagConstraints cPreview = new GridBagConstraints();
+		cPreview.fill = GridBagConstraints.BOTH;
+		cPreview.weightx = 1.0;
+		cPreview.weighty = 1.0;
+		previewOptions.setBorder(new TitledBorder("Options"));
+		// String[] previewOptionsList = {"Cut Preview", "Lines", "Blue/Red"};
+		// JComboBox previewOptionBox = new JComboBox(previewOptionsList);
+		previewOptions.add(previewCheckBox, cPreview);
+		previewOptions.add(estimateCheckBox, cPreview);
+		cMain.gridy++;
+		leftPanel.add(previewOptions, cMain);
+		if(!initialized)initCutOptions();
 		if (cutStrings != null && cutStrings.size() > 0) {
-			c1.gridy++;
-			this.add(this.cutOptions, c1);
+			cMain.gridy++;
+			leftPanel.add(this.cutOptions, cMain);
 		}
 		JButton saveAndClose = new JButton("Apply");
+		GridBagConstraints c1 = new GridBagConstraints();
+		c1.gridy = 0;
+		c1.weightx = 1.0;
+		c1.weighty = 1.0;
+		c1.fill = GridBagConstraints.BOTH;
+		c1.gridx = 0;
+		this.add(leftPanel, c1);
+		if(this.previewCheckBox.isSelected()){
+			c1.gridx++;
+			this.add(previewCanvas, c1);
+		}
+		c1.gridx = 0;
 		c1.gridy++;
 		this.add(saveAndClose, c1);
 		saveAndClose.addActionListener(new ActionListener() {
@@ -193,65 +234,27 @@ public class DescriptorPanel extends JPanel {
 								x + ":" + y + ":" + xerr + ":" + yerr, tree);
 					}
 				}
-				// descriptor = new
-				// DatasetDescriptor(name.getText(),Integer.parseInt(binTextFieldX.getText()),
-				// Double.parseDouble(minTextFieldX.getText()),Double.parseDouble(maxTextFieldX.getText()));
 				for (int i = 0; i < cutBoxes.size(); i++) {
 					if (cutBoxes.get(i).isSelected()) {
 						descriptor.addCut(cutMap.get(cutStrings.get(i)));
 					}
 				}
 				treeAnalyzer.addDescriptor(descriptor);
-				/*
-				 * }else{ System.out.println("Nope"); }
-				 */
 
 				System.out.println("Save and close descriptor!");
 				SwingUtilities.getWindowAncestor(branchVariableFieldX).dispose();
 
 			}
 		});
-
+		try{
+			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+			topFrame.pack();
+		}catch(Exception e){
+			
+		}
+		initialized = true;
 	}
 
-	private void initDatasetCreationPane() {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer,
-	 * DatasetDescriptor descriptor){ this.nDim = 1; this.tree = tree;
-	 * this.treeAnalyzer = treeAnalyzer; this.descriptor = descriptor; init(); }
-	 * 
-	 * private void init(){ initHistogramOptions(); initCutOptions();
-	 * this.setLayout(new GridBagLayout()); GridBagConstraints c = new
-	 * GridBagConstraints(); c.fill = GridBagConstraints.HORIZONTAL; int gridy =
-	 * 0; c.gridy = gridy++; this.add(histogramOptions,c);
-	 * if(cutStrings!=null&&cutStrings.size()>0){ c.gridy = gridy++;
-	 * this.add(cutOptions,c); }
-	 * 
-	 * JButton saveAndClose = new JButton("Apply"); c.gridy = gridy++;
-	 * this.add(saveAndClose, c); saveAndClose.addActionListener(new
-	 * ActionListener(){
-	 * 
-	 * @Override public void actionPerformed(ActionEvent e) {
-	 * if(descriptor==null){ //descriptor = new
-	 * DatasetDescriptor(name.getText(),Integer.parseInt(binTextFieldX.getText()
-	 * ), Double.parseDouble(minTextFieldX.getText()),Double.parseDouble(
-	 * maxTextFieldX.getText())); for(int i=0; i<cutBoxes.size(); i++){
-	 * if(cutBoxes.get(i).isSelected()){
-	 * //descriptor.addCut(cutMap.get(cutStrings.get(i)).getExpression()); } }
-	 * treeAnalyzer.addDescriptor(descriptor); }else{
-	 * System.out.println("Nope"); }
-	 * 
-	 * System.out.println("Save and close descriptor!");
-	 * SwingUtilities.getWindowAncestor(name).dispose();
-	 * 
-	 * } });
-	 * 
-	 * }
-	 */
 	private void initCutOptions() {
 		if (cutStrings != null && cutStrings.size() > 0) {
 			cutOptions.setLayout(new GridBagLayout());
@@ -294,7 +297,27 @@ public class DescriptorPanel extends JPanel {
 			branchVariableFieldY.setText(branchVariableFieldY.getText() + branchComboBoxY.getSelectedItem());
 			this.validateExpression(1);
 		});
+		KeyListener binningListener = new KeyListener() {
 
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				estimateCheckBox.setSelected(false);
+				validateExpression(0);
+				if (type == DatasetDescriptor.DESCRIPTOR_H2) {
+					validateExpression(1);
+				}
+			}
+
+		};
 		this.branchVariableFieldX.setText("");
 		this.branchVariableFieldY.setText("");
 		this.branchVariableFieldXerr.setText("");
@@ -305,16 +328,22 @@ public class DescriptorPanel extends JPanel {
 		branchVariableFieldYerr.setColumns(10);
 		binTextFieldX.setText("");
 		binTextFieldX.setColumns(5);
+		binTextFieldX.addKeyListener(binningListener);
 		minTextFieldX.setText("");
 		minTextFieldX.setColumns(5);
+		minTextFieldX.addKeyListener(binningListener);
 		maxTextFieldX.setText("");
 		maxTextFieldX.setColumns(5);
+		maxTextFieldX.addKeyListener(binningListener);
 		binTextFieldY.setText("");
 		binTextFieldY.setColumns(5);
+		binTextFieldY.addKeyListener(binningListener);
 		minTextFieldY.setText("");
 		minTextFieldY.setColumns(5);
+		minTextFieldY.addKeyListener(binningListener);
 		maxTextFieldY.setText("");
 		maxTextFieldY.setColumns(5);
+		maxTextFieldY.addKeyListener(binningListener);
 		branchVariableFieldX.addActionListener((e) -> {
 			validateExpression(0);
 		});
@@ -461,7 +490,7 @@ public class DescriptorPanel extends JPanel {
 				}
 			}
 		}
-		System.out.println("cuts:[" + cuts + "]");
+		//System.out.println("cuts:[" + cuts + "]");
 		if (i == 0) {
 			boolean passed = TreeExpression.validateExpression(this.branchVariableFieldX.getText(),
 					this.tree.getListOfBranches());
@@ -470,10 +499,12 @@ public class DescriptorPanel extends JPanel {
 
 					this.tree.scanTree(this.branchVariableFieldX.getText(), cuts, 1000, true);
 					List<DataVector> vecs = this.tree.getScanResults();
-					if (vecs.size() >= 1) {
-						this.minTextFieldX.setText(String.format("%4.2f", vecs.get(0).getMin()));
-						this.maxTextFieldX.setText(String.format("%4.2f", vecs.get(0).getMax()));
-						this.binTextFieldX.setText(String.format("%d", vecs.get(0).getBinSuggestion()));
+					if (this.estimateCheckBox.isSelected()) {
+						if (vecs.size() >= 1) {
+							this.minTextFieldX.setText(String.format("%4.2f", vecs.get(0).getMin()));
+							this.maxTextFieldX.setText(String.format("%4.2f", vecs.get(0).getMax()));
+							this.binTextFieldX.setText(String.format("%d", vecs.get(0).getBinSuggestion()));
+						}
 					}
 				} catch (Exception e) {
 					passed = false;
@@ -482,12 +513,19 @@ public class DescriptorPanel extends JPanel {
 			if (!passed) {
 				validationPlaceHolderX.setIcon(xIcon);
 				validationPlaceHolderX.repaint();
-				this.minTextFieldX.setText("");
-				this.maxTextFieldX.setText("");
-				this.binTextFieldX.setText("");
+				if (this.estimateCheckBox.isSelected()) {
+					this.minTextFieldX.setText("");
+					this.maxTextFieldX.setText("");
+					this.binTextFieldX.setText("");
+				}
+				System.out.println("X Validation Failed");
 			} else {
 				validationPlaceHolderX.setIcon(checkIcon);
 				validationPlaceHolderX.repaint();
+				if (this.previewCheckBox.isSelected()) {
+					drawPreviewHistogram();
+				}
+				System.out.println("X Validation Succeeded");
 			}
 		}
 		if (i == 1) {
@@ -496,11 +534,13 @@ public class DescriptorPanel extends JPanel {
 			if (passed) {
 				try {
 					this.tree.scanTree(this.branchVariableFieldY.getText(), cuts, 1000, true);
-					List<DataVector> vecs = this.tree.getScanResults();
-					if (vecs.size() >= 1) {
-						this.minTextFieldY.setText(String.format("%4.2f", vecs.get(0).getMin()));
-						this.maxTextFieldY.setText(String.format("%4.2f", vecs.get(0).getMax()));
-						this.binTextFieldY.setText(String.format("%d", vecs.get(0).getBinSuggestion()));
+					if (this.estimateCheckBox.isSelected()) {
+						List<DataVector> vecs = this.tree.getScanResults();
+						if (vecs.size() >= 1) {
+							this.minTextFieldY.setText(String.format("%4.2f", vecs.get(0).getMin()));
+							this.maxTextFieldY.setText(String.format("%4.2f", vecs.get(0).getMax()));
+							this.binTextFieldY.setText(String.format("%d", vecs.get(0).getBinSuggestion()));
+						}
 					}
 				} catch (Exception e) {
 					passed = false;
@@ -509,14 +549,36 @@ public class DescriptorPanel extends JPanel {
 			if (!passed) {
 				validationPlaceHolderY.setIcon(xIcon);
 				validationPlaceHolderY.repaint();
-				this.minTextFieldY.setText("");
-				this.maxTextFieldY.setText("");
-				this.binTextFieldY.setText("");
+				if (this.estimateCheckBox.isSelected()) {
+					this.minTextFieldY.setText("");
+					this.maxTextFieldY.setText("");
+					this.binTextFieldY.setText("");
+				}
+				System.out.println("Y Validation Failed");
 			} else {
 				validationPlaceHolderY.setIcon(checkIcon);
 				validationPlaceHolderY.repaint();
+				System.out.println("Y Validation Succeeded");
 			}
 		}
+	}
+
+	private void drawPreviewHistogram() {
+
+		List<DataVector> vecs = this.tree.getScanResults();
+		int bins = Integer.parseInt(binTextFieldX.getText());
+		double min = Double.parseDouble(minTextFieldX.getText());
+		double max = Double.parseDouble(maxTextFieldX.getText());
+
+		// System.out.println("Histogram "+bins+" "+min+ " "+max);
+		H1F htemp = new H1F("PreviewHistogram", bins, min, max);
+		// System.out.println("Datavector size"+vecs.get(0).getSize());
+		htemp.fill(vecs.get(0));
+		// TCanvas can = new TCanvas("Blah",500,800);
+		// can.draw(htemp);
+		// previewCanvas.divide(1, 1);
+		previewCanvas.draw(htemp);
+		previewCanvas.update();
 	}
 
 }
