@@ -85,8 +85,29 @@ public class DescriptorPanel extends JPanel {
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
 		previewCheckBox.setSelected(true);
-		estimateCheckBox.setSelected(true);
+		this.estimateCheckBox.setSelected(false);
 		init();
+		if(this.type==DatasetDescriptor.DESCRIPTOR_H1){
+			this.branchVariableFieldX.setText(descriptor.getExpressionX());
+			this.binTextFieldX.setText(""+descriptor.getNbinsX());
+			this.minTextFieldX.setText(""+descriptor.getMinX());
+			this.maxTextFieldX.setText(""+descriptor.getMaxX());
+			this.descriptorName.setText(""+descriptor.getDescName());
+			this.validateExpression(0);
+		}else if(this.type==DatasetDescriptor.DESCRIPTOR_H2){
+			this.descriptorName.setText(""+descriptor.getDescName());
+			this.branchVariableFieldX.setText(descriptor.getExpressionX());
+			this.binTextFieldX.setText(""+descriptor.getNbinsX());
+			this.minTextFieldX.setText(""+descriptor.getMinX());
+			this.maxTextFieldX.setText(""+descriptor.getMaxX());
+			this.branchVariableFieldY.setText(descriptor.getExpressionY());
+			this.binTextFieldY.setText(""+descriptor.getNbinsY());
+			this.minTextFieldY.setText(""+descriptor.getMinY());
+			this.maxTextFieldY.setText(""+descriptor.getMaxY());
+			this.validateExpression(0);
+			this.validateExpression(1);
+		}
+		
 	}
 
 	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, int type) {
@@ -318,30 +339,30 @@ public class DescriptorPanel extends JPanel {
 			}
 
 		};
-		this.branchVariableFieldX.setText("");
+		/*this.branchVariableFieldX.setText("");
 		this.branchVariableFieldY.setText("");
 		this.branchVariableFieldXerr.setText("");
-		this.branchVariableFieldYerr.setText("");
+		this.branchVariableFieldYerr.setText("");*/
 		branchVariableFieldX.setColumns(10);
 		branchVariableFieldXerr.setColumns(10);
 		branchVariableFieldY.setColumns(10);
 		branchVariableFieldYerr.setColumns(10);
-		binTextFieldX.setText("");
+		//binTextFieldX.setText("");
 		binTextFieldX.setColumns(5);
 		binTextFieldX.addKeyListener(binningListener);
-		minTextFieldX.setText("");
+		//minTextFieldX.setText("");
 		minTextFieldX.setColumns(5);
 		minTextFieldX.addKeyListener(binningListener);
-		maxTextFieldX.setText("");
+		//maxTextFieldX.setText("");
 		maxTextFieldX.setColumns(5);
 		maxTextFieldX.addKeyListener(binningListener);
-		binTextFieldY.setText("");
+		//binTextFieldY.setText("");
 		binTextFieldY.setColumns(5);
 		binTextFieldY.addKeyListener(binningListener);
-		minTextFieldY.setText("");
+		//minTextFieldY.setText("");
 		minTextFieldY.setColumns(5);
 		minTextFieldY.addKeyListener(binningListener);
-		maxTextFieldY.setText("");
+		//maxTextFieldY.setText("");
 		maxTextFieldY.setColumns(5);
 		maxTextFieldY.addKeyListener(binningListener);
 		branchVariableFieldX.addActionListener((e) -> {

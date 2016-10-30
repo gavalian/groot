@@ -23,6 +23,17 @@ public class DatasetDescriptor extends AbstractDescriptor {
     List<TreeCut>               treeCuts = new ArrayList<TreeCut>();
     List<TreeExpression> treeExpressions = new ArrayList<TreeExpression>();
     private int           descriptorType = 0;
+    String expressionX = "";
+    String expressionY = "";
+    String expressionXerr = "";
+    String expressionYerr = "";
+    int nbinsX = 100;
+    double minX = 0.0;
+    double maxX = 1.0;
+    
+    int nbinsY = 100;
+    double minY = 0.0;
+    double maxY = 1.0;
     
     public DatasetDescriptor(String name, int type){
         this.descName = name;
@@ -35,6 +46,10 @@ public class DatasetDescriptor extends AbstractDescriptor {
     public DatasetDescriptor(String name, int nbins, double min, double max, String exp, ITree tree){
         this.descName = name;
         this.setExpression(exp, tree);
+        this.nbinsX = nbins;
+        this.minX = min;
+        this.maxX = max;
+        this.expressionX = exp;
         if(treeExpressions.size()==1){
             H1F h1 = new H1F(name,nbins,min,max);
             this.descDataset.add(h1);
@@ -46,6 +61,18 @@ public class DatasetDescriptor extends AbstractDescriptor {
         
         this.descName = name;
         this.setExpression(exp, tree);
+        this.nbinsX = nbinsX;
+        this.minX = minX;
+        this.maxX = maxX;
+        this.nbinsY = nbinsY;
+        this.minY = minY;
+        this.minY = maxY;
+        if(treeExpressions.size()==2){
+            this.expressionX = treeExpressions.get(0).treeExpression;
+            this.expressionY = treeExpressions.get(1).treeExpression;
+        }else{
+        	this.expressionX = exp;
+        }
         if(treeExpressions.size()==2){
             H2F h2 = new H2F(name,nbinsX,minX,maxX,nbinsY,minY,maxY);
             this.descDataset.add(h2);
@@ -58,12 +85,22 @@ public class DatasetDescriptor extends AbstractDescriptor {
         this.setExpression(exp, tree);        
         if(treeExpressions.size()==2){
             this.descriptorType = DatasetDescriptor.DESCRIPTOR_GRXY_XY;
+            this.expressionX = treeExpressions.get(0).treeExpression;
+            this.expressionY = treeExpressions.get(1).treeExpression;
         }
         if(treeExpressions.size()==3){
             this.descriptorType = DatasetDescriptor.DESCRIPTOR_GRXY_XY_EY;
+            this.expressionX = treeExpressions.get(0).treeExpression;
+            this.expressionY = treeExpressions.get(1).treeExpression;
+            this.expressionYerr = treeExpressions.get(2).treeExpression;
+
         }
         if(treeExpressions.size()==4){
             this.descriptorType = DatasetDescriptor.DESCRIPTOR_GRXY_XY_EX_EY;
+            this.expressionX = treeExpressions.get(0).treeExpression;
+            this.expressionY = treeExpressions.get(1).treeExpression;
+            this.expressionXerr = treeExpressions.get(2).treeExpression;
+            this.expressionYerr = treeExpressions.get(3).treeExpression;
         }
         GraphErrors graph = new GraphErrors(name);
         this.descDataset.add(graph);
@@ -186,7 +223,87 @@ public class DatasetDescriptor extends AbstractDescriptor {
 		this.descriptorType = descriptorType;
 	}
 
-    @Override
+    public String getExpressionX() {
+		return expressionX;
+	}
+
+	public void setExpressionX(String expressionX) {
+		this.expressionX = expressionX;
+	}
+
+	public String getExpressionY() {
+		return expressionY;
+	}
+
+	public void setExpressionY(String expressionY) {
+		this.expressionY = expressionY;
+	}
+
+	public String getExpressionXerr() {
+		return expressionXerr;
+	}
+
+	public void setExpressionXerr(String expressionXerr) {
+		this.expressionXerr = expressionXerr;
+	}
+
+	public String getExpressionYerr() {
+		return expressionYerr;
+	}
+
+	public void setExpressionYerr(String expressionYerr) {
+		this.expressionYerr = expressionYerr;
+	}
+
+	public int getNbinsX() {
+		return nbinsX;
+	}
+
+	public void setNbinsX(int nbinsX) {
+		this.nbinsX = nbinsX;
+	}
+
+	public double getMinX() {
+		return minX;
+	}
+
+	public void setMinX(double minX) {
+		this.minX = minX;
+	}
+
+	public double getMaxX() {
+		return maxX;
+	}
+
+	public void setMaxX(double maxX) {
+		this.maxX = maxX;
+	}
+
+	public int getNbinsY() {
+		return nbinsY;
+	}
+
+	public void setNbinsY(int nbinsY) {
+		this.nbinsY = nbinsY;
+	}
+
+	public double getMinY() {
+		return minY;
+	}
+
+	public void setMinY(double minY) {
+		this.minY = minY;
+	}
+
+	public double getMaxY() {
+		return maxY;
+	}
+
+	public void setMaxY(double maxY) {
+		this.maxY = maxY;
+	}
+
+	@Override
     public void processTreeEvent(Tree tree) {
         
         boolean cutsPassed = true;
