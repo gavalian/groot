@@ -48,6 +48,7 @@ public class DescriptorPanel extends JPanel {
 	ImageIcon checkIcon = new ImageIcon();
 	ImageIcon xIcon = new ImageIcon();
 	boolean initialized = false;
+	boolean editMode = false;
 
 	// checkImage = checkImage.getScaledInstance(iconSizeX, iconSizeY,
 	// Image.SCALE_SMOOTH);
@@ -81,6 +82,7 @@ public class DescriptorPanel extends JPanel {
 	EmbeddedCanvas previewCanvas = new EmbeddedCanvas();
 
 	public DescriptorPanel(Tree tree, TreeAnalyzer treeAnalyzer, DatasetDescriptor descriptor) {
+		editMode=true;
 		this.type = descriptor.getDescriptorType();
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
@@ -107,6 +109,7 @@ public class DescriptorPanel extends JPanel {
 			this.validateExpression(0);
 			this.validateExpression(1);
 		}
+		descriptorName.setEditable(false);
 		
 	}
 
@@ -229,7 +232,14 @@ public class DescriptorPanel extends JPanel {
 					int binsx = Integer.parseInt(binTextFieldX.getText());
 					Double minx = Double.parseDouble(minTextFieldX.getText());
 					Double maxx = Double.parseDouble(maxTextFieldX.getText());
-					descriptor = new DatasetDescriptor(descriptorName.getText(), binsx, minx, maxx, expressionx, tree);
+					//descriptor = new DatasetDescriptor(descriptorName.getText(), binsx, minx, maxx, expressionx, tree);
+					descriptor.setDescName(descriptorName.getText());
+					descriptor.setNbinsX(binsx);
+					descriptor.setMinX(minx);
+					descriptor.setMaxX(maxx);
+					descriptor.setExpression(expressionx,tree);
+					descriptor.initDatasets();
+
 				} else if (type == DatasetDescriptor.DESCRIPTOR_H2) {
 					String expressionx = branchVariableFieldX.getText();
 					int binsx = Integer.parseInt(binTextFieldX.getText());
@@ -256,11 +266,17 @@ public class DescriptorPanel extends JPanel {
 					}
 				}
 				for (int i = 0; i < cutBoxes.size(); i++) {
+					descriptor.clearCuts();
 					if (cutBoxes.get(i).isSelected()) {
 						descriptor.addCut(cutMap.get(cutStrings.get(i)));
 					}
 				}
-				treeAnalyzer.addDescriptor(descriptor);
+				if(!editMode){
+					treeAnalyzer.addDescriptor(descriptor);
+				}else{
+					treeAnalyzer.updateDescriptor(descriptor);
+					System.out.println("Update descriptor"+descriptor.getDescName());
+				}
 
 				System.out.println("Save and close descriptor!");
 				SwingUtilities.getWindowAncestor(branchVariableFieldX).dispose();
