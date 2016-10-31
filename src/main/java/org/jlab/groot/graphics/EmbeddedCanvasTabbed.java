@@ -35,8 +35,8 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
     private JTabbedPane   tabbedPane = null; 
     private JPanel       actionPanel = null;
     private int          canvasOrder = 1;
-    private int iconSizeX = 35;
-    private int iconSizeY = 35;
+    private int iconSizeX = 25;
+    private int iconSizeY = 25;
     private Map<String,EmbeddedCanvas>  tabbedCanvases = new LinkedHashMap<String,EmbeddedCanvas>();
 
     private int isDynamic = 0;

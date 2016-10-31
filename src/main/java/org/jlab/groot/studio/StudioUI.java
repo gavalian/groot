@@ -37,7 +37,6 @@ import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
 import javax.swing.tree.TreePath;
 
-import org.jlab.clas.physics.EventTree;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.data.DataVector;
 import org.jlab.groot.data.DatasetOperations;
@@ -672,11 +671,23 @@ public class StudioUI implements MouseListener, ActionListener {
 		GStyle.getAxisAttributesY().setLabelFontSize(12);
 		GStyle.getH1FAttributes().setFillColor(43);
 		GStyle.getH1FAttributes().setOptStat("1110");
-		TreeTextFile tree = new TreeTextFile("TextTree");
+		// TreeTextFile tree = new TreeTextFile("TextTree");
 		// tree.readFile("/Users/gavalian/Desktop/pp_10k.txt");
-		tree.readFile("src/main/resources/sample_data/studio_data/pp_10k_wlab.txt");
+		// tree.readFile("src/main/resources/sample_data/studio_data/pp_10k_wlab.txt");
+		/*EventTree tree = new EventTree();
+		tree.addBranch("LAMBDA", "-211:2212:X+:X-:Xn");
+		tree.addLeaf("LAMBDA", "Mppi", "[-211]+[2212]", "mass2", "mass", "theta", "phi");
+		tree.addBranch("LAMBDA_EK", "11:321:X+:X-:Xn");
+		tree.addLeaf("LAMBDA_EK", "MxeK", "[b]+[t]-[11]-[321]", "mass2", "mass", "theta", "phi");
+		tree.addBranch("LAMBDA_EKG", "11:321:22:X+:X-:Xn");
+		tree.addLeaf("LAMBDA_EKG", "MxeK", "[b]+[t]-[11]-[321]", "mass2", "mass", "theta", "phi");
+		tree.addBranch("LAMBDA_EKNG", "11:321:X+:X-");
+		tree.addLeaf("LAMBDA_EKNG", "MxeK", "[b]+[t]-[11]-[321]", "mass2", "mass", "theta", "phi");
+		tree.initTree();
+		tree.setSource("/Users/wphelps/Desktop/collaboration_demo/eKplusLambda.DST.hipo");
+		// System.out.println("#Entries:"+tree.getEntries());
 		// StudioUI sui = new StudioUI(new RandomTree());
-		new StudioUI(tree);
+		new StudioUI(tree);*/
 	}
 
 	@Override
