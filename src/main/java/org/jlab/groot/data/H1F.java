@@ -410,6 +410,12 @@ public class H1F  implements IDataSet {
         }
     }
     
+    public void fill(DataVector vec){
+    	 for(int loop = 0; loop < vec.getSize(); loop++){
+             this.fill(vec.getValue(loop));
+         }
+    }
+    
     public void add(H1F h){
         if(h.getAxis().getNBins()==this.getXaxis().getNBins()){
             for(int loop = 0; loop < this.histogramData.length; loop++){

@@ -44,8 +44,10 @@ import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.graphics.EmbeddedCanvasTabbed;
+import org.jlab.groot.tree.DatasetDescriptor;
 import org.jlab.groot.tree.DynamicTree;
 import org.jlab.groot.tree.TreeAnalyzer;
+import org.jlab.groot.tree.TreeCut;
 import org.jlab.groot.tree.TreeFile;
 import org.jlab.groot.tree.TreeProvider;
 import org.jlab.groot.ui.CutPanel;
@@ -155,6 +157,55 @@ public class StudioUI implements MouseListener, ActionListener {
 		 * tree.addObject(node,"tree3");
 		 */
 		thirdSplitPane.setTopComponent(studioTree.tree().getSelector().getTree());
+		studioTree.tree().getSelector().getTree().getTree().addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("Mouse clicked!");
+				if (e.getClickCount() == 2) {
+					TreePath path = studioTree.tree().getSelector().getTree().getTree().getPathForLocation(e.getX(), e.getY());
+					if (path != null) {
+						System.out.println(path.getLastPathComponent().toString());
+						//for (int i = 0; i < studioTree.tree().getSelector().getSelectorCuts().size(); i++) {
+
+							if (studioTree.tree().getSelector().getSelectorCuts().containsKey(path.getLastPathComponent()
+									.toString())) {
+								if((e.getModifiers() & InputEvent.CTRL_MASK) != 0){
+									editCut(studioTree.tree().getSelector().getSelectorCuts().get(path.getLastPathComponent()
+									.toString()));
+								}
+							}
+						//}
+					}
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+
 		thirdSplitPane.setBottomComponent(analyzer.getTree());
 		analyzer.getTree().getTree().addMouseListener(new MouseListener() {
 
@@ -166,9 +217,14 @@ public class StudioUI implements MouseListener, ActionListener {
 					if (path != null) {
 						System.out.println(path.getLastPathComponent().toString());
 						for (int i = 0; i < analyzer.getDescriptors().size(); i++) {
-							if (analyzer.getDescriptors().get(i).getDescName() == path.getLastPathComponent()
-									.toString()) {
+							System.out.println(analyzer.getDescriptors().get(i).getDescName() + " "+path.getLastPathComponent()
+									.toString());
+							if (analyzer.getDescriptors().get(i).getDescName().equals(path.getLastPathComponent()
+									.toString())) {
 								System.out.println(e.getModifiers());
+								if((e.getModifiers() & InputEvent.CTRL_MASK) != 0){
+									editDescriptor(analyzer.getDescriptors().get(i));
+								}else{
 								if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0) {
 									System.out.println("Drawing same");
 									drawCanvasTabbed.getCanvas().draw(analyzer.getDescriptors().get(i).getDataSet(),
@@ -178,6 +234,7 @@ public class StudioUI implements MouseListener, ActionListener {
 									drawCanvasTabbed.getCanvas()
 											.drawNext(analyzer.getDescriptors().get(i).getDataSet());
 									drawCanvasTabbed.getCanvas().update();
+								}
 								}
 							}
 						}
@@ -507,8 +564,8 @@ public class StudioUI implements MouseListener, ActionListener {
 		System.out.println("---> Replaying all the descriptors from the tree");
 		
 		if (this.previewMode == true) {
-			this.analyzer.process(studioTree.tree(), 1000);
-			processedLabel.setText("Processed: 1000 events");
+			this.analyzer.process(studioTree.tree(), this.previewEvents);
+			processedLabel.setText("Processed: "+this.previewEvents+" events");
 		} else {
 			this.analyzer.process(studioTree.tree());
 			processedLabel.setText("Processed: "+studioTree.tree().getEntries()+" events");
@@ -533,6 +590,19 @@ public class StudioUI implements MouseListener, ActionListener {
 		frame.setMinimumSize(frame.getSize());
 		frame.setVisible(true);
 	}
+	
+	private void editCut(TreeCut treeCut) {
+		System.out.println("Editing cut");
+		CutPanel cutPane = new CutPanel(studioTree.tree(),treeCut);
+		JFrame frame = new JFrame("Cut Editor");
+		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(cutPane);
+		frame.pack();
+		frame.setLocationRelativeTo(this.frame);
+		frame.setMinimumSize(frame.getSize());
+		frame.setVisible(true);
+		
+	}
 
 	public void addDescriptor(int dim) {
 		// panel = new DescriptorPanel(studioTree,analyzer,2);
@@ -541,8 +611,18 @@ public class StudioUI implements MouseListener, ActionListener {
 		frame.add(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(this.frame);
-		frame.setMinimumSize(frame.getSize());
+//		frame.setMinimumSize(new Dimension(frame.getSize().getHeight()/2,frame.getSize().getWidth()/2));
 		frame.setVisible(true);
+	}
+	public void editDescriptor(DatasetDescriptor desc){
+		JFrame frame = new JFrame("Edit Descriptor");
+		DescriptorPanel panel = new DescriptorPanel(studioTree.tree(), analyzer,desc);
+		frame.add(panel);
+		frame.pack();
+		frame.setLocationRelativeTo(this.frame);
+//		frame.setMinimumSize(new Dimension(frame.getSize().getHeight()/2,frame.getSize().getWidth()/2));
+		frame.setVisible(true);
+	
 	}
 
 	/*
