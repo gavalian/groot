@@ -59,7 +59,7 @@ public class DescriptorPanel extends JPanel {
 	JComboBox branchComboBoxY = new JComboBox();
 	JLabel validationPlaceHolderX = new JLabel();
 	JLabel validationPlaceHolderY = new JLabel();
-	JCheckBox previewCheckBox = new JCheckBox("Show Preview");
+	JCheckBox previewCheckBox = new JCheckBox("Instant Preview");
 	JCheckBox estimateCheckBox = new JCheckBox("Estimate Range/Binning");
 
 	JTextField name = new JTextField();

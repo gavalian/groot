@@ -219,7 +219,7 @@ public class CutPanel extends JPanel {
 			leftPanel.add(this.cutOptions, c);
 		}
 		c.gridy++;
-		leftPanel.add(previewOptions, c);
+		//leftPanel.add(previewOptions, c);
 		// c.anchor = GridBagConstraints.EAST;
 		
 		this.setLayout(new GridBagLayout());
@@ -227,13 +227,14 @@ public class CutPanel extends JPanel {
 		c2.fill = GridBagConstraints.HORIZONTAL;
 		c2.weightx = 1.0;
 		c2.weighty = 1.0;
+		c2.gridwidth=2;
 		c2.gridy=0;
-		c2.gridx=0;
+		//c2.gridx=0;
 		this.add(leftPanel, c2);
-		c2.gridx++;
-		this.add(this.previewCanvas, c2);
-		c2.gridwidth=1;
+		//c2.gridx++;
+		//this.add(this.previewCanvas, c2);
 		c2.gridx=0;
+		c2.gridwidth=1;
 		c2.gridy++;
 		JButton cancelButton = new JButton("Cancel");
 		this.add(cancelButton,c2);
