@@ -49,6 +49,7 @@ public class DatasetDescriptor extends AbstractDescriptor {
 		this.minX = min;
 		this.maxX = max;
 		this.expressionX = exp;
+		this.initDatasets();
 	}
 
 	public DatasetDescriptor(String name, int nbinsX, double minX, double maxX, int nbinsY, double minY, double maxY,
@@ -61,14 +62,14 @@ public class DatasetDescriptor extends AbstractDescriptor {
 		this.maxX = maxX;
 		this.nbinsY = nbinsY;
 		this.minY = minY;
-		this.minY = maxY;
+		this.maxY = maxY;
 		if (treeExpressions.size() == 2) {
 			this.expressionX = treeExpressions.get(0).treeExpression;
 			this.expressionY = treeExpressions.get(1).treeExpression;
 		} else {
 			this.expressionX = exp;
 		}
-
+		this.initDatasets();
 	}
 
 	public DatasetDescriptor(String name, String exp, ITree tree) {
