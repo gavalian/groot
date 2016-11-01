@@ -565,6 +565,7 @@ public class StudioUI implements MouseListener, ActionListener {
 		} else {
 			vec = studioTree.actionTreeNode(paths, -1);
 		}
+		System.out.println("Vector size"+vec.size());
 		if (vec.size() == 2) {
 			H2F h2d = H2F.create(
 					item.getLastPathComponent().toString() + "_vs_" + lastLeaf.getLastPathComponent().toString(),
@@ -671,9 +672,9 @@ public class StudioUI implements MouseListener, ActionListener {
 		GStyle.getAxisAttributesY().setLabelFontSize(12);
 		GStyle.getH1FAttributes().setFillColor(43);
 		GStyle.getH1FAttributes().setOptStat("1110");
-		// TreeTextFile tree = new TreeTextFile("TextTree");
-		// tree.readFile("/Users/gavalian/Desktop/pp_10k.txt");
-		// tree.readFile("src/main/resources/sample_data/studio_data/pp_10k_wlab.txt");
+		TreeTextFile tree = new TreeTextFile("TextTree");
+		//tree.readFile("/Users/gavalian/Desktop/pp_10k.txt");
+		tree.readFile("src/main/resources/sample_data/studio_data/pp_10k_wlab.txt");
 		/*EventTree tree = new EventTree();
 		tree.addBranch("LAMBDA", "-211:2212:X+:X-:Xn");
 		tree.addLeaf("LAMBDA", "Mppi", "[-211]+[2212]", "mass2", "mass", "theta", "phi");
@@ -686,8 +687,9 @@ public class StudioUI implements MouseListener, ActionListener {
 		tree.initTree();
 		tree.setSource("/Users/wphelps/Desktop/collaboration_demo/eKplusLambda.DST.hipo");
 		// System.out.println("#Entries:"+tree.getEntries());
-		// StudioUI sui = new StudioUI(new RandomTree());
-		new StudioUI(tree);*/
+		StudioUI sui = new StudioUI(new RandomTree());
+		*/
+		new StudioUI(tree);
 	}
 
 	@Override
@@ -788,8 +790,14 @@ public class StudioUI implements MouseListener, ActionListener {
 		}
 		if (e.getActionCommand().compareTo("Edit Tree") == 0) {
 			JDialog dialog = studioTree.treeConfigure();
-			dialog.setLocationRelativeTo(frame);
-			dialog.setVisible(true);
+			if(dialog!=null){
+				dialog.setLocationRelativeTo(frame);
+				dialog.setVisible(true);
+				if(dialog.getComponentCount()==1){
+					dialog.setVisible(false);
+					dialog.dispose();
+				}
+			}
 		}
 	}
 }

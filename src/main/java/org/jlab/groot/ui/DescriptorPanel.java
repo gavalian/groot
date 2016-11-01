@@ -86,7 +86,11 @@ public class DescriptorPanel extends JPanel {
 		this.type = descriptor.getDescriptorType();
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
-		previewCheckBox.setSelected(true);
+		if(this.type==DatasetDescriptor.DESCRIPTOR_H1){
+			previewCheckBox.setSelected(true);
+		}else{
+			previewCheckBox.setSelected(false);
+		}
 		this.estimateCheckBox.setSelected(false);
 		init();
 		if(this.type==DatasetDescriptor.DESCRIPTOR_H1){
@@ -117,7 +121,11 @@ public class DescriptorPanel extends JPanel {
 		this.type = type;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
-		previewCheckBox.setSelected(true);
+		if(this.type==DatasetDescriptor.DESCRIPTOR_H1){
+			previewCheckBox.setSelected(true);
+		}else{
+			previewCheckBox.setSelected(false);
+		}		
 		estimateCheckBox.setSelected(true);
 		init();
 	}
@@ -126,7 +134,11 @@ public class DescriptorPanel extends JPanel {
 		this.type = 1;
 		this.tree = tree;
 		this.treeAnalyzer = treeAnalyzer;
-		previewCheckBox.setSelected(true);
+		if(this.type==DatasetDescriptor.DESCRIPTOR_H1){
+			previewCheckBox.setSelected(true);
+		}else{
+			previewCheckBox.setSelected(false);
+		}		
 		estimateCheckBox.setSelected(true);
 		init();
 	}
