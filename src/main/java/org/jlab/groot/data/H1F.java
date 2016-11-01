@@ -173,6 +173,7 @@ public class H1F  implements IDataSet {
         for(int i = 0; i < vec.getSize(); i++){
             h.fill(vec.getValue(i));
         }
+        h.setFillColor(43);        
         return h;
     }
     /**
