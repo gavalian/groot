@@ -3,6 +3,8 @@ package org.jlab.groot.base;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -53,6 +55,7 @@ public class DatasetAttributes implements Cloneable {
     private String stringTitleX = "";
     private String stringTitleY = "";
     private String stringTitle  = "";
+    private String drawOptions = "";
     
     public DatasetAttributes(int datasetType){
         this.datasetType = datasetType;
@@ -145,7 +148,15 @@ public class DatasetAttributes implements Cloneable {
         public String getTitleX(){ return this.stringTitleX;}
         public String getTitleY(){ return this.stringTitleY;}
         
-        @Override
+        public String getDrawOptions() {
+			return drawOptions;
+		}
+
+		public void setDrawOptions(String drawOptions) {
+			this.drawOptions = drawOptions;
+		}
+
+		@Override
         public DatasetAttributes  clone() throws CloneNotSupportedException{
             return (DatasetAttributes) super.clone();
         }
@@ -155,7 +166,7 @@ public class DatasetAttributes implements Cloneable {
             return pane;
         }
         
-        public static class DatasetAttributesPane extends JPanel implements ActionListener {
+        public static class DatasetAttributesPane extends JPanel implements ActionListener, KeyListener {
     	public JButton buttonDefault;
     	public JButton buttonSetDefault;
         public JButton buttonRemove;
@@ -183,6 +194,7 @@ public class DatasetAttributes implements Cloneable {
         
         private JComboBox boxFillColor = null;
         private JTextField optStatTextField = null;
+        private JTextField drawOptionsTextField = null;
         private JComboCheckBox optStatCheckBox = null;
         private List<ActionListener> listeners = new ArrayList<ActionListener>();
         
@@ -248,7 +260,9 @@ public class DatasetAttributes implements Cloneable {
             JLabel optStatLabel = new JLabel("StatBox Options:");
             optStatTextField = new JTextField(10);
             optStatTextField.setText(""+attr.getOptStat());
-
+            drawOptionsTextField = new JTextField(10);
+            drawOptionsTextField.setText(""+attr.getDrawOptions());
+            
             
             if(attr.getDatasetType()==DatasetAttributes.HISTOGRAM|| attr.getDatasetType()==DatasetAttributes.FUNCTION){
 	            this.add(labelLineColor);
@@ -281,7 +295,14 @@ public class DatasetAttributes implements Cloneable {
             }
             this.add(optStatLabel);
             this.add(optStatTextField,"wrap, pushx, growx");
+            this.add(new JLabel("Draw Options:"));
+            this.add(drawOptionsTextField,"wrap, pushx, growx");
             optStatTextField.addActionListener(this);
+            drawOptionsTextField.addActionListener(this);
+            optStatTextField.addKeyListener(this);
+            drawOptionsTextField.addKeyListener(this);
+
+
             //this.add(new JSeparator(SwingConstants.HORIZONTAL),"skip, wrap, pushx, growx");
             
             buttonDefault = new JButton("Default");
@@ -334,9 +355,34 @@ public class DatasetAttributes implements Cloneable {
             	attr.setFillColor(Integer.parseInt(colorChoices[boxFillColor.getSelectedIndex()]));
             }else if(e.getSource()==optStatTextField){
             	attr.setOptStat(optStatTextField.getText());
+            }else if(e.getSource()==drawOptionsTextField){
+            	attr.setDrawOptions(drawOptionsTextField.getText());
             }
             updateCanvas();
         }
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			if(e.getSource()==optStatTextField){
+            	attr.setOptStat(optStatTextField.getText());
+                updateCanvas();
+            }else if(e.getSource()==drawOptionsTextField){
+            	attr.setDrawOptions(drawOptionsTextField.getText());
+                updateCanvas();
+            }
+		}
     }
     
     public static void main(String[] args){
