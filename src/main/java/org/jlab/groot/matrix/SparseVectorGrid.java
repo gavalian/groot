@@ -5,10 +5,13 @@
  */
 package org.jlab.groot.matrix;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.jlab.groot.data.DataVector;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.math.Axis;
 import org.jlab.groot.ui.TCanvas;
 
 /**
@@ -20,6 +23,7 @@ public class SparseVectorGrid {
     SparseIndex               indexer;
     HashMap<Long,DataVector>   binMap;
     private int  vectorSize   = 1;
+    private List<Axis>  gridAxis = new ArrayList<Axis>();
     
     public SparseVectorGrid(){
         
@@ -27,13 +31,15 @@ public class SparseVectorGrid {
     
     public SparseVectorGrid(int[] bins){
         this.indexer = new SparseIndex(bins);
-        this.binMap = new HashMap<Long,DataVector>();
+        this.binMap  = new HashMap<Long,DataVector>();
+        for(int i = 0; i < bins.length; i++) gridAxis.add(new Axis(bins[i],0.0,1.0));
     }
     
     public SparseVectorGrid(int size, int[] bins){
         this.vectorSize = size;
         this.indexer = new SparseIndex(bins);
         this.binMap = new HashMap<Long,DataVector>();
+        for(int i = 0; i < bins.length; i++) gridAxis.add(new Axis(bins[i],0.0,1.0));
     }
     
     public HashMap<Long,DataVector> getGrid(){ return binMap;}
@@ -51,6 +57,36 @@ public class SparseVectorGrid {
     public void addBin(DataVector vec, int[] index){
         Long key = indexer.getKey(index);
         binMap.put(key, vec);
+    }
+    
+    public Axis getAxis(int index){
+        return this.gridAxis.get(index);
+    }
+    /**
+     * sets names for all the axis.
+     * @param names array of names to set axis titles
+     */
+    public void setAxisNames(String[] names){
+        if(names.length!=this.gridAxis.size()){
+            System.out.println("[setAxisNames] ERROR : Names do not have same dimension as axis");
+        } else {
+            for(int i = 0; i < names.length; i++) this.gridAxis.get(i).setTitle(names[i]);
+        }
+    }
+    /**
+     * fills the array of indices with bin values taken from the axis. 
+     * @param values axis values
+     * @param index returned index for each dimension
+     * @return returns true if all indices are within the bounds, false otherwise
+     */
+    public boolean getBinsByAxis(double[] values, int[] index){
+        boolean flag = true;
+        for(int i = 0; i < values.length; i++){
+            index[i] = this.gridAxis.get(i).getBin(values[i]);
+            if(index[i]<0||index[i]>=this.gridAxis.get(i).getNBins())
+                flag = false;
+        }  
+        return flag;
     }
     
     public DataVector getBin(int[] index){
