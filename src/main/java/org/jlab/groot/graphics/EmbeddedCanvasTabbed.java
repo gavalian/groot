@@ -132,6 +132,7 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
         EmbeddedCanvas canvas = new EmbeddedCanvas();
         this.tabbedCanvases.put(name, canvas);
         tabbedPane.addTab(name, canvas);
+        tabbedPane.setSelectedComponent(canvas);
     }
     
     @Override

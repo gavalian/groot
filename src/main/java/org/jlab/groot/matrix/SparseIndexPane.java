@@ -12,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import net.miginfocom.swing.MigLayout;
 import org.jlab.groot.ui.RangeSlider;
@@ -24,15 +25,21 @@ public class SparseIndexPane extends JPanel {
     
     int indexRank = 0;
     int[] dimensions = null;
+    int   numberOrder = 0;
     
     List<RangeSlider>  sliders     = new ArrayList<RangeSlider>();    
-    JComboBox     selectionBin = null;
+    JComboBox       selectionBin = null;
+    JComboBox     selectionOrder = null;
     
-    public SparseIndexPane(int[] dims){
+    JComboBox       selectionBinY = null;
+    JComboBox     selectionOrderY = null;
+    
+    public SparseIndexPane(int[] dims, int vectorSize){
         super();
         dimensions = dims;
         this.setBorder(BorderFactory.createTitledBorder("Grid Index"));        
         this.setLayout(new MigLayout());
+        this.numberOrder = vectorSize;
         initUI();
     }
     
@@ -59,13 +66,29 @@ public class SparseIndexPane extends JPanel {
         }
         
         String[] choises = new String[dimensions.length];
+        String[] choisesOrder = new String[this.numberOrder];
+
         for(int i = 0; i < choises.length; i++) choises[i] = (new Integer(i)).toString();
         this.selectionBin = new JComboBox(choises);
+
+
+        for(int i = 0; i < this.numberOrder; i++) choisesOrder[i] = (new Integer(i)).toString();
         
-        this.add(new JLabel("Draw Dimension :"));
-        this.add(this.selectionBin,"wrap, pushx, growx");
+        this.selectionOrder = new JComboBox(choisesOrder);
+        this.add(new JLabel(""));
+        this.add( new JSeparator(),"wrap, pushx, growx");
+        this.add(new JLabel("X dimension : "));
+        this.add(this.selectionBin,"split 3, growx");
+        this.add(new JLabel("Vector : "));
+        this.add(this.selectionOrder,"growx");
+        
+        
+/*        this.add(this.selectionBin," wrap, pushx, growx");
+        this.add(new JLabel("Vector : "));
+        this.add(this.selectionOrder," wrap, pushx, growx");        
+*/
     }
-        
+    
     public int[] getBins(){
         int[] index = new int[this.sliders.size()];
         for(int i = 0; i < index.length;i++) index[i] = sliders.get(i).getValue();
@@ -90,9 +113,14 @@ public class SparseIndexPane extends JPanel {
         return Integer.parseInt(token);
     }
     
+    public int getSelectedOrder(){
+        String token = (String) this.selectionOrder.getSelectedItem();
+        return Integer.parseInt(token);
+    }
+    
     public static void main(String[] args){
         JFrame frame = new JFrame();
-        SparseIndexPane pane = new SparseIndexPane(new int[]{10,15,20});
+        SparseIndexPane pane = new SparseIndexPane(new int[]{10,15,20},2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(pane);
         frame.pack();

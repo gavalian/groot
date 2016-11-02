@@ -48,28 +48,31 @@ public class GridStudio extends JFrame implements ActionListener {
     public void openFile(String filename){
         grid = SparseGridIO.importHipo(filename);
         mainPane.remove(indexPane);
-        indexPane = new SparseIndexPane(grid.getIndexer().getBinsPerAxis());
+        indexPane = new SparseIndexPane(grid.getIndexer().getBinsPerAxis(),grid.getVectorSize());
         mainPane.add(indexPane,BorderLayout.PAGE_END);
         this.validate();
         
     }
     
     private void initUI(){
+        
         mainPane = new JPanel();
         mainPane.setLayout(new BorderLayout());
         
         canvas = new EmbeddedCanvasTabbed();
         
-        indexPane = new SparseIndexPane(new int[]{9,21,31});
+        indexPane = new SparseIndexPane(new int[]{9,21,31},1);
         
         mainPane.add(canvas,BorderLayout.CENTER);
         mainPane.add(indexPane,BorderLayout.PAGE_END);
         
         actionPane = new JPanel();
-        JButton buttonPlot = new JButton("Draw");
-        
+        JButton buttonPlot = new JButton("Draw");        
         buttonPlot.addActionListener(this);
+        JButton buttonOverView = new JButton("Over View");
+        buttonOverView.addActionListener(this);
         actionPane.add(buttonPlot);
+        actionPane.add(buttonOverView);
         mainPane.add(actionPane,BorderLayout.PAGE_START);
     }
 
@@ -80,9 +83,24 @@ public class GridStudio extends JFrame implements ActionListener {
             int[] binsMin = this.indexPane.getBinsMin();
             int[] binsMax = this.indexPane.getBinsMax();
             int   dim  = this.indexPane.getSelectedBin();
-            H1F h = grid.slice(dim, 0,binsMin,binsMax);
+            int order  = this.indexPane.getSelectedOrder();
+            
+            H1F h = grid.slice(dim, order,binsMin,binsMax);
             canvas.getCanvas().drawNext(h);
             canvas.getCanvas().update();
+        }
+        
+        if(e.getActionCommand().compareTo("Over View")==0){
+            this.canvas.getCanvas().divide(1, grid.getIndexer().getRank());
+            int order = this.indexPane.getSelectedOrder();
+            int[] binsMax = grid.getIndexer().getBinsPerAxis();
+            int[] binsMin = new int[binsMax.length];
+            for(int k = 0; k < binsMin.length; k++) binsMin[k] = 0;
+            
+            for(int i = 0; i < grid.getIndexer().getRank();i++){
+                H1F h = grid.slice(i, order,binsMin,binsMax);
+                canvas.getCanvas().drawNext(h);
+            }
         }
     }
     

@@ -39,8 +39,24 @@ public class FitPanel extends JPanel {
 	ArrayList<String> dataSetNames = new ArrayList<String>();
 	IDataSet currentDataset = null;
 	JComboBox paramEstimationMethods;
-	String predefFunctions[] = {"gaus", "gaus+p0", "gaus+p1", "gaus+p2", "gaus+p3"};
-	String predefFunctionsF1D[] = {"[amp]*gaus(x,[mean],[sigma])", "[amp]*gaus(x,[mean],[sigma])+[p0]", "[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]", "[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]+x*x*[p2]", "[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]+x*x*[p2]"};
+	String predefFunctions[] = {"gaus", 
+            "gaus+p0",
+            "gaus+p1", 
+            "gaus+p2", 
+            "gaus+p3",
+            "a+bcos",
+            "a+bcos+ccos2"
+        };
+        
+	String predefFunctionsF1D[] = {"[amp]*gaus(x,[mean],[sigma])", 
+            "[amp]*gaus(x,[mean],[sigma])+[p0]", 
+            "[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]", 
+            "[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]+x*x*[p2]", 
+            "[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]+x*x*[p2]",
+            "[a]+[b]*cos(x*[c])",
+            "[a]+[b]*cos(x*[d])+[c]*cos(2*x*[e])",
+        };
+        
 
     boolean predef = true;
 	JComboBox predefinedFunctionsSelector;

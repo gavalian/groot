@@ -163,15 +163,48 @@ public class SparseGridIO {
         return grid;
     }
     
+    public static void printUsage(){
+        System.out.println("grid -create -file file.txt -index \"2:12:24\" -vec \"4,6,8\" -out file.hipo");
+    }
+    
+    public static int[] getVector(String items){
+        String[] tokens = items.split(":");
+        int[] vec = new int[tokens.length];
+        for(int i = 0; i < tokens.length;i++) vec[i] = Integer.parseInt(tokens[i]);
+        return vec;
+    }
+    
     public static void main(String[] args){
-        int[] bins = new int[]{5,2,18,20,36};
-        SparseVectorGrid grid = SparseGridIO.importText(bins, 
-                "/Users/gavalian/Work/Software/Release-9.0/Distribution/datasets/pim_datatables_5D.txt", 
-                new int[]{11,12,13});
-        grid.show();
         
-        SparseGridIO.exportHipo(grid, "grid.hipo");
         
+        if(args.length==1){
+            GridStudio studio = new GridStudio();
+            studio.openFile(args[0]);
+        } else {
+        
+            if(args.length!=9){
+                SparseGridIO.printUsage();
+                System.exit(0);
+            }
+        
+            //int[] bins    = new int[]{5,2,18,20,36};
+            //int[] columns = new int[]{11,12,13}
+            // Command line for GRID:
+            // grid -crate -file pim_datatables_5D.txt -index "5:2:18:20:36" -vec "11:12:13" -out grid.hipo
+            int[] bins    = SparseGridIO.getVector(args[4]);
+            int[] columns = SparseGridIO.getVector(args[6]);
+            
+            String inputFile = args[2];
+            String   outFile = args[8];
+            
+            SparseVectorGrid grid = SparseGridIO.importText(bins, 
+                    inputFile, columns);
+            
+            grid.show();
+            
+            SparseGridIO.exportHipo(grid, outFile);
+        }
+            /*
         SparseVectorGrid gridIn = SparseGridIO.importHipo( "grid.hipo");
 
         H1F h = grid.projection(4, 0);
@@ -180,6 +213,6 @@ public class SparseGridIO {
         System.out.println("Comparison Output");
         grid.show();
         System.out.println("Comparison Input");
-        gridIn.show();
+        gridIn.show();*/
     }
 }

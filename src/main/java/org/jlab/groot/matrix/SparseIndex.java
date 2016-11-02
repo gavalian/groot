@@ -50,7 +50,20 @@ public class SparseIndex {
         }
         return key;
     }
-    
+    /**
+     * Checks two SparseIndex classes for compatability. The
+     * rank as well as the number of bins in each dimension have
+     * to be equal for the SparseIndex to be compatible !
+     * @param sindex SparseIndex class
+     * @return true is compatible, false otherwise
+     */
+    public boolean isCompatible(SparseIndex sindex){
+        if(this.getRank()!=sindex.getRank()) return false;
+        int[] bins = sindex.getBinsPerAxis();
+        for(int i = 0; i < bins.length; i++)
+            if(bins[i]!=this.binsPerAxis[i]) return false;
+        return true;
+    }
     // Assume the array size is correct. 
     public long getKeyFast(int [] bin){        
         long key = 0;        
@@ -78,6 +91,12 @@ public class SparseIndex {
     
     public int [] getBinsPerAxis(){
         return binsPerAxis; 
+    }
+    
+    public int [] getBinsPerAxisCopy(){
+        int[] bins = new int[binsPerAxis.length];
+        for(int i = 0; i < bins.length; i++) bins[i] = this.binsPerAxis[i];
+        return bins; 
     }
     
     public int [] getBitsPerAxis(){

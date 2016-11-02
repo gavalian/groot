@@ -2,6 +2,7 @@
 
 package org.jlab.groot.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -9,6 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 
@@ -26,7 +28,10 @@ import javax.swing.plaf.basic.BasicSliderUI;
 class RangeSliderUI extends BasicSliderUI {
 
     /** Color of selected range. */
-    private Color rangeColor = Color.GREEN;
+//    private Color rangeColor = Color.GREEN;
+    private Color rangeColor = new Color(21*3,58*3,71*3);
+    private Color colorKnobFill = new Color(207,64,43);
+    private Color colorKnobDraw = new Color(21,58,71);
     
     /** Location and size of thumb for upper value. */
     private Rectangle upperThumbRect;
@@ -217,7 +222,8 @@ class RangeSliderUI extends BasicSliderUI {
             g.translate(trackBounds.x + cx, trackBounds.y);
 
             // Draw selected range.
-            g.setColor(rangeColor);
+            // comment gagik
+            // g.setColor(rangeColor);
             for (int x = 0; x <= 3; x++) {
                 g.drawLine(x, lowerY - trackBounds.y, x, upperY - trackBounds.y);
             }
@@ -255,12 +261,17 @@ class RangeSliderUI extends BasicSliderUI {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.translate(knobBounds.x, knobBounds.y);
-
-        g2d.setColor(Color.CYAN);
+        // comment gagik
+        // g2d.setColor(Color.CYAN);
+        g2d.setColor(this.colorKnobFill);
         g2d.fill(thumbShape);
-
-        g2d.setColor(Color.BLUE);
+        // comment gagik
+        // g2d.setColor(Color.BLUE);
+        g2d.setColor(this.colorKnobDraw);
+        //Stroke oldStroke = g2d.getStroke();
+        //g2d.setStroke(new BasicStroke(3));
         g2d.draw(thumbShape);
+        //g2d.setStroke(oldStroke);
         
         // Dispose graphics.
         g2d.dispose();
@@ -285,10 +296,12 @@ class RangeSliderUI extends BasicSliderUI {
             RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.translate(knobBounds.x, knobBounds.y);
 
-        g2d.setColor(Color.PINK);
+        //g2d.setColor(Color.PINK);
+        g2d.setColor(this.colorKnobFill);
         g2d.fill(thumbShape);
 
-        g2d.setColor(Color.RED);
+        //g2d.setColor(Color.RED);
+        g2d.setColor(this.colorKnobDraw);
         g2d.draw(thumbShape);
 
         // Dispose graphics.
