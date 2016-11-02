@@ -98,6 +98,34 @@ public class SparseVectorGrid {
         return summ;
     }
     
+    public H1F slice(int dim, int order, int[] bmin, int[] bmax){
+        int bins = this.indexer.getBinsPerAxis()[dim];
+        H1F h1 = new H1F("h1",bins,0.0,1.0);
+        int[] keyBins = new int[indexer.getRank()];
+        
+        for(Map.Entry<Long,DataVector>  entry : this.binMap.entrySet()){
+            boolean doesFill = true;
+            
+            indexer.getIndex(entry.getKey(), keyBins);
+        
+            int nbin = keyBins[dim];
+            
+            for(int i = 0; i < keyBins.length;i++){
+                if( (keyBins[i]<bmin[i]||keyBins[i]>bmax[i])&&i!=dim) doesFill = false;
+            }
+            
+            if(doesFill==true){
+                /*System.out.print("filling key bins : ");
+                for(int i = 0; i < keyBins.length; i++) System.out.print(" " + keyBins[i]);
+                System.out.println();*/
+                double center = h1.getXaxis().getBinCenter(nbin);
+                h1.fill(center,entry.getValue().getValue(order));
+            }
+        }
+        h1.setFillColor(43);
+        return h1;
+    }
+    
     public H1F projection(int dim, int order){
         int bins = this.indexer.getBinsPerAxis()[dim];
         H1F h1 = new H1F("h1",bins,0.0,1.0);
@@ -110,6 +138,7 @@ public class SparseVectorGrid {
             double center = h1.getXaxis().getBinCenter(nbin);
             h1.fill(center,entry.getValue().getValue(order));
         }
+        h1.setFillColor(43);
         return h1;
     }
     

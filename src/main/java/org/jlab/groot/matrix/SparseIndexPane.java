@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import net.miginfocom.swing.MigLayout;
+import org.jlab.groot.ui.RangeSlider;
 
 /**
  *
@@ -24,7 +25,7 @@ public class SparseIndexPane extends JPanel {
     int indexRank = 0;
     int[] dimensions = null;
     
-    List<JSlider>  sliders     = new ArrayList<JSlider>();    
+    List<RangeSlider>  sliders     = new ArrayList<RangeSlider>();    
     JComboBox     selectionBin = null;
     
     public SparseIndexPane(int[] dims){
@@ -36,9 +37,14 @@ public class SparseIndexPane extends JPanel {
     }
     
     private void initUI(){
+        
         for(int i = 0; i < dimensions.length; i++){
-            JSlider sl = new JSlider(JSlider.HORIZONTAL,
-                    0, dimensions[i]-1, 0);
+            //JSlider sl = new JSlider(JSlider.HORIZONTAL,
+            //        0, dimensions[i]-1, 0);
+            RangeSlider sl = new RangeSlider(
+                    0, dimensions[i]-1);
+            sl.setUpperValue(dimensions[i]-1);
+            sl.setValue(0);
             
             sl.setMajorTickSpacing(2);
             sl.setMinorTickSpacing(1);
@@ -64,6 +70,24 @@ public class SparseIndexPane extends JPanel {
         int[] index = new int[this.sliders.size()];
         for(int i = 0; i < index.length;i++) index[i] = sliders.get(i).getValue();
         return index;
+    }
+    
+    public int[] getBinsMin(){
+        int[] index = new int[this.sliders.size()];
+        for(int i = 0; i < index.length;i++) index[i] = sliders.get(i).getValue();
+        return index;
+    }
+    
+    public int[] getBinsMax(){
+        int[] index = new int[this.sliders.size()];
+        for(int i = 0; i < index.length;i++) index[i] = sliders.get(i).getUpperValue();
+        return index;
+    }
+    
+    
+    public int getSelectedBin(){
+        String token = (String) this.selectionBin.getSelectedItem();
+        return Integer.parseInt(token);
     }
     
     public static void main(String[] args){
