@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import org.jlab.groot.data.DataVector;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.io.TextFileReader;
 import org.jlab.groot.ui.TCanvas;
 import org.jlab.hipo.data.HipoEvent;
 import org.jlab.hipo.data.HipoNode;
@@ -122,6 +123,32 @@ public class SparseGridIO {
         writer.writeEvent(event.getDataBuffer());
         
         writer.close();
+    }
+    
+    public static void importFileToGrid(String filename, SparseVectorGrid grid, int order){
+        TextFileReader reader = new TextFileReader();
+        reader.openFile(filename);
+        int indexRank = grid.getIndexer().getRank();
+        
+        while(reader.readNext()){
+          double[] values = reader.getAsDouble(0,indexRank-1);
+          grid.fill(values, order);
+        }
+    }
+    
+    public static SparseVectorGrid inportTextFill(String[] names, int[] bins, 
+            double[] axisMin, double[] axisMax, String filename, int vsize){
+        
+        SparseGridBuilder builder = new SparseGridBuilder(vsize);
+        for(int i = 0; i < names.length; i++){
+            builder.axis(filename, bins[i],axisMin[i],axisMax[i]);
+        }
+        
+        SparseVectorGrid grid = builder.build();
+        
+        SparseGridIO.importFileToGrid(filename, grid, 0);
+        
+        return grid;
     }
     
     public static SparseVectorGrid importText(int[] lengths, String filename, int[] columns){

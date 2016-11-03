@@ -87,14 +87,56 @@ public class SparseVectorGrid {
                 flag = false;
         }  
         return flag;
+    }    
+    /**
+     * fill the grid element 0 with weight of 1.0
+     * @param array values along the axis
+     */
+    public void fill(double[] array){
+        this.fill(array,0,1.0);
     }
-    
+    /**
+     * fill the grid with values from array for element = order
+     * with default weight of 1.0
+     * @param array values along the axis
+     * @param order element index
+     */
+    public void fill(double[] array, int order){
+        this.fill(array,order,1.0);
+    }
+    /**
+     * increment the value of the particular bin, the bin
+     * is determined by axis. order is index in the array.
+     * @param array values along the axis
+     * @param order element index
+     * @param weight increment amount
+     */
+    public void fill(double[] array, int order, double weight){
+        int[] index = new int[array.length];
+        boolean status = this.getBinsByAxis(array, index);
+        if(status==true){
+            DataVector vec = getBinVector(index);
+            double value = vec.getValue(order);
+            vec.set(order, value + weight);
+        }
+    }
+    /**
+     * returns a vector for a bin, if the entry does not exist
+     * a NULL will be returned. 
+     * @param index
+     * @return 
+     */
     public DataVector getBin(int[] index){
         Long key = indexer.getKey(index);
         if(binMap.containsKey(key)==true) return binMap.get(key);
         return null;
     }
-    
+    /**
+     * returns vector for particular bin, if the entry does not exist
+     * in the map, it creates a new one.
+     * @param index
+     * @return 
+     */
     private DataVector getBinVector(int[] index){
         Long key = indexer.getKey(index);
         if(binMap.containsKey(key)==false){            
@@ -102,6 +144,7 @@ public class SparseVectorGrid {
         } 
         return binMap.get(key);
     }
+    
     
     public void addBinContent(int order, double value, int[] index){
         Long key = indexer.getKey(index);
@@ -178,13 +221,38 @@ public class SparseVectorGrid {
         return h1;
     }
     
-    public void show(){        
-        StringBuilder str = new StringBuilder();        
-        System.out.println(" MATRIX SIZE = " + binMap.size());
-        System.out.println(" INDEX = " + this.indexer.toString());
-        for(int i = 0; i < this.vectorSize; i++){
-            str.append(String.format(" ORDER %4d : INTEGRAL = %15.6f\n", i,this.integral(i)));
+    public int getNumberOfBins(){
+        int nbins = 1;
+        for(int i = 0; i < this.gridAxis.size(); i++){
+            nbins *= this.gridAxis.get(i).getNBins();
         }
+        return nbins;
+    }
+    
+    public void show(){
+        
+        StringBuilder str = new StringBuilder();        
+        int        nbins = this.getNumberOfBins();
+        int     nentries = this.binMap.size();
+        double populated = ((double) nentries)/nbins;
+        
+        str.append(String.format("SPARSE GRID  : NBINS = %12d ,  ENTRIES = %12d, POPULATION = %8.1f %%\n", 
+                nbins,nentries, 100*populated));
+        str.append(String.format("GRID COLUMNS : %-12d \n",this.vectorSize));
+        str.append(String.format("INDEXER      : %s\n", this.getIndexer().toString())); 
+        for(int i = 0; i < this.vectorSize; i++){
+            str.append(String.format("  ORDER %4d : INTEGRAL = %e\n", i,this.integral(i)));
+        }
+        
+        for(int i = 0; i < this.gridAxis.size(); i++){
+            str.append(String.format("AXIS  # %2d (%12s) : %5d %12.5f %12.5f\n", i,
+                    this.gridAxis.get(i).getTitle(),
+                    this.gridAxis.get(i).getNBins(),
+                    this.gridAxis.get(i).min(),
+                    this.gridAxis.get(i).max()                    
+                    ));
+        }
+        
         System.out.println(str.toString());
     }
     
