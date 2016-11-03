@@ -11,6 +11,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -262,6 +264,29 @@ public class OptionsPanel extends JPanel {
 				applyToAllListener.actionPerformed(new ActionEvent("", 0, ""));
 			}
 		});
+		xAxisTextField.addKeyListener(new KeyListener(){
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				can.getPad(pad).getAxisX().setTitle(xAxisTextField.getText());
+				can.update();
+				applyToAllListener.actionPerformed(new ActionEvent("", 0, ""));
+			}
+			
+		});
+		
 		
 		yAxisTextField.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -269,6 +294,28 @@ public class OptionsPanel extends JPanel {
 				can.update();
 				applyToAllListener.actionPerformed(new ActionEvent("", 0, ""));
 			}
+		});
+		yAxisTextField.addKeyListener(new KeyListener(){
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				can.getPad(pad).getAxisY().setTitle(yAxisTextField.getText());
+				can.update();
+				applyToAllListener.actionPerformed(new ActionEvent("", 0, ""));
+			}
+			
 		});
 		
 		titleTextField.addActionListener(new ActionListener(){
@@ -278,6 +325,30 @@ public class OptionsPanel extends JPanel {
 				applyToAllListener.actionPerformed(new ActionEvent("", 0, ""));
 			}
 		});
+		
+		titleTextField.addKeyListener(new KeyListener(){
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				can.getPad(pad).setTitle(titleTextField.getText());
+				can.update();
+				applyToAllListener.actionPerformed(new ActionEvent("", 0, ""));
+			}
+			
+		});
+		
 		xGridBox.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				can.getPad(pad).getAxisX().setGrid(xGridBox.isSelected());
