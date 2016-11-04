@@ -144,7 +144,19 @@ public class SparseVectorGrid {
         } 
         return binMap.get(key);
     }
-    
+    /**
+     * returns ":" separated list of axis names
+     * @return string with all axis names
+     */
+    public String getAxisNamesString(){
+        StringBuilder str = new StringBuilder();
+        str.append(this.gridAxis.get(0).getTitle());
+        for(int i = 1; i < this.gridAxis.size(); i++){
+            str.append(":");
+            str.append(gridAxis.get(i).getTitle());
+        }
+        return str.toString();
+    }
     
     public void addBinContent(int order, double value, int[] index){
         Long key = indexer.getKey(index);

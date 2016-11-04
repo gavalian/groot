@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import org.jlab.groot.data.DataVector;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.io.ArgumentParser;
 import org.jlab.groot.io.TextFileReader;
 import org.jlab.groot.ui.TCanvas;
 import org.jlab.hipo.data.HipoEvent;
@@ -88,8 +89,8 @@ public class SparseGridIO {
         headerEvent.addNode(index);
         headerEvent.addNode(vsize);
         HipoRecord headerRecord = new HipoRecord();
-        headerRecord.addEvent(headerEvent.getDataBuffer());
         
+        headerRecord.addEvent(headerEvent.getDataBuffer());        
         writer.open(filename,headerRecord.build().array());
         
         writer.setCompressionType(1);
@@ -113,14 +114,16 @@ public class SparseGridIO {
             nodeIndex.push(vector.getKey());
             for(int i = 0; i < vectorSize; i++) nodeData.push(vector.getValue().getValue(i));
         }
-
-        HipoEvent event = new HipoEvent();
-        HipoNode ni = nodeIndex.buildNode(100, 1);
-        HipoNode nd = nodeData.buildNode(100, 2);
-        System.out.println("Writing trailing nodes with size = " + ni.getDataSize());
-        event.addNode(ni);
-        event.addNode(nd);
-        writer.writeEvent(event.getDataBuffer());
+        
+        if(nodeIndex.getSize()!=0){
+            HipoEvent event = new HipoEvent();
+            HipoNode ni = nodeIndex.buildNode(100, 1);
+            HipoNode nd = nodeData.buildNode(100, 2);
+            System.out.println("Writing trailing nodes with size = " + ni.getDataSize());
+            event.addNode(ni);
+            event.addNode(nd);
+            writer.writeEvent(event.getDataBuffer());
+        }
         
         writer.close();
     }
@@ -136,12 +139,50 @@ public class SparseGridIO {
         }
     }
     
+    public static SparseVectorGrid createGrid(String[] names, int[] bins,
+            double[] axisMin, double[] axisMax, int vecsize){
+        
+        SparseGridBuilder builder = new SparseGridBuilder(vecsize);
+        for(int i = 0; i < names.length; i++){
+            builder.axis(names[i], bins[i],axisMin[i],axisMax[i]);
+        }
+        SparseVectorGrid  grid = builder.build();
+        return grid;
+    }
+    
+    public static SparseVectorGrid createGrid(String names, String bins, 
+            String limits,int vecsize){
+        
+        String[]  tokens     = names.split(":");
+        int[]     arr_bins   = SparseGridIO.getVectorInt(bins);
+        double[]  arr_limits = SparseGridIO.getVectorDouble(limits);
+        if(tokens.length!=arr_bins.length){
+            System.out.println("[createGrid] error : number of names is not consistent with number of bins");
+            return null;
+        }
+        
+        if( (2*arr_bins.length)!=arr_limits.length){
+            System.out.println("[createGrid] error : number of bins is not consistent with number of limits");
+            return null;
+        }
+        
+        double[] axisMin = new double[arr_bins.length];
+        double[] axisMax = new double[arr_bins.length];
+        for(int i = 0; i < arr_bins.length; i++){
+            axisMin[i] = arr_limits[i*2];
+            axisMax[i] = arr_limits[i*2+1];
+        }
+        return SparseGridIO.createGrid(tokens, arr_bins, axisMin, axisMax, vecsize);
+    }
+    
+    
+    
     public static SparseVectorGrid inportTextFill(String[] names, int[] bins, 
             double[] axisMin, double[] axisMax, String filename, int vsize){
         
         SparseGridBuilder builder = new SparseGridBuilder(vsize);
         for(int i = 0; i < names.length; i++){
-            builder.axis(filename, bins[i],axisMin[i],axisMax[i]);
+            builder.axis(names[i], bins[i],axisMin[i],axisMax[i]);
         }
         
         SparseVectorGrid grid = builder.build();
@@ -194,15 +235,97 @@ public class SparseGridIO {
         System.out.println("grid -create -file file.txt -index \"2:12:24\" -vec \"4,6,8\" -out file.hipo");
     }
     
-    public static int[] getVector(String items){
+    public static int[] getVectorInt(String items){
         String[] tokens = items.split(":");
         int[] vec = new int[tokens.length];
         for(int i = 0; i < tokens.length;i++) vec[i] = Integer.parseInt(tokens[i]);
         return vec;
     }
     
+    public static double[] getVectorDouble(String items){
+        String[] tokens = items.split(":");
+        double[] vec = new double[tokens.length];
+        for(int i = 0; i < tokens.length;i++) vec[i] = Double.parseDouble(tokens[i]);
+        return vec;
+    }
+    
     public static void main(String[] args){
         
+        ArgumentParser parser = new ArgumentParser();
+        
+        parser.addCommand("-create");        
+        parser.addCommand("-fill");
+        parser.addCommand("-insert");
+        //parser.addCommand("-show");
+        
+        parser.getCommand("-create").addRequiredParameter("-o", "Output file to save the grid");
+        parser.getCommand("-create").addRequiredParameter("-d", 
+                "Dimension names as a string list separated by \":\"");
+        parser.getCommand("-create").addRequiredParameter("-b", 
+                "bins for each dimension integer separated by \":\"");
+        parser.getCommand("-create").addRequiredParameter("-a", 
+                "axis definitions min and max double numbers separated by \":\"");
+        
+        parser.getCommand("-create").addOptionalParameter("-v", "1",
+                "size of the vector for each bin ");        
+        
+        parser.getCommand("-fill").addRequiredParameter("-grid", "grid file to fill from text file");
+        parser.getCommand("-fill").addRequiredParameter("-o", "output file name to save the grid");
+        parser.getCommand("-fill").addRequiredParameter("-c", "column of the grid to fill");
+        parser.getCommand("-fill").addRequiredParameter("-i", "input text file");
+        parser.getCommand("-fill").addOptionalParameter("-s", "space",
+                "separator of the columns in the text file");
+        
+        
+        parser.getCommand("-insert").addRequiredParameter("-i", "input text file");
+        parser.getCommand("-insert").addRequiredParameter("-b", 
+                "bins for each dimension integer separated by \":\"");
+        parser.getCommand("-insert").addRequiredParameter("-a", 
+                "axis definitions min and max double numbers separated by \":\"");
+        parser.getCommand("-insert").addRequiredParameter("-c", 
+                "columns numbers for vector content \":\"");
+        parser.getCommand("-insert").addRequiredParameter("-o", 
+                "output grid file name");
+        
+        
+        //parser.show();
+
+        parser.parse(args);
+        //parser.getCommand().show();
+        
+        if(parser.getCommand().getCommand().compareTo("-create")==0){
+            if(parser.getCommand().containsRequired()==false){
+                parser.getCommand().explainMissing();
+                parser.getCommand().printUsage("grid");
+            } else {
+                int vecsize = parser.getCommand().getAsInt("-v");
+                String bins = parser.getCommand().getAsString("-b");
+                String dims = parser.getCommand().getAsString("-d");
+                String axis = parser.getCommand().getAsString("-a");
+                String out  = parser.getCommand().getAsString("-o");
+                
+                SparseVectorGrid  grid = SparseGridIO.createGrid(dims, bins, axis, vecsize);
+                SparseGridIO.exportHipo(grid, out);
+            }
+        }
+        
+        if(parser.getCommand().getCommand().compareTo("-fill")==0){
+            
+            String  inputGrid = parser.getCommand().getAsString("-grid");
+            int        column = parser.getCommand().getAsInt("-c");
+            String  inputFile = parser.getCommand().getAsString("-i");
+            String outputFile = parser.getCommand().getAsString("-o");
+            
+            SparseVectorGrid  grid = SparseGridIO.importHipo(inputGrid);
+            
+            grid.show();
+            SparseGridIO.importFileToGrid(inputFile, grid, column);
+            SparseGridIO.exportHipo(grid, outputFile);
+            
+        }
+        //System.out.println(parser.getCommand());
+        
+        /*
         
         if(args.length==1){
             GridStudio studio = new GridStudio();
@@ -218,8 +341,8 @@ public class SparseGridIO {
             //int[] columns = new int[]{11,12,13}
             // Command line for GRID:
             // grid -crate -file pim_datatables_5D.txt -index "5:2:18:20:36" -vec "11:12:13" -out grid.hipo
-            int[] bins    = SparseGridIO.getVector(args[4]);
-            int[] columns = SparseGridIO.getVector(args[6]);
+            int[] bins    = SparseGridIO.getVectorInt(args[4]);
+            int[] columns = SparseGridIO.getVectorInt(args[6]);
             
             String inputFile = args[2];
             String   outFile = args[8];
@@ -231,7 +354,9 @@ public class SparseGridIO {
             
             SparseGridIO.exportHipo(grid, outFile);
         }
-            /*
+        */
+        
+        /*
         SparseVectorGrid gridIn = SparseGridIO.importHipo( "grid.hipo");
 
         H1F h = grid.projection(4, 0);
