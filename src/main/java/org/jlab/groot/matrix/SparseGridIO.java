@@ -256,7 +256,10 @@ public class SparseGridIO {
         parser.addCommand("-create");        
         parser.addCommand("-fill");
         parser.addCommand("-insert");
+        parser.addCommand("-show");
         //parser.addCommand("-show");
+        
+        parser.getCommand("-show").addRequiredParameter("-f", "Grid file name to display");
         
         parser.getCommand("-create").addRequiredParameter("-o", "Output file to save the grid");
         parser.getCommand("-create").addRequiredParameter("-d", 
@@ -310,18 +313,36 @@ public class SparseGridIO {
         }
         
         if(parser.getCommand().getCommand().compareTo("-fill")==0){
-            
-            String  inputGrid = parser.getCommand().getAsString("-grid");
-            int        column = parser.getCommand().getAsInt("-c");
-            String  inputFile = parser.getCommand().getAsString("-i");
-            String outputFile = parser.getCommand().getAsString("-o");
-            
-            SparseVectorGrid  grid = SparseGridIO.importHipo(inputGrid);
-            
-            grid.show();
-            SparseGridIO.importFileToGrid(inputFile, grid, column);
-            SparseGridIO.exportHipo(grid, outputFile);
-            
+             if(parser.getCommand().containsRequired()==false){
+                parser.getCommand().explainMissing();
+                parser.getCommand().printUsage("grid");
+            } else {
+                 String  inputGrid = parser.getCommand().getAsString("-grid");
+                 int        column = parser.getCommand().getAsInt("-c");
+                 String  inputFile = parser.getCommand().getAsString("-i");
+                 String outputFile = parser.getCommand().getAsString("-o");
+                 
+                 SparseVectorGrid  grid = SparseGridIO.importHipo(inputGrid);
+                 
+                 grid.show();
+                 SparseGridIO.importFileToGrid(inputFile, grid, column);
+                 SparseGridIO.exportHipo(grid, outputFile);            
+             }
+        }
+        
+        /**
+         * Show COMMAND - displays the grid
+         */
+        if(parser.getCommand().getCommand().compareTo("-show")==0){
+             if(parser.getCommand().containsRequired()==false){
+                parser.getCommand().explainMissing();
+                parser.getCommand().printUsage("grid");
+                System.exit(0);
+            } else {
+                 String file = parser.getCommand().getAsString("-f");
+                 GridStudio studio = new GridStudio();
+                 studio.openFile(file);
+             }
         }
         //System.out.println(parser.getCommand());
         
