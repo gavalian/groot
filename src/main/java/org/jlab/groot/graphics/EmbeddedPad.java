@@ -375,6 +375,7 @@ public class EmbeddedPad {
         if(datasetPlotters.isEmpty()){
         	axisFrame.getAxisY().setTitle(ds.getAttributes().getTitleY());
         	axisFrame.getAxisX().setTitle(ds.getAttributes().getTitleX());
+        	this.setTitle(ds.getAttributes().getTitle());
         }else{
         	axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleY());
         	axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleX());
