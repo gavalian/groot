@@ -145,17 +145,23 @@ public class TreeCut {
         }        
     }
     
-    public boolean isValid(ITree tree){
+    public double isValid(ITree tree){
         if(expr!=null){
         for(int i = 0; i < cutVariables.size(); i++){
             expr.setVariable(cutVariables.get(i), 
                     tree.getBranch(cutVariables.get(i)).getValue().doubleValue());
         }
         	double result = expr.evaluate();
-        	if(result>0.0) return true;
-            return false;
-        }else{
+        	//if(result>0.0) return true;
+            return result;
+        /*}else{
         	return true;
+        }*/
+    }
+        if(this.getExpression()==""){
+        	return 1.0;
+        }else{
+        	return 0.0;
         }
     }
 }

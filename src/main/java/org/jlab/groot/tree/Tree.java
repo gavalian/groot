@@ -190,9 +190,9 @@ public class Tree implements ITree {
      * @param branch
      * @return 
      */
-    public List<Double>  getVector(String branch){
+    /*public List<Double>  getVector(String branch){
         return getVector(branch,defaultSelector);
-    }
+    }*/
     /**
      * returns a list of values from the tree branch for rows that pass
      * the cuts described by selector.
@@ -200,7 +200,7 @@ public class Tree implements ITree {
      * @param selector
      * @return 
      */
-    public List<Double>  getVector(String branch, TreeSelector selector){
+  /*  public List<Double>  getVector(String branch, TreeSelector selector){
         this.reset();
         List<Double> vector = new ArrayList<Double>();
         while(readNext()==true){
@@ -209,7 +209,7 @@ public class Tree implements ITree {
             }
         }
         return vector;
-    }
+    }*/
     /**
      * returns data vector filled with values evaluated with expression given
      * for entries that pass the given cut
@@ -237,7 +237,7 @@ public class Tree implements ITree {
                 
         for(int i = 0; i < nentries; i++){
             readEntry(i);
-            if(cut.isValid(this)==true){
+            if(cut.isValid(this)>.5){
                 double result = exp.getValue(this);
                 vec.add(result);
             }
@@ -268,7 +268,7 @@ public class Tree implements ITree {
             texp.add(exp);
             scanResults.add(new DataVector());
         }
-        
+        scanResults.add(new DataVector());
         int eventsLimit = limit;
         
         if(limit>=getEntries()||limit<0){
@@ -282,33 +282,37 @@ public class Tree implements ITree {
             int eventsLimitHalf = eventsLimit/2;
             for(int i = 0; i < eventsLimitHalf;i++){
                 readEntry(i);
-                if(cut.isValid(this)==true){
+                //if(cut.isValid(this)==true){
                     for(int k = 0; k < texp.size();k++){
                         double result = texp.get(k).getValue(this);
                         scanResults.get(k).add(result);
                     }
-                }
+                    scanResults.get(texp.size()).add(cut.isValid(this));
+                //}
             }
             
             for(int i = getEntries()-1; i > getEntries()-eventsLimitHalf; i--){
                 readEntry(i);
-                if(cut.isValid(this)==true){
+                //if(cut.isValid(this)==true){
                     for(int k = 0; k < texp.size();k++){
                         double result = texp.get(k).getValue(this);
                         scanResults.get(k).add(result);
                     }
-                }
+                    scanResults.get(texp.size()).add(cut.isValid(this));
+                //}
             }
             
         } else {
             for(int i = 0; i < getEntries();i++){
                 readEntry(i);
-                if(cut.isValid(this)==true){
+                //if(cut.isValid(this)==true){
                     for(int k = 0; k < texp.size();k++){
                         double result = texp.get(k).getValue(this);
                         scanResults.get(k).add(result);
                     }
-                }
+                    scanResults.get(texp.size()).add(cut.isValid(this));
+
+               // }
                 if(i>eventsLimit) return;
             }
         }

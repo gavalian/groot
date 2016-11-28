@@ -44,26 +44,27 @@ public class TreeSelector {
         return treeCuts.get(cut);
     }
     
-    public boolean isValid(Tree tree){
+    public double isValid(Tree tree){
+    	double weight = 1.0;
         for(Map.Entry<String,TreeCut> entry : treeCuts.entrySet()){
             if(entry.getValue().isActive()==true){
-                if(entry.getValue().isValid(tree)==false) return false;
+               weight*=entry.getValue().isValid(tree);
             }
         }
-        return true;
+        return weight;
     }
     
-    public Map<String,Integer>  getCuts(Tree tree){
-        Map<String,Integer>  cuts = new LinkedHashMap<String,Integer>();
+    public Map<String,Double>  getCuts(Tree tree){
+        Map<String,Double>  cuts = new LinkedHashMap<String,Double>();
         for(Map.Entry<String,TreeCut> entry : treeCuts.entrySet()){
             if(entry.getValue().isActive()==true){
-                if(entry.getValue().isValid(tree)==false){
-                    cuts.put(entry.getKey(), 0);
-                } else {
-                    cuts.put(entry.getKey(), 1);
-                }
+                //if(entry.getValue().isValid(tree)==false){
+                    cuts.put(entry.getKey(), entry.getValue().isValid(tree));
+                //} else {
+                //    cuts.put(entry.getKey(), 1);
+                //}
             } else {
-                cuts.put(entry.getKey(), 0);
+                cuts.put(entry.getKey(), 1.0);
             }
         }
         return cuts;

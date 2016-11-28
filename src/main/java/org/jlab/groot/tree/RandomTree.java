@@ -55,7 +55,7 @@ public class RandomTree extends Tree {
         
         int counter = 0;
         while(tree.readNext()==true){            
-            boolean status = q2cut.isValid(tree);
+            double status = q2cut.isValid(tree);
             counter++;
             System.out.println( counter + " : " + status);
         }

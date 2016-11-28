@@ -149,17 +149,20 @@ public class DatasetDescriptor extends AbstractDescriptor {
 	}
 
 	public void fill(ITree tree) {
-
+		double eventWeight = 1.0;
 		boolean cutsPassed = true;
+		System.out.println("Number of TreeCuts"+this.treeCuts.size());
 		for (TreeCut cut : this.treeCuts) {
-			if (cut.isValid(tree) == false)
-				return;
+			eventWeight*=cut.isValid(tree);
+			System.out.println("Cut"+cut.cutExpression+" "+cut.isValid(tree)+" "+eventWeight);
+			/*if (cut.isValid(tree) == false)
+				return;*/
 		}
 
 		if (descriptorType == DatasetDescriptor.DESCRIPTOR_H1) {
 			double value = treeExpressions.get(0).getValue(tree);
 			H1F h1 = (H1F) this.descDataset.get(0);
-			h1.fill(value);
+			h1.fill(value,eventWeight);
 			return;
 		}
 
@@ -167,14 +170,16 @@ public class DatasetDescriptor extends AbstractDescriptor {
 			double valueX = treeExpressions.get(0).getValue(tree);
 			double valueY = treeExpressions.get(1).getValue(tree);
 			H2F h2 = (H2F) this.descDataset.get(0);
-			h2.fill(valueX, valueY);
+			h2.fill(valueX, valueY,eventWeight);
 			return;
 		}
 		if (descriptorType == DatasetDescriptor.DESCRIPTOR_GRXY_XY) {
 			double x = treeExpressions.get(0).getValue(tree);
 			double y = treeExpressions.get(1).getValue(tree);
 			GraphErrors graph = (GraphErrors) this.descDataset.get(0);
-			graph.addPoint(x, y, 0.0, 0.0);
+			if(eventWeight>0.0){
+				graph.addPoint(x, y, 0.0, 0.0);
+			}
 		}
 
 		if (descriptorType == DatasetDescriptor.DESCRIPTOR_GRXY_XY_EY) {
@@ -182,7 +187,9 @@ public class DatasetDescriptor extends AbstractDescriptor {
 			double y = treeExpressions.get(1).getValue(tree);
 			double ey = treeExpressions.get(2).getValue(tree);
 			GraphErrors graph = (GraphErrors) this.descDataset.get(0);
-			graph.addPoint(x, y, 0.0, ey);
+			if(eventWeight>0.0){
+				graph.addPoint(x, y, 0.0, ey);
+			}
 		}
 
 		if (descriptorType == DatasetDescriptor.DESCRIPTOR_GRXY_XY_EX_EY) {
@@ -191,7 +198,9 @@ public class DatasetDescriptor extends AbstractDescriptor {
 			double ex = treeExpressions.get(2).getValue(tree);
 			double ey = treeExpressions.get(3).getValue(tree);
 			GraphErrors graph = (GraphErrors) this.descDataset.get(0);
-			graph.addPoint(x, y, ex, ey);
+			if(eventWeight>0.0){
+				graph.addPoint(x, y, ex, ey);
+			}
 		}
 	}
 
@@ -339,7 +348,7 @@ public class DatasetDescriptor extends AbstractDescriptor {
 
 	@Override
 	public void processTreeEvent(Tree tree) {
-
+		/*
 		boolean cutsPassed = true;
 		for (TreeCut cut : this.treeCuts) {
 			if (cut.isValid(tree) == false)
@@ -382,6 +391,58 @@ public class DatasetDescriptor extends AbstractDescriptor {
 			double ey = treeExpressions.get(3).getValue(tree);
 			GraphErrors graph = (GraphErrors) this.descDataset.get(0);
 			graph.addPoint(x, y, ex, ey);
+		}*/
+		
+		double eventWeight = 1.0;
+		boolean cutsPassed = true;
+		for (TreeCut cut : this.treeCuts) {
+			eventWeight*=cut.isValid(tree);
+			/*if (cut.isValid(tree) == false)
+				return;*/
+		}
+
+		if (descriptorType == DatasetDescriptor.DESCRIPTOR_H1) {
+			double value = treeExpressions.get(0).getValue(tree);
+			H1F h1 = (H1F) this.descDataset.get(0);
+			h1.fill(value,eventWeight);
+			return;
+		}
+
+		if (descriptorType == DatasetDescriptor.DESCRIPTOR_H2) {
+			double valueX = treeExpressions.get(0).getValue(tree);
+			double valueY = treeExpressions.get(1).getValue(tree);
+			H2F h2 = (H2F) this.descDataset.get(0);
+			h2.fill(valueX, valueY,eventWeight);
+			return;
+		}
+		if (descriptorType == DatasetDescriptor.DESCRIPTOR_GRXY_XY) {
+			double x = treeExpressions.get(0).getValue(tree);
+			double y = treeExpressions.get(1).getValue(tree);
+			GraphErrors graph = (GraphErrors) this.descDataset.get(0);
+			if(eventWeight>0.0){
+				graph.addPoint(x, y, 0.0, 0.0);
+			}
+		}
+
+		if (descriptorType == DatasetDescriptor.DESCRIPTOR_GRXY_XY_EY) {
+			double x = treeExpressions.get(0).getValue(tree);
+			double y = treeExpressions.get(1).getValue(tree);
+			double ey = treeExpressions.get(2).getValue(tree);
+			GraphErrors graph = (GraphErrors) this.descDataset.get(0);
+			if(eventWeight>0.0){
+				graph.addPoint(x, y, 0.0, ey);
+			}
+		}
+
+		if (descriptorType == DatasetDescriptor.DESCRIPTOR_GRXY_XY_EX_EY) {
+			double x = treeExpressions.get(0).getValue(tree);
+			double y = treeExpressions.get(1).getValue(tree);
+			double ex = treeExpressions.get(2).getValue(tree);
+			double ey = treeExpressions.get(3).getValue(tree);
+			GraphErrors graph = (GraphErrors) this.descDataset.get(0);
+			if(eventWeight>0.0){
+				graph.addPoint(x, y, ex, ey);
+			}
 		}
 	}
 

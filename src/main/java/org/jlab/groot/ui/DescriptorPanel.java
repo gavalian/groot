@@ -277,10 +277,11 @@ public class DescriptorPanel extends JPanel {
 								x + ":" + y + ":" + xerr + ":" + yerr, tree);
 					}
 				}
+				descriptor.clearCuts();
 				for (int i = 0; i < cutBoxes.size(); i++) {
-					descriptor.clearCuts();
 					if (cutBoxes.get(i).isSelected()) {
 						descriptor.addCut(cutMap.get(cutStrings.get(i)));
+						//System.out.println("Adding Cut"+cutMap.get(cutStrings.get(i)).getName()+" "+cutMap.get(cutStrings.get(i)).getExpression());
 					}
 				}
 				if(!editMode){
@@ -533,9 +534,9 @@ public class DescriptorPanel extends JPanel {
 		for (int j = 0; j < cutBoxes.size(); j++) {
 			if (cutBoxes.get(j).isSelected()) {
 				if (cuts == "") {
-					cuts += cutMap.get(cutStrings.get(j)).getExpression();
+					cuts += "("+cutMap.get(cutStrings.get(j)).getExpression()+")";
 				} else {
-					cuts += "&&" + cutMap.get(cutStrings.get(j)).getExpression();
+					cuts += "*(" + cutMap.get(cutStrings.get(j)).getExpression()+")";
 				}
 			}
 		}
@@ -547,6 +548,7 @@ public class DescriptorPanel extends JPanel {
 				try {
 
 					this.tree.scanTree(this.branchVariableFieldX.getText(), cuts, 1000, true);
+					System.out.println("Preview: "+ this.branchVariableFieldX.getText()+" "+cuts+" "+1000+" " +true);
 					List<DataVector> vecs = this.tree.getScanResults();
 					if (this.estimateCheckBox.isSelected()) {
 						if (vecs.size() >= 1) {
@@ -622,7 +624,7 @@ public class DescriptorPanel extends JPanel {
 		// System.out.println("Histogram "+bins+" "+min+ " "+max);
 		H1F htemp = new H1F("PreviewHistogram", bins, min, max);
 		// System.out.println("Datavector size"+vecs.get(0).getSize());
-		htemp.fill(vecs.get(0));
+		htemp.fill(vecs.get(0),vecs.get(1));
 		// TCanvas can = new TCanvas("Blah",500,800);
 		// can.draw(htemp);
 		// previewCanvas.divide(1, 1);
