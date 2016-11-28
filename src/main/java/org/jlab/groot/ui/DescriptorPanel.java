@@ -531,6 +531,7 @@ public class DescriptorPanel extends JPanel {
 
 	private void validateExpression(int i) {
 		String cuts = "";
+		boolean xPassed = false;
 		for (int j = 0; j < cutBoxes.size(); j++) {
 			if (cutBoxes.get(j).isSelected()) {
 				if (cuts == "") {
@@ -541,14 +542,14 @@ public class DescriptorPanel extends JPanel {
 			}
 		}
 		//System.out.println("cuts:[" + cuts + "]");
-		if (i == 0) {
+		if (i == 0 || i==1) {
 			boolean passed = TreeExpression.validateExpression(this.branchVariableFieldX.getText(),
 					this.tree.getListOfBranches());
 			if (passed) {
 				try {
 
 					this.tree.scanTree(this.branchVariableFieldX.getText(), cuts, 1000, true);
-					System.out.println("Preview: "+ this.branchVariableFieldX.getText()+" "+cuts+" "+1000+" " +true);
+					//System.out.println("Preview: "+ this.branchVariableFieldX.getText()+" "+cuts+" "+1000+" " +true);
 					List<DataVector> vecs = this.tree.getScanResults();
 					if (this.estimateCheckBox.isSelected()) {
 						if (vecs.size() >= 1) {
@@ -569,14 +570,14 @@ public class DescriptorPanel extends JPanel {
 					this.maxTextFieldX.setText("");
 					this.binTextFieldX.setText("");
 				}
-				System.out.println("X Validation Failed");
+				//System.out.println("X Validation Failed");
 			} else {
 				validationPlaceHolderX.setIcon(checkIcon);
 				validationPlaceHolderX.repaint();
 				if (this.previewCheckBox.isSelected()) {
 					drawPreviewHistogram();
 				}
-				System.out.println("X Validation Succeeded");
+				//System.out.println("X Validation Succeeded");
 			}
 		}
 		if (i == 1) {
@@ -605,11 +606,11 @@ public class DescriptorPanel extends JPanel {
 					this.maxTextFieldY.setText("");
 					this.binTextFieldY.setText("");
 				}
-				System.out.println("Y Validation Failed");
+				//System.out.println("Y Validation Failed");
 			} else {
 				validationPlaceHolderY.setIcon(checkIcon);
 				validationPlaceHolderY.repaint();
-				System.out.println("Y Validation Succeeded");
+				//System.out.println("Y Validation Succeeded");
 			}
 		}
 	}

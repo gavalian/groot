@@ -151,10 +151,10 @@ public class DatasetDescriptor extends AbstractDescriptor {
 	public void fill(ITree tree) {
 		double eventWeight = 1.0;
 		boolean cutsPassed = true;
-		System.out.println("Number of TreeCuts"+this.treeCuts.size());
+		//System.out.println("Number of TreeCuts"+this.treeCuts.size());
 		for (TreeCut cut : this.treeCuts) {
 			eventWeight*=cut.isValid(tree);
-			System.out.println("Cut"+cut.cutExpression+" "+cut.isValid(tree)+" "+eventWeight);
+			//System.out.println("Cut"+cut.cutExpression+" "+cut.isValid(tree)+" "+eventWeight);
 			/*if (cut.isValid(tree) == false)
 				return;*/
 		}
