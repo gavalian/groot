@@ -60,6 +60,7 @@ public class DataGroup {
         }
         
         dataGroupSets.get(order).add(ds);
+        dataGroup.put(ds.getName(), ds);
         /*
         if(dataGroup.containsKey(ds.getName())==true){
             System.out.println("[warning] --> object with name " + ds.getName()

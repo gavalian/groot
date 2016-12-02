@@ -91,19 +91,20 @@ public class FitterFunction implements FCNBase {
             if(x>=function.getMin()&&x<=function.getMax()&&usePoint){
                 double yv = function.evaluate(x);
                 double normalization = yerr*yerr;                
+                /*
                 if(options.contains("R")==true){
                     normalization = yv;
-                }
+                }*/
                 
                 if(options.contains("N")==true){
-                    normalization = y;
+                    normalization = Math.abs(y);
                 }
                 
                 if(options.contains("W")==true){
                 	normalization = 1.0;
                 }
-                                
-                if(normalization>0.000000000001){                    
+                
+                if(Math.abs(normalization)>0.000000000001){
                     chi2 += (yv-y)*(yv-y)/normalization;
                     ndf++;
                 }

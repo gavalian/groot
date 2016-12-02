@@ -80,6 +80,7 @@ public class DataFitter {
         System.err.println("*******************************************");
         */
         MnMigrad migrad = new MnMigrad(funcFitter, upar);
+        
         FunctionMinimum min = migrad.minimize();
         
         MnUserParameters userpar = min.userParameters();
