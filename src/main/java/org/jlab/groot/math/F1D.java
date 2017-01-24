@@ -52,10 +52,10 @@ public class F1D extends Func1D {
             }
     };
     
-    Function funcErrf = new Function("erf", 1) {
+    Function funcErrf = new Function("erf", 3) {
             @Override
             public double apply(double... args) {
-                return ErrorFunction.erf(args[0]);
+                return ErrorFunction.erf(0.0,1.0,args[1],args[2],args[0]);
             }
     };
     
