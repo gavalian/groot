@@ -694,7 +694,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 400);
         EmbeddedCanvas canvas = new EmbeddedCanvas();
-        canvas.divide(2, 2);
+        //canvas.divide(2, 2);
         canvas.setAxisFontSize(14);
         //canvas.getPad(0).getAxisFrame().getAxisX().setAxisFontSize(18);
         //canvas.getPad(1).getAxisFrame().getAxisY().setAxisFontSize(18);
@@ -703,14 +703,18 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
       //  H1F h1  = FunctionFactory.createDebugH1F(6);
        // H1F h2  = FunctionFactory.randomGausian(100, 0.4, 5.6, 200000, 2.3, 0.8);
         H1F h2b = FunctionFactory.randomGausian(100, 0.4, 5.6, 80000, 4.0, 0.8);
-        H2F h2d = FunctionFactory.randomGausian2D(40, 0.4, 5.6, 800000, 2.3, 0.8);
-        
+        H2F h2d = FunctionFactory.randomGausian2D(24, 0.4, 5.6, 800000, 2.3, 0.8);
+        H2F h2d2 = new H2F("h2d2",100,-180,180,24,-180,180);
         DataGroup group = new DataGroup(2,1);
         h2b.setName("h2b");
         GraphErrors hprofile = h2d.getProfileX();
         group.addDataSet(h2d, 0);
         group.addDataSet(hprofile, 1);
-        canvas.draw(group);
+        for(int i = 0; i < 20000; i++){
+            h2d2.fill(Math.random()*360.0-180.0,Math.random()*360.0-180.0 );
+        }
+        //canvas.draw(group);
+        canvas.draw(h2d2);
         /*for(int i =0; i < 4; i++){
             canvas.cd(i);
             canvas.draw(h2);

@@ -142,15 +142,18 @@ public class EmbeddedPad {
         Dimension3D  axis = new Dimension3D();
         axis.set(0.0, 1.0, 0.0, 1.0, 0.0, 1.0);
         if(this.datasetPlotters.size()>0){
+            
             axis.copy(datasetPlotters.get(0).getDataRegion());
             for(IDataSetPlotter plotter : this.datasetPlotters){
                 Dimension3D d3d = plotter.getDataRegion();
                 axis.combine(d3d);
             }
-        
-        
+            
+            System.out.println( "AXIS = "  + axis.toString());
+            
         if(this.getAxisX().isAutoScale()==false){
             axis.getDimension(0).copy(this.getAxisX().getRange());
+            //axis.getDimension(1).copy(this.getAxisY().getRange());
         }else{
         	axisFrame.getAxisX().setRange(
                     axis.getDimension(0).getMin(),
@@ -164,15 +167,25 @@ public class EmbeddedPad {
         	sum += datasetPlotters.get(0).getDataSet().getDataY(i);
         }
         
+        if(this.datasetPlotters.size()>0){
+            if(this.getDatasetPlotters().get(0) instanceof Histogram2DPlotter){
+                sum = 1.0;
+            }
+        }
+        
         if(this.getAxisY().isAutoScale()==false || sum==0.0){
             axis.getDimension(1).copy(this.getAxisY().getRange());
+            //System.out.println("if 1");            
         }else{
         	axisFrame.getAxisY().setRange(
                     axis.getDimension(1).getMin(),
                     axis.getDimension(1).getMax()
             );
-        	axisFrame.getAxisY().getAttributes().setAxisAutoScale(true);
+                axisFrame.getAxisY().getAttributes().setAxisAutoScale(true);
+                //System.out.println("if 2");
         }
+        //System.out.println(" AXIS Y MIN MAX" + axisFrame.getAxisY().getMin() + " " 
+        //+ axisFrame.getAxisY().getMax());
         
         if(this.getAxisZ().isAutoScale()==false){
             axis.getDimension(2).copy(this.getAxisZ().getRange());
@@ -200,7 +213,7 @@ public class EmbeddedPad {
         }*/
 
         
-        
+        //System.out.println( "Y AXIS DIM = " + axisFrame.getAxisY().toString());
         
         Rectangle2D rect = new Rectangle2D.Double(
                 axisFrame.getFrameDimensions().getDimension(0).getMin() + this.attr.getPadMargins().getLeftMargin(),
