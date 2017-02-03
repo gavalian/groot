@@ -149,7 +149,7 @@ public class EmbeddedPad {
                 axis.combine(d3d);
             }
             
-            System.out.println( "AXIS = "  + axis.toString());
+            //System.out.println( "AXIS = "  + axis.toString());
             
         if(this.getAxisX().isAutoScale()==false){
             axis.getDimension(0).copy(this.getAxisX().getRange());
