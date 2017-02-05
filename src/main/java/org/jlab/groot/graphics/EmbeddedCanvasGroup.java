@@ -54,6 +54,7 @@ public class EmbeddedCanvasGroup extends JPanel implements ActionListener {
     public void setData(List<IDataSet>  datasets){
         this.canvasDataSets.clear();
         this.canvasDataSets.addAll(datasets);
+        this.currentPage = 0;
         this.maxPages = this.canvasDataSets.size()/this.padsPerPage;
         if(maxPages*this.padsPerPage<this.canvasDataSets.size()){
             this.maxPages++;
