@@ -54,22 +54,32 @@ public class EmbeddedCanvasGroup extends JPanel implements ActionListener {
     public void setData(List<IDataSet>  datasets){
         this.canvasDataSets.clear();
         this.canvasDataSets.addAll(datasets);
-        this.maxPages = this.canvasDataSets.size()/this.padsPerPage + 1;
+        this.maxPages = this.canvasDataSets.size()/this.padsPerPage;
+        if(maxPages*this.padsPerPage<this.canvasDataSets.size()){
+            this.maxPages++;
+        }
+        this.updateCanvas();
+        
+    }
+    
+    
+    public void updateCanvas(){
+        this.canvas.clear();
+        this.canvas.divide(3, 4);
+        for(int i = 0; i < this.padsPerPage; i++){
+            int index = currentPage*this.padsPerPage + i;
+            this.canvas.cd(i);
+            if(index<this.canvasDataSets.size()){
+                this.canvas.draw(this.canvasDataSets.get(index));
+            }
+        }
+        this.progressLabel.setText(String.format("%d/%d", this.currentPage,this.maxPages));
     }
     
     public void nextPage(){
         if(currentPage<maxPages){
             currentPage++;
-            this.canvas.clear();
-            this.canvas.divide(3, 4);
-            for(int i = 0; i < this.padsPerPage; i++){
-                int index = currentPage*this.padsPerPage + i;
-                this.canvas.cd(i);
-                if(index<this.canvasDataSets.size()){
-                    this.canvas.draw(this.canvasDataSets.get(index));
-                }
-            }
-            this.progressLabel.setText(String.format("%d/%d", this.currentPage,this.maxPages));
+            this.updateCanvas();
         }
     }
     
@@ -77,15 +87,7 @@ public class EmbeddedCanvasGroup extends JPanel implements ActionListener {
         if(currentPage>0){
             currentPage--;
             this.canvas.clear();
-            this.canvas.divide(3, 4);
-            for(int i = 0; i < this.padsPerPage; i++){
-                int index = currentPage*this.padsPerPage + i;
-                this.canvas.cd(i);
-                if(index<this.canvasDataSets.size()){
-                    this.canvas.draw(this.canvasDataSets.get(index));
-                }
-            }
-            this.progressLabel.setText(String.format("%d/%d", this.currentPage,this.maxPages));
+            this.updateCanvas();
         }
     }
     
