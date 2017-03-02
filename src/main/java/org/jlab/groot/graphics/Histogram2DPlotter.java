@@ -78,7 +78,12 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                     //System.out.println("2D plotter axis Z " + zAxisLog);
                     Color  weightColor;
                     if(frame.getAxisZ().isAutoScale()){
-                    	weightColor = palette.getColor3D(dataWeight,dataRegionZ.getMax(), zAxisLog);
+                    	if(dataRegionZ.getMin()<0){                    
+                    		dataWeight -= dataRegionZ.getMin();
+                    		weightColor = palette.getColor3D(dataWeight,dataRegionZ.getMax()-dataRegionZ.getMin(), zAxisLog);
+                    	}else{
+                    		weightColor = palette.getColor3D(dataWeight,dataRegionZ.getMax(), zAxisLog);
+                    	}
                     }else{
                     	dataWeight -= frame.getAxisZ().getRange().getMin();
                     	weightColor = palette.getColor3D(dataWeight,frame.getAxisZ().getRange().getMax()-frame.getAxisZ().getRange().getMin(), zAxisLog);
