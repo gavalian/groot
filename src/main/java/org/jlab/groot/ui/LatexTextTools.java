@@ -42,7 +42,7 @@ public class LatexTextTools {
         table.put("#chi"  , "\u03C7");        
         table.put("#psi"  , "\u03C8");        
         table.put("#theta", "\u03B8");
-
+        table.put("#omega", "\u03C9");
         table.put("#pi"   , "\u03C0");
 
         
@@ -82,6 +82,8 @@ public class LatexTextTools {
             index = newString.indexOf("_");
             //System.out.println(newString);
         }
+        
+        
                         
         AttributedString  string = new AttributedString(newString);
         
