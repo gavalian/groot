@@ -559,6 +559,64 @@ public class H2F implements IDataSet {
     }
     
     /**
+     *
+     * @param ngroups indicates how many bins of this have to be merged into one
+     * bin of the result NOTE: If ngroup is not an exact divider of the number
+     * of bins, the top limit of the rebinned histogram is reduced to the upper
+     * edge of the last bin that can make a complete group.
+     * 
+     * @return a H2F object obtained from original histogram with rebinned
+     * x-axis
+     */
+    public H2F rebinX(int ngroups) {
+        int nbinsX = xAxis.getNBins() / ngroups;
+
+        H2F hrebinX = new H2F(hName, this.getTitle(),
+                nbinsX, xAxis.min(), xAxis.min() + nbinsX * ngroups * xAxis.getBinWidth(0),
+                yAxis.getNBins(), yAxis.min(), yAxis.max());
+
+        for (int iby = 0; iby < yAxis.getNBins(); iby++) {
+            for (int ibx = 0; ibx < nbinsX; ibx++) {
+                double height = 0.0;
+                for (int igroup = 0; igroup < ngroups; igroup++) {
+                    height += this.getBinContent(ibx * ngroups + igroup, iby);
+                }
+                hrebinX.setBinContent(ibx, iby, height);
+            }
+        }
+        return hrebinX;
+    }
+
+    /**
+     *
+     * @param ngroups indicates how many bins of this have to be merged into one
+     * bin of the result NOTE: If ngroup is not an exact divider of the number
+     * of bins, the top limit of the rebinned histogram is reduced to the upper
+     * edge of the last bin that can make a complete group.
+     * 
+     * @return a H2F object obtained from original histogram with rebinned
+     * y-axis
+     */
+    public H2F rebinY(int ngroups) {
+        int nbinsY = yAxis.getNBins() / ngroups;
+
+        H2F hrebinY = new H2F(hName, this.getTitle(),
+                xAxis.getNBins(), xAxis.min(), xAxis.max(),
+                nbinsY, yAxis.min(), yAxis.min() + nbinsY * ngroups * yAxis.getBinWidth(0));
+
+        for (int ibx = 0; ibx < xAxis.getNBins(); ibx++) {
+            for (int iby = 0; iby < nbinsY; iby++) {
+                double height = 0.0;
+                for (int igroup = 0; igroup < ngroups; igroup++) {
+                    height += this.getBinContent(ibx, iby * ngroups + igroup);
+                }
+                hrebinY.setBinContent(ibx, iby, height);
+            }
+        }
+        return hrebinY;
+    }
+
+    /**
      * Creates a projection of the 2D histogram onto the X Axis, adding up all
      * the y bins for each x bin
      *
