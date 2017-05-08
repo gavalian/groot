@@ -49,58 +49,65 @@ public class DataFitter {
             System.setOut(pipeStream);
             System.setErr(pipeStream);
         }
-        
-        FitterFunction funcFitter = new FitterFunction(func,
-                data,options);
-        
-        int npars = funcFitter.getFunction().getNPars();
-        
-        MnUserParameters upar = new MnUserParameters();
-        for(int loop = 0; loop < npars; loop++){
-            UserParameter par = funcFitter.getFunction().parameter(loop);
-            upar.add(par.name(),par.value(),0.0001);
-            if(par.getStep()<0.0000000001){
-                upar.fix(par.name());
-            }
-            if(par.min()>-1e9&&par.max()<1e9){
-                upar.setLimits(par.name(), par.min(), par.max());
-            }
+        try{
+	        FitterFunction funcFitter = new FitterFunction(func,
+	                data,options);
+	        
+	        int npars = funcFitter.getFunction().getNPars();
+	        
+	        MnUserParameters upar = new MnUserParameters();
+	        for(int loop = 0; loop < npars; loop++){
+	            UserParameter par = funcFitter.getFunction().parameter(loop);
+	            upar.add(par.name(),par.value(),0.0001);
+	            if(par.getStep()<0.0000000001){
+	                upar.fix(par.name());
+	            }
+	            if(par.min()>-1e9&&par.max()<1e9){
+	                upar.setLimits(par.name(), par.min(), par.max());
+	            }
+	        }
+	        
+	        
+	        MnScan  scanner = new MnScan(funcFitter,upar);
+	        FunctionMinimum scanmin = scanner.minimize(); 
+	        /*
+	        System.err.println("******************");
+	        System.err.println("*   SCAN RESULTS  *");
+	        System.err.println("******************");
+	        System.out.println("minimum : " + scanmin);
+	        System.out.println("pars    : " + upar);
+	        System.out.println(upar);
+	        System.err.println("*******************************************");
+	        */
+	        MnMigrad migrad = new MnMigrad(funcFitter, upar);
+	        
+	        FunctionMinimum min = migrad.minimize();
+	        
+	        MnUserParameters userpar = min.userParameters();
+	        
+	        for(int loop = 0; loop < npars; loop++){
+	            UserParameter par = funcFitter.getFunction().parameter(loop);
+	            par.setValue(userpar.value(par.name()));
+	            par.setError(userpar.error(par.name()));
+	        }
+	        
+	        if(options.contains("V")==true){
+	            System.out.println(upar);
+	            System.err.println("******************");
+	            System.err.println("*   FIT RESULTS  *");
+	            System.err.println("******************");
+	            
+	            System.err.println(min);
+	        }
+	        
+	        System.out.println(funcFitter.getBenchmarkString());
+        }catch(Exception e){
+	       e.printStackTrace();
+	       if(DataFitter.FITPRINTOUT==false){
+	            System.setOut(outStream);
+	            System.setErr(errStream);
+	        }
         }
-        
-        
-        MnScan  scanner = new MnScan(funcFitter,upar);
-        FunctionMinimum scanmin = scanner.minimize(); 
-        /*
-        System.err.println("******************");
-        System.err.println("*   SCAN RESULTS  *");
-        System.err.println("******************");
-        System.out.println("minimum : " + scanmin);
-        System.out.println("pars    : " + upar);
-        System.out.println(upar);
-        System.err.println("*******************************************");
-        */
-        MnMigrad migrad = new MnMigrad(funcFitter, upar);
-        
-        FunctionMinimum min = migrad.minimize();
-        
-        MnUserParameters userpar = min.userParameters();
-        
-        for(int loop = 0; loop < npars; loop++){
-            UserParameter par = funcFitter.getFunction().parameter(loop);
-            par.setValue(userpar.value(par.name()));
-            par.setError(userpar.error(par.name()));
-        }
-        
-        if(options.contains("V")==true){
-            System.out.println(upar);
-            System.err.println("******************");
-            System.err.println("*   FIT RESULTS  *");
-            System.err.println("******************");
-            
-            System.err.println(min);
-        }
-        
-        System.out.println(funcFitter.getBenchmarkString());
         if(DataFitter.FITPRINTOUT==false){
             System.setOut(outStream);
             System.setErr(errStream);
