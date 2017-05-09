@@ -47,6 +47,8 @@ public class LatexTextTools {
 
         
         table.put("#Theta", "\u0398");
+        
+        table.put("#degree", "\u00B0");
         table.put("#rarrow"   , "\u2192");
         table.put("#larrow"   , "\u2190");
         table.put("#uarrow"   , "\u2191");
