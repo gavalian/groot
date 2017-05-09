@@ -366,6 +366,7 @@ public class H2F implements IDataSet {
         for(int loop = 0; loop < this.getXAxis().getNBins(); loop++){
             H1F slice = this.sliceX(loop);
             slice.setName(this.getName()+"_"+loop);
+            slice.setTitleY(this.getTitleY());
             slices.add(slice);
         }
         return slices;
@@ -376,6 +377,7 @@ public class H2F implements IDataSet {
         for(int loop = 0; loop < this.getYAxis().getNBins(); loop++){
             H1F slice = this.sliceY(loop);
             slice.setName(this.getName()+"_"+loop);
+            slice.setTitleX(this.getTitleX());
             slices.add(slice);
         }
         return slices;
