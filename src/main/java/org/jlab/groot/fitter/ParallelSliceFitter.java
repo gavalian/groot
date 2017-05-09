@@ -1,7 +1,5 @@
 package org.jlab.groot.fitter;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,7 +17,6 @@ import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.F1D;
-import org.jlab.groot.math.FunctionFactory;
 import org.jlab.groot.ui.ProgressBar;
 
 public class ParallelSliceFitter {
@@ -68,8 +65,10 @@ public class ParallelSliceFitter {
 	
 	public GraphErrors getMeanSlices(){
 		GraphErrors graph = new GraphErrors();
+		System.out.println("Slices size:"+slices.size());
 		for(int i=0; i<slices.size(); i++){
 			graph.addPoint(axis.getBinCenter(i),fitsResults[i].getParameter(1),0,fitsResults[i].parameter(1).error());
+			System.out.println("Bin:"+i+" X:"+axis.getBinCenter(i)+" Y:"+fitsResults[i].getParameter(1));
 		}
 		return graph;
 	}
@@ -105,7 +104,7 @@ public class ParallelSliceFitter {
 			temp.setN(i);
 			temp.setHistogram(slice);
 			temp.setResultSetter(setter);
-			temp.setFitter(new F1D("f1", "[amp]*gaus(x,[mean],[sigma])", axis.min(), axis.max()));
+			temp.setFitter(new F1D("f1", "[amp]*gaus(x,[mean],[sigma])", slice.getxAxis().min(), slice.getxAxis().max()));
 			threads.add(temp);
 		}
 
@@ -132,7 +131,7 @@ public class ParallelSliceFitter {
 				}
 				bar.update(ncomplete, ntotal);
 				try {
-					Thread.sleep(500);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -156,7 +155,7 @@ public class ParallelSliceFitter {
 		canvas.divide(2, 2);
 		frame.setSize(800, 500);
 		Random rand = new Random();
-		H2F histogram2d = new H2F("h2","",100,0,4,100,0,4);
+		H2F histogram2d = new H2F("h2","",1000,0,4,1000,0,4);
 		for(int i=0; i<8000000; i++){
 			double x = 1.5+rand.nextGaussian();
 			double y = 2.5+2*rand.nextGaussian();
