@@ -38,6 +38,7 @@ import java.util.TimerTask;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -53,6 +54,7 @@ import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
+import org.jlab.groot.fitter.ParallelSliceFitter;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.math.FunctionFactory;
 import org.jlab.groot.ui.FitPanel;
@@ -88,6 +90,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     private int                  activePad     = 0; 
     private boolean isChild = false;
     private boolean showFPS = false;
+    private int fitSlicesMode = 0;
     
     public EmbeddedCanvas(){
         super();
@@ -309,6 +312,10 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     public EmbeddedPad  getPad(int index){
         return this.canvasPads.get(index);
     }
+    
+    public EmbeddedPad  getPad(){
+        return this.canvasPads.get(this.activePad);
+    }
     /**
      * forces repaint method for the entire canvas
      */
@@ -475,6 +482,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     	 if (SwingUtilities.isRightMouseButton(e)) {
              popupPad = getPadByXY(e.getX(),e.getY());
              //System.out.println("POP-UP coordinates = " + e.getX() + " " + e.getY() + "  pad = " + popupPad);
+             createPopupMenu();
              popup.show(EmbeddedCanvas.this, e.getX(), e.getY());
          }
     }
@@ -505,6 +513,32 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         JMenuItem itemFitPanel = new JMenuItem("Fit Panel");
         JMenuItem itemOptions = new JMenuItem("Options");
         JMenuItem itemOpenWindow = new JMenuItem("Open in New Window");
+        JMenu itemFitSlices = new JMenu("Fit Slices");
+        JMenu itemFitSlicesX = new JMenu("X Axis");
+        JMenu itemFitSlicesY = new JMenu("Y Axis");
+        itemFitSlices.add(itemFitSlicesX);
+        itemFitSlices.add(itemFitSlicesY);
+        JMenuItem itemFitSlicesgausx = new JMenuItem("gaus");
+        JMenuItem itemFitSlicesgausp0x = new JMenuItem("gaus+p0");
+        JMenuItem itemFitSlicesgausp1x = new JMenuItem("gaus+p1");
+        JMenuItem itemFitSlicesgausp2x = new JMenuItem("gaus+p2");
+        JMenuItem itemFitSlicesgausp3x = new JMenuItem("gaus+p3");
+        itemFitSlicesX.add(itemFitSlicesgausx);
+        itemFitSlicesX.add(itemFitSlicesgausp0x);
+        itemFitSlicesX.add(itemFitSlicesgausp1x);
+        itemFitSlicesX.add(itemFitSlicesgausp2x);
+        itemFitSlicesX.add(itemFitSlicesgausp3x);
+        JMenuItem itemFitSlicesgausy = new JMenuItem("gaus");
+        JMenuItem itemFitSlicesgausp0y = new JMenuItem("gaus+p0");
+        JMenuItem itemFitSlicesgausp1y = new JMenuItem("gaus+p1");
+        JMenuItem itemFitSlicesgausp2y = new JMenuItem("gaus+p2");
+        JMenuItem itemFitSlicesgausp3y = new JMenuItem("gaus+p3");
+        itemFitSlicesY.add(itemFitSlicesgausy);
+        itemFitSlicesY.add(itemFitSlicesgausp0y);
+        itemFitSlicesY.add(itemFitSlicesgausp1y);
+        itemFitSlicesY.add(itemFitSlicesgausp2y);
+        itemFitSlicesY.add(itemFitSlicesgausp3y);
+
         itemCopy.addActionListener(this);
         itemCopyPad.addActionListener(this);
         itemSave.addActionListener(this);
@@ -513,6 +547,17 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         itemOptions.addActionListener(this);
         itemOpenWindow.addActionListener(this);
         itemPaste.addActionListener(this);
+        itemFitSlicesgausp3x.addActionListener(e -> fitSlices(0,ParallelSliceFitter.P3_BG));
+        itemFitSlicesgausp2x.addActionListener(e -> fitSlices(0,ParallelSliceFitter.P2_BG));
+        itemFitSlicesgausp1x.addActionListener(e -> fitSlices(0,ParallelSliceFitter.P1_BG));
+        itemFitSlicesgausp0x.addActionListener(e -> fitSlices(0,ParallelSliceFitter.P0_BG));
+        itemFitSlicesgausx.addActionListener(e -> fitSlices(0,ParallelSliceFitter.NO_BG));
+        itemFitSlicesgausp3y.addActionListener(e -> fitSlices(1,ParallelSliceFitter.P3_BG));
+        itemFitSlicesgausp2y.addActionListener(e -> fitSlices(1,ParallelSliceFitter.P2_BG));
+        itemFitSlicesgausp1y.addActionListener(e -> fitSlices(1,ParallelSliceFitter.P1_BG));
+        itemFitSlicesgausp0y.addActionListener(e -> fitSlices(1,ParallelSliceFitter.P0_BG));
+        itemFitSlicesgausy.addActionListener(e -> fitSlices(1,ParallelSliceFitter.NO_BG));
+     
         this.popup.add(itemCopyPad);
         this.popup.add(itemPaste);
         this.popup.add(new JSeparator());
@@ -521,12 +566,24 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         this.popup.add(itemSaveAs);
         this.popup.add(new JSeparator());
         this.popup.add(itemFitPanel);
+        List<IDataSetPlotter> plotters = this.getPad(this.popupPad).getDatasetPlotters();
+        boolean containsH2F = false;
+        for(int i=0; i<plotters.size();i++){
+        	if(plotters.get(i) instanceof Histogram2DPlotter){
+        		containsH2F = true;
+        	}
+        	System.out.println(plotters.get(i).getName());
+        }
+        if(containsH2F){
+        	this.popup.add(itemFitSlices);
+        }
         this.popup.add(new JSeparator());
         this.popup.add(itemOptions);
         //this.popup.add(itemOpenWindow);
         //addMouseListener(this);
     }
-    @Override
+
+	@Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("action performed " + e.getActionCommand());
         
@@ -589,6 +646,22 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     	frame.setLocationRelativeTo(this);
     	frame.setVisible(true);		
 	}
+    
+    private void fitSlices(int axis, int mode){
+    	  List<IDataSetPlotter> plotters = this.getPad(this.popupPad).getDatasetPlotters();
+    	  H2F histogram = null;
+          boolean containsH2F = false;
+          for(int i=0; i<plotters.size();i++){
+          	if(plotters.get(i) instanceof Histogram2DPlotter){
+          		histogram = (H2F)(plotters.get(i).getDataSet());
+          	}
+          }
+          ParallelSliceFitter fitter = new ParallelSliceFitter(histogram);
+          fitter.setBackgroundOrder(mode);
+          if(axis==0) fitter.fitSlicesX();
+          if(axis==1) fitter.fitSlicesY();
+          fitter.inspectFits();
+    }
 
 	private void paste(int popupPad2) {
     	 DataFlavor dmselFlavor = new DataFlavor(EmbeddedPad.class, "EmbeddedPad");
