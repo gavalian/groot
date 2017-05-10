@@ -31,7 +31,8 @@ public class ParallelSliceFitter {
 	F1D fitsResults[];
 	double min = 0.0; 
 	double max = 0.0;
-	boolean autorange = true;
+	boolean autorangemin = true;
+	boolean autorangemax = true;
 	Axis axis = null;
 	String[] modes = {
 			"[amp]*gaus(x,[mean],[sigma])",
@@ -77,8 +78,10 @@ public class ParallelSliceFitter {
 	public void fitSlicesY() {
 		slices = histogram.getSlicesY();
 		axis = histogram.getYAxis();
-		if(autorange && slices.size()>0){
+		if(autorangemin && slices.size()>0){
 			min = slices.get(0).getxAxis().min();
+		}
+		if(autorangemax && slices.size()>0){
 			max = slices.get(0).getxAxis().max();
 		}
 		fit();
@@ -87,8 +90,10 @@ public class ParallelSliceFitter {
 	public void fitSlicesX() {
 		slices = histogram.getSlicesX();
 		axis = histogram.getXAxis();
-		if(autorange && slices.size()>0){
+		if(autorangemin && slices.size()>0){
 			min = slices.get(0).getxAxis().min();
+		}
+		if(autorangemax && slices.size()>0){
 			max = slices.get(0).getxAxis().max();
 		}
 		fit();
@@ -181,21 +186,32 @@ public class ParallelSliceFitter {
 
 	public void setMin(double min) {
 		this.min = min;
-		this.autorange = false;
+		this.autorangemin = false;
 	}
 
 	public void setMax(double max) {
 		this.max = max;
-		this.autorange = false;
+		this.autorangemax = false;
 	}
 	
 	public void setRange(double min,double max) {
 		this.min = min;
 		this.max = max;
-		this.autorange = false;
+		this.autorangemin = false;
+		this.autorangemax = false;
 	}
 	
 	public void inspectFits(){
+		JFrame frame = new JFrame("Fit Inspector");
+		frame.add(getInspectFitsPane());
+		Dimension screensize  = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.pack();
+		frame.setSize((int)(screensize.getHeight()*.75*1.618), (int) (screensize.getHeight()*.75));
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+	}
+	
+	public JTabbedPane getInspectFitsPane(){
 		int nHistograms = slices.size();
 		int cols = 4;
 		int rows = 4;
@@ -203,7 +219,6 @@ public class ParallelSliceFitter {
 		int pages = nHistograms/(cols*rows);
 		if(nHistograms - pages*cols*rows > 0) pages++;
 
-		JFrame frame = new JFrame("Fit Inspector");
 		JTabbedPane pane = new JTabbedPane();
 		EmbeddedCanvas fitSummary = new EmbeddedCanvas();
 		int nPlots = mode+5;
@@ -262,12 +277,7 @@ public class ParallelSliceFitter {
 		ArrayList<IDataSet> data = new ArrayList<IDataSet>(slices);
 		group.setData(data);
 		pane.add("Individual Fits",group);
-		frame.add(pane);
-		Dimension screensize  = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.pack();
-		frame.setSize((int)(screensize.getHeight()*.75*1.618), (int) (screensize.getHeight()*.75));
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		return pane;
 	}
 
 	private void fit() {
