@@ -9,6 +9,7 @@ import org.jlab.groot.graphics.IDataSetPlotter;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.geom.GeneralPath;
 
 
@@ -117,6 +118,27 @@ public class HistogramPlotter  implements IDataSetPlotter {
         int lineColor = this.dataset.getAttributes().getLineColor();
         g2d.setColor(TStyle.getColor(lineColor));
         g2d.draw(path);
+        
+        if(this.dataset.getAttributes().getDrawOptions().contains("E")){
+        	for(int p = 0; p < npoints; p++){
+                double xp = frame.getAxisPointX(this.dataset.getDataX(p));
+                //double yp = frame.getAxis(1).getAxisPosition(graphDataSet.getDataY(p));
+                //double yp1 = frame.getAxisPointY(this.dataset.getDataY(p));
+                //int    yc = (int) (frame.getAxis(1).getDimension().getMax() - yp 
+                //        + frame.getAxis(1).getDimension().getMin());
+                
+               // double xpL = frame.getAxisPointX(this.dataset.getDataX(p) - this.dataset.getDataEX(p));
+                //double xpH = frame.getAxisPointX(this.dataset.getDataX(p) + this.dataset.getDataEX(p));
+                
+                double ypL = frame.getAxisPointY(this.dataset.getDataY(p) - this.dataset.getDataEY(p));
+                double ypH = frame.getAxisPointY(this.dataset.getDataY(p) + this.dataset.getDataEY(p));
+                
+                g2d.setColor(TStyle.getColor(lineColor));
+                g2d.setStroke(new BasicStroke(this.dataset.getAttributes().getLineWidth()));
+                //g2d.drawLine((int) xpL, (int) yp, (int) xpH, (int) yp);
+                g2d.drawLine((int) xp, (int) ypL, (int) xp, (int) ypH);
+            }
+        }
     }
     
     @Override
