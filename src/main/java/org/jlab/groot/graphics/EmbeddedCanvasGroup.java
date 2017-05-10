@@ -74,11 +74,11 @@ public class EmbeddedCanvasGroup extends JPanel implements ActionListener {
                 this.canvas.draw(this.canvasDataSets.get(index));
             }
         }
-        this.progressLabel.setText(String.format("%d/%d", this.currentPage,this.maxPages));
+        this.progressLabel.setText(String.format("%d/%d", this.currentPage+1,this.maxPages));
     }
     
     public void nextPage(){
-        if(currentPage<maxPages){
+        if((currentPage+1)<maxPages){
             currentPage++;
             this.updateCanvas();
         }
