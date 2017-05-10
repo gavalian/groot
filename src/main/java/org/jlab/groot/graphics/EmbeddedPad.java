@@ -382,7 +382,8 @@ public class EmbeddedPad {
     public int getHeight(){return (int)(padDimensions.getDimension(1).getMax() -  padDimensions.getDimension(1).getMin());}
 
     public void draw(IDataSet ds, String options){
-        if(options.contains("same")==false){
+        ds.getAttributes().setDrawOptions(options);
+    	if(options.contains("same")==false){
             this.datasetPlotters.clear();
         }
         if(datasetPlotters.isEmpty()){
