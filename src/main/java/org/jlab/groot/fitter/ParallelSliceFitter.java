@@ -18,6 +18,7 @@ import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.graphics.EmbeddedCanvas;
+import org.jlab.groot.graphics.EmbeddedCanvasGroup;
 import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.ui.ProgressBar;
@@ -242,18 +243,25 @@ public class ParallelSliceFitter {
 		fitSummary.cd(counter++);
 		fitSummary.draw(this.getChi2Slices());
 		pane.addTab("Summary",fitSummary);
-		
+		/*
+		ArrayList<IDataSet> data = new ArrayList<IDataSet>();
 		for(int i=0; i<pages; i++){
+			
 			EmbeddedCanvas temp = new EmbeddedCanvas();
 			temp.divide(cols, rows);
 			for(int j=0; j<(rows*cols)&&(j+i*rows*cols)<nHistograms; j++){
 				temp.cd(j);
 				temp.draw(slices.get(i*rows*cols+j));
+				data.add(slices.get(i*rows*cols+j));
 				//temp.draw(fitsResults[i],"same");
 				temp.getPad(j).setTitle("Slice #"+((i*rows*cols)+j)+" Value:"+String.format("%.2f", this.axis.getBinCenter(i*rows*cols+j)));
 			}
-			pane.add("Page "+i, temp);
-		}
+			//pane.add("Page "+i, temp);
+		}*/
+		EmbeddedCanvasGroup group = new EmbeddedCanvasGroup();
+		ArrayList<IDataSet> data = new ArrayList<IDataSet>(slices);
+		group.setData(data);
+		pane.add("Individual Fits",group);
 		frame.add(pane);
 		Dimension screensize  = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.pack();
