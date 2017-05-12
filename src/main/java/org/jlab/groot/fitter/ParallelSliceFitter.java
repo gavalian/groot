@@ -33,6 +33,15 @@ public class ParallelSliceFitter {
 	double max = 0.0;
 	boolean autorangemin = true;
 	boolean autorangemax = true;
+	String fitMode = "N";
+	public String getFitMode() {
+		return fitMode;
+	}
+
+	public void setFitMode(String fitMode) {
+		this.fitMode = fitMode;
+	}
+
 	Axis axis = null;
 	String[] modes = {
 			"[amp]*gaus(x,[mean],[sigma])",
@@ -295,6 +304,7 @@ public class ParallelSliceFitter {
 			temp.setN(i);
 			temp.setHistogram(slice);
 			temp.setResultSetter(setter);
+			temp.setOptions("RQ"+this.fitMode);
 			temp.setFitter(new F1D("f1",modes[mode], min, max));
 			threads.add(temp);
 		}
