@@ -614,7 +614,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         	File desktop = new File(System.getProperty("user.home"), "Desktop");
         	DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
         	String data = df.format(new Date());
-        	this.save(desktop.getAbsolutePath() +File.separator+"Plot_"+data+".png");
+        	//this.save(desktop.getAbsolutePath() +File.separator+"Plot_"+data+".png");
             fc.setSelectedFile(new File(desktop.getAbsolutePath() +File.separator+"Plot_"+data+".png"));
             FileFilter filter = new FileNameExtensionFilter("PNG File","png");
             fc.addChoosableFileFilter(filter);
@@ -625,7 +625,12 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 if(file.exists()==true){
-                    JOptionPane.showMessageDialog(this, "Error. The file already esits....");
+                    JOptionPane.showMessageDialog(this, "Error. The file already exists....");
+                    int result = JOptionPane.showConfirmDialog(this, "File already exists, would you like to overwrite?",
+                            "alert", JOptionPane.OK_CANCEL_OPTION);
+                    if(result == JOptionPane.OK_OPTION){
+                        this.save(file.getAbsolutePath());
+                    }
                 } else {
                     //System.out.println("saving file : " + file.getAbsolutePath());
                     this.save(file.getAbsolutePath());
