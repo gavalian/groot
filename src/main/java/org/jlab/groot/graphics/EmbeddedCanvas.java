@@ -625,8 +625,8 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 if(file.exists()==true){
-                    JOptionPane.showMessageDialog(this, "Error. The file already exists....");
-                    int result = JOptionPane.showConfirmDialog(this, "File already exists, would you like to overwrite?",
+                    //JOptionPane.showMessageDialog(this, "Error. The file already exists....");
+                    int result = JOptionPane.showConfirmDialog(this, "File already exists, would you like to overwrite it?",
                             "alert", JOptionPane.OK_CANCEL_OPTION);
                     if(result == JOptionPane.OK_OPTION){
                         this.save(file.getAbsolutePath());
