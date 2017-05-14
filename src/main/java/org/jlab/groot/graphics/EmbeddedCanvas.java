@@ -56,6 +56,7 @@ import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.fitter.ParallelSliceFitter;
 import org.jlab.groot.group.DataGroup;
+import org.jlab.groot.math.Dimension1D;
 import org.jlab.groot.math.FunctionFactory;
 import org.jlab.groot.ui.FitPanel;
 import org.jlab.groot.ui.OptionsPanel;
@@ -662,6 +663,10 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
           	}
           }
           ParallelSliceFitter fitter = new ParallelSliceFitter(histogram);
+          Dimension1D range = null;
+          if(axis==0) range = this.getPad(this.popupPad).getAxisY().getRange();
+          if(axis==1) range = this.getPad(this.popupPad).getAxisX().getRange();
+          fitter.setRange(range.getMin(), range.getMax());
           fitter.setBackgroundOrder(mode);
           if(axis==0) fitter.fitSlicesX();
           if(axis==1) fitter.fitSlicesY();

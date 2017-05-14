@@ -28,11 +28,15 @@ public class ParallelSliceFitter {
 	int nthreads = Runtime.getRuntime().availableProcessors();
 	ArrayList<H1F> slices = null;
 	ArrayList<FitThread> threads = new ArrayList<FitThread>();
-	F1D fitsResults[];
+	ArrayList<FitResults> fitResults = new ArrayList<FitResults>();
 	double min = 0.0; 
 	double max = 0.0;
+	double maxChiSquare = Double.MAX_VALUE;
+	int minEvents = 10;
 	boolean autorangemin = true;
 	boolean autorangemax = true;
+	boolean showProgress = true;
+	
 	String fitMode = "N";
 	public String getFitMode() {
 		return fitMode;
@@ -110,84 +114,96 @@ public class ParallelSliceFitter {
 	
 	public GraphErrors getChi2Slices(){
 		GraphErrors graph = new GraphErrors();
-		//System.out.println("Slices size:"+slices.size());
-		for(int i=0; i<slices.size(); i++){
-			graph.addPoint(axis.getBinCenter(i),fitsResults[i].getChiSquare()/(double)fitsResults[i].getNDF(),0,0);
-			graph.setTitleX(this.slices.get(0).getTitleX());
-			graph.setTitleY("#chi^2/ndf from SliceFitter");
-			//System.out.println("Bin:"+i+" X:"+axis.getBinCenter(i)+" Y:"+fitsResults[i].getParameter(1));
+		for(FitResults result: fitResults){
+			if(result.getChiSq()<this.maxChiSquare&&result.getData().getIntegral()>this.minEvents){
+				graph.addPoint(result.getPoint(),result.getChiSq(),0,0);
+				graph.setTitleX(this.slices.get(0).getTitleX());
+				graph.setTitleY("#chi^2/ndf from SliceFitter");
+			}
 		}
 		return graph;
 	}
 	
 	public GraphErrors getMeanSlices(){
 		GraphErrors graph = new GraphErrors();
-		//System.out.println("Slices size:"+slices.size());
-		for(int i=0; i<slices.size(); i++){
-			graph.addPoint(axis.getBinCenter(i),fitsResults[i].getParameter(1),0,fitsResults[i].parameter(1).error());
-			graph.setTitleX(this.slices.get(0).getTitleX());
-			graph.setTitleY("Gaussian Mean from SliceFitter");
-			//System.out.println("Bin:"+i+" X:"+axis.getBinCenter(i)+" Y:"+fitsResults[i].getParameter(1));
+		for(FitResults result: fitResults){
+			if(result.getChiSq()<this.maxChiSquare&&result.getData().getIntegral()>this.minEvents){
+				graph.addPoint(result.getPoint(),result.getFunction().getParameter(1),0,result.getFunction().parameter(1).error());
+				graph.setTitleX(this.slices.get(0).getTitleX());
+				graph.setTitleY("Gaussian Mean from SliceFitter");
+			}
 		}
 		return graph;
 	}
 	
 	public GraphErrors getSigmaSlices(){
 		GraphErrors graph = new GraphErrors();
-		for(int i=0; i<slices.size(); i++){
-			graph.addPoint(axis.getBinCenter(i),fitsResults[i].getParameter(2),0,fitsResults[i].parameter(2).error());
-			graph.setTitleX(this.slices.get(0).getTitleX());
-			graph.setTitleY("Gaussian #sigma from SliceFitter");
+		for(FitResults result: fitResults){
+			if(result.getChiSq()<this.maxChiSquare&&result.getData().getIntegral()>this.minEvents){
+				graph.addPoint(result.getPoint(),result.getFunction().getParameter(2),0,result.getFunction().parameter(2).error());
+				graph.setTitleX(this.slices.get(0).getTitleX());
+				graph.setTitleY("Gaussian #sigma from SliceFitter");
+			}
 		}
 		return graph;
 	}
 	
 	public GraphErrors getAmpSlices(){
 		GraphErrors graph = new GraphErrors();
-		for(int i=0; i<slices.size(); i++){
-			graph.addPoint(axis.getBinCenter(i),fitsResults[i].getParameter(0),0,fitsResults[i].parameter(0).error());
-			graph.setTitleX(this.slices.get(0).getTitleX());
-			graph.setTitleY("Gaussian Amplitude from SliceFitter");
+		for(FitResults result: fitResults){
+			if(result.getChiSq()<this.maxChiSquare&&result.getData().getIntegral()>this.minEvents){
+				graph.addPoint(result.getPoint(),result.getFunction().getParameter(0),0,result.getFunction().parameter(0).error());
+				graph.setTitleX(this.slices.get(0).getTitleX());
+				graph.setTitleY("Gaussian Amplitude from SliceFitter");
+			}
 		}
 		return graph;
 	}
 	
 	public GraphErrors getP0Slices(){
 		GraphErrors graph = new GraphErrors();
-		for(int i=0; i<slices.size(); i++){
-			graph.addPoint(axis.getBinCenter(i),fitsResults[i].getParameter(3),0,fitsResults[i].parameter(3).error());
-			graph.setTitleX(this.slices.get(0).getTitleX());
-			graph.setTitleY("Background P0 from SliceFitter");
+		for(FitResults result: fitResults){
+			if(result.getChiSq()<this.maxChiSquare&&result.getData().getIntegral()>this.minEvents){
+				graph.addPoint(result.getPoint(),result.getFunction().getParameter(3),0,result.getFunction().parameter(3).error());
+				graph.setTitleX(this.slices.get(0).getTitleX());
+				graph.setTitleY("Background P0 from SliceFitter");
+			}
 		}
 		return graph;
 	}
 	
 	public GraphErrors getP1Slices(){
 		GraphErrors graph = new GraphErrors();
-		for(int i=0; i<slices.size(); i++){
-			graph.addPoint(axis.getBinCenter(i),fitsResults[i].getParameter(4),0,fitsResults[i].parameter(4).error());
-			graph.setTitleX(this.slices.get(0).getTitleX());
-			graph.setTitleY("Background P1 from SliceFitter");
+		for(FitResults result: fitResults){
+			if(result.getChiSq()<this.maxChiSquare&&result.getData().getIntegral()>this.minEvents){
+				graph.addPoint(result.getPoint(),result.getFunction().getParameter(4),0,result.getFunction().parameter(4).error());
+				graph.setTitleX(this.slices.get(0).getTitleX());
+				graph.setTitleY("Background P1 from SliceFitter");
+			}
 		}
 		return graph;
 	}
 	
 	public GraphErrors getP2Slices(){
 		GraphErrors graph = new GraphErrors();
-		for(int i=0; i<slices.size(); i++){
-			graph.addPoint(axis.getBinCenter(i),fitsResults[i].getParameter(5),0,fitsResults[i].parameter(5).error());
-			graph.setTitleX(this.slices.get(0).getTitleX());
-			graph.setTitleY("Background P2 from SliceFitter");
+		for(FitResults result: fitResults){
+			if(result.getChiSq()<this.maxChiSquare&&result.getData().getIntegral()>this.minEvents){
+				graph.addPoint(result.getPoint(),result.getFunction().getParameter(5),0,result.getFunction().parameter(5).error());
+				graph.setTitleX(this.slices.get(0).getTitleX());
+				graph.setTitleY("Background P2 from SliceFitter");
+			}
 		}
 		return graph;
 	}
 	
 	public GraphErrors getP3Slices(){
 		GraphErrors graph = new GraphErrors();
-		for(int i=0; i<slices.size(); i++){
-			graph.addPoint(axis.getBinCenter(i),fitsResults[i].getParameter(6),0,fitsResults[i].parameter(6).error());
-			graph.setTitleX(this.slices.get(0).getTitleX());
-			graph.setTitleY("Background P3 from SliceFitter");
+		for(FitResults result: fitResults){
+			if(result.getChiSq()<this.maxChiSquare&&result.getData().getIntegral()>this.minEvents){
+				graph.addPoint(result.getPoint(),result.getFunction().getParameter(6),0,result.getFunction().parameter(6).error());
+				graph.setTitleX(this.slices.get(0).getTitleX());
+				graph.setTitleY("Background P3 from SliceFitter");
+			}
 		}
 		return graph;
 	}
@@ -210,6 +226,30 @@ public class ParallelSliceFitter {
 		this.autorangemax = false;
 	}
 	
+	public double getMaxChiSquare() {
+		return maxChiSquare;
+	}
+
+	public void setMaxChiSquare(double maxChiSquare) {
+		this.maxChiSquare = maxChiSquare;
+	}
+
+	public int getMinEvents() {
+		return minEvents;
+	}
+
+	public void setMinEvents(int minEvents) {
+		this.minEvents = minEvents;
+	}
+
+	public boolean isShowProgress() {
+		return showProgress;
+	}
+
+	public void setShowProgress(boolean showProgress) {
+		this.showProgress = showProgress;
+	}
+
 	public void inspectFits(){
 		JFrame frame = new JFrame("Fit Inspector");
 		frame.add(getInspectFitsPane());
@@ -267,21 +307,6 @@ public class ParallelSliceFitter {
 		fitSummary.cd(counter++);
 		fitSummary.draw(this.getChi2Slices());
 		pane.addTab("Summary",fitSummary);
-		/*
-		ArrayList<IDataSet> data = new ArrayList<IDataSet>();
-		for(int i=0; i<pages; i++){
-			
-			EmbeddedCanvas temp = new EmbeddedCanvas();
-			temp.divide(cols, rows);
-			for(int j=0; j<(rows*cols)&&(j+i*rows*cols)<nHistograms; j++){
-				temp.cd(j);
-				temp.draw(slices.get(i*rows*cols+j));
-				data.add(slices.get(i*rows*cols+j));
-				//temp.draw(fitsResults[i],"same");
-				temp.getPad(j).setTitle("Slice #"+((i*rows*cols)+j)+" Value:"+String.format("%.2f", this.axis.getBinCenter(i*rows*cols+j)));
-			}
-			//pane.add("Page "+i, temp);
-		}*/
 		EmbeddedCanvasGroup group = new EmbeddedCanvasGroup();
 		ArrayList<IDataSet> data = new ArrayList<IDataSet>(slices);
 		group.setData(data);
@@ -292,21 +317,28 @@ public class ParallelSliceFitter {
 	private void fit() {
 		List<Callable<Object>> taskList = new ArrayList<Callable<Object>>(slices.size());
 		ArrayList<Future<Object>> tasks = new ArrayList<Future<Object>>();
-		fitsResults = new F1D[slices.size()];
 		for (int i=0; i<slices.size(); i++) {
 			H1F slice = slices.get(i);
-			ResultSetter setter = new ResultSetter() {
-				public void setResult(H1F histogram, F1D fit,int fitNumber) {
-					fitsResults[fitNumber] = fit;
-				}
-			};
-			FitThread temp = new FitThread();
-			temp.setN(i);
-			temp.setHistogram(slice);
-			temp.setResultSetter(setter);
-			temp.setOptions("RQ"+this.fitMode);
-			temp.setFitter(new F1D("f1",modes[mode], min, max));
-			threads.add(temp);
+			if(slice.getIntegral() > minEvents){
+				ResultSetter setter = new ResultSetter() {
+					public void setResult(H1F histogram, F1D fit,int fitNumber) {
+						FitResults result = new FitResults();
+						result.setData(histogram);
+						result.setFunction(fit);
+						result.setPoint(axis.getBinCenter(fitNumber));
+						if((fit.getChiSquare()/(double)fit.getNDF())<maxChiSquare){
+							fitResults.add(result);
+						}
+					}
+				};
+				FitThread temp = new FitThread();
+				temp.setN(i);
+				temp.setHistogram(slice);
+				temp.setResultSetter(setter);
+				temp.setOptions("RQ"+this.fitMode);
+				temp.setFitter(new F1D("f1",modes[mode], min, max));
+				threads.add(temp);
+			}
 		}
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(nthreads);
@@ -318,11 +350,13 @@ public class ParallelSliceFitter {
 		}
 		int ncomplete = 0;
 		int ntotal = 0;
-		System.out.println("In parallel fitter");
 		if (tasks != null) {
-			ProgressBar bar = new ProgressBar();
-			ntotal = tasks.size();
-			bar.update(ncomplete, ntotal);
+			ProgressBar bar = null;
+			if(this.isShowProgress()){
+				bar = new ProgressBar();
+				ntotal = tasks.size();
+				bar.update(ncomplete, ntotal+1);
+			}
 			while (ncomplete < ntotal) {
 				ncomplete = 0;
 				for (int i = 0; i < ntotal; i++) {
@@ -330,11 +364,10 @@ public class ParallelSliceFitter {
 						ncomplete++;
 					}
 				}
-				bar.update(ncomplete, ntotal);
+				if(this.isShowProgress()) bar.update(ncomplete, ntotal+1);
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -342,7 +375,6 @@ public class ParallelSliceFitter {
 		for (FitThread thread : threads) {
 			try {
 				thread.join();
-				//System.out.println("Thread " + thread.getN() + " has been joined successfully.");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -362,7 +394,6 @@ public class ParallelSliceFitter {
 			double y = 2.5+2*rand.nextGaussian();
 			histogram2d.fill(x, y);
 		}
-		//H2F histogram2d = FunctionFactory.randomGausian2D(200, 0.4, 7.6, 800000, 3.3, 0.8);
 		histogram2d.setTitleX("Randomly Generated Function");
 		histogram2d.setTitleY("Randomly Generated Function");
 		canvas.getPad(0).setTitle("Histogram2D Demo");
@@ -385,6 +416,34 @@ public class ParallelSliceFitter {
 		frame.add(canvas);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+	}
+	
+	private class FitResults{
+		H1F data = null;
+		F1D function = null;
+
+		public H1F getData() {
+			return data;
+		}
+		public void setData(H1F data) {
+			this.data = data;
+		}
+		public F1D getFunction() {
+			return function;
+		}
+		public void setFunction(F1D function) {
+			this.function = function;
+		}
+		public double getPoint() {
+			return point;
+		}
+		public void setPoint(double point) {
+			this.point = point;
+		}
+		public double getChiSq(){
+			return this.function.getChiSquare()/(double)this.function.getNDF();
+		}
+		double point = 0.0;
 	}
 
 	private class FitThread extends Thread {
@@ -509,7 +568,8 @@ public class ParallelSliceFitter {
 			}
 			return xMax;
 		}
-		private double getMaxYIDataSet(IDataSet data, double min, double max) {
+	
+	    private double getMaxYIDataSet(IDataSet data, double min, double max) {
 			double max1 = 0;
 			double xMax = 0;
 			for (int i = 0; i < data.getDataSize(0); i++) {
@@ -524,9 +584,10 @@ public class ParallelSliceFitter {
 			}
 			return max1;
 		}
-	}
+		}
 
 	public interface ResultSetter {
 		public void setResult(H1F histogram, F1D fit, int fitNumber);
 	}
 }
+
