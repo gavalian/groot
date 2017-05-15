@@ -48,6 +48,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.jlab.groot.base.GStyle;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.data.DataParser;
 import org.jlab.groot.data.GraphErrors;
@@ -77,8 +78,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
     private JPopupMenu popup = null;
     private int popupPad = 0;
     private List<EmbeddedPad>    canvasPads  = new ArrayList<EmbeddedPad>();
-	private File desktop = new File(System.getProperty("user.home"), "Desktop");
-    private String currentDirectory = desktop.getAbsolutePath();
+
 
 	public List<EmbeddedPad> getCanvasPads() {
 		return canvasPads;
@@ -614,11 +614,10 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
         }
         if(e.getActionCommand().compareTo("Save As...")==0){
             final JFileChooser fc = new JFileChooser("Save As...");
-        	File desktop = new File(System.getProperty("user.home"), "Desktop");
         	DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
         	String data = df.format(new Date());
         	//this.save(desktop.getAbsolutePath() +File.separator+"Plot_"+data+".png");
-            fc.setSelectedFile(new File(currentDirectory +File.separator+"Plot_"+data+".png"));
+            fc.setSelectedFile(new File(GStyle.getWorkingDirectory() +File.separator+"Plot_"+data+".png"));
             FileFilter filter = new FileNameExtensionFilter("PNG File","png");
             fc.addChoosableFileFilter(filter);
             fc.setFileFilter(filter);
@@ -633,12 +632,12 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener,MouseL
                             "alert", JOptionPane.OK_CANCEL_OPTION);
                     if(result == JOptionPane.OK_OPTION){
                         this.save(file.getAbsolutePath());
-                        this.currentDirectory = file.getParent();
+                        GStyle.setWorkingDirectory(file.getParent());
                     }
                 } else {
                     //System.out.println("saving file : " + file.getAbsolutePath());
                     this.save(file.getAbsolutePath());
-                    this.currentDirectory = file.getParent();
+                    GStyle.setWorkingDirectory(file.getParent());
                 }
             }
         }/*

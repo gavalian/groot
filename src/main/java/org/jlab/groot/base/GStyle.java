@@ -1,6 +1,7 @@
 package org.jlab.groot.base;
 
 import java.awt.BasicStroke;
+import java.io.File;
 
 public class GStyle {
     
@@ -11,7 +12,8 @@ public class GStyle {
 	static AxisAttributes AxisAttributesX 			= new AxisAttributes(AxisAttributes.X);
 	static AxisAttributes AxisAttributesY 			= new AxisAttributes(AxisAttributes.Y);
 	static AxisAttributes AxisAttributesZ 			= new AxisAttributes(AxisAttributes.Z);
-        
+    private static String workingDirectory 					= new File(System.getProperty("user.home"), "Desktop").getAbsolutePath();
+    
         public static float[]  dashPattern1 = new float[]{10.0f,5.0f};
         public static float[]  dashPattern2 = new float[]{10.0f,5.0f,2.0f,5.0f};
         public static float[]  dashPattern3 = new float[]{2.0f,5.0f,2.0f,5.0f};
@@ -94,5 +96,13 @@ public class GStyle {
 	
 	public static DatasetAttributes getFunctionAttributes() {
 		return FunctionAttributes;
+	}
+
+	public static String getWorkingDirectory() {
+		return workingDirectory;
+	}
+
+	public static void setWorkingDirectory(String workingDirectory) {
+		GStyle.workingDirectory = workingDirectory;
 	}
 }
