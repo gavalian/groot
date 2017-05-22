@@ -408,9 +408,8 @@ public class EmbeddedPad {
         if(ds instanceof H2F){
             axisFrame.getAxisZ().getAttributes().setShowAxis(true);
             this.addPlotter(new Histogram2DPlotter(ds));
-        }else{
-            axisFrame.getAxisZ().getAttributes().setShowAxis(false);
         }
+        
         if(ds instanceof GraphErrors){
             this.addPlotter(new GraphErrorsPlotter(ds));
             GraphErrors gr = (GraphErrors) ds;
