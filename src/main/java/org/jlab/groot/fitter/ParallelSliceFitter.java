@@ -542,6 +542,7 @@ public class ParallelSliceFitter {
 					fitFunction.setParameter(1, getMeanIDataSet(currentDataset, currentRangeMin, currentRangeMax));
 				} else if (i == 2) {
 					fitFunction.setParameter(2, getRMSIDataSet(currentDataset, currentRangeMin, currentRangeMax));
+					fitFunction.setParLimits(2, 0.0, Double.MAX_VALUE);
 				} else if (i == 3) {
 					fitFunction.setParameter(3,
 							getAverageHeightIDataSet(currentDataset, currentRangeMin, currentRangeMax));
