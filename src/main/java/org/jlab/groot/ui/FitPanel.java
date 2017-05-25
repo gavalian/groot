@@ -39,16 +39,16 @@ public class FitPanel extends JPanel {
 	ArrayList<IDataSet> datasets = new ArrayList<IDataSet>();
 	ArrayList<String> dataSetNames = new ArrayList<String>();
 	IDataSet currentDataset = null;
+	ArrayList<F1D> fitAllFitFunctions = new ArrayList<F1D>();
 	JComboBox paramEstimationMethods;
 	String predefFunctions[] = {"gaus", "gaus+p0", "gaus+p1", "gaus+p2", "gaus+p3", "p0", "p1", "p2", "p3", "exp",
-			"a+bcos", "a+bcos+ccos2","amdahl"};
+			"a+bcos", "a+bcos+ccos2", "amdahl"};
 
 	String predefFunctionsF1D[] = {"[amp]*gaus(x,[mean],[sigma])", "[amp]*gaus(x,[mean],[sigma])+[p0]",
 			"[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]", "[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]+x*x*[p2]",
 			"[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]+x*x*[p2]", "[p0]", "[p0]+[p1]*x", "[p0]+[p1]*x+[p2]*x*x",
 			"[p0]+[p1]*x+[p2]*x*x+[p3]*x*x", "[a]*exp(x,[b])", "[a]+[b]*cos(x*[c])",
-			"[a]+[b]*cos(x*[d])+[c]*cos(2*x*[e])",
-			"1/((1-[p])+[p]/x)"};
+			"[a]+[b]*cos(x*[d])+[c]*cos(2*x*[e])", "1/((1-[p])+[p]/x)"};
 
 	boolean predef = true;
 	JComboBox predefinedFunctionsSelector;
@@ -196,6 +196,8 @@ public class FitPanel extends JPanel {
 						} else if (i == 2) {
 							fitFunction.setParameter(2,
 									getRMSIDataSet(currentDataset, currentRangeMin, currentRangeMax));
+							if (predefinedFunctionsSelector.getSelectedIndex() < 5)
+								fitFunction.setParLimits(2, 0.0, Double.MAX_VALUE);
 						} else if (i == 3) {
 							fitFunction.setParameter(3,
 									getAverageHeightIDataSet(currentDataset, currentRangeMin, currentRangeMax));
@@ -311,7 +313,7 @@ public class FitPanel extends JPanel {
 				fitFunction.setLineWidth(5);
 				fitFunction.setLineStyle(1);
 				canvas.cd(index);
-				canvas.draw(fitFunction, "same");
+				canvas.draw(fitFunction, "same"+drawOption);
 				canvas.update();
 
 				/*
@@ -338,65 +340,85 @@ public class FitPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Construct options
-					/*
-					 * int method = paramEstimationMethods.getSelectedIndex();
-					 * if(method==0){ options = "ER"; }else if(method==1){
-					 * options = "NR"; }else if(method==2){ options = "PR";
-					 * }else if(method==3){ options ="R"; }else if(method==4){
-					 * options ="LR"; } String drawOption = ""; for(int i=0;
-					 * i<optionCheckBoxes.size(); i++){
-					 * if(optionCheckBoxes.get(0).isSelected()){ drawOption =
-					 * "S";
-					 * 
-					 * } if(optionCheckBoxes.get(1).isSelected()){ options =
-					 * options+"Q"; } }
-					 * 
-					 * for(int padCounter=0;
-					 * padCounter<canvasPads.size();padCounter++){ double min =
-					 * canvas.getPad(padCounter).getAxisX().getMin(); double max
-					 * = canvas.getPad(padCounter).getAxisX().getMax();
-					 * if(fitAllFitFunctions.size()!=canvasPads.size()){
-					 * fitAllFitFunctions.add(new
-					 * F1D(predefFunctions[predefinedFunctionsSelector.
-					 * getSelectedIndex()], min, max)); }else{
-					 * fitAllFitFunctions.get(padCounter).initFunction(
-					 * predefFunctions[predefinedFunctionsSelector.
-					 * getSelectedIndex()], min, max); } ArrayList<IDataSet>
-					 * tempDataset = new ArrayList<IDataSet>(); int ndataset =
-					 * canvas.getPad(padCounter).getDatasetPlotters(); for(int i
-					 * = 0; i < ndataset; i++){ IDataSet ds =
-					 * canvas.getPad(padCounter).getDataSet(i); String name =
-					 * ds.getName(); dataSetNames.add(name);
-					 * tempDataset.add(ds); } IDataSet currentDataset =
-					 * tempDataset.get(0);
-					 * fitAllFitFunctions.get(padCounter).setRange(min, max);
-					 * 
-					 * if(predef){ for(int i=0;
-					 * i<fitAllFitFunctions.get(padCounter).getNParams(); i++){
-					 * if(i==0){
-					 * fitAllFitFunctions.get(padCounter).setParameter(0,
-					 * getMaxYIDataSet(currentDataset,min, max)); }else
-					 * if(i==1){
-					 * fitAllFitFunctions.get(padCounter).setParameter(1,
-					 * getMeanIDataSet(currentDataset,min, max)); }else
-					 * if(i==2){
-					 * fitAllFitFunctions.get(padCounter).setParameter(2,
-					 * getRMSIDataSet(currentDataset,min, max)); }else if(i==3){
-					 * fitAllFitFunctions.get(padCounter).setParameter(3,
-					 * getAverageHeightIDataSet(currentDataset,min, max)); }else
-					 * if(i>3){
-					 * fitAllFitFunctions.get(padCounter).setParameter(i, 1.0);
-					 * }
-					 * 
-					 * }} fitter.fit(currentDataset,
-					 * fitAllFitFunctions.get(padCounter),options);
-					 * fitAllFitFunctions.get(padCounter).setLineColor(2);
-					 * fitAllFitFunctions.get(padCounter).setLineWidth(5);
-					 * fitAllFitFunctions.get(padCounter).setLineStyle(1);
-					 * canvas.cd(padCounter);
-					 * canvas.draw(fitAllFitFunctions.get(padCounter),"same"+
-					 * drawOption); }
-					 */
+
+					int method = paramEstimationMethods.getSelectedIndex();
+					if (method == 0) {
+						options = "ER";
+					} else if (method == 1) {
+						options = "NR";
+					} else if (method == 2) {
+						options = "PR";
+					} else if (method == 3) {
+						options = "R";
+					} else if (method == 4) {
+						options = "LR";
+					}
+					String drawOption = "";
+					for (int i = 0; i < optionCheckBoxes.size(); i++) {
+						if (optionCheckBoxes.get(0).isSelected()) {
+							drawOption = "S";
+
+						}
+						if (optionCheckBoxes.get(1).isSelected()) {
+							options = options + "Q";
+						}
+					}
+
+					for (int padCounter = 0; padCounter < canvasPads.size(); padCounter++) {
+						double min = canvas.getPad(padCounter).getAxisX().getMin();
+						double max = canvas.getPad(padCounter).getAxisX().getMax();
+						if (fitAllFitFunctions.size() != canvasPads.size()) {
+							fitAllFitFunctions.add(new F1D("f1",
+									predefFunctionsF1D[predefinedFunctionsSelector.getSelectedIndex()], min, max));
+						} else {
+							fitAllFitFunctions.set(padCounter, new F1D("f1",
+									predefFunctionsF1D[predefinedFunctionsSelector.getSelectedIndex()], min, max));
+						}
+						ArrayList<IDataSet> tempDataset = new ArrayList<IDataSet>();
+						int ndataset = canvas.getPad(padCounter).getDatasetPlotters().size();
+						for (int i = 0; i < ndataset; i++) {
+							IDataSet ds = canvas.getPad(padCounter).getDatasetPlotters().get(i).getDataSet();
+							String name = ds.getName();
+							dataSetNames.add(name);
+							tempDataset.add(ds);
+						}
+						if (ndataset > 0) {
+							IDataSet currentDataset = tempDataset.get(0);
+							fitAllFitFunctions.get(padCounter).setRange(min, max);
+
+							if (predef) {
+								for (int i = 0; i < fitAllFitFunctions.get(padCounter).getNPars(); i++) {
+									if (i == 0) {
+										fitAllFitFunctions.get(padCounter).setParameter(0,
+												getMaxYIDataSet(currentDataset, min, max));
+									} else if (i == 1) {
+										fitAllFitFunctions.get(padCounter).setParameter(1,
+												getMeanIDataSet(currentDataset, min, max));
+									} else if (i == 2) {
+										fitAllFitFunctions.get(padCounter).setParameter(2,
+												getRMSIDataSet(currentDataset, min, max));
+										if (predefinedFunctionsSelector.getSelectedIndex() < 5)
+											fitFunction.setParLimits(2, 0.0, Double.MAX_VALUE);
+									} else if (i == 3) {
+										fitAllFitFunctions.get(padCounter).setParameter(3,
+												getAverageHeightIDataSet(currentDataset, min, max));
+									} else if (i > 3) {
+										fitAllFitFunctions.get(padCounter).setParameter(i, 1.0);
+									}
+
+								}
+							}
+							DataFitter.fit(fitAllFitFunctions.get(padCounter), currentDataset, options);
+							fitAllFitFunctions.get(padCounter).setLineColor(2);
+							fitAllFitFunctions.get(padCounter).setLineWidth(5);
+							fitAllFitFunctions.get(padCounter).setLineStyle(1);
+							canvas.cd(padCounter);
+							canvas.draw(fitAllFitFunctions.get(padCounter), "same" + drawOption);
+							
+							canvas.update();
+						}
+					}
+
 				}
 			});
 			fitButtons.add(fit);
