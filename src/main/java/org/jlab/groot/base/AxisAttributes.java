@@ -71,6 +71,7 @@ public class AxisAttributes implements Cloneable {
 
 	public AxisAttributes(int axisType) {
 		this.axisType = axisType;
+		if(this.axisType== AxisAttributes.Z) showAxis = false;
 	}
 
 	public Dimension1D getAxisDimension() {
@@ -225,6 +226,7 @@ public class AxisAttributes implements Cloneable {
 	public AxisAttributes clone() throws CloneNotSupportedException {
 			AxisAttributes copy = (AxisAttributes) super.clone();
 			copy.range = (Dimension1D) range.clone();
+			copy.axisDimension = (Dimension1D) this.axisDimension.clone();
 		return  copy;
 	}
 
