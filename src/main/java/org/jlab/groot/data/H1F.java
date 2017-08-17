@@ -915,4 +915,26 @@ public class H1F  implements IDataSet {
     public void setOptStat(String i) {
         this.hAttr.setOptStat(i);
     }
+
+    @Override
+    public double getMin() {
+        double min = Double.MAX_VALUE;
+        for(int ibuff = 0; ibuff < histogramData.length; ibuff++){
+            if(histogramData[ibuff] < min){
+                min = histogramData[ibuff];
+            }
+        }
+        return min;
+    }
+
+    @Override
+    public double getMax() {
+        double max = Double.MIN_VALUE;
+        for(int ibuff = 0; ibuff < histogramData.length; ibuff++){
+            if(histogramData[ibuff] > max){
+                max = histogramData[ibuff];
+            }
+        }
+        return max;
+    }
 }

@@ -177,10 +177,9 @@ public class Dimension1D implements Cloneable{
         //System.out.println("order = " + orderMin);
         //System.out.println("order = " + orderMax);
         List<Double>  orderTicks = this.createTicks(maxTicks, orderMin, orderMax);
-        int count = 0;
         for(Double value : orderTicks){
             int power = (int) value.intValue();
-            //System.out.println(count + " : " + Math.pow(10, power));
+            //System.out.println(Math.pow(10, power));
             ticks.add(Math.pow(10,power));
         }
         return ticks;

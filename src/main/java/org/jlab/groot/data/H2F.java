@@ -765,5 +765,26 @@ public class H2F implements IDataSet {
     public PaveText getStatBox() {
         return new PaveText(2);
     }
-    
+
+    @Override
+    public double getMin() {
+        double min = Double.MAX_VALUE;
+        for(int ibuff = 0; ibuff < hBuffer.length; ibuff++){
+            if(hBuffer[ibuff] < min){
+                min = hBuffer[ibuff];
+            }
+        }
+        return min;
+    }
+
+    @Override
+    public double getMax() {
+        double max = Double.MIN_VALUE;
+        for(int ibuff = 0; ibuff < hBuffer.length; ibuff++){
+            if(hBuffer[ibuff] > max){
+                max = hBuffer[ibuff];
+            }
+        }
+        return max;
+    }
 }

@@ -19,6 +19,7 @@ import javax.swing.JTabbedPane;
 import org.jlab.groot.base.AxisAttributes;
 import org.jlab.groot.base.PadAttributes;
 import org.jlab.groot.base.PadMargins;
+import org.jlab.groot.base.TColorPalette;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
@@ -34,26 +35,26 @@ import org.jlab.groot.ui.PaveText;
  * @author gavalian
  */
 public class EmbeddedPad {
- 
+
     PadAttributes attr = new PadAttributes();
-    Dimension2D            padDimensions  = new Dimension2D();
-    GraphicsAxisFrame          axisFrame  = new GraphicsAxisFrame();
+    Dimension2D padDimensions = new Dimension2D();
+    GraphicsAxisFrame axisFrame = new GraphicsAxisFrame();
     List<IDataSetPlotter> datasetPlotters = new ArrayList<IDataSetPlotter>();
-    boolean 				preliminary = true;
-    int 				preliminarySize = 36;
+    boolean preliminary = true;
+    int preliminarySize = 36;
     PaveText statBox = null;
-     
-    public EmbeddedPad(){
-        
+
+    public EmbeddedPad() {
+
     }
-    
-    public EmbeddedPad(int x, int y, int width, int height){
-        this.setDimension(x, y, width, height);        
+
+    public EmbeddedPad(int x, int y, int width, int height) {
+        this.setDimension(x, y, width, height);
     }
-    
-    public final EmbeddedPad setDimension(int x, int y, int width, int height){
-        this.padDimensions.getDimension(0).setMinMax(x,x+width);
-        this.padDimensions.getDimension(1).setMinMax(y,y+height);
+
+    public final EmbeddedPad setDimension(int x, int y, int width, int height) {
+        this.padDimensions.getDimension(0).setMinMax(x, x + width);
+        this.padDimensions.getDimension(1).setMinMax(y, y + height);
         axisFrame.setFrameDimensions(
                 padDimensions.getDimension(0).getMin(),
                 padDimensions.getDimension(0).getMax(),
@@ -63,50 +64,52 @@ public class EmbeddedPad {
         //System.out.println(padDimensions);
         return this;
     }
-    
-    public void clear(){
+
+    public void clear() {
         this.datasetPlotters.clear();
     }
-    
-    public Map<String,IDataSet>  getObjectMap(){        
-        Map<String,IDataSet> objects = new LinkedHashMap<String,IDataSet>();
-        for(IDataSetPlotter plotter : this.datasetPlotters){
+
+    public Map<String, IDataSet> getObjectMap() {
+        Map<String, IDataSet> objects = new LinkedHashMap<String, IDataSet>();
+        for (IDataSetPlotter plotter : this.datasetPlotters) {
             objects.put(plotter.getName(), plotter.getDataSet());
         }
         return objects;
     }
-    
-    public void setAxisRange(double xmin, double xmax, double ymin, double ymax){
-    	this.getAxisX().setRange(xmin, xmax);
-    	this.getAxisY().setRange(ymin, ymax);
+
+    public void setAxisRange(double xmin, double xmax, double ymin, double ymax) {
+        this.getAxisX().setRange(xmin, xmax);
+        this.getAxisY().setRange(ymin, ymax);
     }
-    
-    public void setMargins(PadMargins margins){
+
+    public void setMargins(PadMargins margins) {
         this.attr.getPadMargins().copy(margins);
         //System.out.println(" PAD - > " + padMargins);
     }
-    
-    public GraphicsAxisFrame  getAxisFrame(){
+
+    public GraphicsAxisFrame getAxisFrame() {
         return this.axisFrame;
     }
-    public void paint(Graphics g){
-    	this.draw((Graphics2D)g);
-    }
-    /**
-	 * @return the datasetPlotters
-	 */
-	public List<IDataSetPlotter> getDatasetPlotters() {
-		return datasetPlotters;
-	}
 
-	/**
-	 * @param datasetPlotters the datasetPlotters to set
-	 */
-	public void setDatasetPlotters(List<IDataSetPlotter> datasetPlotters) {
-		this.datasetPlotters = datasetPlotters;
-	}
-	
-	/*
+    public void paint(Graphics g) {
+        this.draw((Graphics2D) g);
+    }
+
+    /**
+     * @return the datasetPlotters
+     */
+    public List<IDataSetPlotter> getDatasetPlotters() {
+        return datasetPlotters;
+    }
+
+    /**
+     * @param datasetPlotters the datasetPlotters to set
+     */
+    public void setDatasetPlotters(List<IDataSetPlotter> datasetPlotters) {
+        this.datasetPlotters = datasetPlotters;
+    }
+
+    /*
 	public void drawScreenshot(Graphics g){
 		EmbeddedCanvas can = new EmbeddedCanvas();
 		can.setPreferredSize(new Dimension(this.getWidth(),this.getHeight()));
@@ -114,9 +117,7 @@ public class EmbeddedPad {
 		this.draw((Graphics2D)g);
 		this.setDimension((int)x1, (int)y1, (int)x2, (int)y2);
 	}*/
-	
-
-	public void draw(Graphics2D g2d){        
+    public void draw(Graphics2D g2d) {
         //axisFrame.updateMargins(g2d);
         //axisFrame.setAxisMargins(padMargins);
         //axisFrame.updateMargins(g2d);
@@ -129,151 +130,147 @@ public class EmbeddedPad {
                 (int) (padDimensions.getDimension(1).getMax()
                         -padDimensions.getDimension(1).getMin())
                 );
-        */
+         */
 
-        
         //axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getYTitle());
         //axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getXTitle());
         //axisFrame.updateMargins(g2d);
         //System.out.println(padMargins);
-       // padMargins = axisFrame.getFrameMargins();
-      // System.out.println(padMargins);
-
-        Dimension3D  axis = new Dimension3D();
+        // padMargins = axisFrame.getFrameMargins();
+        // System.out.println(padMargins);
+        Dimension3D axis = new Dimension3D();
         axis.set(0.0, 1.0, 0.0, 1.0, 0.0, 1.0);
-        if(this.datasetPlotters.size()>0){
-            
+        if (this.datasetPlotters.size() > 0) {
+
             axis.copy(datasetPlotters.get(0).getDataRegion());
-            for(IDataSetPlotter plotter : this.datasetPlotters){
+            for (IDataSetPlotter plotter : this.datasetPlotters) {
                 Dimension3D d3d = plotter.getDataRegion();
                 axis.combine(d3d);
             }
-            
+
             //System.out.println( "AXIS = "  + axis.toString());
-            
-        if(this.getAxisX().isAutoScale()==false){
-            axis.getDimension(0).copy(this.getAxisX().getRange());
-            //axis.getDimension(1).copy(this.getAxisY().getRange());
-        }else{
-        	axisFrame.getAxisX().setRange(
-                    axis.getDimension(0).getMin(),
-                    axis.getDimension(0).getMax()
-            );
-        	axisFrame.getAxisX().getAttributes().setAxisAutoScale(true);
-        }
-        
-        double sum = 0.0;
-        for(int i=0; i<datasetPlotters.get(0).getDataSet().getDataSize(1); i++){
-        	sum += datasetPlotters.get(0).getDataSet().getDataY(i);
-        }
-        
-        if(this.datasetPlotters.size()>0){
-            if(this.getDatasetPlotters().get(0) instanceof Histogram2DPlotter){
-                sum = 1.0;
+            if (this.getAxisX().isAutoScale() == false) {
+                axis.getDimension(0).copy(this.getAxisX().getRange());
+                //axis.getDimension(1).copy(this.getAxisY().getRange());
+            } else {
+                axisFrame.getAxisX().setRange(
+                        axis.getDimension(0).getMin(),
+                        axis.getDimension(0).getMax()
+                );
+                axisFrame.getAxisX().getAttributes().setAxisAutoScale(true);
             }
-        }
-        
-        if(this.getAxisY().isAutoScale()==false || sum==0.0){
-            axis.getDimension(1).copy(this.getAxisY().getRange());
-            //System.out.println("if 1");            
-        }else{
-        	axisFrame.getAxisY().setRange(
-                    axis.getDimension(1).getMin(),
-                    axis.getDimension(1).getMax()
-            );
+
+            double sum = 0.0;
+            for (int i = 0; i < datasetPlotters.get(0).getDataSet().getDataSize(1); i++) {
+                sum += datasetPlotters.get(0).getDataSet().getDataY(i);
+            }
+
+            if (this.datasetPlotters.size() > 0) {
+                if (this.getDatasetPlotters().get(0) instanceof Histogram2DPlotter) {
+                    sum = 1.0;
+                }
+            }
+
+            if (this.getAxisY().isAutoScale() == false || sum == 0.0) {
+                axis.getDimension(1).copy(this.getAxisY().getRange());
+                //System.out.println("if 1");            
+            } else {
+                axisFrame.getAxisY().setRange(
+                        axis.getDimension(1).getMin(),
+                        axis.getDimension(1).getMax()
+                );
                 axisFrame.getAxisY().getAttributes().setAxisAutoScale(true);
                 //System.out.println("if 2");
-        }
-        //System.out.println(" AXIS Y MIN MAX" + axisFrame.getAxisY().getMin() + " " 
-        //+ axisFrame.getAxisY().getMax());
-        
-        if(this.getAxisZ().isAutoScale()==false){
-            axis.getDimension(2).copy(this.getAxisZ().getRange());
-        }else{
-        	axisFrame.getAxisZ().setRange(
-                    axis.getDimension(2).getMin(),
-                    axis.getDimension(2).getMax()
-            );
-        	axisFrame.getAxisZ().getAttributes().setAxisAutoScale(true);
-        }
-        
-        if(this.attr.getTitle()!=""){
-        	this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin()+getTitleFontSize());
-        	axisFrame.setAxisMargins(this.attr.getPadMargins());
-        	axisFrame.updateMargins(g2d);
-        }else{
-        	/*
+            }
+            //System.out.println(" AXIS Y MIN MAX" + axisFrame.getAxisY().getMin() + " " 
+            //+ axisFrame.getAxisY().getMax());
+
+            if (this.getAxisZ().isAutoScale() == false) {
+                axis.getDimension(2).copy(this.getAxisZ().getRange());
+            } else {
+                axisFrame.getAxisZ().setRange(
+                        axis.getDimension(2).getMin(),
+                        axis.getDimension(2).getMax()
+                );
+                axisFrame.getAxisZ().getAttributes().setAxisAutoScale(true);
+            }
+
+            if (this.attr.getTitle() != "") {
+                this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin() + getTitleFontSize());
+                axisFrame.setAxisMargins(this.attr.getPadMargins());
+                axisFrame.updateMargins(g2d);
+            } else {
+                /*
         	this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin()-getTitleFontSize());
         	axisFrame.setAxisMargins(this.attr.getPadMargins());
         	axisFrame.updateMargins(g2d);*/
-        }
-        /*if(this.getAxisZ().getAttributes().showAxis()){
+            }
+            /*if(this.getAxisZ().getAttributes().showAxis()){
         	padMargins.setRightMargin(padMargins.getRightMargin()+10);
         	axisFrame
         }*/
 
-        
-        //System.out.println( "Y AXIS DIM = " + axisFrame.getAxisY().toString());
-        
-        Rectangle2D rect = new Rectangle2D.Double(
-                axisFrame.getFrameDimensions().getDimension(0).getMin() + this.attr.getPadMargins().getLeftMargin(),
-                axisFrame.getFrameDimensions().getDimension(1).getMin() + this.attr.getPadMargins().getTopMargin(),
-                axisFrame.getFrameDimensions().getDimension(0).getLength() 
-                        - this.attr.getPadMargins().getLeftMargin() - this.attr.getPadMargins().getRightMargin(),
-                axisFrame.getFrameDimensions().getDimension(1).getLength() - 
-                        this.attr.getPadMargins().getTopMargin() - this.attr.getPadMargins().getBottomMargin()
-        );
-        
-        g2d.setClip(rect);
-        
-        for(IDataSetPlotter plotter : this.datasetPlotters){
-            plotter.draw(g2d, axisFrame);
-        }
-        g2d.setClip(null);
-        //System.out.println("PLOTTERS SIZE = " + this.datasetPlotters.size());
-        axisFrame.drawAxis(g2d, this.attr.getPadMargins());
-    	List<List<LatexText>> toBeDrawn = new ArrayList< List<LatexText>>();
-        for(int i = 0; i<this.datasetPlotters.size(); i++){
-        	List<List<LatexText>> currentStats = this.datasetPlotters.get(i).getDataSet().getStatBox().getPaveTexts();
-        	String optStat =  this.datasetPlotters.get(i).getDataSet().getAttributes().getOptStat();
-        	int counter = 0;
-        	for(int j=0; j<optStat.length()&&j<currentStats.size(); j++){
-        		//System.out.println("Counter:"+counter);
-        		if(Integer.parseInt(""+optStat.charAt(optStat.length()-1-j))!=0){
-        			toBeDrawn.add(currentStats.get(counter));
-        			//System.out.print("counter:"+counter);
-        			/*for(LatexText text : currentStats.get(counter)){
+            //System.out.println( "Y AXIS DIM = " + axisFrame.getAxisY().toString());
+            Rectangle2D rect = new Rectangle2D.Double(
+                    axisFrame.getFrameDimensions().getDimension(0).getMin() + this.attr.getPadMargins().getLeftMargin(),
+                    axisFrame.getFrameDimensions().getDimension(1).getMin() + this.attr.getPadMargins().getTopMargin(),
+                    axisFrame.getFrameDimensions().getDimension(0).getLength()
+                    - this.attr.getPadMargins().getLeftMargin() - this.attr.getPadMargins().getRightMargin(),
+                    axisFrame.getFrameDimensions().getDimension(1).getLength()
+                    - this.attr.getPadMargins().getTopMargin() - this.attr.getPadMargins().getBottomMargin()
+            );
+
+            g2d.setClip(rect);
+
+            for (IDataSetPlotter plotter : this.datasetPlotters) {
+                plotter.draw(g2d, axisFrame);
+            }
+            g2d.setClip(null);
+            //System.out.println("PLOTTERS SIZE = " + this.datasetPlotters.size());
+            axisFrame.setPalette(attr.getPalette());
+            axisFrame.drawAxis(g2d, this.attr.getPadMargins());
+            List<List<LatexText>> toBeDrawn = new ArrayList< List<LatexText>>();
+            for (int i = 0; i < this.datasetPlotters.size(); i++) {
+                List<List<LatexText>> currentStats = this.datasetPlotters.get(i).getDataSet().getStatBox().getPaveTexts();
+                String optStat = this.datasetPlotters.get(i).getDataSet().getAttributes().getOptStat();
+                int counter = 0;
+                for (int j = 0; j < optStat.length() && j < currentStats.size(); j++) {
+                    //System.out.println("Counter:"+counter);
+                    if (Integer.parseInt("" + optStat.charAt(optStat.length() - 1 - j)) != 0) {
+                        toBeDrawn.add(currentStats.get(counter));
+                        //System.out.print("counter:"+counter);
+                        /*for(LatexText text : currentStats.get(counter)){
         				System.out.print(" "+text.getTextString());
         			}*/
-        		}
-        		
-        		counter++;
-        	}
-        }
-    	axisFrame.updateMargins(g2d);
+                    }
 
-        if(toBeDrawn.size()>0){
-	        statBox = new PaveText(2);
-	        statBox.setPaveTexts(toBeDrawn);
-	    	statBox.setFont(this.attr.getStatBoxFont().getFontName());
-	        statBox.setFontSize(this.attr.getStatBoxFont().getFontSize());
-	        
-	        statBox.updateDimensions(g2d);
-	        statBox.setBackground(255, 255, 255, 200);
-	        int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength()-5) +this.attr.getStatBoxOffsetX();
-	        int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin()+5) +this.attr.getStatBoxOffsetY();
-	        statBox.setPosition(x-this.attr.getPadMargins().getRightMargin(), y+this.attr.getPadMargins().getTopMargin());
-	        statBox.drawPave(g2d, x-this.attr.getPadMargins().getRightMargin(), y+this.attr.getPadMargins().getTopMargin());
-        }
-        if( !"".equals(this.attr.getTitle())){
-            LatexText titleLatex = new LatexText(this.attr.getTitle());
-            titleLatex.setColor(1);
-            titleLatex.setFont(this.getTitleFont());
-            titleLatex.setFontSize(this.getTitleFontSize());
-        	this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin()+getTitleFontSize()+10);
-        	titleLatex.drawString(g2d, (int) axisFrame.getAxisX().getAxisPosition((axisFrame.getAxisX().getRange().getMin()+.5*axisFrame.getAxisX().getRange().getLength())),(int)( axisFrame.getFrameDimensions().getDimension(1).getMin()+this.attr.getTitleOffset()), 1, 0);
-        }
-        /*
+                    counter++;
+                }
+            }
+            axisFrame.updateMargins(g2d);
+
+            if (toBeDrawn.size() > 0) {
+                statBox = new PaveText(2);
+                statBox.setPaveTexts(toBeDrawn);
+                statBox.setFont(this.attr.getStatBoxFont().getFontName());
+                statBox.setFontSize(this.attr.getStatBoxFont().getFontSize());
+
+                statBox.updateDimensions(g2d);
+                statBox.setBackground(255, 255, 255, 200);
+                int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMax() - statBox.getBounds().getDimension(0).getLength() - 5) + this.attr.getStatBoxOffsetX();
+                int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin() + 5) + this.attr.getStatBoxOffsetY();
+                statBox.setPosition(x - this.attr.getPadMargins().getRightMargin(), y + this.attr.getPadMargins().getTopMargin());
+                statBox.drawPave(g2d, x - this.attr.getPadMargins().getRightMargin(), y + this.attr.getPadMargins().getTopMargin());
+            }
+            if (!"".equals(this.attr.getTitle())) {
+                LatexText titleLatex = new LatexText(this.attr.getTitle());
+                titleLatex.setColor(1);
+                titleLatex.setFont(this.getTitleFont());
+                titleLatex.setFontSize(this.getTitleFontSize());
+                this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin() + getTitleFontSize() + 10);
+                titleLatex.drawString(g2d, (int) axisFrame.getAxisX().getAxisPosition((axisFrame.getAxisX().getRange().getMin() + .5 * axisFrame.getAxisX().getRange().getLength())), (int) (axisFrame.getFrameDimensions().getDimension(1).getMin() + this.attr.getTitleOffset()), 1, 0);
+            }
+            /*
         if(this.optStat>0){
 
             if(this.datasetPlotters.get(0).getDataSet() instanceof H1F){
@@ -323,248 +320,265 @@ public class EmbeddedPad {
         }*/
         }
     }
-    
-    public void setOptStat(int opts){
-        if( this.getDatasetPlotters().size()>0){
-            this.getDatasetPlotters().get(0).getDataSet().getAttributes().setOptStat(""+opts);
+
+    public void setOptStat(int opts) {
+        if (this.getDatasetPlotters().size() > 0) {
+            this.getDatasetPlotters().get(0).getDataSet().getAttributes().setOptStat("" + opts);
         }
     }
-    public void setOptStat(String opts){
-        if( this.getDatasetPlotters().size()>0){
+
+    public void setOptStat(String opts) {
+        if (this.getDatasetPlotters().size() > 0) {
             this.getDatasetPlotters().get(0).getDataSet().getAttributes().setOptStat(opts);
         }
     }
-    
-    public String getOptStat(){
-    	 if(this.getDatasetPlotters().size()>0){
-             return this.getDatasetPlotters().get(0).getDataSet().getAttributes().getOptStat();
-         }
+
+    public String getOptStat() {
+        if (this.getDatasetPlotters().size() > 0) {
+            return this.getDatasetPlotters().get(0).getDataSet().getAttributes().getOptStat();
+        }
         return "0";
     }
-    
-    public EmbeddedPad setAutoScale(){
+
+    public EmbeddedPad setAutoScale() {
         this.getAxisX().setAutoScale(true);
         this.getAxisY().setAutoScale(true);
         return this;
     }
-    
- 
-    public GraphicsAxis getAxisX(){
-    	return this.axisFrame.getAxisX();
+
+    public GraphicsAxis getAxisX() {
+        return this.axisFrame.getAxisX();
     }
-    
-    public GraphicsAxis getAxisY(){
-    	return this.axisFrame.getAxisY();
+
+    public GraphicsAxis getAxisY() {
+        return this.axisFrame.getAxisY();
     }
-    
-    public void setStatBoxFont(String name){
-    	this.attr.getStatBoxFont().setFontName(name);
+
+    public void setStatBoxFont(String name) {
+        this.attr.getStatBoxFont().setFontName(name);
     }
-    
-    public void setStatBoxFontSize(int size){
-    	this.attr.getStatBoxFont().setFontSize(size);
+
+    public void setStatBoxFontSize(int size) {
+        this.attr.getStatBoxFont().setFontSize(size);
     }
-    
-    public void setAxisFont(String name){
+
+    public void setAxisFont(String name) {
         this.getAxisFrame().getAxisX().setAxisFont(name);
-        this.getAxisFrame().getAxisY().setAxisFont(name);        
+        this.getAxisFrame().getAxisY().setAxisFont(name);
     }
-    
-    public void setAxisFontSize(int size){
+
+    public void setAxisFontSize(int size) {
         this.getAxisFrame().getAxisX().setAxisFontSize(size);
         this.getAxisFrame().getAxisY().setAxisFontSize(size);
     }
-    
-    public void addPlotter(IDataSetPlotter plotter){
+
+    public void addPlotter(IDataSetPlotter plotter) {
         this.datasetPlotters.add(plotter);
     }
-    public int getWidth(){return (int)(padDimensions.getDimension(0).getMax() -  padDimensions.getDimension(0).getMin());}
-    public int getHeight(){return (int)(padDimensions.getDimension(1).getMax() -  padDimensions.getDimension(1).getMin());}
 
-    public void draw(IDataSet ds, String options){
+    public int getWidth() {
+        return (int) (padDimensions.getDimension(0).getMax() - padDimensions.getDimension(0).getMin());
+    }
+
+    public int getHeight() {
+        return (int) (padDimensions.getDimension(1).getMax() - padDimensions.getDimension(1).getMin());
+    }
+
+    public void draw(IDataSet ds, String options) {
         ds.getAttributes().setDrawOptions(options);
-    	if(options.contains("same")==false){
+        if (options.contains("same") == false) {
             this.datasetPlotters.clear();
         }
-        if(datasetPlotters.isEmpty()){
-        	axisFrame.getAxisY().setTitle(ds.getAttributes().getTitleY());
-        	axisFrame.getAxisX().setTitle(ds.getAttributes().getTitleX());
-        	this.setTitle(ds.getAttributes().getTitle());
-        }else{
-        	axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleY());
-        	axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleX());
+        if (datasetPlotters.isEmpty()) {
+            axisFrame.getAxisY().setTitle(ds.getAttributes().getTitleY());
+            axisFrame.getAxisX().setTitle(ds.getAttributes().getTitleX());
+            this.setTitle(ds.getAttributes().getTitle());
+        } else {
+            axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleY());
+            axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleX());
         }
-        if(ds instanceof Func1D){
+        if (ds instanceof Func1D) {
             this.addPlotter(new FunctionPlotter(ds));
         }
-        
-        if(ds instanceof H1F){
-            this.addPlotter(new HistogramPlotter(ds,options));
+
+        if (ds instanceof H1F) {
+            this.addPlotter(new HistogramPlotter(ds, options));
             H1F h = (H1F) ds;
-            if(h.getFunction()!=null){
+            if (h.getFunction() != null) {
                 this.addPlotter(new FunctionPlotter(h.getFunction()));
             }
         }
-        if(ds instanceof H2F){
+        if (ds instanceof H2F) {
             axisFrame.getAxisZ().getAttributes().setShowAxis(true);
-            this.addPlotter(new Histogram2DPlotter(ds));
+            this.addPlotter(new Histogram2DPlotter(ds).setColorPalette(attr.getPalette()));
         }
-        
-        if(ds instanceof GraphErrors){
+
+        if (ds instanceof GraphErrors) {
             this.addPlotter(new GraphErrorsPlotter(ds));
             GraphErrors gr = (GraphErrors) ds;
-            if(gr.getFunction()!=null){
+            if (gr.getFunction() != null) {
                 this.addPlotter(new FunctionPlotter(gr.getFunction()));
             }
         }
         //axisFrame.getAxisY().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleY());
         //axisFrame.getAxisX().setTitle(datasetPlotters.get(0).getDataSet().getAttributes().getTitleX());
     }
-    
-    public void remove(IDataSet ds){
-    	for(IDataSetPlotter plotter :this.datasetPlotters ){
-    		if(plotter.getDataSet().equals(ds)){
-    			this.datasetPlotters.remove(plotter);
-    			break;
-    		}
-    	}
+
+    public void remove(IDataSet ds) {
+        for (IDataSetPlotter plotter : this.datasetPlotters) {
+            if (plotter.getDataSet().equals(ds)) {
+                this.datasetPlotters.remove(plotter);
+                break;
+            }
+        }
     }
-    
+
     /**
      * returns copy of embedded pad with all plotters included.
-     * @return 
+     *
+     * @return
      */
-    public EmbeddedPad  getCopy(){
+    public EmbeddedPad getCopy() {
         EmbeddedPad pad = new EmbeddedPad();
-        for(int i =0 ; i < this.datasetPlotters.size(); i++){
+        for (int i = 0; i < this.datasetPlotters.size(); i++) {
             IDataSetPlotter plotter = this.datasetPlotters.get(i);
-            if(plotter instanceof HistogramPlotter){
+            if (plotter instanceof HistogramPlotter) {
                 pad.addPlotter(new HistogramPlotter(plotter.getDataSet()));
             }
-            if(plotter instanceof FunctionPlotter){
+            if (plotter instanceof FunctionPlotter) {
                 pad.addPlotter(new FunctionPlotter(plotter.getDataSet()));
             }
-            if(plotter instanceof Histogram2DPlotter){
+            if (plotter instanceof Histogram2DPlotter) {
                 pad.addPlotter(new Histogram2DPlotter(plotter.getDataSet()));
             }
-            if(plotter instanceof GraphErrorsPlotter){
-            	pad.addPlotter(new GraphErrorsPlotter(plotter.getDataSet()));
+            if (plotter instanceof GraphErrorsPlotter) {
+                pad.addPlotter(new GraphErrorsPlotter(plotter.getDataSet()));
                 //System.out.println("Graph errors");
             }
         }
         try {
-			pad.getAxisX().setAttributes((AxisAttributes) this.getAxisX().getAttributes().clone());
-			pad.getAxisY().setAttributes((AxisAttributes) this.getAxisY().getAttributes().clone());
-			pad.getAxisZ().setAttributes((AxisAttributes) this.getAxisZ().getAttributes().clone());
-			pad.setTitle(this.attr.getTitle());
-			pad.setTitleOffset(this.attr.getTitleOffset());
-			pad.setTitleFontSize(this.getTitleFontSize());
-			pad.setTitleFont(this.getTitleFont());
-			pad.setStatBoxFont(this.getStatBoxFontName());
-			pad.setStatBoxFontSize(this.getStatBoxFontSize());
+            pad.getAxisX().setAttributes((AxisAttributes) this.getAxisX().getAttributes().clone());
+            pad.getAxisY().setAttributes((AxisAttributes) this.getAxisY().getAttributes().clone());
+            pad.getAxisZ().setAttributes((AxisAttributes) this.getAxisZ().getAttributes().clone());
+            pad.setTitle(this.attr.getTitle());
+            pad.setTitleOffset(this.attr.getTitleOffset());
+            pad.setTitleFontSize(this.getTitleFontSize());
+            pad.setTitleFont(this.getTitleFont());
+            pad.setStatBoxFont(this.getStatBoxFontName());
+            pad.setStatBoxFontSize(this.getStatBoxFontSize());
 
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        } catch (CloneNotSupportedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return pad;
     }
-    
-    
+
     private String getStatBoxFontName() {
-		return this.attr.getStatBoxFont().getFontName();
-	}
+        return this.attr.getStatBoxFont().getFontName();
+    }
 
+    public static class EmbeddedPadConfigurationPane extends JDialog {
 
-	public static class EmbeddedPadConfigurationPane extends JDialog {
+        EmbeddedPad embeddedPad = null;
+        JTabbedPane tabbedPane = null;
 
-        EmbeddedPad  embeddedPad = null;
-        JTabbedPane  tabbedPane  = null;
-        
-        public EmbeddedPadConfigurationPane(EmbeddedPad pad){
+        public EmbeddedPadConfigurationPane(EmbeddedPad pad) {
             super();
             tabbedPane = new JTabbedPane();
             this.setEmbeddedPad(pad);
         }
-        
-        public final void setEmbeddedPad(EmbeddedPad pad){
+
+        public final void setEmbeddedPad(EmbeddedPad pad) {
             embeddedPad = pad;
         }
-        
-        public void initUI(){
+
+        public void initUI() {
             //embeddedPad.getAxisFrame().getAxisX()
         }
-        
+
     }
 
+    public GraphicsAxis getAxisZ() {
+        return this.axisFrame.getAxisZ();
+    }
 
-	public GraphicsAxis getAxisZ() {
-    	return this.axisFrame.getAxisZ();
-	}
+    public String getTitle() {
+        return this.attr.getTitle();
+    }
 
-	public String getTitle() {
-		return this.attr.getTitle();
-	}
-	public int getTitleOffset() {
-		return this.attr.getTitleOffset();
-	}
+    public int getTitleOffset() {
+        return this.attr.getTitleOffset();
+    }
 
-	public void setTitleOffset(int titleOffset) {
-		this.attr.setTitleOffset(titleOffset);
-	}
+    public void setTitleOffset(int titleOffset) {
+        this.attr.setTitleOffset(titleOffset);
+    }
 
-	public void setTitleFont(String titleFont) {
-		this.attr.setTitleFontName(titleFont);
-	}
+    public void setTitleFont(String titleFont) {
+        this.attr.setTitleFontName(titleFont);
+    }
 
-	public void getTitle(String title) {
-		 this.attr.setTitle(title);
-	}
-	
-	public int getTitleFontSize() {
-		return this.attr.getTitleFontSize();
-	}
-	
-	public String getTitleFont() {
-		return this.attr.getTitleFontName();
-	}
+    public void getTitle(String title) {
+        this.attr.setTitle(title);
+    }
 
-	public void setTitleFontSize(int titleFontSize) {
-		 this.attr.setTitleFontSize(titleFontSize);
-	}
-	public void getTitleFont(String titleFont) {
-		this.attr.setTitleFontName(titleFont);
-	}
-	public void setAxisTitleFontSize(int parseInt) {
-		this.getAxisX().getAttributes().setTitleFontSize(parseInt);
-		this.getAxisY().getAttributes().setTitleFontSize(parseInt);
-		this.getAxisZ().getAttributes().setTitleFontSize(parseInt);
+    public int getTitleFontSize() {
+        return this.attr.getTitleFontSize();
+    }
 
-	}
-	public void setAxisLabelFontSize(int parseInt) {
-		this.getAxisX().getAttributes().setLabelFontSize(parseInt);
-		this.getAxisY().getAttributes().setLabelFontSize(parseInt);
-		this.getAxisZ().getAttributes().setLabelFontSize(parseInt);
-	}
+    public String getTitleFont() {
+        return this.attr.getTitleFontName();
+    }
 
-	public void setFontNameAll(String FontName) {
-		this.getAxisX().getAttributes().setLabelFontName(FontName);
-		this.getAxisY().getAttributes().setLabelFontName(FontName);
-		this.getAxisZ().getAttributes().setLabelFontName(FontName);
-		this.getAxisX().getAttributes().setTitleFontName(FontName);
-		this.getAxisY().getAttributes().setTitleFontName(FontName);
-		this.attr.setTitleFontName(FontName);
-		this.attr.getStatBoxFont().setFontName(FontName);
-	}
+    public void setTitleFontSize(int titleFontSize) {
+        this.attr.setTitleFontSize(titleFontSize);
+    }
 
-	public int getStatBoxFontSize() {
-		return this.attr.getStatBoxFont().getFontSize();
-	}
+    public void getTitleFont(String titleFont) {
+        this.attr.setTitleFontName(titleFont);
+    }
 
-	public void setTitle(String title) {
-		this.attr.setTitle(title);		
-	}
-	
-	
+    public void setAxisTitleFontSize(int parseInt) {
+        this.getAxisX().getAttributes().setTitleFontSize(parseInt);
+        this.getAxisY().getAttributes().setTitleFontSize(parseInt);
+        this.getAxisZ().getAttributes().setTitleFontSize(parseInt);
 
+    }
+
+    public void setAxisLabelFontSize(int parseInt) {
+        this.getAxisX().getAttributes().setLabelFontSize(parseInt);
+        this.getAxisY().getAttributes().setLabelFontSize(parseInt);
+        this.getAxisZ().getAttributes().setLabelFontSize(parseInt);
+    }
+
+    public void setFontNameAll(String FontName) {
+        this.getAxisX().getAttributes().setLabelFontName(FontName);
+        this.getAxisY().getAttributes().setLabelFontName(FontName);
+        this.getAxisZ().getAttributes().setLabelFontName(FontName);
+        this.getAxisX().getAttributes().setTitleFontName(FontName);
+        this.getAxisY().getAttributes().setTitleFontName(FontName);
+        this.attr.setTitleFontName(FontName);
+        this.attr.getStatBoxFont().setFontName(FontName);
+    }
+
+    public int getStatBoxFontSize() {
+        return this.attr.getStatBoxFont().getFontSize();
+    }
+
+    public void setTitle(String title) {
+        this.attr.setTitle(title);
+    }
+
+    public void setPalette(String palName) {
+        this.attr.setPalette(palName);
+    }
+
+    public void setPalette(int palVal) {
+        this.attr.setPalette(palVal);
+    }
+
+    public void setPalette(TColorPalette.PaletteName pal) {
+        this.attr.setPalette(pal);
+    }
 }
