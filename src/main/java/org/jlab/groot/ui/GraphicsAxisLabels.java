@@ -138,7 +138,7 @@ public class GraphicsAxisLabels {
         double min = array.get(0);
         double max = array.get(array.size()-1);
         double difference = max-min;
-        int   placeOfDifference = (int) Math.floor(Math.log(difference) / Math.log(10));
+        int   placeOfDifference = (int) Math.floor(Math.log10(difference));
         return -placeOfDifference;
     }
     /**

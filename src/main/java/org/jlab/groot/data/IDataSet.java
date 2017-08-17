@@ -25,4 +25,6 @@ public interface IDataSet {
     double      getDataEY(int bin);
     double      getData(int xbin, int ybin);
     PaveText    getStatBox();
+    double getMin();
+    double getMax();
 }

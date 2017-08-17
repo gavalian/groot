@@ -23,12 +23,14 @@ public class TColorPalette {
         setPalette(PaletteName.kVisibleSpectrum);
     }
 
-    public Color getColor3D(int icolor){
-        if(icolor<0 || icolor>255)
-            throw new UnsupportedOperationException("No color id:"+icolor);
+    public Color getColor3D(int icolor) {
+        if (icolor < 0 || icolor > 255) {
+            throw new UnsupportedOperationException("No color id:" + icolor);
+        }
 
         return palette[icolor];
     }
+
     public Color getColor3D(double value, double max, boolean islog) {
         return getColor3D(value, 0, max, islog);
     }
@@ -45,15 +47,18 @@ public class TColorPalette {
             if (value <= 0) {
                 throw new UnsupportedOperationException("Logarithmic scale can't be enabled for negative values");
             }
-            fraction = Math.log(value+1.0) / Math.log(max);
-        } else {
-            fraction = (value - min) / (max - min);
-            if (fraction > 1) {
-                fraction = 1.0;
-            } else if (fraction < 0) {
-                fraction = 0;
-            }
+            value = Math.log10(value);
+            min = Math.log10(min);
+            max = Math.log10(max);
         }
+        fraction = (value - min) / (max - min);
+
+        if (fraction > 1) {
+            fraction = 1.0;
+        } else if (fraction < 0) {
+            fraction = 0;
+        }
+
         return palette[Math.min(255, (int) (fraction * 255))];
     }
 

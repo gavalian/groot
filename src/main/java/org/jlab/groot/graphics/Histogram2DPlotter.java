@@ -12,7 +12,6 @@ import org.jlab.groot.base.TColorPalette;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension1D;
 import org.jlab.groot.math.Dimension3D;
-import org.jlab.groot.graphics.GraphicsAxisFrame;
 
 /**
  *
@@ -24,7 +23,6 @@ public class Histogram2DPlotter implements IDataSetPlotter {
     String plotterOptions = "";
     IDataSet dataSet = null;
     Dimension3D dataRegion = new Dimension3D();
-    Dimension1D dataRegionZ = new Dimension1D();
     TColorPalette palette = new TColorPalette();
 
     public Histogram2DPlotter(IDataSet ds) {
@@ -57,7 +55,6 @@ public class Histogram2DPlotter implements IDataSetPlotter {
         int npointsX = dataSet.getDataSize(0);
         int npointsY = dataSet.getDataSize(1);
         frame.setDrawAxisZ(true);
-        updateRegion();
 
         for (int xd = 0; xd < dataSet.getDataSize(0); xd++) {
             for (int yd = 0; yd < dataSet.getDataSize(1); yd++) {
@@ -75,34 +72,23 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                 double dataWeight = this.dataSet.getData(xd, yd);
                 boolean zAxisLog = frame.getAxisZ().getLog();
                 //System.out.println("2D plotter axis Z " + zAxisLog);
-                Color weightColor;
                 if (frame.getAxisZ().isAutoScale()) {
-                        weightColor = palette.getColor3D(dataWeight, dataRegionZ.getMin(), dataRegionZ.getMax(), zAxisLog);
-                } else {
-                    weightColor = palette.getColor3D(dataWeight, frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
-                    //System.out.println("h2d: dataweight "+dataWeight+" max: "+frame.getAxisZ().getRange());
+                    frame.getAxisZ().setRange(dataSet.getMin(), dataSet.getMax());
                 }
+
+                Color weightColor = palette.getColor3D(dataWeight,
+                        frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
                 g2d.setColor(weightColor);
                 g2d.fillRect((int) xps, (int) ype,
                         (int) (xpe - xps) + 1,
                         (int) (yps - ype) + 1);
-
             }
         }
-        
+
         if (this.dataSet.getAttributes().isDrawAxis()) {
-            palette.draw(g2d, 50, 50, 50, 50, frame.getAxisZ().getRange().getMin(), dataRegionZ.getMax(), frame.getAxisZ().getLog());
+            palette.draw(g2d, 50, 50, 50, 50, frame.getAxisZ().getRange().getMin(), dataSet.getMax(), frame.getAxisZ().getLog());
         }
 
-    }
-
-    public void updateRegion() {
-        this.dataRegionZ.setMinMax(dataSet.getData(0, 0), dataSet.getData(0, 0));
-        for (int xd = 0; xd < dataSet.getDataSize(0); xd++) {
-            for (int yd = 0; yd < dataSet.getDataSize(1); yd++) {
-                this.dataRegionZ.grow(dataSet.getData(xd, yd));
-            }
-        }
     }
 
     @Override

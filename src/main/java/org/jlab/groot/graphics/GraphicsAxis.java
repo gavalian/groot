@@ -525,7 +525,7 @@ public class GraphicsAxis {
         }
     }
 
-    public static class GraphicsAxisTicks {
+    public class GraphicsAxisTicks {
 
         List<LatexText> axisTexts = new ArrayList<LatexText>();
         List<Double> axisTicks = new ArrayList<Double>();
@@ -572,17 +572,23 @@ public class GraphicsAxis {
             axisTicks.clear();
 
             int significantFigures = this.getSignificantFigures(ticks);
+
             if (significantFigures < 0) {
                 significantFigures = -1;
             }
-            for (int i = 0; i < ticks.size(); i++) {
-                axisTicks.add(ticks.get(i));
-            }
+
+            axisTicks.addAll(ticks);
 
             for (int i = 0; i < axisTicks.size(); i++) {
-
-                LatexText text = LatexText.createFromDouble(axisTicks.get(i),
-                        significantFigures + 1);
+                LatexText text;
+                if (getLog()) {
+                    int sigFig =  (int) -Math.floor(Math.log10(axisTicks.get(i)));
+                    text = LatexText.createFromDouble(axisTicks.get(i),
+                           Math.max(0, sigFig));
+                } else {
+                    text = LatexText.createFromDouble(axisTicks.get(i),
+                            significantFigures + 1);
+                }
                 text.setFont(this.axisFontProperty.getFontName());
                 text.setFontSize(this.axisFontProperty.getFontSize());
                 axisTexts.add(text);
@@ -596,7 +602,8 @@ public class GraphicsAxis {
             double min = array.get(0);
             double max = array.get(array.size() - 1);
             double difference = max - min;
-            int placeOfDifference = (int) Math.floor(Math.log(difference) / Math.log(10));
+
+            int placeOfDifference = (int) Math.floor(Math.log10(difference));
             return -placeOfDifference;
         }
     }
