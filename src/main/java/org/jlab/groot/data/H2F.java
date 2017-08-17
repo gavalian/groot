@@ -80,11 +80,11 @@ public class H2F implements IDataSet {
             double ymin, double ymax) {
         
         hName = name;
-        this.setTitle(title);
         this.set(bx, xmin, xmax, by, ymin, ymax);
         offset = new MultiIndex(bx, by);
         hBuffer = new float[offset.getArraySize()];          
         initAttributes();
+        this.setTitle(title);
     }
     
     private void initAttributes() {
