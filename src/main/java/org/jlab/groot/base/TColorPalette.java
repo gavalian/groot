@@ -47,6 +47,9 @@ public class TColorPalette {
             if (value <= 0) {
                 throw new UnsupportedOperationException("Logarithmic scale can't be enabled for negative values");
             }
+            if(min==0) {
+                min += 1;
+            }
             value = Math.log10(value);
             min = Math.log10(min);
             max = Math.log10(max);

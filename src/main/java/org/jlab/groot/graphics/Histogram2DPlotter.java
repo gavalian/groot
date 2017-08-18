@@ -55,6 +55,8 @@ public class Histogram2DPlotter implements IDataSetPlotter {
         int npointsX = dataSet.getDataSize(0);
         int npointsY = dataSet.getDataSize(1);
         frame.setDrawAxisZ(true);
+        double dimMin = dataSet.getMin();
+        double dimMax = dataSet.getMax();
 
         for (int xd = 0; xd < dataSet.getDataSize(0); xd++) {
             for (int yd = 0; yd < dataSet.getDataSize(1); yd++) {
@@ -72,12 +74,16 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                 double dataWeight = this.dataSet.getData(xd, yd);
                 boolean zAxisLog = frame.getAxisZ().getLog();
                 //System.out.println("2D plotter axis Z " + zAxisLog);
-                if (frame.getAxisZ().isAutoScale()) {
-                    frame.getAxisZ().setRange(dataSet.getMin(), dataSet.getMax());
-                }
 
-                Color weightColor = palette.getColor3D(dataWeight,
-                        frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
+			 Color weightColor;
+                if (frame.getAxisZ().isAutoScale()) {
+	                weightColor = palette.getColor3D(dataWeight,
+                             dimMin, dimMax, zAxisLog);
+                }
+			 else {
+                     weightColor = palette.getColor3D(dataWeight,
+                             frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
+			 }
                 g2d.setColor(weightColor);
                 g2d.fillRect((int) xps, (int) ype,
                         (int) (xpe - xps) + 1,
