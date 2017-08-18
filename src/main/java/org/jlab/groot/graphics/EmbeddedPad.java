@@ -410,7 +410,7 @@ public class EmbeddedPad {
         }
         if (ds instanceof H2F) {
             axisFrame.getAxisZ().getAttributes().setShowAxis(true);
-            this.addPlotter(new Histogram2DPlotter(ds).setColorPalette(attr.getPalette()));
+            this.addPlotter(new Histogram2DPlotter(ds).setPalette(attr.getPalette()));
         }
 
         if (ds instanceof GraphErrors) {
@@ -440,6 +440,7 @@ public class EmbeddedPad {
      */
     public EmbeddedPad getCopy() {
         EmbeddedPad pad = new EmbeddedPad();
+        pad.setPalette(attr.getPalette().getActivePalette());
         for (int i = 0; i < this.datasetPlotters.size(); i++) {
             IDataSetPlotter plotter = this.datasetPlotters.get(i);
             if (plotter instanceof HistogramPlotter) {
@@ -449,7 +450,7 @@ public class EmbeddedPad {
                 pad.addPlotter(new FunctionPlotter(plotter.getDataSet()));
             }
             if (plotter instanceof Histogram2DPlotter) {
-                pad.addPlotter(new Histogram2DPlotter(plotter.getDataSet()));
+                pad.addPlotter(new Histogram2DPlotter(plotter.getDataSet()).setPalette(pad.attr.getPalette()));
             }
             if (plotter instanceof GraphErrorsPlotter) {
                 pad.addPlotter(new GraphErrorsPlotter(plotter.getDataSet()));

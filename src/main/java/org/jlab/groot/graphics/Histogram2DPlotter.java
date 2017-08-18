@@ -127,7 +127,7 @@ public class Histogram2DPlotter implements IDataSetPlotter {
         return this.dataRegion;
     }
 
-    public Histogram2DPlotter setColorPalette(TColorPalette palette) {
+    public Histogram2DPlotter setPalette(TColorPalette palette) {
         this.palette = palette;
         return this;
     }
