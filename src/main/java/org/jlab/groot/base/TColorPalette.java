@@ -17,17 +17,16 @@ import java.util.Map;
 public class TColorPalette {
 
     double stops[] = {0.0000, 0.1250, 0.2500, 0.3750, 0.5000, 0.6250, 0.7500, 0.8750, 1.0000};
-    Color palette[] = new Color[256];
+    Color palette[];
 
     public TColorPalette() {
-        setPalette(PaletteName.kVisibleSpectrum);
+        setPalette(PaletteName.kDefault);
     }
 
     public Color getColor3D(int icolor) {
-        if (icolor < 0 || icolor > 255) {
+        if (icolor < 0 || icolor > palette.length - 1) {
             throw new UnsupportedOperationException("No color id:" + icolor);
         }
-
         return palette[icolor];
     }
 
@@ -41,13 +40,13 @@ public class TColorPalette {
             throw new UnsupportedOperationException("axis range is wrong: Maximum < Minimum");
         }
         if (value == 0 && min >= 0) {
-            return Color.WHITE;
+            return new Color(200,200,200);
         }
         if (islog == true) {
             if (value <= 0) {
                 throw new UnsupportedOperationException("Logarithmic scale can't be enabled for negative values");
             }
-            if(min==0) {
+            if (min == 0) {
                 min += 1;
             }
             value = Math.log10(value);
@@ -61,8 +60,7 @@ public class TColorPalette {
         } else if (fraction < 0) {
             fraction = 0;
         }
-
-        return palette[Math.min(255, (int) (fraction * 255))];
+        return palette[(int) (fraction * (palette.length-1))];
     }
 
     public void draw(Graphics2D g2d, int x, int y, int width, int height,
@@ -70,6 +68,7 @@ public class TColorPalette {
     }
 
     public enum PaletteName {
+        kDefault(50),
         kDeepSea(51),
         kGreyScale(52),
         kDarkBodyRadiator(53),
@@ -163,15 +162,23 @@ public class TColorPalette {
     }
 
     private void CreateGradientColorTable(double[] red, double[] green, double[] blue) {
-        int nstops = stops.length;
-        int icolor = 0;
-        for (int istop = 1; istop < nstops; istop++) {
-            int ncolors = (int) (Math.floor(255.0 * stops[istop]) - Math.floor(255.0 * stops[istop - 1]));
-            for (int ic = 0; ic < ncolors; ic++) {
-                double rr = red[istop - 1] + ic * (red[istop] - red[istop - 1]) / ncolors;
-                double gg = green[istop - 1] + ic * (green[istop] - green[istop - 1]) / ncolors;
-                double bb = blue[istop - 1] + ic * (blue[istop] - blue[istop - 1]) / ncolors;
-                palette[icolor++] = new Color((int) rr, (int) gg, (int) bb);
+        if (red.length == 47) {
+            palette = new Color[red.length];
+            for (int icol = 0; icol < red.length; icol++) {
+                palette[icol] = new Color((float) red[icol], (float) green[icol], (float) blue[icol]);
+            }
+        } else {
+            palette = new Color[255];
+            int nstops = stops.length;
+            int icolor = 0;
+            for (int istop = 1; istop < nstops; istop++) {
+                int ncolors = (int) (Math.floor(255.0 * stops[istop]) - Math.floor(255.0 * stops[istop - 1]));
+                for (int ic = 0; ic < ncolors; ic++) {
+                    double rr = red[istop - 1] + ic * (red[istop] - red[istop - 1]) / ncolors;
+                    double gg = green[istop - 1] + ic * (green[istop] - green[istop - 1]) / ncolors;
+                    double bb = blue[istop - 1] + ic * (blue[istop] - blue[istop - 1]) / ncolors;
+                    palette[icolor++] = new Color((int) rr, (int) gg, (int) bb);
+                }
             }
         }
     }
@@ -191,6 +198,26 @@ public class TColorPalette {
     public final void setPalette(PaletteName palette) {
 
         switch (palette) {
+            case kDefault: {
+                double[] red = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                    0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                    0., 0., 0., 0.17, 0.33, 0.50, 0.67, 0.83, 1.00, 1.00,
+                    1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                    1., 1., 1., 1., 1., 1., 1.};
+                double[] green = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                    0., 0.08, 0.15, 0.23, 0.31, 0.38, 0.46, 0.53, 0.59, 0.66,
+                    0.73, 0.80, 0.87, 0.72, 0.58, 0.43, 0.29, 0.14, 0.00, 0.08,
+                    0.17, 0.25, 0.33, 0.42, 0.50, 0.58, 0.67, 0.75, 0.83, 0.92,
+                    1., 1., 1., 1., 1., 1., 1.};
+                double[] blue = {0.30, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.52, 0.56, 0.60,
+                    0.64, 0.68, 0.68, 0.70, 0.70, 0.70, 0.70, 0.64, 0.56, 0.48,
+                    0.40, 0.33, 0., 0., 0., 0., 0., 0., 0., 0.,
+                    0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                    0., 0.17, 0.33, 0.50, 0.67, 0.83, 1.};
+                CreateGradientColorTable(red, green, blue);
+            }
+            break;
+
             // Deep Sea
             case kDeepSea: {
                 double red[] = {0., 9., 13., 17., 24., 32., 27., 25., 29.};
