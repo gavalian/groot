@@ -74,15 +74,14 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                 boolean zAxisLog = frame.getAxisZ().getLog();
                 //System.out.println("2D plotter axis Z " + zAxisLog);
 
-			 Color weightColor;
+                Color weightColor;
                 if (frame.getAxisZ().isAutoScale()) {
-	                weightColor = palette.getColor3D(dataWeight,
-                             dimMin, dimMax, zAxisLog);
+                    weightColor = palette.getColor3D(dataWeight,
+                            dimMin, dimMax, zAxisLog);
+                } else {
+                    weightColor = palette.getColor3D(dataWeight,
+                            frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
                 }
-			 else {
-                     weightColor = palette.getColor3D(dataWeight,
-                             frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
-			 }
                 g2d.setColor(weightColor);
                 g2d.fillRect((int) xps, (int) ype,
                         (int) (xpe - xps) + 1,
