@@ -18,7 +18,7 @@ public class PadAttributes {
     private int statBoxOffsetY = 0;
     private int lineStyle = 1;
     private int lineWidth = 1;
-    private TColorPalette palette = new TColorPalette();
+    private TColorPalette palette = GStyle.getPalette();
 
     public Color getBackgroundColor() {
         return backgroundColor;

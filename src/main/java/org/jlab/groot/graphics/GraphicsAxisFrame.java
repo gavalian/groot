@@ -68,7 +68,7 @@ public class GraphicsAxisFrame {
         return this.axisFrameMargins;
     }
 
-    public void setPalette(TColorPalette palette) {
+    void setPalette(TColorPalette palette) {
         axisFrameAxis.get(2).setPalette(palette);
     }
 

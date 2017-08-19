@@ -16,19 +16,29 @@ import java.util.Map;
  */
 public class TColorPalette {
 
-    double stops[] = {0.0000, 0.1250, 0.2500, 0.3750, 0.5000, 0.6250, 0.7500, 0.8750, 1.0000};
-    Color palette[];
-    PaletteName activePalette;
+    private double stops[] = {0.0000, 0.1250, 0.2500, 0.3750, 0.5000, 0.6250, 0.7500, 0.8750, 1.0000};
+    private Color paletteColors[];
+    private PaletteName activePalette;
+    private Color bgColor = new Color(200,200,200);
 
     public TColorPalette() {
         setPalette(PaletteName.kDefault);
     }
 
+    private TColorPalette(PaletteName palName, Color bgColor) {
+        setPalette(palName);
+        this.bgColor = bgColor;
+    }
+
+    public TColorPalette(TColorPalette palette) {
+        this(palette.activePalette, palette.bgColor);
+    }
+
     public Color getColor3D(int icolor) {
-        if (icolor < 0 || icolor > palette.length - 1) {
+        if (icolor < 0 || icolor > paletteColors.length - 1) {
             throw new UnsupportedOperationException("No color id:" + icolor);
         }
-        return palette[icolor];
+        return paletteColors[icolor];
     }
 
     public Color getColor3D(double value, double max, boolean islog) {
@@ -41,7 +51,7 @@ public class TColorPalette {
             throw new UnsupportedOperationException("axis range is wrong: Maximum < Minimum");
         }
         if (value == 0 && min >= 0) {
-            return new Color(200,200,200);
+            return bgColor;
         }
         if (islog == true) {
             if (value <= 0) {
@@ -61,7 +71,7 @@ public class TColorPalette {
         } else if (fraction < 0) {
             fraction = 0;
         }
-        return palette[(int) (fraction * (palette.length-1))];
+        return paletteColors[(int) (fraction * (paletteColors.length-1))];
     }
 
     public void draw(Graphics2D g2d, int x, int y, int width, int height,
@@ -141,9 +151,9 @@ public class TColorPalette {
         }
 
         static {
-            for (PaletteName palette : PaletteName.values()) {
-                map.put(palette.name(), palette);
-                map.put(palette.value, palette);
+            for (PaletteName palName : PaletteName.values()) {
+                map.put(palName.name(), palName);
+                map.put(palName.value, palName);
             }
         }
 
@@ -164,12 +174,12 @@ public class TColorPalette {
 
     private void CreateGradientColorTable(double[] red, double[] green, double[] blue) {
         if (red.length == 47) {
-            palette = new Color[red.length];
+            paletteColors = new Color[red.length];
             for (int icol = 0; icol < red.length; icol++) {
-                palette[icol] = new Color((float) red[icol], (float) green[icol], (float) blue[icol]);
+                paletteColors[icol] = new Color((float) red[icol], (float) green[icol], (float) blue[icol]);
             }
         } else {
-            palette = new Color[255];
+            paletteColors = new Color[255];
             int nstops = stops.length;
             int icolor = 0;
             for (int istop = 1; istop < nstops; istop++) {
@@ -178,14 +188,14 @@ public class TColorPalette {
                     double rr = red[istop - 1] + ic * (red[istop] - red[istop - 1]) / ncolors;
                     double gg = green[istop - 1] + ic * (green[istop] - green[istop - 1]) / ncolors;
                     double bb = blue[istop - 1] + ic * (blue[istop] - blue[istop - 1]) / ncolors;
-                    palette[icolor++] = new Color((int) rr, (int) gg, (int) bb);
+                    paletteColors[icolor++] = new Color((int) rr, (int) gg, (int) bb);
                 }
             }
         }
     }
 
     public int getPaletteSize() {
-        return palette.length;
+        return paletteColors.length;
     }
 
     public void setPalette(String palName) {
@@ -198,6 +208,10 @@ public class TColorPalette {
 
     public PaletteName getActivePalette() {
         return activePalette;
+    }
+
+    public void setBackgroundColor(Color bgColor) {
+        this.bgColor = bgColor;
     }
 
     public final void setPalette(PaletteName palette) {
