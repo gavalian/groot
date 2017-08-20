@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.base.PadMargins;
-import org.jlab.groot.base.TColorPalette;
 import org.jlab.groot.math.Dimension2D;
 
 /**
@@ -66,10 +65,6 @@ public class GraphicsAxisFrame {
 
     public PadMargins getFrameMargins() {
         return this.axisFrameMargins;
-    }
-
-    void setPalette(TColorPalette palette) {
-        axisFrameAxis.get(2).setPalette(palette);
     }
 
     public void setAxisMargins(PadMargins margins) {

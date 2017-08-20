@@ -227,7 +227,7 @@ public class EmbeddedPad {
             }
             g2d.setClip(null);
             //System.out.println("PLOTTERS SIZE = " + this.datasetPlotters.size());
-            axisFrame.setPalette(attr.getPalette());
+            axisFrame.getAxisZ().setPalette(attr.getPalette());
             axisFrame.drawAxis(g2d, this.attr.getPadMargins());
             List<List<LatexText>> toBeDrawn = new ArrayList< List<LatexText>>();
             for (int i = 0; i < this.datasetPlotters.size(); i++) {
