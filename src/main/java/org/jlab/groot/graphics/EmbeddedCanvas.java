@@ -588,6 +588,18 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
 
         JMenu itemPalettes = new JMenu("Set Palette");
 
+        for (String palName : new String[]{"kDefault","kRainBow",
+            "kVisibleSpectrum","kDarkBodyRadiator","kInvertedDarkBodyRadiator"} ) {
+            JMenuItem palItem = new JMenuItem(palName);
+            palItem.addActionListener(e -> {
+                this.getPad(popupPad).setPalette(palName);
+                repaint();
+            });
+            itemPalettes.add(palItem);
+        }
+
+        JMenu itemExtPalList = new JMenu("Extended list");
+
         String[] palNames = Stream.of(TColorPalette.PaletteName.values())
                 .map(Enum::name)
                 .sorted()
@@ -596,7 +608,8 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         
         JList<String> palList = new JList(palNames);
         JScrollPane palScroll = new JScrollPane(palList);
-        itemPalettes.add(palScroll);
+        itemExtPalList.add(palScroll);
+        itemPalettes.add(itemExtPalList);
 
         palList.addListSelectionListener(e -> {
             this.getPad(popupPad).setPalette(palList.getSelectedValue());

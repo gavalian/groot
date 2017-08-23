@@ -5,7 +5,6 @@
  */
 package org.jlab.groot.graphics;
 
-import org.jlab.groot.graphics.IDataSetPlotter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.jlab.groot.base.TColorPalette;
@@ -75,15 +74,14 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                 boolean zAxisLog = frame.getAxisZ().getLog();
                 //System.out.println("2D plotter axis Z " + zAxisLog);
 
-			 Color weightColor;
+                Color weightColor;
                 if (frame.getAxisZ().isAutoScale()) {
-	                weightColor = palette.getColor3D(dataWeight,
-                             dimMin, dimMax, zAxisLog);
+                    weightColor = palette.getColor3D(dataWeight,
+                            dimMin, dimMax, zAxisLog);
+                } else {
+                    weightColor = palette.getColor3D(dataWeight,
+                            frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
                 }
-			 else {
-                     weightColor = palette.getColor3D(dataWeight,
-                             frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
-			 }
                 g2d.setColor(weightColor);
                 g2d.fillRect((int) xps, (int) ype,
                         (int) (xpe - xps) + 1,
@@ -127,7 +125,7 @@ public class Histogram2DPlotter implements IDataSetPlotter {
         return this.dataRegion;
     }
 
-    public Histogram2DPlotter setColorPalette(TColorPalette palette) {
+    Histogram2DPlotter setPalette(TColorPalette palette) {
         this.palette = palette;
         return this;
     }

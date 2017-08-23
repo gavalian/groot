@@ -660,7 +660,7 @@ public class GraphicsAxis {
         return this.attr.showAxis();
     }
 
-    public void setPalette(TColorPalette palette) {
+    void setPalette(TColorPalette palette) {
         this.palette = palette;
     }
 }
