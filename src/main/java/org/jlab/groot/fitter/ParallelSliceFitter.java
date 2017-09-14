@@ -42,7 +42,7 @@ public class ParallelSliceFitter {
 	boolean autorangemaxbin = true;
 	boolean showProgress = true;
 
-	String fitMode = "N";
+	String fitMode = "RN";
 	public String getFitMode() {
 		return fitMode;
 	}
@@ -389,7 +389,7 @@ public class ParallelSliceFitter {
 					temp.setN(i);
 					temp.setHistogram(slice);
 					temp.setResultSetter(setter);
-					temp.setOptions("RQ" + this.fitMode);
+					temp.setOptions( this.fitMode);
 					temp.setFitter(new F1D("f1", modes[mode], min, max));
 					threads.add(temp);
 				}
