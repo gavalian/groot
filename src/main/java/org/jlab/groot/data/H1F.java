@@ -19,12 +19,15 @@ public class H1F  implements IDataSet {
 
     Axis  xAxis;
     Axis  yAxis;
-    float[]   histogramData;
-    float[]   histogramDataError;
+    
+    float[]    histogramData;
+    float[]    histogramDataError;
     String     histName   = "";
     int        histogramUnderFlow = 0;
     int        histogramOverFlow  = 0;
     int        histogramEntries   = 0;
+    long       histogramUniqueID  = 0L;
+    
     DatasetAttributes hAttr     = new DatasetAttributes(DatasetAttributes.HISTOGRAM);
     
     Func1D     fittedFunction = null;
@@ -126,6 +129,12 @@ public class H1F  implements IDataSet {
     	setName(name);
     	setTitle(title);
     }
+    
+    public H1F  setUniqueID(long id){ this.histogramUniqueID = id; return this;}
+    public long getUniqueID(){ return this.histogramUniqueID;}
+
+    public int getUnderflow(){ return this.histogramUnderFlow;}
+    public int getOverflow() { return this.histogramOverFlow;}
     
     public final void initAttributes(){
     	try {
