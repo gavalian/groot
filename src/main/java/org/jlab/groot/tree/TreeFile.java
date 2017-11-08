@@ -8,11 +8,11 @@ package org.jlab.groot.tree;
 import java.util.ArrayList;
 import java.util.List;
 import org.jlab.groot.data.DataVector;
-import org.jlab.hipo.data.HipoEvent;
-import org.jlab.hipo.data.HipoNode;
-import org.jlab.hipo.data.HipoNodeType;
-import org.jlab.hipo.io.HipoRecord;
-import org.jlab.hipo.io.HipoWriter;
+import org.jlab.jnp.hipo.data.HipoEvent;
+import org.jlab.jnp.hipo.data.HipoNode;
+import org.jlab.jnp.hipo.data.HipoNodeType;
+import org.jlab.jnp.hipo.io.HipoWriter;
+
 
 /**
  *
@@ -23,7 +23,7 @@ public class TreeFile extends Tree {
     List<DataVector>  dataVectors  = new ArrayList<DataVector>();
     HipoWriter             writer  = null;
     private  int     autoSaveCount = 300;
-    HipoRecord       headerRecord  = new HipoRecord();
+    //HipoRecord       headerRecord  = new HipoRecord();
     
     public TreeFile(String name) {
         super(name);
@@ -44,7 +44,7 @@ public class TreeFile extends Tree {
             str.append(":");
             str.append(item);
         }
-        
+/*        
         HipoNode   node = new HipoNode(200,1,str.toString());
         HipoEvent event = new HipoEvent();
         event.addNode(node);
@@ -53,7 +53,7 @@ public class TreeFile extends Tree {
         writer = new HipoWriter();
         writer.addHeader(str.toString());
         
-        
+  */      
     }
     
     public void close(){
@@ -94,7 +94,7 @@ public class TreeFile extends Tree {
             }
             HipoEvent event = new HipoEvent();
             event.addNode(node);
-            writer.writeEvent(event.getDataBuffer());
+            writer.writeEvent(event);
             dataVectors.clear();
         }
     }

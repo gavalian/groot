@@ -17,13 +17,8 @@ import org.jlab.groot.data.H1F;
 import org.jlab.groot.io.ArgumentParser;
 import org.jlab.groot.io.TextFileReader;
 import org.jlab.groot.ui.TCanvas;
-import org.jlab.hipo.data.HipoEvent;
-import org.jlab.hipo.data.HipoNode;
-import org.jlab.hipo.data.HipoNodeBuilder;
-import org.jlab.hipo.data.HipoNodeType;
-import org.jlab.hipo.io.HipoReader;
-import org.jlab.hipo.io.HipoRecord;
-import org.jlab.hipo.io.HipoWriter;
+import org.jlab.jnp.hipo.io.HipoReader;
+
 
 /**
  *
@@ -32,6 +27,7 @@ import org.jlab.hipo.io.HipoWriter;
 public class SparseGridIO {
     
     public static SparseVectorGrid importHipo(String filename){
+        /*
         HipoReader      reader = new HipoReader();
         
         reader.open(filename);
@@ -65,11 +61,12 @@ public class SparseGridIO {
                 grid.binMap.put(key, vec);
             }
         }
-        return grid;
+        return grid;*/
+        return null;
     }
     
     public static void exportHipo(SparseVectorGrid grid, String filename){
-        
+        /*
         int  entriesPerNode = 300;
         int      vectorSize = grid.getVectorSize();
         
@@ -136,7 +133,7 @@ public class SparseGridIO {
         while(reader.readNext()){
           double[] values = reader.getAsDouble(0,indexRank-1);
           grid.fill(values, order);
-        }
+        }*/
     }
     
     public static SparseVectorGrid createGrid(String[] names, int[] bins,
@@ -187,7 +184,7 @@ public class SparseGridIO {
         
         SparseVectorGrid grid = builder.build();
         
-        SparseGridIO.importFileToGrid(filename, grid, 0);
+        //SparseGridIO.importFileToGrid(filename, grid, 0);
         
         return grid;
     }
@@ -325,7 +322,7 @@ public class SparseGridIO {
                  SparseVectorGrid  grid = SparseGridIO.importHipo(inputGrid);
                  
                  grid.show();
-                 SparseGridIO.importFileToGrid(inputFile, grid, column);
+                 //SparseGridIO.importFileToGrid(inputFile, grid, column);
                  SparseGridIO.exportHipo(grid, outputFile);            
              }
         }

@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.group.DataGroupDescriptor;
-import org.jlab.hipo.data.HipoEvent;
-import org.jlab.hipo.data.HipoNode;
-import org.jlab.hipo.io.HipoReader;
-import org.jlab.hipo.io.HipoWriter;
+import org.jlab.jnp.hipo.data.HipoEvent;
+import org.jlab.jnp.hipo.data.HipoNode;
+import org.jlab.jnp.hipo.io.HipoWriter;
+import org.jlab.jnp.hipo.io.HipoReader;
 
 /**
  *
@@ -85,7 +85,7 @@ public class TDirectory extends Directory<IDataSet> {
                 List<HipoNode>  nodes = DataSetSerializer.serializeDataSet(ds);
                 HipoEvent       event = new HipoEvent();
                 event.addNodes(nodes);
-                writer.writeEvent(event.getDataBuffer());
+                writer.writeEvent(event);
             } else {
                 System.out.println("[TDirectory::writeFile] error getting object : " + object);
             }
@@ -97,7 +97,7 @@ public class TDirectory extends Directory<IDataSet> {
             event.addNodes(nodes);
             event.updateNodeIndex();
             System.out.println(event);
-            writer.writeEvent(event.getDataBuffer());
+            writer.writeEvent(event);
         }
         writer.close();
     }
@@ -146,9 +146,9 @@ public class TDirectory extends Directory<IDataSet> {
         
         int nevents = reader.getEventCount();
         for(int i = 0; i < nevents; i++){
-            byte[] eventBuffer = reader.readEvent(i);
+            //byte[] eventBuffer = reader.readEvent(i);
             //System.out.println(" EVENT # " + i + "  SIZE = " + eventBuffer.length);
-            HipoEvent    event = new HipoEvent(eventBuffer);
+            HipoEvent    event = reader.readNextEvent();
             
             if(event.hasGroup(1200)==true){
                 System.out.println("--> reading data group descriptor");

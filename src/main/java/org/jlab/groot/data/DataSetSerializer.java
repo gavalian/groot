@@ -13,9 +13,10 @@ import org.jlab.groot.base.DatasetAttributes;
 import org.jlab.groot.group.DataGroupDescriptor;
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.Func1D;
-import org.jlab.hipo.data.HipoEvent;
-import org.jlab.hipo.data.HipoNode;
-import org.jlab.hipo.data.HipoNodeType;
+import org.jlab.jnp.hipo.data.HipoEvent;
+import org.jlab.jnp.hipo.data.HipoNode;
+import org.jlab.jnp.hipo.data.HipoNodeType;
+
 
 /**
  *
