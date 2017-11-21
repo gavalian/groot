@@ -39,6 +39,10 @@
 	<id>clas12maven</id>
 	<url>https://clasweb.jlab.org/clas12maven</url>
       </repository>
+      <repository>
+	<id>jnp-maven</id>
+	<url>https://clasweb.jlab.org/jhep/maven</url>
+      </repository>
     </repositories>
 
 
