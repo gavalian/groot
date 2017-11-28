@@ -68,6 +68,13 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
             g2d.setStroke(strokeError);
             g2d.drawLine((int) xpL, (int) yp, (int) xpH, (int) yp);
             g2d.drawLine((int) xp, (int) ypL, (int) xp, (int) ypH);
+            if(this.getDataSet().getAttributes().getDrawOptions().contains("L")){
+            	if(p<npoints-1){
+            		double xpNext = frame.getAxisPointX(graphDataSet.getDataX(p+1));
+                    double ypNext = frame.getAxisPointY(graphDataSet.getDataY(p+1));
+                    g2d.drawLine((int)xp, (int)yp, (int) xpNext, (int) ypNext);
+            	}
+            }
             g2d.setColor(TStyle.getColor(this.getDataSet().getAttributes().getMarkerColor()));
             g2d.setStroke(strokePoint);
            
