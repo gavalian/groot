@@ -781,7 +781,19 @@ public class H2F implements IDataSet {
         }
         return min;
     }
-
+    /**
+     * returns a flat 1D histogram from the bins of 2D histogram
+     * @param h2 reference histogram 2D
+     * @return 1D flat histogram
+     */
+    public static H1F getH1F(H2F h2){
+        H1F h1 = new H1F(h2.getName(),h2.getDataBufferSize(),0.0,h2.getDataBufferSize());
+        for(int i = 0; i < h2.getDataBufferSize(); i++){
+            h1.setBinContent(i, h2.getDataBufferBin(i));
+        }
+        return h1;
+    }
+    
     @Override
     public double getMax() {
         double max = Double.MIN_VALUE;

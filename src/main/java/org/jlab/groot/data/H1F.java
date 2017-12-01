@@ -145,6 +145,25 @@ public class H1F  implements IDataSet {
 		}
     }
     
+    /**
+     * divides the content of each bin in the histogram to the 
+     * maximum bin.
+     */
+    public void unit(){
+        float max = (float) this.getMax();
+        if(max<0e-12){
+            System.out.println("[H1F] ** error ** the histogram has very low maximum. can not be set to unit.");
+            return;
+        }
+        for(int i = 0; i < histogramData.length; i++){
+            histogramData[i] = histogramData[i]/max;
+            histogramDataError[i] = histogramDataError[i]/max;
+        }
+    }
+    /**
+     * set Title of the histogram
+     * @param title new title
+     */
     public final void setTitle(String title){
         this.hAttr.setTitle(title);
     }
