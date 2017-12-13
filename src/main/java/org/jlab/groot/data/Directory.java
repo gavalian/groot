@@ -296,8 +296,11 @@ public class Directory<T> {
             System.out.println("[TDirectory] [" + 
                     dir.getDirectoryPath() +
                     "]---> replacing object " + name);
-        }        
+        }
+        //System.out.println("BEFORE " + dir.getObjectMap().size());
         dir.getObjectMap().put(name, object);
+        //System.out.println("AFTER " + dir.getObjectMap().size());
+        
         //currentDirectory.g.put(name, object);
         
     }
@@ -502,9 +505,14 @@ public class Directory<T> {
         
         Directory<H1F> dir = new Directory<>();
         
-        dir.mkdir("/a/b/c/d/e/f");
-        dir.cd("/a/b/c/d/e");
+        dir.mkdir("/a");
+        dir.cd("/a");
         dir.pwd();
+        
+        System.out.println("SIZE = " + dir.getObjectList().size());
+        dir.add("TATA", new H1F());
+        System.out.println("SIZE = " + dir.getObjectList().size());
+        
         /*
         dir.mkdir("a");
         dir.cd("a");

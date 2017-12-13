@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.group.DataGroupDescriptor;
+import org.jlab.groot.ui.TBrowser;
 import org.jlab.jnp.hipo.data.HipoEvent;
 import org.jlab.jnp.hipo.data.HipoNode;
 import org.jlab.jnp.hipo.io.HipoWriter;
@@ -145,7 +146,10 @@ public class TDirectory extends Directory<IDataSet> {
         this.groupDescriptors.clear();
         
         int nevents = reader.getEventCount();
-        for(int i = 0; i < nevents; i++){
+        System.out.println(" DEBUG : event count = " + nevents);
+        
+        //for(int i = 0; i < nevents; i++){
+        while(reader.hasNext()==true){
             //byte[] eventBuffer = reader.readEvent(i);
             //System.out.println(" EVENT # " + i + "  SIZE = " + eventBuffer.length);
             HipoEvent    event = reader.readNextEvent();
@@ -159,13 +163,17 @@ public class TDirectory extends Directory<IDataSet> {
                 //System.out.println(event.toString());
                 IDataSet h1 = DataSetSerializer.deserializeDataSet(event);
                 String h1name = h1.getName();
+                //System.out.println(" NAME = [" +  h1name + "]");
                 //System.out.println("name -> : " + h1name + " -> " + this.stringDirectoryFromPath(h1name)
                 //+ " obj ---> " + this.stringObjectFromPath(h1name));
                 String dirname = this.stringDirectoryFromPath(h1name);
+                //System.out.println("[DIRNAME] = [" + dirname + "]");
                 mkdir(dirname);
                 cd(dirname);
-                //pwd();
+                pwd();
+                //System.out.println("OBJECTS = " + this.getObjectList().size());
                 h1.setName(this.stringObjectFromPath(h1name));
+                //System.out.println(h1.toString());
                 addDataSet(h1);
                 this.ls();
             }
@@ -174,7 +182,17 @@ public class TDirectory extends Directory<IDataSet> {
     
     
     public static void main(String[] args){
+        TDirectory dir = new TDirectory();
         
+       /* dir.mkdir("/aa");
+        dir.cd("/aa");
+        dir.add("TEST", new H1F());
+        dir.cd();
+        System.out.println(" ADDING " + dir.getObjectList().size());*/
+       dir.readFile("/Users/gavalian/Desktop/out_monitor.hipo");
+       TBrowser browser = new TBrowser(dir);
+        
+        /*
         if(args.length<3){
             System.out.println("error: \n\n Usage : hadd [outputfile] [input1] [input2] ....\n\n");
             System.exit(0);
@@ -186,6 +204,8 @@ public class TDirectory extends Directory<IDataSet> {
         for(int i = 1; i < args.length;i++) inputFiles.add(args[i]);
         
         TDirectory.addFiles(outputFile, inputFiles);
+        */
+        
         /*
         TDirectory dir = new TDirectory();
         dir.mkdir("/calibration/PCAL");
