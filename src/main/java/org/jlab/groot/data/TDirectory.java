@@ -82,11 +82,14 @@ public class TDirectory extends Directory<IDataSet> {
             //System.out.println("writing object ---> " + object);
             IDataSet ds = getObject(object);
             if(ds!=null){
+                String dataset_name = ds.getName();
+                
                 ds.setName(object);
                 List<HipoNode>  nodes = DataSetSerializer.serializeDataSet(ds);
                 HipoEvent       event = new HipoEvent();
                 event.addNodes(nodes);
                 writer.writeEvent(event);
+                ds.setName(dataset_name);
             } else {
                 System.out.println("[TDirectory::writeFile] error getting object : " + object);
             }
