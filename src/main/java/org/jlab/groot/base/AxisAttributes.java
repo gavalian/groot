@@ -57,7 +57,7 @@ public class AxisAttributes implements Cloneable {
 	private boolean axisGrid = true;
 	private int lineColor = 1;
 	private int lineWidth = 1;
-	private int tickSize = 5;
+	private int tickSize = 10; // was 5
 	private boolean log = false;
 	private boolean showAxis = true;
 	private int lineStyle = 1;

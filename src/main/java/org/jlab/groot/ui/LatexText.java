@@ -32,7 +32,7 @@ public class LatexText {
     public  static int  ROTATE_LEFT   = 12;
     public  static int  ROTATE_RIGHT  = 13;
     
-    private String  textFamily   = "Avenir";
+    private String  textFamily   = "Times New Roman";//"Avenir";
     private int     textFontSize = 12;
     private Double  relativeX  = 0.0;
     private Double  relativeY  = 0.0;
@@ -85,6 +85,7 @@ public class LatexText {
         if(this.latexString.getIterator().getEndIndex()>0){
         //System.out.println("INDEX = " + this.latexString.getIterator().getEndIndex());
             latexString.addAttribute(TextAttribute.FAMILY, fontname);
+            latexString.addAttribute(TextAttribute.WEIGHT,TextAttribute.WEIGHT_EXTRABOLD);
         }
     }
     

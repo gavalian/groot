@@ -20,7 +20,7 @@ public class GStyle {
         public static float[]  dashPattern3 = new float[]{2.0f,5.0f,2.0f,5.0f};
         static TColorPalette palette = new TColorPalette();
 
-        public static Integer    graphicsFrameLineWidth = 1;
+        public static Integer    graphicsFrameLineWidth = 2;
 
         public static void setPalette(String palName) {
             palette.setPalette(palName);

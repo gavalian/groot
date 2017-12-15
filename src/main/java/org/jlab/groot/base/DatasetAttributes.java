@@ -81,7 +81,7 @@ public class DatasetAttributes implements Cloneable {
     
     private void init(int datasetType2) {
     	if(datasetType2 == DatasetAttributes.HISTOGRAM){
-    		this.setLineWidth(1);
+            this.setLineWidth(2);
             this.setLineColor(1);
             this.setLineStyle(1);
             this.setFillColor(-1);

@@ -56,7 +56,9 @@ public class GraphicsAxisFrame {
         axisFrameMargins.setBottomMargin((int) yoffset);
         axisFrameMargins.setTopMargin(10);
         axisFrameMargins.setRightMargin(15);
-        if (this.drawAxisZ == true) {
+        //System.out.println("draw Z axis = " + this.drawAxisZ);
+        if(this.axisFrameAxis.get(2).isShowAxis()==true){
+        //if (this.drawAxisZ == true) {
             double zoffset = axisFrameAxis.get(2).getAxisBounds(g2d);
             double length = 15 + zoffset + this.colorAxisOffset + this.colorAxisSize;
             axisFrameMargins.setRightMargin((int) length);
