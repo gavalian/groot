@@ -45,9 +45,9 @@ public class AxisAttributes implements Cloneable {
 	public final static int X = 1;
 	public final static int Y = 2;
 	public final static int Z = 3;
-	private String labelFontName = "Avenir";
+	private String labelFontName = "Times New Roman";// "Avenir";
 	private int labelFontSize = 12;
-	private String titleFontName = "Avenir";
+	private String titleFontName = "Times New Roman";//"Avenir";
 	private int titleFontSize = 12;
 	private boolean axisAutoScale = true;
 	private double axisMinimum = 0.0;
@@ -71,7 +71,11 @@ public class AxisAttributes implements Cloneable {
 
 	public AxisAttributes(int axisType) {
 		this.axisType = axisType;
-		if(this.axisType== AxisAttributes.Z) showAxis = false;
+		if(this.axisType== AxisAttributes.Z){
+                    showAxis = false;
+                    labelFontSize = 8;
+                    tickSize = 5;
+                }
 	}
 
 	public Dimension1D getAxisDimension() {

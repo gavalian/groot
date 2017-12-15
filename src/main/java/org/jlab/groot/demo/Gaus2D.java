@@ -52,7 +52,7 @@ public class Gaus2D {
 		c1.setFont("HanziPen TC");	
 		c1.setTitleSize(16);
 		c1.setAxisTitleSize(14);
-		c1.setAxisLabelSize(12);
+		//c1.setAxisLabelSize(12);
                 c1.update();
 	}
 }
