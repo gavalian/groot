@@ -13,15 +13,16 @@ public class GStyle {
 	static AxisAttributes AxisAttributesX 			= new AxisAttributes(AxisAttributes.X);
 	static AxisAttributes AxisAttributesY 			= new AxisAttributes(AxisAttributes.Y);
 	static AxisAttributes AxisAttributesZ 			= new AxisAttributes(AxisAttributes.Z);
-    private static String workingDirectory 					= new File(System.getProperty("user.home"), "Desktop").getAbsolutePath();
-    
+        private static String workingDirectory     = new File(System.getProperty("user.home"), "Desktop").getAbsolutePath();
+        
         public static float[]  dashPattern1 = new float[]{10.0f,5.0f};
         public static float[]  dashPattern2 = new float[]{10.0f,5.0f,2.0f,5.0f};
         public static float[]  dashPattern3 = new float[]{2.0f,5.0f,2.0f,5.0f};
         static TColorPalette palette = new TColorPalette();
 
         public static Integer    graphicsFrameLineWidth = 2;
-
+        public static Color      canvasBackgroundColor = Color.WHITE;
+        
         public static void setPalette(String palName) {
             palette.setPalette(palName);
         }
@@ -30,6 +31,15 @@ public class GStyle {
             return new TColorPalette(palette);
         }
 
+        
+        public static void setCanvasBackgroundColor(Color c){
+            canvasBackgroundColor = c;
+        }
+        
+        public static Color getCanvasBackgroundColor(){
+            return canvasBackgroundColor;
+        }
+        
         public static BasicStroke getStroke(int type){
             switch (type){
                 

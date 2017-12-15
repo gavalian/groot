@@ -34,11 +34,12 @@ public class Gaus2D {
         c1.getPad(1).setTitle("Function with Autoscaled Axis");
         c1.draw(h2d);
         c1.cd(3);
-        c1.getPad(3).setTitle("X Projection");
+       // c1.getPad(3).setTitle("X Projection");
         H1F projectionX = h2d.projectionX();
         projectionX.setTitleX("Randomly Generated Function");
         projectionX.setTitleY("Counts");
-        c1.draw(projectionX);      
+        c1.draw(projectionX);
+        c1.getPad(3).setTitle("X Projection");
         c1.cd(2);
         GraphErrors profileY = h2d.getProfileY();
         profileY.setTitleX("Randomly Generated Function");
@@ -51,8 +52,8 @@ public class Gaus2D {
 		frame.setVisible(true);
 		c1.setFont("HanziPen TC");	
 		c1.setTitleSize(16);
-		c1.setAxisTitleSize(14);
-		c1.setAxisLabelSize(18);
+		c1.setAxisTitleSize(12);
+		c1.setAxisLabelSize(12);
                 c1.update();
 	}
 }

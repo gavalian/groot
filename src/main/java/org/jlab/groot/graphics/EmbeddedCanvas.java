@@ -272,8 +272,11 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
 
             int w = this.getSize().width;
             int h = this.getSize().height;
-            g2d.setColor(Color.WHITE);
-            //g2d.setColor(new Color(200,200,200));
+            
+            g2d.setColor(GStyle.getCanvasBackgroundColor());
+            
+            //g2d.setColor(Color.WHITE);
+//            g2d.setColor(new Color(230,230,230));
             g2d.fillRect(0, 0, w, h);
             updateCanvasPads(w, h);
 
