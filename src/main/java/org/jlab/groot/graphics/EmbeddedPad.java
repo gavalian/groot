@@ -552,7 +552,8 @@ public class EmbeddedPad {
     public void setAxisLabelFontSize(int parseInt) {
         this.getAxisX().getAttributes().setLabelFontSize(parseInt);
         this.getAxisY().getAttributes().setLabelFontSize(parseInt);
-        this.getAxisZ().getAttributes().setLabelFontSize(parseInt);
+        
+        this.getAxisZ().getAttributes().setLabelFontSize( (parseInt * 2)/3);
     }
 
     public void setFontNameAll(String FontName) {
