@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 public class PadAttributes {
 
     private Color backgroundColor = Color.WHITE;
+    private Color axisColor       = Color.RED;
+    
     private FontProperties statBoxFont = new FontProperties();
     private FontProperties titleFont = new FontProperties();
     private String title = "";
@@ -28,6 +30,11 @@ public class PadAttributes {
         this.backgroundColor = backgroundColor;
     }
 
+    public void setAxisColor(Color c){
+        this.axisColor = c;
+    }
+    
+    public Color getAxisColor(){return this.axisColor;}
     public FontProperties getStatBoxFont() {
         return statBoxFont;
     }

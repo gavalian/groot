@@ -141,6 +141,7 @@ public class GraphicsAxis {
 
     public void setLog(boolean flag) {
         this.getAttributes().setLog(flag);
+        this.axisTicks.setLog(flag);
     }
 
     public Dimension1D getRange() {
@@ -321,7 +322,7 @@ public class GraphicsAxis {
             for (double tick : ticks) {
                 //System.out.println(" tick = " + tick);
                 int xtick = (int) this.getAxisPosition(tick);
-                g2d.drawLine(xtick, y - height, xtick, y - height + this.getAttributes().getTickSize());
+                g2d.drawLine(xtick, y - height, xtick, y - height + this.getAttributes().getTickSize()/2);
                 //g2d.drawLine(x,(int) tick,x+height,(int) tick);
             }
             
@@ -337,7 +338,7 @@ public class GraphicsAxis {
             for (double tick : ticks) {
                 //System.out.println(" tick = " + tick);
                 int ytick = (int) this.getAxisPosition(tick);
-                g2d.drawLine(x + height - this.getAttributes().getTickSize(), ytick, x + height, ytick);
+                g2d.drawLine(x + height - this.getAttributes().getTickSize()/2, ytick, x + height, ytick);
                 //g2d.drawLine(x,(int) tick,x+height,(int) tick);
             }
         }
@@ -354,7 +355,9 @@ public class GraphicsAxis {
             return;
         }
 
+        //g2d.setColor(Color.WHITE);
         g2d.setColor(Color.BLACK);
+        
         //List<Double>  ticks = axisRange.getDimensionTicks(this.numberOfMajorTicks);
         //axisTicks.init(ticks);
         this.setAxisDivisions(10);
@@ -377,7 +380,9 @@ public class GraphicsAxis {
         double midpoint = getAxisPosition(this.attr.getRange().getMin()) * 0.5 + 0.5 * getAxisPosition(this.attr.getRange().getMax());
 
         if (this.isVertical == false) {
+            
             g2d.drawLine((int) this.attr.getAxisDimension().getMin(), y, (int) this.attr.getAxisDimension().getMax(), y);
+            
             for (int i = 0; i < ticks.size(); i++) {
                 double tick = this.getAxisPosition(ticks.get(i));
                 g2d.drawLine((int) tick, y, (int) tick, y - tickLength);
@@ -395,7 +400,13 @@ public class GraphicsAxis {
                     (int) midpoint,
                     y + axisBounds + labelOffset + titleOffset, 1, 0);
         } else {
-            g2d.drawLine(x, (int) this.attr.getAxisDimension().getMin(), x, (int) this.attr.getAxisDimension().getMax());
+            g2d.drawLine(x, (int) this.attr.getAxisDimension().getMin(), x, 
+                    (int) this.attr.getAxisDimension().getMax());
+            //g2d.drawString(this.axisTicks.getAxisExponent(), x, (int) this.attr.getAxisDimension().getMax());
+            axisTicks.getAxisExponent().drawString(g2d, x+5, 
+                    (int) this.attr.getAxisDimension().getMax() - 5, 0, 2);
+            
+            
             for (int i = 0; i < ticks.size(); i++) {
                 double tick = this.getAxisPosition(ticks.get(i));
                 g2d.drawLine(x, (int) tick, x + tickLength, (int) tick);
@@ -461,6 +472,7 @@ public class GraphicsAxis {
     }
 
     private void updateAxisDivisions(Graphics2D g2d) {
+        
         List<Double> ticks;
         if (this.getLog()) {
             ticks = this.attr.getRange().getDimensionTicksLog(numberOfMajorTicks);
@@ -506,7 +518,9 @@ public class GraphicsAxis {
 
             numberOfMajorTicks = nticks;
         }
-
+        if(this.isVertical==true){
+            this.axisTicks.processAxisExponent();
+        }
     }
 
     /*
@@ -546,18 +560,31 @@ public class GraphicsAxis {
         }
     }
 
-    public class GraphicsAxisTicks {
+    public static class GraphicsAxisTicks {
 
         List<LatexText> axisTexts = new ArrayList<LatexText>();
         List<Double>    axisTicks = new ArrayList<Double>();
-        List<Double>    axisTicksMinor = new ArrayList<Double>();
+        List<Double>    axisTicksMinor = new ArrayList<Double>();        
+        FontProperties  axisFontProperty = new FontProperties();
+        LatexText          axisExponent  = new LatexText("");
+        boolean        isLog            = false;
         
-        FontProperties axisFontProperty = new FontProperties();
-
         void GraphicsAxisString() {
 
         }
 
+        public void setLog(boolean flag){
+            this.isLog = flag;
+        }
+        
+        public boolean getLog(){
+            return this.isLog;
+        }
+        
+        public LatexText getAxisExponent(){
+            return this.axisExponent;
+        }
+        
         public List<Double> getAxisTicks() {
             return this.axisTicks;
         }
@@ -592,7 +619,50 @@ public class GraphicsAxis {
             }
             return width;
         }
-
+        
+        private int getTrailingZeros(String number){            
+            if(number.compareTo("0")==0) return 30;
+            int tz = 0; int pos = number.length()-1;
+            while(number.charAt(pos)=='0'&&pos>=0){
+                pos--; tz++;
+            }
+            return tz;
+        }
+        
+        private int getMinZeros(){
+            int minZeros = 30;
+            for(LatexText tex : this.axisTexts){
+                int tz = this.getTrailingZeros(tex.getTextString());
+                if(tz<minZeros) minZeros = tz;
+            }
+            //axisExponent = String.format("x%d", minZeros);
+            return minZeros;
+        }
+        
+        public void processAxisExponent(){
+            int minZeros = getMinZeros();
+            if(minZeros>2){
+                axisExponent.setText(String.format("x%d", minZeros));
+                for(LatexText tex : this.axisTexts){                    
+                    String value = tex.getTextString();
+                    if(value.length()>minZeros){
+                        //int pos = 
+                        tex.setText(value.substring(0, value.length()-minZeros));
+                    }
+                }
+            } else {
+                axisExponent.setText("");
+            }
+            
+        }
+        
+        public void show(){
+            System.out.print("TICKS  (" + axisExponent + ") : ");
+            for(int i = 0; i < this.axisTexts.size(); i++){
+                System.out.print("  "+ this.axisTexts.get(i).getTextString());
+            }
+            System.out.println();
+        }
         public void init(List<Double> ticks) {
 
             axisTexts.clear();

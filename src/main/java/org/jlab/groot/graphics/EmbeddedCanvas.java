@@ -542,6 +542,11 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         JMenuItem itemCopy = new JMenuItem("Copy Canvas");
         JMenuItem itemCopyPad = new JMenuItem("Copy Pad");
         JMenuItem itemPaste = new JMenuItem("Paste Pad");
+        
+        JMenuItem itemInvertGray  = new JMenuItem("Gray Background");
+        JMenuItem itemInvertWhite = new JMenuItem("White Background");
+        
+        
         JMenuItem itemSave = new JMenuItem("Save");
         JMenuItem itemSaveAs = new JMenuItem("Save As...");
         JMenuItem itemFitPanel = new JMenuItem("Fit Panel");
@@ -577,10 +582,13 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         itemCopyPad.addActionListener(this);
         itemSave.addActionListener(this);
         itemSaveAs.addActionListener(this);
+        itemInvertGray.addActionListener(this);
+        itemInvertWhite.addActionListener(this);
         itemFitPanel.addActionListener(this);
         itemOptions.addActionListener(this);
         itemOpenWindow.addActionListener(this);
         itemPaste.addActionListener(this);
+        
         itemFitSlicesgausp3x.addActionListener(e -> fitSlices(0, ParallelSliceFitter.P3_BG));
         itemFitSlicesgausp2x.addActionListener(e -> fitSlices(0, ParallelSliceFitter.P2_BG));
         itemFitSlicesgausp1x.addActionListener(e -> fitSlices(0, ParallelSliceFitter.P1_BG));
@@ -637,6 +645,11 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         if (containsH2F) {
             this.popup.add(itemPalettes);
         }
+
+        
+        this.popup.add(new JSeparator());
+        this.popup.add(itemInvertGray);
+        this.popup.add(itemInvertWhite);
         this.popup.add(new JSeparator());
         this.popup.add(itemCopy);
         this.popup.add(itemSave);
@@ -659,6 +672,17 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         if (e.getActionCommand().compareTo("Options") == 0) {
             this.openOptionsPanel(popupPad);
         }
+        
+        if (e.getActionCommand().compareTo("Gray Background") == 0) {
+            GStyle.setCanvasBackgroundColor(new Color(230,230,230));
+            this.update();
+        }
+        
+        if (e.getActionCommand().compareTo("White Background") == 0) {
+            GStyle.setCanvasBackgroundColor(new Color(255,255,255));
+            this.update();
+        }
+        
         if (e.getActionCommand().compareTo("Fit Panel") == 0) {
             this.openFitPanel(popupPad);
         }
