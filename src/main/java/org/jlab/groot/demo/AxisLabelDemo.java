@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.H2F;
 import org.jlab.groot.graphics.GraphicsAxis.GraphicsAxisTicks;
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.RandomFunc;
@@ -31,6 +32,8 @@ public class AxisLabelDemo {
        ticks.show();
        Random rand = new Random();
        H1F h1 = new H1F("h1" , "Random Histogram", 200, -5.0, 5.0);
+       H2F h2 = new H2F("h1" , "Random Histogram", 80, -5.0, 5.0,80,-5.0,5.0);
+       
        h1.setTitleX("X TILTE");
        h1.setTitleY("Y TILTE");
        
@@ -41,10 +44,10 @@ public class AxisLabelDemo {
        f1.setParameter(3, 20.0);
 
        TCanvas c1 = new TCanvas("groot",500,500);
-       c1.draw(h1);
+       c1.draw(h2);
        c1.getCanvas().initTimer(200);
        RandomFunc rndm = new RandomFunc(f1);
-       for (int j = 0; j < 3400000; j++) {
+       for (int j = 0; j < 6400000; j++) {
            
            try {
                Thread.sleep(0);
@@ -53,6 +56,7 @@ public class AxisLabelDemo {
            }
            
            h1.fill(rndm.random());
+           h2.fill(rndm.random(),rndm.random());
        }
        
     }

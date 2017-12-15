@@ -403,6 +403,7 @@ public class GraphicsAxis {
             g2d.drawLine(x, (int) this.attr.getAxisDimension().getMin(), x, 
                     (int) this.attr.getAxisDimension().getMax());
             //g2d.drawString(this.axisTicks.getAxisExponent(), x, (int) this.attr.getAxisDimension().getMax());
+
             axisTicks.getAxisExponent().drawString(g2d, x+5, 
                     (int) this.attr.getAxisDimension().getMax() - 5, 0, 2);
             
@@ -464,6 +465,8 @@ public class GraphicsAxis {
         g2d.setColor(Color.BLACK);
         g2d.drawRect(x + 4, (int) this.attr.getAxisDimension().getMax(),
                 8, (int) Math.abs(this.attr.getAxisDimension().getLength()));
+        axisTicks.getAxisExponent().drawString(g2d, x+5, 
+                    (int) this.attr.getAxisDimension().getMax() - 5, 0, 2);
         for (int i = 0; i < ticks.size(); i++) {
             double tick = this.getAxisPosition(ticks.get(i));
             g2d.drawLine(xstart, (int) tick, xstart + tickSize, (int) tick);
