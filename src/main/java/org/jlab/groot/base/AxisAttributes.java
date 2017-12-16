@@ -52,7 +52,7 @@ public class AxisAttributes implements Cloneable {
 	private boolean axisAutoScale = true;
 	private double axisMinimum = 0.0;
 	private double axisMaximum = 2.0;
-	private int labelOffset = 4;
+	private int labelOffset = 8;
 	private int titleOffset = 5;
 	private boolean axisGrid = true;
 	private int lineColor = 1;

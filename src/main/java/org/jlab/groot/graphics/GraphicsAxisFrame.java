@@ -122,8 +122,11 @@ public class GraphicsAxisFrame {
             axisFrameAxis.get(1).drawAxis(g2d, (int) xcorner, (int) ycorner, (int) getAxisX().getDimension().getLength());
         }
         if (axisFrameAxis.get(2).getAttributes().showAxis()) {
-            int xc = (int) this.axisFrameDimension.getDimension(0).getMax()
+            
+            /*int xc = (int) this.axisFrameDimension.getDimension(0).getMax()
                     - this.axisFrameMargins.getRightMargin();
+            */
+            int xc = (int) (xcorner + getAxisX().getDimension().getLength());
             axisFrameAxis.get(2).drawAxis(g2d, (int) xc, (int) ycorner);
         }
 
@@ -141,6 +144,7 @@ public class GraphicsAxisFrame {
     }
 
     public void setDrawAxisZ(boolean flag) {
+        this.getAxisZ().setShowAxis(flag);
         this.drawAxisZ = flag;
     }
 

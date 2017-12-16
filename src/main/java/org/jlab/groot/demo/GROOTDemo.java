@@ -21,6 +21,7 @@ public class GROOTDemo {
 	public static void main(String[] args) {
 		Dimension screensize  = Toolkit.getDefaultToolkit().getScreenSize();
 		JFrame frame = new JFrame("GROOT DEMO");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize((int)(screensize.getHeight()*.75*1.618), (int) (screensize.getHeight()*.75));
 		JTabbedPane tabbedPane = new JTabbedPane();
 		EmbeddedCanvas can1 = new EmbeddedCanvas();

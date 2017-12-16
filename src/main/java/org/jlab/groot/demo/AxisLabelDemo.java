@@ -46,6 +46,7 @@ public class AxisLabelDemo {
        TCanvas c1 = new TCanvas("groot",500,500);
        c1.draw(h2);
        c1.getCanvas().initTimer(200);
+       c1.getCanvas().getPad().getAxisZ().setLog(true);
        RandomFunc rndm = new RandomFunc(f1);
        for (int j = 0; j < 6400000; j++) {
            
