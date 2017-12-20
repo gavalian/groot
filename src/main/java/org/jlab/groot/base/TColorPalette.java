@@ -25,8 +25,8 @@ public class TColorPalette {
     private Color bgColor = new Color(200, 200, 200);
 
     public TColorPalette() {
-       // setPalette(PaletteName.kDefault);
-       setPalette(PaletteName.kDarkBodyRadiator);
+        setPalette(PaletteName.kDefault);
+       //setPalette(PaletteName.kDarkBodyRadiator);
     }
 
     private TColorPalette(PaletteName palName, Color bgColor) {
