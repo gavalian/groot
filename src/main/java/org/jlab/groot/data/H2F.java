@@ -100,7 +100,25 @@ public class H2F implements IDataSet {
             e.printStackTrace();
         }			
     }
-    
+    /**
+     * calculated the integral of the 2D histogram
+     * @return integral
+     */
+    public double integral(){
+        double summ = 0.0;
+        for(int i = 0; i < hBuffer.length; i++){
+            summ += hBuffer[i];
+        }
+        return summ;
+    }
+    /**
+     * returns entries in the histogram
+     * @return histogram entries
+     */
+    public int getEntries(){
+        int entries = (int) integral();
+        return entries;
+    }
     /**
      * Sets the bins to the x and y axes and creates the buffer of the histogram
      * 
