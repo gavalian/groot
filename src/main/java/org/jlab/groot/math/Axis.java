@@ -1,6 +1,7 @@
 package org.jlab.groot.math;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Defines the attributes for creating a basic axis template with
@@ -171,18 +172,18 @@ public class Axis implements Serializable {
      * @return			the bin where the specified value is in array indexing format
      */
     public int getBin(double xVal) {
-        if(xVal<axisMargins[0]) return -1;
-    	for (int i = 0; i < numBins; i++) {
-    		if ((xVal >= axisMargins[i] && xVal < axisMargins[i+1])) {
-    			return i;
-    		}
-    	}
-    	/*
-    	if (xVal == axisMargins[axisMargins.length - 1]) {
-    		return numBins;
-    	}*/
+        if(xVal<axisMargins[0]||xVal>axisMargins[axisMargins.length-1]) return -1;
         
-    	return numBins;
+    	/*for (int i = 0; i < numBins; i++) {
+    		if ((xVal >= axisMargins[i] && xVal < axisMargins[i+1])) {
+                    return i;
+    		}
+        }        
+        return numBins;*/
+                
+        int bin = Arrays.binarySearch(axisMargins, xVal);
+        if(bin>0) return bin;               
+        return ((-bin) - 2);
     }
     
     /**
@@ -197,4 +198,24 @@ public class Axis implements Serializable {
     	return minVal + value;
     }
 
+    public static void main(String[] args){
+        Axis axis = new Axis(2500,0.0,1.0);
+        int bin = 0;
+        double[] values = new double[200000];
+        for(int i = 0; i < values.length; i++) values[i] = Math.random();
+        long start_time = System.currentTimeMillis();
+        for(int i = 0; i < 200; i++){
+            for(int k = 0; k < values.length; k++){
+             //   double value = Math.random();
+                axis.getBin(values[k]);
+            }
+        }
+        /*for(double d = -0.1; d < 1.05; d += 0.01){
+            bin = axis.getBin(d);
+            System.out.println( "value = " + d + " bin = " + bin);
+        }*/
+        long end_time   = System.currentTimeMillis();
+        long time = end_time - start_time;
+        System.out.println("time elapsed = " + time);
+    }
 }

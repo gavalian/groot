@@ -21,6 +21,7 @@ public class H2F implements IDataSet {
     private String hName = "basic2D";
     private Axis xAxis = new Axis();
     private Axis yAxis = new Axis();
+    
     private long histogramUniqueID = 0L;
     
     private float[] hBuffer;
@@ -701,13 +702,12 @@ public class H2F implements IDataSet {
      */
     public H1F sliceX(int xBin) {
         String name = "Slice of " + xBin + " X Bin";
-        double xMin = yAxis.min();
-        double xMax = yAxis.max();
-        int xNum    = yAxis.getNBins();
-        H1F sliceX = new H1F(name, name, xNum, xMin, xMax);
-        
-        for (int x = 0; x < xNum; x++) {
-            sliceX.setBinContent(x, this.getBinContent(xBin,x));
+        double yMin = yAxis.min();
+        double yMax = yAxis.max();
+        int    yNum = yAxis.getNBins();
+        H1F sliceX = new H1F(name, name, yNum, yMin, yMax);        
+        for (int y = 0; y < yNum; y++) {
+            sliceX.setBinContent(y, this.getBinContent(xBin,y));
         }
         return sliceX;
     }
