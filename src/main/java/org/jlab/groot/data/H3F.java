@@ -94,6 +94,23 @@ public class H3F {
         return 0.0;
     }
     
+    
+    public int   getDataBufferSize(){
+        return this.hBuffer.length;
+    }
+    
+    public float getDataBufferBin(int bin){
+        return hBuffer[bin]; 
+    }
+    
+    public static H1F getH1F(H3F h3){
+        H1F h1 = new H1F("H3_to_H1",h3.getDataBufferSize(),0.0,h3.getDataBufferSize());
+        for(int i = 0; i < h3.getDataBufferSize(); i++){
+            h1.setBinContent(i, h3.getDataBufferBin(i));
+        }
+        return h1;
+    }
+    
     public H2F sliceZ(int zBin){
         
         H2F h2 = new H2F("SLICE of " + zBin + " Z bin",
