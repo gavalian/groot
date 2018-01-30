@@ -20,7 +20,7 @@ public class H3F {
     private final Axis yAxis = new Axis();
     private final Axis zAxis = new Axis();
     
-    private MultiIndex offset;
+    private MultiIndex offset = new MultiIndex();
     private float[] hBuffer;
     
     public H3F(int xbins, double xmin, double xmax, int ybins, double ymin, double ymax,
