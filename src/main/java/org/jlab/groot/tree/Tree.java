@@ -234,12 +234,14 @@ public class Tree implements ITree {
         int nentries = getEntries();
         TreeExpression exp = new TreeExpression("oper",expression,getListOfBranches());
         TreeCut        cut = new TreeCut("cut",tcut,getListOfBranches());
-                
+        int status = 0;
         for(int i = 0; i < nentries; i++){
-            readEntry(i);
-            if(cut.isValid(this)>.5){
-                double result = exp.getValue(this);
-                vec.add(result);
+            status = readEntry(i);
+            if(status>0){
+                if(cut.isValid(this)>.5){
+                    double result = exp.getValue(this);
+                    vec.add(result);
+                }
             }
             if(limit>0&&i>limit) return vec;
         }
@@ -280,38 +282,45 @@ public class Tree implements ITree {
         if(eventsLimit>0&&bothSides==true){
             
             int eventsLimitHalf = eventsLimit/2;
+            int status = 0;
             for(int i = 0; i < eventsLimitHalf;i++){
-                readEntry(i);
+                status = readEntry(i);
                 //if(cut.isValid(this)==true){
+                if(status>0){
                     for(int k = 0; k < texp.size();k++){
                         double result = texp.get(k).getValue(this);
                         scanResults.get(k).add(result);
                     }
                     scanResults.get(texp.size()).add(cut.isValid(this));
+                }
                 //}
             }
             
             for(int i = getEntries()-1; i > getEntries()-eventsLimitHalf; i--){
-                readEntry(i);
+                status = readEntry(i);
                 //if(cut.isValid(this)==true){
-                    for(int k = 0; k < texp.size();k++){
-                        double result = texp.get(k).getValue(this);
-                        scanResults.get(k).add(result);
+                    if(status>0){
+                        for(int k = 0; k < texp.size();k++){
+                            double result = texp.get(k).getValue(this);
+                            scanResults.get(k).add(result);
+                        }
+                        scanResults.get(texp.size()).add(cut.isValid(this));
                     }
-                    scanResults.get(texp.size()).add(cut.isValid(this));
                 //}
             }
             
         } else {
+            int status = 0;
             for(int i = 0; i < getEntries();i++){
-                readEntry(i);
+                status = readEntry(i);
                 //if(cut.isValid(this)==true){
+                if(status>0){
                     for(int k = 0; k < texp.size();k++){
                         double result = texp.get(k).getValue(this);
                         scanResults.get(k).add(result);
                     }
                     scanResults.get(texp.size()).add(cut.isValid(this));
-
+                }
                // }
                 if(i>eventsLimit) return;
             }

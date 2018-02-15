@@ -82,7 +82,7 @@ public class TreeFile extends Tree {
                 this.setBranchData(data);
             }
         }
-        return -1;
+        return 1;
     }
     
     private void openFileForWriting(String filename){

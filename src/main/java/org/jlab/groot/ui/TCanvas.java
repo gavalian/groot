@@ -9,9 +9,18 @@ package org.jlab.groot.ui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
@@ -23,27 +32,34 @@ import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.fitter.DataFitter;
 import org.jlab.groot.graphics.EmbeddedCanvas;
+import org.jlab.groot.graphics.EmbeddedPad;
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.Func1D;
 import org.jlab.groot.math.FunctionFactory;
 import org.jlab.groot.math.RandomFunc;
+import org.jlab.groot.studio.DataStudio;
+import org.jlab.groot.studio.DataStudioFrame;
 
 /**
  *
  * @author gavalian
  */
-public class TCanvas extends JFrame {
+public class TCanvas extends JFrame implements ActionListener {
     
     JPanel  framePane = null;
     EmbeddedCanvas  canvas = null; 
     JPanel  statusPane  = null;
     JLabel  statusLabel = null;
+
+    JMenuBar menuBar = null;
     
     public TCanvas(String name, int xsize, int ysize){
         super();
         this.setTitle(name);
         this.setSize(xsize, ysize);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.initMenu();
+        this.setJMenuBar(menuBar);
 
         canvas = new EmbeddedCanvas();
     
@@ -94,6 +110,75 @@ public class TCanvas extends JFrame {
     	this.canvas.save(filename);
     }
     
+    private void initMenu(){
+        menuBar = new JMenuBar();
+        JMenu menuFile   = new JMenu("File");
+        JMenuItem mfNew = new JMenuItem("New");
+        mfNew.addActionListener(this);
+        
+        menuFile.add(mfNew);
+        
+        JMenu menuView   = new JMenu("View");
+        JMenuItem mvDivide = new JMenuItem("Divide");
+        mvDivide.addActionListener(this);
+        menuView.add(mvDivide);
+        
+        JMenu menuStudio = new JMenu("Studio");
+        JMenuItem msInspector = new JMenuItem("Inspector");
+        msInspector.addActionListener(this);
+        JMenuItem msSaveAll = new JMenuItem("Save All");
+        msSaveAll.addActionListener(this);
+        
+        menuStudio.add(msInspector);
+        menuStudio.add(msSaveAll);
+        
+        menuBar.add(menuFile);
+        menuBar.add(menuView);
+        menuBar.add(menuStudio);
+    }
+     @Override
+    public void actionPerformed(ActionEvent e) {
+        
+        if(e.getActionCommand().compareTo("New")==0){
+            TCanvas c2 = new TCanvas("c2",600,600);
+        }
+        
+        if(e.getActionCommand().compareTo("Save All")==0){
+            List<EmbeddedPad> pads = this.getCanvas().getCanvasPads();
+            for(EmbeddedPad p : pads){
+                Map<String,IDataSet> datasets = p.getObjectMap();
+                for(Map.Entry<String,IDataSet> entry : datasets.entrySet()){
+                    DataStudio.getInstance().addDataSet(entry.getValue());
+                }
+            }
+        }
+        
+        if(e.getActionCommand().compareTo("Inspector")==0){
+            DataStudioFrame frame = new DataStudioFrame();
+            frame.setCanvas(this);
+            frame.setVisible(true);
+        }
+        
+        if(e.getActionCommand().compareTo("Divide")==0){
+            String[] options = new String[]{"1","2","3","4","5","6","7"};
+            JComboBox columns = new JComboBox(options);
+            JComboBox    rows = new JComboBox(options);
+            columns.setSelectedIndex(this.getCanvas().getNColumns()-1);
+            rows.setSelectedIndex(this.getCanvas().getNRows()-1);
+            
+            Object[] message = {
+                "Columns:", columns,
+                "Rows:", rows
+            };
+            int option = JOptionPane.showConfirmDialog(this, message, "Divide Canvas", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                String stringCOLS = (String) columns.getSelectedItem();
+                String stringROWS = (String) rows.getSelectedItem();
+                this.getCanvas().divide(Integer.parseInt(stringCOLS), Integer.parseInt(stringROWS));
+                //System.out.println("----> Splitting " + columns.getSelectedItem() + " " + rows.getSelectedItem());
+            }
+        }
+    }
     public static void main(String[] args){
         
         
@@ -200,4 +285,6 @@ public class TCanvas extends JFrame {
 
 
     }
+
+   
 }

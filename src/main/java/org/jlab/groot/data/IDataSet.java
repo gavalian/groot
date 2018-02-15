@@ -13,7 +13,7 @@ import org.jlab.groot.ui.PaveText;
  *
  * @author gavalian
  */
-public interface IDataSet {    
+public interface IDataSet {
     void        setName(String name);
     void        reset();
     String      getName();

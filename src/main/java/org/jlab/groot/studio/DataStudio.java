@@ -24,7 +24,7 @@ public class DataStudio {
     private Map<String,TCanvas>     canvasStore = new HashMap<String,TCanvas>();
     private Map<Integer,TreeFile>   ntupleStore = new HashMap<Integer,TreeFile>();
     private Map<Integer,IDataSet>  datasetStore = new HashMap<Integer,IDataSet>();
-    
+    private Integer                dataSetNumbering = 100;
     public DataStudio(){
         
     }
@@ -33,6 +33,22 @@ public class DataStudio {
     public Map<String,DataVector> getVectorStore(){ return this.vectorStore;}
     public Map<Integer,IDataSet> getDataSetStore(){ return this.datasetStore;}
     public Map<Integer,TreeFile> getNtupleStore() { return this.ntupleStore;}
+    
+    public void addDataSet(Integer id, IDataSet ds){
+        if(this.datasetStore.containsKey(id)==true){
+            System.out.println("** DATA STUDIO ** reaplcing data set id = " + id);
+        }        
+        this.datasetStore.put(id, ds);
+        this.dataSetNumbering = id;
+    }
+    
+    public void addDataSet(IDataSet ds){
+        this.dataSetNumbering++;
+        if(this.datasetStore.containsKey(dataSetNumbering)==true){
+            System.out.println("** DATA STUDIO ** reaplcing data set id = " + dataSetNumbering);
+        }        
+        this.datasetStore.put(dataSetNumbering, ds);
+    }
     
     public static DataStudio getInstance(){ return studio;}
 }
