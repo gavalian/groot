@@ -54,6 +54,7 @@ public class TCanvas extends JFrame implements ActionListener {
     JMenuBar menuBar = null;
     
     public TCanvas(String name, int xsize, int ysize){
+        
         super();
         this.setTitle(name);
         this.setSize(xsize, ysize);

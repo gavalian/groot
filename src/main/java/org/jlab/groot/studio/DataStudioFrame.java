@@ -5,6 +5,8 @@
  */
 package org.jlab.groot.studio;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -72,9 +74,31 @@ public class DataStudioFrame extends JFrame {
             
         };
         this.dTable = new JTable(model);
+        
+        dTable.addMouseListener(new MouseAdapter() {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+           
+            if (e.getClickCount() == 2) {
+                int[] rows = dTable.getSelectedRows();
+                if(rows.length>0){
+                    Integer id = (Integer) dTable.getModel().getValueAt(rows[0], 0);
+                    System.out.println(" SELECTED ROWS " + rows.length  + " "  + id);
+                    if(canvas!=null){
+                        canvas.getCanvas().drawNext(DataStudio.getInstance().getDataSetStore().get(id));
+                    }
+                }
+
+            } else {
+            }
+
+        }
+        });
+        
         ListSelectionModel cellSelectionModel = dTable.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+        /*
         cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -89,7 +113,7 @@ public class DataStudioFrame extends JFrame {
                 //System.out.println(" SELECTED ROWS " + rows.length  );
             }
         
-        });
+        });*/
        
         
     }
