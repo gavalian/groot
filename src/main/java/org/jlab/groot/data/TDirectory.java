@@ -192,10 +192,10 @@ public class TDirectory extends Directory<IDataSet> {
         dir.add("TEST", new H1F());
         dir.cd();
         System.out.println(" ADDING " + dir.getObjectList().size());*/
-       dir.readFile("/Users/gavalian/Desktop/out_monitor.hipo");
-       TBrowser browser = new TBrowser(dir);
+       //dir.readFile("/Users/gavalian/Desktop/out_monitor.hipo");
+       //TBrowser browser = new TBrowser(dir);
         
-        /*
+        
         if(args.length<3){
             System.out.println("error: \n\n Usage : hadd [outputfile] [input1] [input2] ....\n\n");
             System.exit(0);
@@ -207,7 +207,7 @@ public class TDirectory extends Directory<IDataSet> {
         for(int i = 1; i < args.length;i++) inputFiles.add(args[i]);
         
         TDirectory.addFiles(outputFile, inputFiles);
-        */
+        
         
         /*
         TDirectory dir = new TDirectory();
