@@ -179,10 +179,9 @@ public class Axis implements Serializable {
                     return i;
     		}
         }        
-        return numBins;*/
-                
+        return numBins;*/                
         int bin = Arrays.binarySearch(axisMargins, xVal);
-        if(bin>0) return bin;               
+        if(bin>=0) return bin;               
         return ((-bin) - 2);
     }
     
@@ -198,8 +197,23 @@ public class Axis implements Serializable {
     	return minVal + value;
     }
 
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        str.append(String.format("bins %8d : ",this.numBins));
+        for(int i = 0; i < this.axisMargins.length; i++){
+            str.append(this.axisMargins[i]).append("  ");
+        }
+        return str.toString();
+    }
     public static void main(String[] args){
-        Axis axis = new Axis(2500,0.0,1.0);
+        
+        Axis axis = new Axis(11,-2.0,9.0);
+        System.out.println(axis);
+        for(int i = -3; i < 10; i++ ){
+            System.out.println(i + " bin = " + axis.getBin(i));
+        }
+        /*Axis axis = new Axis(2500,0.0,1.0);
         int bin = 0;
         double[] values = new double[200000];
         for(int i = 0; i < values.length; i++) values[i] = Math.random();
@@ -210,12 +224,12 @@ public class Axis implements Serializable {
                 axis.getBin(values[k]);
             }
         }
-        /*for(double d = -0.1; d < 1.05; d += 0.01){
+        for(double d = -0.1; d < 1.05; d += 0.01){
             bin = axis.getBin(d);
             System.out.println( "value = " + d + " bin = " + bin);
-        }*/
+        }
         long end_time   = System.currentTimeMillis();
         long time = end_time - start_time;
-        System.out.println("time elapsed = " + time);
+        System.out.println("time elapsed = " + time);*/
     }
 }
