@@ -125,7 +125,7 @@ public class GraphicsAxis {
             //axisLabels.updateLog(ticks);
         } else {
             List<Double> ticks = this.attr.getRange().getDimensionTicks(this.numberOfMajorTicks);
-            this.axisTicks.init(ticks);
+            this.axisTicks.init(ticks, min, max);
             //axisLabels.update(ticks);
         }
         return this;
@@ -483,7 +483,8 @@ public class GraphicsAxis {
             ticks = this.attr.getRange().getDimensionTicks(numberOfMajorTicks);
 
         }
-        axisTicks.init(ticks);
+        
+        axisTicks.init(ticks,attr.getAxisMinimum(),attr.getAxisMaximum());
         axisTicks.updateFont(getLabelFont());
 
         double heights = 0.0;
@@ -509,7 +510,7 @@ public class GraphicsAxis {
                     ticks = this.attr.getRange().getDimensionTicks(nticks);
 
                 }
-                axisTicks.init(ticks);
+                axisTicks.init(ticks,attr.getAxisMinimum(), attr.getAxisMaximum());
                 //heights  = axisTicks.getTextsHeight(g2d);
                 if (this.isVertical == true) {
                     heights = axisTicks.getTextsHeight(g2d);
@@ -666,7 +667,8 @@ public class GraphicsAxis {
             }
             System.out.println();
         }
-        public void init(List<Double> ticks) {
+        
+        public void init(List<Double> ticks, double min, double max) {
 
             axisTexts.clear();
             axisTicks.clear();
@@ -684,6 +686,23 @@ public class GraphicsAxis {
                 double step = 0.2*(axisTicks.get(i+1) - axisTicks.get(i));
                 for(int k = 0; k < 4; k++){
                     axisTicksMinor.add( axisTicks.get(i) + step*(k+1));
+                }
+            }
+            
+            if(axisTicks.size()>1){
+                int size = axisTicks.size();                
+                double step = 0.2*(axisTicks.get(size-1) - axisTicks.get(size-2));
+                double tick = axisTicks.get(size-1);
+                for(int k = 0; k < 4; k++){
+                    double tickMinor = tick + step*(k+1);                    
+                    if(tickMinor < max)
+                        axisTicksMinor.add(tickMinor);
+                }
+                tick = axisTicks.get(0);
+                for(int k = 0; k < 4; k++){
+                    double tickMinor = tick - step*(k+1);                    
+                    if(tickMinor > min)
+                        axisTicksMinor.add(tickMinor);
                 }
             }
             

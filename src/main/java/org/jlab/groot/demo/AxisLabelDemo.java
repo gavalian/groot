@@ -27,7 +27,7 @@ public class AxisLabelDemo {
        GraphicsAxisTicks ticks; 
        ticks = new GraphicsAxisTicks();
        List<Double> values = Arrays.asList(new Double[]{0.0,20000.0,40000.0,60000.0,80000.0,100000.0});
-       ticks.init(values);
+       ticks.init(values,0.0,2000.0);
        ticks.processAxisExponent();
        ticks.show();
        Random rand = new Random();
