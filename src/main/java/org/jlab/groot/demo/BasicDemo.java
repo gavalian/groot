@@ -12,13 +12,13 @@ public class BasicDemo {
 		JFrame frame = new JFrame("Basic GROOT Demo");
 		EmbeddedCanvas canvas = new EmbeddedCanvas();
 		frame.setSize(800,500);
-		H1F histogram = new H1F("histogram",100,-5,5); 
+		H1F histogram = new H1F("histogram","Some Histogram;Randomly Created;Counts",100,-5,5); 
 		Random randomGenerator = new Random();
 		for(int i=0; i<50000; i++){
 			histogram.fill(randomGenerator.nextGaussian());
 		}
-		histogram.setTitleX("Randomly Generated Function");
-		histogram.setTitleY("Counts");
+		//histogram.setTitleX("Randomly Generated Function");
+		//histogram.setTitleY("Counts");
 		canvas.getPad(0).setTitle("BasicDemo Test");
 		histogram.setLineWidth(2);
 		histogram.setLineColor(21);

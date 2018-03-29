@@ -165,7 +165,18 @@ public class H1F  implements IDataSet {
      * @param title new title
      */
     public final void setTitle(String title){
-        this.hAttr.setTitle(title);
+        
+        if(title.contains(";")==true){
+           String[] tokens = title.split(";");
+           if(tokens.length>0)
+               this.hAttr.setTitle(tokens[0]);
+           if(tokens.length>1)
+               this.hAttr.setTitleX(tokens[1]);
+           if(tokens.length>2)
+               this.hAttr.setTitleY(tokens[2]);
+        } else {
+            this.hAttr.setTitle(title);
+        }
     }
     
     /**
