@@ -525,6 +525,13 @@ public class GraphicsAxis {
         if(this.isVertical==true){
             this.axisTicks.processAxisExponent();
         }
+        if(this.isLogarithmic==true){
+            this.axisTicks.processAxisLogarithmic();
+        }
+        
+        if(this.attr.isLog()==true){
+            this.axisTicks.processAxisLogarithmic();
+        }
     }
 
     /*
@@ -643,6 +650,23 @@ public class GraphicsAxis {
             return minZeros;
         }
         
+        public void processAxisLogarithmic(){
+            System.out.println("Processing Logarithmic Scale");
+            int nticks = this.axisTicks.size();
+            for(int i = 0; i < nticks; i++){
+                Integer exponent = (int) Math.log(this.axisTicks.get(i));
+                System.out.println(" tick = " + 
+                        this.axisTicks.get(i) + "  value = " 
+                + String.format("10^%d", exponent));
+                String number = exponent.toString();
+                StringBuilder str = new StringBuilder();
+                str.append("10");
+                for(int k = 0; k < number.length(); k++) 
+                    str.append("^").append(number.charAt(k));
+                this.axisTexts.get(i).setText(str.toString());
+            }
+        }
+        
         public void processAxisExponent(){
             int minZeros = getMinZeros();
             if(minZeros>2){
@@ -656,8 +680,7 @@ public class GraphicsAxis {
                 }
             } else {
                 axisExponent.setText("");
-            }
-            
+            }            
         }
         
         public void show(){
