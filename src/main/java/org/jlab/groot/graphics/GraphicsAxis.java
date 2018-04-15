@@ -651,13 +651,13 @@ public class GraphicsAxis {
         }
         
         public void processAxisLogarithmic(){
-            System.out.println("Processing Logarithmic Scale");
+            //System.out.println("Processing Logarithmic Scale");
             int nticks = this.axisTicks.size();
             for(int i = 0; i < nticks; i++){
                 Integer exponent = (int) Math.log(this.axisTicks.get(i));
-                System.out.println(" tick = " + 
-                        this.axisTicks.get(i) + "  value = " 
-                + String.format("10^%d", exponent));
+                //System.out.println(" tick = " + 
+                //        this.axisTicks.get(i) + "  value = " 
+                //+ String.format("10^%d", exponent));
                 String number = exponent.toString();
                 StringBuilder str = new StringBuilder();
                 str.append("10");
