@@ -27,7 +27,7 @@ public class Directory<T> {
     Directory      currentDirectory = null;
     
     Map<String,Directory> directoryMap = new LinkedHashMap<>();
-    Map<String,T>     directoryObjects = new HashMap<>();
+    Map<String,T>     directoryObjects = new LinkedHashMap<>();
     /**
      * Default constructor creates a ROOT directory. The parent is
      * set to NULL and name is set to "/"
@@ -466,10 +466,10 @@ public class Directory<T> {
     
     public DefaultMutableTreeNode  getNodes(DefaultMutableTreeNode node,List<String> objects, int depth){        
         String name = node.toString();
-        System.out.println(" level = " + depth);
+        //System.out.println(" level = " + depth);
         Set<String> keys = this.getChildrenList(name, objects, depth);
         for(String key : keys){
-            System.out.println("---> adding : " + key);
+            //System.out.println("---> adding : " + key);
             DefaultMutableTreeNode child = new DefaultMutableTreeNode(key);
             node.add(child);
             getNodes(child,objects,depth+1);

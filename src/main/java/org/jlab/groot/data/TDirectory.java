@@ -150,7 +150,8 @@ public class TDirectory extends Directory<IDataSet> {
         
         int nevents = reader.getEventCount();
         System.out.println(" DEBUG : event count = " + nevents);
-        
+        int counter = 0;
+        int groupCounter = 0;
         //for(int i = 0; i < nevents; i++){
         while(reader.hasNext()==true){
             //byte[] eventBuffer = reader.readEvent(i);
@@ -158,6 +159,7 @@ public class TDirectory extends Directory<IDataSet> {
             HipoEvent    event = reader.readNextEvent();
             
             if(event.hasGroup(1200)==true){
+                groupCounter++;
                 System.out.println("--> reading data group descriptor");
                 System.out.println(event);
                 DataGroupDescriptor desc = DataSetSerializer.deserializeDataGroupDescriptor(event);
@@ -178,9 +180,12 @@ public class TDirectory extends Directory<IDataSet> {
                 h1.setName(this.stringObjectFromPath(h1name));
                 //System.out.println(h1.toString());
                 addDataSet(h1);
-                this.ls();
+                //this.ls();
             }
+            counter++;
         }
+        System.out.println(" EVENT # " + nevents + " : counter = " +
+                counter + " groups = " + groupCounter);
     }
     
     
