@@ -484,7 +484,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         }
         if (e.getClickCount() == 1 && e.getButton() == 1) {
             //System.out.println("Left click!");
-            if (selectedDataset != null) {
+           /* if (selectedDataset != null) {
                 //-- gagik selectedDataset.getAttributes().setFillColor(fillcolortemp);
                 this.repaint();
             }
@@ -516,7 +516,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
                         }
                     }
                 }
-            }
+            }*/
         }
 
     }
