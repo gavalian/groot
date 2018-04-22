@@ -8,6 +8,7 @@ package org.jlab.groot.graphics;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -21,6 +22,7 @@ import org.jlab.groot.base.AxisAttributes;
 import org.jlab.groot.base.PadAttributes;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.base.TColorPalette;
+import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
@@ -44,12 +46,16 @@ public class EmbeddedPad {
     boolean preliminary = true;
     int preliminarySize = 36;
     PaveText statBox = null;
-
+    PaveText legend  = null;
+    Point2D  legendPosition = new Point2D.Double(20,10);
+    private boolean drawLegend = false;
+    
     public EmbeddedPad() {
 
     }
 
     public EmbeddedPad(int x, int y, int width, int height) {
+        
         this.setDimension(x, y, width, height);
     }
 
@@ -274,6 +280,40 @@ public class EmbeddedPad {
                 this.attr.getPadMargins().setTopMargin(this.attr.getPadMargins().getTopMargin() + getTitleFontSize() + 10);
                 titleLatex.drawString(g2d, (int) axisFrame.getAxisX().getAxisPosition((axisFrame.getAxisX().getRange().getMin() + .5 * axisFrame.getAxisX().getRange().getLength())), (int) (axisFrame.getFrameDimensions().getDimension(1).getMin() + this.attr.getTitleOffset()), 1, 0);
             }
+            
+            
+            /*DRAWING THE LEGEND*/
+            
+            if(this.drawLegend==true){
+                legend = new PaveText(2);
+                legend.setXOffset(40);
+                //System.out.println(" drawing legend");
+                for(IDataSetPlotter data : this.datasetPlotters){
+                    IDataSet ds = data.getDataSet();
+                    legend.addText(ds.getAttributes().getTitle(),"");
+                    /*System.out.println(" data set : " + ds.getName() 
+                            + " tile : [" + ds.getAttributes().getTitle()
+                    + "]");*/
+                    Color col = TStyle.getColor(ds.getAttributes().getLineColor());
+                    legend.addColor(col);
+                }
+                legend.setFont(this.attr.getStatBoxFont().getFontName());
+                legend.setFontSize(this.attr.getStatBoxFont().getFontSize());
+                legend.updateDimensions(g2d);
+                legend.setBackground(255, 255, 255, 160);
+                //int x = (int) this.padDimensions.getDimension(0).getMin();
+                //int y = (int) this.padDimensions.getDimension(1).getMin();
+                //int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMax() - legend.getBounds().getDimension(0).getLength() - 5) + this.attr.getStatBoxOffsetX();
+                int x = (int) (axisFrame.getFrameDimensions().getDimension(0).getMin()
+                        + this.attr.getPadMargins().getLeftMargin() 
+                        + this.legendPosition.getX());// - legend.getBounds().getDimension(0).getLength() - 5) + this.attr.getStatBoxOffsetX();
+                int y = (int) (axisFrame.getFrameDimensions().getDimension(1).getMin() +
+                        this.attr.getPadMargins().getTopMargin() - 
+                        legend.getBounds().getDimension(1).getLength()+ this.legendPosition.getY());//+this.attr.getPadMargins().getTopMargin());
+                legend.setPosition(x , y );
+                legend.drawPave(g2d, x , y );
+                //this.legend.drawPave(g2d, x, y);
+            }
             /*
         if(this.optStat>0){
 
@@ -325,6 +365,19 @@ public class EmbeddedPad {
         }
     }
 
+    
+    public void setLegend(boolean flag){
+        this.drawLegend = flag;
+        if(drawLegend == false){
+            this.legend = null;
+        } else {
+            legend = new PaveText(1);            
+        }
+    }
+    
+    public void setLEgendPosition(double xl, double yl){
+        this.legendPosition.setLocation(xl, yl);
+    }
     public void setOptStat(int opts) {
         if (this.getDatasetPlotters().size() > 0) {
             this.getDatasetPlotters().get(0).getDataSet().getAttributes().setOptStat("" + opts);

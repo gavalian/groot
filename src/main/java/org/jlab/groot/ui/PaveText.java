@@ -5,6 +5,7 @@
  */
 package org.jlab.groot.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -30,8 +31,9 @@ public class PaveText {
     private int              xPadding      = 5;
     private int              ySpacing      = 2;
     private int              xSpacing      = 10;
-    
+    private int              xLeftOffset   = 0;
     private Color            backgroundColor = Color.WHITE;
+    private List<Color>      colors          = new ArrayList<Color>();
     
     public PaveText(int cols){
         this.N_COLUMNS = cols;
@@ -55,12 +57,20 @@ public class PaveText {
         this.paveTexts.add(lt);
     }
     
+    public void addColor(Color col){
+        colors.add(col);
+    }
+    
     public void setBackground(int r, int g, int b){
         this.backgroundColor = new Color(r,g,b);
     }
     
     public void setBackground(int r, int g, int b, int alpha){
         this.backgroundColor = new Color(r,g,b,alpha);
+    }
+    
+    public void setXOffset(int offset){
+        this.xLeftOffset = offset;
     }
     
     public void drawPave(Graphics2D g2d, int x , int y){
@@ -91,8 +101,9 @@ public class PaveText {
                 20,20
         );*/
         int ystart = (int) this.paveDimension.getDimension(1).getMin();
-        int xstart = (int) this.paveDimension.getDimension(0).getMin();
+        int xstart = (int) this.paveDimension.getDimension(0).getMin() + this.xLeftOffset;
         //System.out.println("drawing....");
+        int counter = 0;
         for(List<LatexText> list : this.paveTexts){
 
             if(list.size()==2){
@@ -100,7 +111,16 @@ public class PaveText {
                 list.get(1).drawString(g2d, 
                         (int) (xstart+paveDimension.getDimension(0).getLength()), ystart,2,0);
             }
+            int size = this.paveFont.getFontSize();
+            
+            if(this.colors.size()>counter){
+               g2d.setColor(this.colors.get(counter));
+               g2d.setStroke(new BasicStroke(4));
+               g2d.drawLine(xstart-this.xLeftOffset+10,ystart+size/2,xstart-5,ystart+size/2);
+               g2d.setColor(Color.BLACK);
+            }
             ystart += ySpacing;
+            counter++;
         }
     }
     
@@ -132,8 +152,8 @@ public class PaveText {
         ySpacing = (int) (1.1*height/this.paveTexts.size());
         
         this.paveDimension.getDimension(0).setMinMax(
-                paveDimension.getDimension(0).getMin(), 
-                paveDimension.getDimension(0).getMin() + width + xSpacing
+                 paveDimension.getDimension(0).getMin(), 
+                this.xLeftOffset + paveDimension.getDimension(0).getMin() + width + xSpacing
                 );
         this.paveDimension.getDimension(1).setMinMax(
                 paveDimension.getDimension(1).getMin(), 

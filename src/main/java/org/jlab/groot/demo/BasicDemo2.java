@@ -42,6 +42,7 @@ public class BasicDemo2 {
 		
 		barber.setTitleX("E#gamma [GeV]");
 		barber.setTitleY("#sigma [nb]");
+                
 		canvas.getPad(0).setTitle("Total Cross Section #gammap#rarrowppp#bar");
 		
 		barber.setMarkerColor(2);
@@ -50,9 +51,13 @@ public class BasicDemo2 {
 		bodemkamp.setMarkerColor(4);
 		bodemkamp.setLineColor(4);
 		
+                barber.setTitle("Cross Section (nb)");
+                bodemkamp.setTitle("Assymetry ");
 		canvas.draw(barber);
 		canvas.draw(bodemkamp,"same");
 
+                canvas.getPad().setLegend(true);
+                canvas.getPad().setLEgendPosition(20, 20);
 		canvas.setFont("HanziPen TC");  
 		canvas.setTitleSize(48);
 		canvas.setStatBoxFontSize(18);
