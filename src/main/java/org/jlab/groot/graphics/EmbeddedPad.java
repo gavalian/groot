@@ -375,7 +375,7 @@ public class EmbeddedPad {
         }
     }
     
-    public void setLEgendPosition(double xl, double yl){
+    public void setLegendPosition(double xl, double yl){
         this.legendPosition.setLocation(xl, yl);
     }
     public void setOptStat(int opts) {

@@ -57,7 +57,7 @@ public class BasicDemo2 {
 		canvas.draw(bodemkamp,"same");
 
                 canvas.getPad().setLegend(true);
-                canvas.getPad().setLEgendPosition(20, 20);
+                canvas.getPad().setLegendPosition(20, 20);
 		canvas.setFont("HanziPen TC");  
 		canvas.setTitleSize(48);
 		canvas.setStatBoxFontSize(18);
