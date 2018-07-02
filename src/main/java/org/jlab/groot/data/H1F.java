@@ -490,6 +490,7 @@ public class H1F  implements IDataSet {
     }
     
     
+    
     public void divide(double number){
         for(int i = 0; i < this.getAxis().getNBins(); i++)
         {
@@ -547,6 +548,25 @@ public class H1F  implements IDataSet {
             h1div.setBinError(bin, result.error());
         }
         return h1div;
+    }
+    /**
+     * Subtract the given histogram from this histogram.
+     * @param h reference histogram
+     */
+    public void sub(H1F h){
+        if(h.getAxis().getNBins()==this.getXaxis().getNBins()){
+            StatNumber   result = new StatNumber();
+            StatNumber   denom  = new StatNumber();
+            for(int loop = 0; loop < this.histogramData.length; loop++){
+                result.set(this.getBinContent(loop), this.getBinError(loop));
+                denom.set(h.getBinContent(loop), h.getBinError(loop));
+                result.subtract(denom);
+                this.setBinContent(loop, result.number());
+                this.setBinError(loop, result.error());
+            }
+        } else {
+            System.out.println("[warning] ---> histograms have different bin number. not added.");
+        }
     }
     /**
      * returns a new histogram with a content of h1 where the integral is normalized

@@ -131,6 +131,14 @@ public class TDirectory extends Directory<IDataSet> {
                             h1.add(h2);
                         }
                     }
+                    
+                    if(dataset instanceof H2F){
+                        H2F h1 = (H2F) dataset;
+                        H2F h2 = (H2F) inDir.getObject(object);
+                        if(h2!=null){
+                            h1.add(h2);
+                        }
+                    }
                 } catch (Exception e) {
                     System.out.println("--> error with dataset : " + object);
                 }
