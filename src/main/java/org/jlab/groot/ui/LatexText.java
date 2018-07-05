@@ -13,6 +13,7 @@ import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedString;
+import org.jlab.groot.base.ColorPalette;
 
 import org.jlab.groot.base.TStyle;
 
@@ -39,6 +40,7 @@ public class LatexText {
     private AttributedString  latexString = null;
     private String            asciiString = "";
     private Integer           textColor   = 1;
+    private Color             latexTextColor = Color.BLACK;
     
     
     public LatexText(String text, double xc, double yc){
@@ -73,7 +75,10 @@ public class LatexText {
     }
     
     public int    getColor(){return this.textColor;}
-    public void   setColor(int color){ this.textColor = color;}
+    public void   setColor(int color){ 
+        this.textColor = color;
+        this.latexTextColor = ColorPalette.getColor(textColor);
+    }
     
     public double getX(){ return this.relativeX;}
     public double getY(){ return this.relativeY;}
@@ -117,7 +122,7 @@ public void drawString(Graphics2D  g2d, int x, int y, int alignX, int alignY, in
         //if(alignY==LatexText.ALIGN_CENTER)    posY = posY + (int) (0.5*rect.getHeight());
         AffineTransform orig = g2d.getTransform();
         g2d.rotate(-Math.PI/2);
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(this.latexTextColor);
         g2d.drawString(latexString.getIterator(),-posX,posY);
         g2d.setTransform(orig);
     }
@@ -135,6 +140,7 @@ public void drawString(Graphics2D  g2d, int x, int y, int alignX, int alignY, in
         if(alignX==2) xp = (int) (xp-rect.getWidth());
         if(alignY==1) yp = (int) (y + 0.5*(ascend));
         if(alignY==2) yp = (int)  y;
+        g2d.setColor(latexTextColor);
         g2d.drawString(latexString.getIterator(), xp, yp);        
     }
     

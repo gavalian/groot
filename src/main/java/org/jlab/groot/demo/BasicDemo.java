@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.graphics.EmbeddedCanvas;
+import org.jlab.groot.ui.LatexText;
+import org.jlab.groot.ui.PaveText;
 
 public class BasicDemo {
 
@@ -24,13 +26,29 @@ public class BasicDemo {
 		histogram.setLineColor(21);
 		histogram.setFillColor(34);
 		histogram.setOptStat(1110);
-		canvas.draw(histogram);
+		canvas.draw(histogram);                
 		canvas.setFont("HanziPen TC");  
 		canvas.setTitleSize(32);
 		canvas.setAxisTitleSize(24);
 		canvas.setAxisLabelSize(18);
 		canvas.setStatBoxFontSize(18);
-		frame.add(canvas);
+                
+                
+                LatexText text = new LatexText("NDF = 24",100,50);
+                text.setFont("HanziPen TC");
+                text.setFontSize(28);
+                text.setColor(2);
+                LatexText textChi = new LatexText("#chi^2 = 0.0567",100,80);
+                textChi.setFont("HanziPen TC");
+                //textChi.setFont("Times");
+                textChi.setFontSize(28);
+                textChi.setColor(4);
+                //text.setLocation(100, 100);
+                canvas.draw(text);
+                canvas.draw(textChi);
+                
+                
+                frame.add(canvas);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}

@@ -64,6 +64,7 @@ import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.math.Dimension1D;
 import org.jlab.groot.math.FunctionFactory;
 import org.jlab.groot.ui.FitPanel;
+import org.jlab.groot.ui.LatexText;
 import org.jlab.groot.ui.OptionsPanel;
 import org.jlab.groot.ui.TransferableImage;
 
@@ -215,6 +216,9 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         
     }
 
+    public void draw(LatexText text) {
+        this.getPad(activePad).addLatex(text);
+    }
     /**
      * draws data set on current active pad with given options
      *

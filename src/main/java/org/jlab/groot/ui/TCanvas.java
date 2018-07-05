@@ -106,6 +106,11 @@ public class TCanvas extends JFrame implements ActionListener {
         this.getCanvas().update();
     }
     
+    public void draw(LatexText text){
+        this.canvas.draw(text);
+        this.getCanvas().update();
+    }
+    
     public void draw(IDataSet ds){
         this.canvas.draw(ds);
         this.getCanvas().update();
