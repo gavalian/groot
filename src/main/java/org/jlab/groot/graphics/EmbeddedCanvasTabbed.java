@@ -61,7 +61,19 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
             this.initBottomBar();
         }
     }
-    
+    public EmbeddedCanvasTabbed(boolean isStatic,String... canvases){
+        super();
+        this.setLayout(new BorderLayout());
+        this.setMinimumSize(new Dimension(200,200));
+        this.setSize(400, 500);
+        this.initUI();
+        if(isStatic==false){
+            this.initBottomBar();
+        }
+        for(String canvas : canvases){
+            addCanvas(canvas);
+        }
+    }
     public EmbeddedCanvasTabbed(String... canvases){
         super();
         this.setLayout(new BorderLayout());
@@ -121,6 +133,19 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
         actionPanel.add(buttonRemove);
         actionPanel.add(buttonDivide);
         actionPanel.add(buttonClear);
+    }
+    
+    public void setActiveCanvas(String title){
+        for(int index = 0; index < this.tabbedCanvases.size(); index++){
+            String tabTitle = tabbedPane.getTitleAt(index);
+            //System.out.println(" title " + index + " = " + tabTitle);
+            if(tabTitle.compareTo(title)==0){
+                
+                tabbedPane.setSelectedIndex(index);
+                return;
+            }
+        }
+        System.out.println("[EmbeddedCanvasTabbed] ---> error setting active canvas to : " + title);
     }
     
     public EmbeddedCanvas getCanvas(){
