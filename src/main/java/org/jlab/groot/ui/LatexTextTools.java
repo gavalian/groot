@@ -31,7 +31,7 @@ public class LatexTextTools {
         table.put("#zeta"  , "\u03B6");
         table.put("#eta"  , "\u03B7");
         table.put("#kappa"  , "\u03BA");
-        table.put("#lamda"  , "\u03BB");
+        table.put("#lambda"  , "\u03BB");
         table.put("#mu"  , "\u03BC");
         table.put("#nu"  , "\u03BD");
         table.put("#xi"  , "\u03BE");
