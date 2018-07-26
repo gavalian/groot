@@ -13,6 +13,7 @@ package org.jlab.groot.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.jlab.jnp.readers.TextFileReader;
 
 /**
  *
@@ -317,5 +318,30 @@ public class DataVector {
         } else {
             System.out.println("[DataVector] error : setValue works only for fixed length vectors.");
         }
+    }
+    
+    public static List<DataVector> readFile(String format, String filename, int startPosition){
+        TextFileReader reader = new TextFileReader();
+        reader.open(filename);
+        String[] tokens = format.split(":");
+        List<DataVector> vectors = new ArrayList<DataVector>();
+        
+        for(int i = 0; i < tokens.length; i++){
+            vectors.add(new DataVector());
+        }
+        
+        while(reader.readNext()==true){
+            double[] values = reader.getAsDoubleArray();
+            if(values.length>=tokens.length+startPosition){
+                for(int i = 0; i < tokens.length; i++){
+                    vectors.get(i).add(values[i+startPosition]);
+                }
+            }
+        }
+        return vectors;
+    }
+    
+    public static List<DataVector> readFile(String format, String filename){
+        return DataVector.readFile(format, filename, 0);
     }
 }

@@ -150,8 +150,10 @@ public class TGCanvas extends JFrame implements ActionListener {
     
     public static void main(String[] args){
         TGCanvas c1 = new TGCanvas("Calibration GUI","DC:CTOF:CND",600,600);
-        c1.addCanvas("ECAL");
+        c1.addCanvas("ECAL").addCanvas("BST");
         c1.addCanvas("FTOF");
+
+        
         c1.setCanvas("ECAL");
     }
 }
