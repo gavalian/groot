@@ -18,10 +18,12 @@ import org.jlab.groot.ui.PaveText;
 public class GraphErrors implements IDataSet {
     
     public static final String[] MARKERNAME = {"Circle","Square","Triangle","Inverted Triangle"};
+    
     private final DataVector dataX = new DataVector();
     private final DataVector dataY = new DataVector();
     private final DataVector dataEX = new DataVector();
     private final DataVector dataEY = new DataVector();
+    
     private String graphName = "graphErrors";
     private DatasetAttributes  graphAttr = null;
     
@@ -29,6 +31,28 @@ public class GraphErrors implements IDataSet {
     
     public GraphErrors(){
         initAttributes();
+    }
+    
+    public GraphErrors(String name, DataVector grX, DataVector grY){
+        setName(name);
+        for(int i = 0; i < grX.getSize(); i++){
+            this.addPoint(grX.getValue(i), grY.getValue(i), 0.0, 0.0);
+        }
+    }
+    
+    public GraphErrors(String name, DataVector grX, DataVector grY, DataVector erX, DataVector erY){
+        setName(name);
+        for(int i = 0; i < grX.getSize(); i++){
+            double errX = 0.0;
+            if(erX!=null) errX = erX.getValue(i);
+            this.addPoint(grX.getValue(i), grY.getValue(i), errX , erY.getValue(i));
+        }
+    }
+    public GraphErrors(String name,  DataVector grY){
+        setName(name);
+        for(int i = 0; i < grY.getSize(); i++){
+            this.addPoint((double) (i+1), grY.getValue(i), 0.0, 0.0);
+        }
     }
     
     public GraphErrors(String name, double[] x, double y[], double[] ex, double[] ey){

@@ -12,7 +12,7 @@ import org.jlab.groot.ui.PaveText;
 /**
  * Specifies the methods to create a 2D Histogram and operations to fill it and
  * set values to its bins
- * 
+ * @author Gagik Gavalian
  * @author Erin Kirby
  * @version 061714
  */

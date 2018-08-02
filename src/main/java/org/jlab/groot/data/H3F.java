@@ -11,8 +11,8 @@ import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.MultiIndex;
 
 /**
- *
- * @author gavalian
+ * @author Gagik Gavalian
+ * 
  */
 public class H3F {
 

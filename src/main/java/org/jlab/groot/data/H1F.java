@@ -11,7 +11,7 @@ import org.jlab.groot.ui.PaveText;
 
 /**
  * Defines the class to create a basic 1D Histogram
- * 
+ * @author Gagik Gavalian
  * @author Erin Kirby
  * @version 062614
  */
