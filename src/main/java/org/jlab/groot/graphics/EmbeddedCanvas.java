@@ -212,8 +212,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
      * @param ds data set to be drawn
      */
     public void draw(IDataSet ds) {
-        draw(ds, "");
-        
+        draw(ds, "");        
     }
 
     public void draw(LatexText text) {

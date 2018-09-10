@@ -38,6 +38,7 @@ public class GraphErrors implements IDataSet {
         for(int i = 0; i < grX.getSize(); i++){
             this.addPoint(grX.getValue(i), grY.getValue(i), 0.0, 0.0);
         }
+        initAttributes();
     }
     
     public GraphErrors(String name, DataVector grX, DataVector grY, DataVector erX, DataVector erY){
@@ -47,12 +48,14 @@ public class GraphErrors implements IDataSet {
             if(erX!=null) errX = erX.getValue(i);
             this.addPoint(grX.getValue(i), grY.getValue(i), errX , erY.getValue(i));
         }
+        initAttributes();
     }
     public GraphErrors(String name,  DataVector grY){
         setName(name);
         for(int i = 0; i < grY.getSize(); i++){
             this.addPoint((double) (i+1), grY.getValue(i), 0.0, 0.0);
         }
+        initAttributes();
     }
     
     public GraphErrors(String name, double[] x, double y[], double[] ex, double[] ey){

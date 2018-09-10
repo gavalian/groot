@@ -120,7 +120,7 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
         }
         
         graphDataRegion.getDimension(0).addPadding(0.05);
-        graphDataRegion.getDimension(1).addPadding(0.0,0.15);
+        graphDataRegion.getDimension(1).addPadding(0.10,0.10);
         return graphDataRegion;
     }
 
