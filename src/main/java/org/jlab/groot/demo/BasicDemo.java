@@ -11,6 +11,7 @@ import org.jlab.groot.ui.PaveText;
 public class BasicDemo {
 
 	public static void main(String[] args) {
+            
 		JFrame frame = new JFrame("Basic GROOT Demo");
 		EmbeddedCanvas canvas = new EmbeddedCanvas();
 		frame.setSize(800,500);

@@ -567,7 +567,30 @@ public class GraphicsAxis {
         //axis.setLog(true);        
         axis.show();
         for (double d = 0; d < 120; d += 0.5) {
-            System.out.println(d + " fraction = " + axis.getAxisPosition(d));
+           // System.out.println(d + " fraction = " + axis.getAxisPosition(d));
+        }
+        
+        GraphicsAxisTicks ticks = new GraphicsAxisTicks();
+        //List<Double>  numbers = new ArrayList<Double>();
+        AxisAttributes attr = new AxisAttributes(AxisAttributes.X);
+        attr.setAxisMinimum(0.1);
+        attr.setAxisMaximum(10000);
+        
+        List<Double>  numbers = attr.getRange().getDimensionTicksLog(10);
+        
+        for(int i = 0; i < numbers.size(); i++){
+            System.out.println( i + " -> " + numbers.get(i));
+        }
+        
+        ticks.init(numbers, 0.1, 10000);
+        ticks.processAxisLogarithmic();
+        
+        List<LatexText> texts = ticks.getAxisTexts();
+        
+        int i = 0;
+        for(LatexText text : texts){
+            System.out.println( i + " " + text.getTextString());
+            i++;
         }
     }
 
@@ -654,10 +677,11 @@ public class GraphicsAxis {
             //System.out.println("Processing Logarithmic Scale");
             int nticks = this.axisTicks.size();
             for(int i = 0; i < nticks; i++){
-                Integer exponent = (int) Math.log(this.axisTicks.get(i));
+                Integer exponent = (int) Math.log10(this.axisTicks.get(i));
                 //System.out.println(" tick = " + 
                 //        this.axisTicks.get(i) + "  value = " 
                 //+ String.format("10^%d", exponent));
+                
                 String number = exponent.toString();
                 StringBuilder str = new StringBuilder();
                 str.append("10");
