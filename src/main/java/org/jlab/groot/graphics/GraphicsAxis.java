@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jlab.groot.base.AxisAttributes;
-import org.jlab.groot.base.ColorPalette;
 import org.jlab.groot.base.FontProperties;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.base.TColorPalette;

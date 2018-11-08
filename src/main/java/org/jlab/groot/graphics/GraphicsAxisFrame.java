@@ -121,6 +121,7 @@ public class GraphicsAxisFrame {
         if (axisFrameAxis.get(1).getAttributes().showAxis()) {
             axisFrameAxis.get(1).drawAxis(g2d, (int) xcorner, (int) ycorner, (int) getAxisX().getDimension().getLength());
         }
+        
         if (axisFrameAxis.get(2).getAttributes().showAxis()) {
             
             /*int xc = (int) this.axisFrameDimension.getDimension(0).getMax()

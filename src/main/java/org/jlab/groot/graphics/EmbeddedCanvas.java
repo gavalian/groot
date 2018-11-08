@@ -799,8 +799,15 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
                 System.out.println("We have a match!");
                 try {
                     EmbeddedPad pad = (EmbeddedPad) clipboardContent.getTransferData(dmselFlavor);
-                    for (int j = 0; j < pad.getDatasetPlotters().size(); j++) {
-                        this.getPad(popupPad2).getDatasetPlotters().add(pad.getDatasetPlotters().get(j));
+                    if(pad.getDatasetPlotters().size()>0){
+                        /*System.out.println("---------------------------- PASTING");
+                        this.getPad(popupPad2).getAxisFrame().getAxisZ().getAttributes().setShowAxis(false);
+                        
+                        this.getPad(popupPad2).draw(pad.getDatasetPlotters().get(0).getDataSet(), "same");
+                        */
+                        for (int j = 0; j < pad.getDatasetPlotters().size(); j++) {
+                            this.getPad(popupPad2).getDatasetPlotters().add(pad.getDatasetPlotters().get(j));
+                        }
                     }
                     this.update();
                 } catch (Exception e) {
