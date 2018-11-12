@@ -46,8 +46,8 @@ public class FitPanel extends JPanel {
 
 	String predefFunctionsF1D[] = {"[amp]*gaus(x,[mean],[sigma])", "[amp]*gaus(x,[mean],[sigma])+[p0]",
 			"[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]", "[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]+x*x*[p2]",
-			"[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]+x*x*[p2]", "[p0]", "[p0]+[p1]*x", "[p0]+[p1]*x+[p2]*x*x",
-			"[p0]+[p1]*x+[p2]*x*x+[p3]*x*x", "[a]*exp(x,[b])", "[a]+[b]*cos(x*[c])",
+			"[amp]*gaus(x,[mean],[sigma])+[p0]+x*[p1]+x*x*[p2]+x*x*x*[p3]", "[p0]", "[p0]+[p1]*x", "[p0]+[p1]*x+[p2]*x*x",
+			"[p0]+[p1]*x+[p2]*x*x+[p3]*x*x*x", "[a]*exp(x,[b])", "[a]+[b]*cos(x*[c])",
 			"[a]+[b]*cos(x*[d])+[c]*cos(2*x*[e])", "1/((1-[p])+[p]/x)"};
 
 	boolean predef = true;
