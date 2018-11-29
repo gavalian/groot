@@ -28,6 +28,7 @@ import javax.swing.border.EtchedBorder;
 
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.H1FC;
 import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.fitter.DataFitter;
@@ -99,6 +100,14 @@ public class TCanvas extends JFrame implements ActionListener {
     
     public void cd(int pad){
         this.canvas.cd(pad);
+    }
+    
+    public void draw(H1FC data){
+        List<H1F> list = data.getDataSets();
+        draw(list.get(0));
+        for(int i = 1; i < list.size(); i++){
+            draw(list.get(i),"same");
+        }
     }
     
     public void draw(IDataSet ds, String options){
