@@ -2,6 +2,7 @@ package org.jlab.groot.demo;
 
 import java.util.Random;
 import javax.swing.JFrame;
+import org.jlab.groot.data.DataLine;
 
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
@@ -34,7 +35,7 @@ public class BasicDemo {
 		histogram.setOptStat(1110);
 		
                 //canvas.draw(histogram);
-                canvas.draw(h2d);
+                //canvas.draw(h2d);
                 canvas.draw(histogram);
                 
 		canvas.setFont("HanziPen TC");  
@@ -57,6 +58,27 @@ public class BasicDemo {
                 canvas.draw(text);
                 canvas.draw(textChi);
                 
+                
+                DataLine line = new DataLine(-2.5,1000.0,-2.5,1500);
+                line.setLineColor(2);
+                line.setLineWidth(4);
+                line.setArrowSizeOrigin(15);
+                line.setArrowSizeEnd(15);
+                canvas.draw(line);
+                
+                DataLine line2 = new DataLine(0.4,550.0,2.5,1400);
+                line2.setLineColor(1);
+                line2.setLineWidth(4);
+                line2.setArrowSizeOrigin(15);
+                canvas.draw(line2);
+                
+                DataLine line3 = new DataLine(1.2,550.0,-1.5,1800);
+                line3.setLineColor(3);
+                line3.setLineWidth(4);
+                line3.setArrowSizeEnd(15);
+                line3.setArrowAngle(45.0);
+                
+                canvas.draw(line3);
                 
                 frame.add(canvas);
 		frame.setLocationRelativeTo(null);

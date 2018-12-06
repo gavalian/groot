@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import org.jlab.groot.data.DataLine;
 
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
@@ -101,6 +102,10 @@ public class TCanvas extends JFrame implements ActionListener {
     public void cd(int pad){
         this.canvas.cd(pad);
     }
+    public void draw(DataLine line) { 
+        canvas.draw(line);
+        this.getCanvas().update();
+    } 
     
     public void draw(H1FC data){
         List<H1F> list = data.getDataSets();

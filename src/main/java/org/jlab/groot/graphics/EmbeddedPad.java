@@ -23,6 +23,7 @@ import org.jlab.groot.base.PadAttributes;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.base.TColorPalette;
 import org.jlab.groot.base.TStyle;
+import org.jlab.groot.data.DataLine;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
@@ -52,6 +53,9 @@ public class EmbeddedPad {
     
     private List<PaveText>   padTexts = new ArrayList<PaveText>();
     private List<LatexText>  padLatexText = new ArrayList<LatexText>();
+    
+    private List<DataLine>   padLines = new ArrayList<DataLine>();
+    private DataLinePlotter  dataLinePlotter = new DataLinePlotter();
     
     public EmbeddedPad() {
 
@@ -87,6 +91,8 @@ public class EmbeddedPad {
         this.datasetPlotters.clear();
         this.axisFrame.setDrawAxisZ(false);
         this.padTexts.clear();
+        this.padLines.clear();
+        this.drawLegend = false;
     }
 
     public Map<String, IDataSet> getObjectMap() {
@@ -247,6 +253,11 @@ public class EmbeddedPad {
             
             for (IDataSetPlotter plotter : this.datasetPlotters) {
                 plotter.draw(g2d, axisFrame);
+            }
+            //System.out.println("--- drawing lines --- size = " + padLines.size());
+            for (DataLine line : padLines){
+                //System.out.println("--> draw line");
+                dataLinePlotter.draw(g2d, line, axisFrame);
             }
             g2d.setClip(null);
             //System.out.println("PLOTTERS SIZE = " + this.datasetPlotters.size());
@@ -466,6 +477,11 @@ public class EmbeddedPad {
         return (int) (padDimensions.getDimension(1).getMax() - padDimensions.getDimension(1).getMin());
     }
 
+    public void draw(DataLine line){ 
+        //System.out.println("--- data pad adding line ---");
+        padLines.add(line); 
+    }
+    
     public void draw(IDataSet ds, String options) {
         
         ds.getAttributes().setDrawOptions(options);

@@ -54,6 +54,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.base.TColorPalette;
+import org.jlab.groot.data.DataLine;
 import org.jlab.groot.data.DataParser;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
@@ -204,7 +205,12 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
      */
     public void drawNext(IDataSet ds,String options) {
         draw(ds, options);
-        cd(this.activePad + 1);
+        cd(this.activePad + 1);        
+    }
+    
+    public void draw(DataLine line){
+        //System.out.println("--- canvas adding line");
+        this.getPad(activePad).draw(line);
     }
     /**
      * draws dataset on current active pad with no options
