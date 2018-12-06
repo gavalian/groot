@@ -61,14 +61,15 @@ public class BasicDemo {
                 
                 DataLine line = new DataLine(-2.5,1000.0,-2.5,1500);
                 line.setLineColor(2);
-                line.setLineWidth(4);
+                line.setLineWidth(2);
                 line.setArrowSizeOrigin(15);
                 line.setArrowSizeEnd(15);
+                line.setArrowAngle(25);
                 canvas.draw(line);
                 
                 DataLine line2 = new DataLine(0.4,550.0,2.5,1400);
                 line2.setLineColor(1);
-                line2.setLineWidth(4);
+                line2.setLineWidth(2);
                 line2.setArrowSizeOrigin(15);
                 canvas.draw(line2);
                 
