@@ -109,7 +109,7 @@ public class HistogramPlotter  implements IDataSetPlotter {
         yp = frame.getAxisPointY(0.0);
         path.lineTo((int) xpe, (int) yp);
         int fillColor = this.dataset.getAttributes().getFillColor();
-        if(fillColor>=0){
+        if(fillColor>0){
             g2d.setColor(TStyle.getColor(fillColor));
             g2d.fill(path);
         }
