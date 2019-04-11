@@ -133,6 +133,9 @@ public class F1D extends Func1D {
         F1D func  = new F1D("f1d","[amp]*gaus(x,[mean],[sigma])",0.1,0.8);
         F1D func2 = new F1D("f1d","[a]*gaus(x,[m],[s])+[h]*exp([f])",0.1,0.8);
         //func.parse("[amp]*gaus(x,[mean],[sigma])");
+        F1D func3 = new F1D("funcExp","[a]*exp(-[b]*x)",0.0,2.0);
+        func3.setParameter(0, 0.64);
+        func3.setParameter(1, 1.0);
         
         func2.setParameter(0, 10);
         func2.setParameter(1, 0.5);
@@ -140,10 +143,11 @@ public class F1D extends Func1D {
         func2.setParameter(3, 10);
         func2.setParameter(4, -2.0);
         System.out.println(func2.toString());
-        for(double x = func.getMin(); x < func.getMax(); x+= 0.05){
-            double value = func2.evaluate(x);
+        for(double x = func3.getMin(); x < func3.getMax(); x+= 0.05){
+            double value = func3.evaluate(x);
             System.out.println("x = " + x + "  value = " + value);
             //func.show();
         }
+        
     }
 }
