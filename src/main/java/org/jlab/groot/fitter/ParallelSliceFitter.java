@@ -3,12 +3,15 @@ package org.jlab.groot.fitter;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -29,7 +32,7 @@ public class ParallelSliceFitter {
 	int nthreads = Runtime.getRuntime().availableProcessors();
 	ArrayList<H1F> slices = null;
 	ArrayList<FitThread> threads = new ArrayList<FitThread>();
-	ArrayList<FitResults> fitResults = new ArrayList<FitResults>();
+	List<FitResults> fitResults = Collections.synchronizedList(new ArrayList<FitResults>());
 	double min = 0.0;
 	double max = 0.0;
 	int minBin = 0;
@@ -403,31 +406,7 @@ public class ParallelSliceFitter {
 			Future<Object> x = (Future<Object>) threadPool.submit(thread);
 			tasks.add(x);
 		}
-		int ncomplete = 0;
-		int ntotal = 0;
-		if (tasks != null) {
-			ProgressBar bar = null;
-			if (this.isShowProgress()) {
-				bar = new ProgressBar();
-				ntotal = tasks.size();
-				bar.update(ncomplete, ntotal + 1);
-			}
-			while (ncomplete < ntotal) {
-				ncomplete = 0;
-				for (int i = 0; i < ntotal; i++) {
-					if (tasks.get(i).isDone()) {
-						ncomplete++;
-					}
-				}
-				if (this.isShowProgress())
-					bar.update(ncomplete, ntotal + 1);
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+
 		for (FitThread thread : threads) {
 			try {
 				thread.join();
@@ -435,7 +414,21 @@ public class ParallelSliceFitter {
 				e.printStackTrace();
 			}
 		}
-		threadPool.shutdown();
+		
+		awaitTerminationAfterShutdown(threadPool);
+		fitResults.sort(Comparator.comparing(FitResults::getPoint));
+	}
+	
+        public void awaitTerminationAfterShutdown(ExecutorService threadPool) {
+	    threadPool.shutdown();
+	    try {
+	        if (!threadPool.awaitTermination(60, TimeUnit.SECONDS)) {
+	            threadPool.shutdownNow();
+	        }
+	    } catch (InterruptedException ex) {
+	        threadPool.shutdownNow();
+	        Thread.currentThread().interrupt();
+	    }
 	}
 
 	public static void main(String[] args) {
