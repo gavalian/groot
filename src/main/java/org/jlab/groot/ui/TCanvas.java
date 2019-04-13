@@ -99,9 +99,11 @@ public class TCanvas extends JFrame implements ActionListener {
         this.canvas.divide(xsize, ysize);
     }
     
-    public void cd(int pad){
-        this.canvas.cd(pad);
+    public TCanvas cd(int pad){
+        canvas.cd(pad);
+        return this;
     }
+    
     public void draw(DataLine line) { 
         canvas.draw(line);
         this.getCanvas().update();

@@ -162,6 +162,11 @@ public class H2F implements IDataSet {
         return xAxis;
     }
     
+    public void normalize(double norm){
+        for(int i = 0; i < hBuffer.length; i++){
+            hBuffer[i] = hBuffer[i]/((float) norm);
+        }
+    }
     /**
      *
      * @return the y-axis of the 2D Histogram

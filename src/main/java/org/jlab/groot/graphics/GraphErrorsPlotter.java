@@ -50,6 +50,12 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
         int style = this.getDataSet().getAttributes().getMarkerStyle();
         BasicStroke strokePoint = new BasicStroke(lineThickness);
         BasicStroke strokeError = new BasicStroke(lineThickness);
+        boolean drawLine = false;
+        
+        if(this.plottingOptions.contains("L")==true) drawLine = true;
+        
+        double prevXp = 0.0;
+        double prevYp = 0.0;
         
         for(int p = 0; p < npoints; p++){
             double xp = frame.getAxisPointX(graphDataSet.getDataX(p));
@@ -58,6 +64,10 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
             //int    yc = (int) (frame.getAxis(1).getDimension().getMax() - yp 
             //        + frame.getAxis(1).getDimension().getMin());
             
+            if(drawLine==true&&p!=0){
+                g2d.drawLine((int) xp, (int) yp, (int) prevXp, (int) prevYp);
+                prevXp = xp; prevYp = yp;
+            }
             double xpL = frame.getAxisPointX(graphDataSet.getDataX(p) - graphDataSet.getDataEX(p));
             double xpH = frame.getAxisPointX(graphDataSet.getDataX(p) + graphDataSet.getDataEX(p));
             

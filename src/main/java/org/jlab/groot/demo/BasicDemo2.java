@@ -27,6 +27,7 @@ public class BasicDemo2 {
 	    double bodenkampyerr[] = {13.4,16.7,13.5,17.5,15.7};
 
 	    JFrame frame = new JFrame("Basic GROOT Demo 2");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		EmbeddedCanvas canvas = new EmbeddedCanvas();
 		frame.setSize(1200,750);
 		
@@ -53,8 +54,8 @@ public class BasicDemo2 {
 		
                 barber.setTitle("Cross Section (nb)");
                 bodemkamp.setTitle("Assymetry ");
-		canvas.draw(barber);
-		canvas.draw(bodemkamp,"same");
+		canvas.draw(barber,"L");
+		canvas.draw(bodemkamp,"sameL");
 
                 canvas.getPad().setLegend(true);
                 canvas.getPad().setLegendPosition(20, 20);
