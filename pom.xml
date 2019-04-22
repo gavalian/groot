@@ -62,6 +62,13 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+
+	  <archive>
+            <manifest>
+              <mainClass>org.jlab.groot.demo.GROOTDemo</mainClass>
+            </manifest>
+          </archive>
+
         </configuration>
         <executions>
           <execution>

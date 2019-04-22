@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import org.jlab.groot.data.DataVector;
 

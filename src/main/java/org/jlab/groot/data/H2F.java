@@ -817,6 +817,29 @@ public class H2F implements IDataSet {
         return h1;
     }
     
+    public H3F createH3F(int binsZ){
+        H3F h3 = new H3F(
+                getXAxis().getNBins(),
+                getXAxis().min(),getXAxis().max(),
+                getYAxis().getNBins(),
+                getYAxis().min(),getYAxis().max(),
+                binsZ,0.0,1.0
+        );
+        h3.reset();
+        
+        double h2min = getMin();
+        double h2max = getMax();
+        Axis   axisZ = new Axis(binsZ,h2min,h2max);
+        for(int x = 0; x < getXAxis().getNBins(); x++){
+            for(int y = 0; y < getYAxis().getNBins(); y++){
+                double value = getBinContent(x,y);
+                int     zbin = axisZ.getBin(value);
+                h3.setBinContent(x, y, zbin, 1.0);
+            }
+        }
+        return h3;
+    } 
+    
     @Override
     public double getMax() {
         double max = Double.MIN_VALUE;

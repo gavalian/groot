@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jlab.groot.math.Axis;
 import org.jlab.groot.math.MultiIndex;
+import org.jlab.jnp.readers.TextFileWriter;
 
 /**
  * @author Gagik Gavalian
@@ -48,6 +49,11 @@ public class H3F {
         return false;
     }
     
+    public void reset(){
+        for(int i = 0; i < hBuffer.length; i++){
+            hBuffer[i] = (float) 0.0;
+        }
+    }
     public int findBin(double x, double y, double z){
         int bx = xAxis.getBin(x);
         int by = yAxis.getBin(y);
@@ -85,6 +91,12 @@ public class H3F {
     public Axis getZAxis(){ return zAxis;}
     
     
+    public void setBinContent(int bx, int by, int bz, double value){
+        if (isValidBins(bx, by, bz)) {
+            int buff = offset.getArrayIndex(bx, by, bz);
+            hBuffer[buff] = (float) value;
+        }
+    }
     
     public double getBinContent(int bx, int by, int bz){
         if (isValidBins(bx, by, bz)) {
@@ -101,6 +113,27 @@ public class H3F {
     
     public float getDataBufferBin(int bin){
         return hBuffer[bin]; 
+    }
+    
+    
+    public void export(String filename){
+        TextFileWriter writer = new TextFileWriter();
+        writer.open(filename);
+        writer.writeString("NRRD0001");
+        writer.writeString("type: float");
+        writer.writeString("dimension: 3");
+        writer.writeString(String.format("sizes: %d %d %d", 
+                xAxis.getNBins(),yAxis.getNBins(),zAxis.getNBins()
+                ));
+        writer.writeString("encoding: ascii\n");
+        for(int x = 0; x < xAxis.getNBins(); x++){
+            for(int y = 0; y < yAxis.getNBins(); y++){
+                for(int z = 0; z < zAxis.getNBins(); z++){
+                    writer.writeString(String.format("%.6f", getBinContent(x,y,z)));
+                }
+            }
+        }
+        writer.close();
     }
     
     public static H1F getH1F(H3F h3){
