@@ -21,6 +21,12 @@
       </dependency>
 
       <dependency>
+        <groupId>org.jlab.jnp</groupId>
+        <artifactId>jnp-hipo4</artifactId>
+        <version>4.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.freehep</groupId>
 	<artifactId>jminuit</artifactId>
         <version>1.0</version>
