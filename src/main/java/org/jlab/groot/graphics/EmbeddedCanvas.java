@@ -105,12 +105,24 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         super();
         //this.setSize(500, 400);
         this.setPreferredSize(new Dimension(500, 400));
+
         canvasPads.add(new EmbeddedPad());
         this.divide(1, 1);
         this.createPopupMenu();
         this.initMouse();
     }
 
+    public EmbeddedCanvas(int xsize, int ysize) {
+        super();
+        //this.setSize(500, 400);
+        this.setPreferredSize(new Dimension(xsize, ysize));
+        this.setSize(xsize, ysize);
+        canvasPads.add(new EmbeddedPad());
+        this.divide(1, 1);
+        this.createPopupMenu();
+        this.initMouse();
+    }
+       
     public EmbeddedCanvas(EmbeddedPad pad) {
         this.setPreferredSize(new Dimension(500, 400));
         this.createPopupMenu();
@@ -846,7 +858,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
 
     }
 
-    private BufferedImage getScreenShot() {
+    public BufferedImage getScreenShot() {
         BufferedImage bi = new BufferedImage(
                 this.getWidth(), this.getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
         this.paint(bi.getGraphics());
