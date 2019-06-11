@@ -53,6 +53,13 @@ public class TreeCut {
         }
     };
 
+    static Operator operatorNOTEQ = new Operator("!=", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
+        @Override
+        public double apply(final double... args) {
+            if(args[0] == (int) args[1]) return 0.0;
+            return 1.0;
+        }
+    };
     static Operator operatorAND = new Operator("&&", 2, true, Operator.PRECEDENCE_ADDITION) {
         @Override
         public double apply(final double... args) {
@@ -80,7 +87,8 @@ public class TreeCut {
                 .operator(operatorOR)
                 .operator(operatorGT)
                 .operator(operatorLT)
-                .operator(operatorEQ);
+                .operator(operatorEQ)
+                .operator(operatorNOTEQ);
         builder.variables(variables);
         try {
             Expression expr = builder.build(); 

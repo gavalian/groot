@@ -69,7 +69,7 @@ public class TreeFile extends Tree {
                     this.addBranch(tokens[i], "", "");
                 }
             }
-        }        
+        }
     }
     
     @Override
