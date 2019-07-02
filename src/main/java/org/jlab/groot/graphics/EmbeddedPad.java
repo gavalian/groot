@@ -520,7 +520,9 @@ public class EmbeddedPad {
         if (ds instanceof H2F) {
             axisFrame.getAxisZ().getAttributes().setShowAxis(true);
             axisFrame.setDrawAxisZ(true);
-            this.addPlotter(new Histogram2DPlotter(ds).setPalette(attr.getPalette()));            
+            Histogram2DPlotter plotter = new Histogram2DPlotter(ds).setPalette(attr.getPalette());
+            plotter.setOptions(options);
+            this.addPlotter(plotter);            
         }
 
         if (ds instanceof GraphErrors) {

@@ -26,12 +26,7 @@ public class TreeHipo extends Tree {
     
     public TreeHipo(Schema bankSchema){
         super("HIPO");
-        treeSchema = bankSchema.getCopy();
-        List<String> list = treeSchema.getEntryList();
-        for(String item : list){
-            this.addBranch(item, "", "");
-        }
-        treeBank = new Bank(treeSchema);
+        initSchema(bankSchema);
     }
     
     public TreeHipo(String filename, String bankname){
@@ -44,6 +39,7 @@ public class TreeHipo extends Tree {
     private void initSchema(Schema schema){
         treeSchema = schema.getCopy();
         List<String> list = treeSchema.getEntryList();
+        this.addBranch("i", "", "");
         for(String item : list){
             this.addBranch(item, "", "");
         }
@@ -77,6 +73,7 @@ public class TreeHipo extends Tree {
             }
         }
         //System.out.println(" row = " + currentRow);
+        getBranch("i").setValue(currentRow);
         int nBranches = treeSchema.getElements();
         for(int b = 0; b < nBranches; b++){
             int     type = treeSchema.getType(b);

@@ -5,9 +5,11 @@
  */
 package org.jlab.groot.graphics;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.jlab.groot.base.TColorPalette;
+import org.jlab.groot.base.TStyle;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension1D;
 import org.jlab.groot.math.Dimension3D;
@@ -56,7 +58,13 @@ public class Histogram2DPlotter implements IDataSetPlotter {
         frame.setDrawAxisZ(true);
         double dimMin = dataSet.getMin();
         double dimMax = dataSet.getMax();
-
+        boolean drawBox = false;
+        
+        if(plotterOptions.contains("box")==true) drawBox = true;
+        int lineColor = dataSet.getAttributes().getLineColor();
+        g2d.setColor(TStyle.getColor(lineColor));
+        g2d.setStroke(new BasicStroke(this.dataSet.getAttributes().getLineWidth()));
+        
         for (int xd = 0; xd < dataSet.getDataSize(0); xd++) {
             for (int yd = 0; yd < dataSet.getDataSize(1); yd++) {
                 double dataX = dataSet.getDataX(xd);
@@ -82,10 +90,24 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                     weightColor = palette.getColor3D(dataWeight,
                             frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
                 }
-                g2d.setColor(weightColor);
-                g2d.fillRect((int) xps, (int) ype,
-                        (int) (xpe - xps) + 1,
-                        (int) (yps - ype) + 1);
+                if(drawBox==false){                                    
+                    g2d.setColor(weightColor);
+                    g2d.fillRect((int) xps, (int) ype,
+                            (int) (xpe - xps) + 1,
+                            (int) (yps - ype) + 1);
+                } else{
+                    double fraction = (dataWeight - dimMin)/(dimMax-dimMin);
+
+                    double    w     = (xpe-xps)*fraction*0.5;
+                    double    h     = (yps-ype)*fraction*0.5;
+                    double centerX  = xps + (xpe-xps)*0.5;
+                    double centerY  = ype + (yps-ype)*0.5;
+                    /*System.out.printf(" v = %8.5f (%8.5f , %8.5f) fraction = %8.5f  w = %8.5f h = %8.5f\n",
+                            dataWeight,dimMin,dimMax,fraction,w,h);*/
+                    g2d.drawRect((int) (centerX-w), (int) (centerY - h),
+                            (int) (2.0*w),
+                            (int) (2.0*h));
+                }
             }
         }
 

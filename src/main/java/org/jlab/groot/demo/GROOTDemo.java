@@ -131,7 +131,8 @@ public class GROOTDemo {
 		EmbeddedCanvas can3 = new EmbeddedCanvas();
 		can3.divide(2,2);
 
-        H2F h2d = FunctionFactory.randomGausian2D(40, 0.4, 7.6, 800000, 3.3, 0.8);
+        H2F h2d  = FunctionFactory.randomGausian2D(40, 0.4, 7.6, 800000, 3.3, 0.8);
+        H2F h2d2 = FunctionFactory.randomGausian2D(40, 0.4, 7.6, 800000, 5.2, 0.4);
         h2d.setTitleX("Randomly Generated Function");
         h2d.setTitleY("Randomly Generated Function");
         GraphErrors hprofile = h2d.getProfileY();
@@ -139,11 +140,14 @@ public class GROOTDemo {
         can3.cd(0);
         can3.getPad(0).getAxisZ().setRange(100, 600);
         can3.getPad(0).setTitle("Function with Fixed Axis");
-        can3.draw(h2d);
+        can3.draw(h2d,"box");
+        can3.draw(h2d2,"samebox");
         can3.cd(1);
         can3.getPad(1).getAxisZ().setAutoScale(true);
         can3.getPad(1).setTitle("Function with Autoscaled Axis");
-        can3.draw(h2d);
+        h2d.getAttributes().setLineColor(2);
+        h2d2.getAttributes().setLineColor(4);
+        can3.draw(h2d2,"box");
         can3.cd(3);
         can3.getPad(3).setTitle("X Projection");
         H1F projectionX = h2d.projectionX();

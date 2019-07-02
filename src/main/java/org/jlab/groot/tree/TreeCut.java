@@ -83,7 +83,7 @@ public class TreeCut {
         String[] variables = new String[branches.size()];
         for(int i=0; i < branches.size(); i++) variables[i] = branches.get(i);
         ExpressionBuilder builder = new ExpressionBuilder(expression)
-        		.operator(operatorAND)
+                .operator(operatorAND)
                 .operator(operatorOR)
                 .operator(operatorGT)
                 .operator(operatorLT)
@@ -147,7 +147,8 @@ public class TreeCut {
                 .operator(operatorOR)
                 .operator(operatorGT)
                 .operator(operatorLT)
-                .operator(operatorEQ);
+                .operator(operatorEQ)
+                .operator(operatorNOTEQ);
         builder.variables(variables);
         expr = builder.build();
         }        
