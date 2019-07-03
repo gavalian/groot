@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import org.jlab.groot.base.TColorPalette;
 import org.jlab.groot.base.TStyle;
+import org.jlab.groot.data.DataSetUtils;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.Dimension1D;
 import org.jlab.groot.math.Dimension3D;
@@ -96,7 +97,8 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                             (int) (xpe - xps) + 1,
                             (int) (yps - ype) + 1);
                 } else{
-                    double fraction = (dataWeight - dimMin)/(dimMax-dimMin);
+                    //double fraction = (dataWeight - dimMin)/(dimMax-dimMin);
+                    double fraction = DataSetUtils.dataFraction(dataWeight, dimMin, dimMax, zAxisLog);
 
                     double    w     = (xpe-xps)*fraction*0.5;
                     double    h     = (yps-ype)*fraction*0.5;
