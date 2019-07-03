@@ -357,6 +357,34 @@ public class H2F implements IDataSet {
             this.addBinContent(bin);
     }
     
+    public void fill(DataVector vx, DataVector vy) {
+        if(vx.getSize()!=vy.getSize()){
+            System.out.println("[H1F::fill] ** error ** : --> vectors have different lengths.");
+            return;
+        }
+        /*int bin = this.findBin(x, y);
+        if (bin >= 0)
+            this.addBinContent(bin);*/
+        int nsize = vx.getSize();
+        for(int loop = 0; loop < nsize; loop++){
+            fill(vx.getValue(loop),vy.getValue(loop));
+        }
+    }
+    public void fill(DataVector vx, DataVector vy, DataVector weight) {
+        if(vx.getSize()!=vy.getSize()||vx.getSize()!=weight.getSize()){
+            System.out.println("[H1F::fill] ** error ** : --> vectors have different lengths.");
+            return;
+        }
+        
+        /*int bin = this.findBin(x, y);
+        if (bin >= 0)
+            this.addBinContent(bin);*/
+        int nsize = vx.getSize();
+        for(int loop = 0; loop < nsize; loop++){
+            fill(vx.getValue(loop),vy.getValue(loop),weight.getValue(loop));
+        }
+    }
+    
     public void fill(double x, double y, double w) {
         int bin = this.findBin(x, y);
         if (bin >= 0) {

@@ -219,7 +219,9 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
      */
     public void drawNext(IDataSet ds,String options) {
         draw(ds, options);
-        cd(this.activePad + 1);        
+        if(options.contains("same")==false&&options.contains("SAME")==false){
+            cd(this.activePad + 1);
+        }
     }
     
     public void draw(DataLine line){

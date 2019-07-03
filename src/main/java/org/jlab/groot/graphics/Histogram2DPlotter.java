@@ -102,11 +102,14 @@ public class Histogram2DPlotter implements IDataSetPlotter {
                     double    h     = (yps-ype)*fraction*0.5;
                     double centerX  = xps + (xpe-xps)*0.5;
                     double centerY  = ype + (yps-ype)*0.5;
-                    /*System.out.printf(" v = %8.5f (%8.5f , %8.5f) fraction = %8.5f  w = %8.5f h = %8.5f\n",
+                    /*System.out.printf("(%3d : %3d) v = %8.5f (%8.5f , %8.5f) fraction = %8.5f  w = %8.5f h = %8.5f\n",
+                            xd,yd,
                             dataWeight,dimMin,dimMax,fraction,w,h);*/
+                    if( w>1.0 && h> 1.0 ){
                     g2d.drawRect((int) (centerX-w), (int) (centerY - h),
                             (int) (2.0*w),
                             (int) (2.0*h));
+                    }
                 }
             }
         }
