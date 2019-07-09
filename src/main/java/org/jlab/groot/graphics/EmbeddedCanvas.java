@@ -179,9 +179,12 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
      * Clears content of all pads.
      */
     public void clear() {
+        /*
         for (EmbeddedPad pad : this.canvasPads) {
             pad.clear();
-        }
+        }*/
+        this.canvasPads.clear();
+        this.canvasPads.add(new EmbeddedPad());
         cd(0);
         this.update();
     }

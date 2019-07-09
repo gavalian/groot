@@ -78,66 +78,70 @@ public class HistogramPlotter  implements IDataSetPlotter {
         
         path = new GeneralPath();
         //Path2D path = new Path2D.Double();
-        
-        path.moveTo((int) xps, (int) yp);
-        
-        for(int p = 0; p < npoints; p++){
-            dataX  = dataset.getDataX(p);
-            dataY  = dataset.getDataY(p);
-            errorX = dataset.getDataEX(p);
-            
-            xps = frame.getAxisPointX(dataX - errorX*0.5);
-            xpe = frame.getAxisPointX(dataX + errorX*0.5);
-            //System.out.println(" x =  " + dataX + " y = " + dataY + " xps = "
-            //        + xps + " yp = " + yp);
-            //yp  = frame.getAxis(1).getDimension().getMax() - 
-            //        frame.getAxis(1).getAxisPosition(dataY)                    
-            //        + frame.getAxis(1).getDimension().getMin(); 
-            
-            //if(dataY<0.1) dataY = 0.0;
-            yp = frame.getAxisPointY(dataY);
-            
-            //System.out.println("histogram = " + p + " " + dataY + " " + yp);
-            path.lineTo((int) xps, (int) yp);
-            path.lineTo((int) xpe, (int) yp);
-            
-        }
-        
-        //yp  = frame.getAxis(1).getDimension().getMax() - 
-        //        frame.getAxis(1).getAxisPosition(0.0)                 
-        //        + frame.getAxis(1).getDimension().getMin();
-        yp = frame.getAxisPointY(0.0);
-        path.lineTo((int) xpe, (int) yp);
         int fillColor = this.dataset.getAttributes().getFillColor();
-        if(fillColor>0){
-            g2d.setColor(TStyle.getColor(fillColor));
-            g2d.fill(path);
-        }
-        //g2d.fill(path);
-        g2d.setStroke(new BasicStroke(this.dataset.getAttributes().getLineWidth()));
         int lineColor = this.dataset.getAttributes().getLineColor();
-        g2d.setColor(TStyle.getColor(lineColor));
-        g2d.draw(path);
-        
+        path.moveTo((int) xps, (int) yp);
+        if(this.dataset.getAttributes().getDrawOptions().contains("E")==false){
+            for(int p = 0; p < npoints; p++){
+                dataX  = dataset.getDataX(p);
+                dataY  = dataset.getDataY(p);
+                errorX = dataset.getDataEX(p);
+                
+                xps = frame.getAxisPointX(dataX - errorX*0.5);
+                xpe = frame.getAxisPointX(dataX + errorX*0.5);
+                //System.out.println(" x =  " + dataX + " y = " + dataY + " xps = "
+                //        + xps + " yp = " + yp);
+                //yp  = frame.getAxis(1).getDimension().getMax() - 
+                //        frame.getAxis(1).getAxisPosition(dataY)                    
+                //        + frame.getAxis(1).getDimension().getMin(); 
+                
+                //if(dataY<0.1) dataY = 0.0;
+                yp = frame.getAxisPointY(dataY);
+                
+                //System.out.println("histogram = " + p + " " + dataY + " " + yp);
+                path.lineTo((int) xps, (int) yp);
+                path.lineTo((int) xpe, (int) yp);
+                
+            }
+            
+            //yp  = frame.getAxis(1).getDimension().getMax() - 
+            //        frame.getAxis(1).getAxisPosition(0.0)                 
+            //        + frame.getAxis(1).getDimension().getMin();
+            yp = frame.getAxisPointY(0.0);
+            path.lineTo((int) xpe, (int) yp);
+
+            if(fillColor>0){
+                g2d.setColor(TStyle.getColor(fillColor));
+                g2d.fill(path);
+            }
+            //g2d.fill(path);
+            g2d.setStroke(new BasicStroke(this.dataset.getAttributes().getLineWidth()));            
+            g2d.setColor(TStyle.getColor(lineColor));
+            g2d.draw(path);
+        }
         if(this.dataset.getAttributes().getDrawOptions().contains("E")){
         	for(int p = 0; p < npoints; p++){
-                double xp = frame.getAxisPointX(this.dataset.getDataX(p));
-                //double yp = frame.getAxis(1).getAxisPosition(graphDataSet.getDataY(p));
-                //double yp1 = frame.getAxisPointY(this.dataset.getDataY(p));
-                //int    yc = (int) (frame.getAxis(1).getDimension().getMax() - yp 
-                //        + frame.getAxis(1).getDimension().getMin());
-                
-               // double xpL = frame.getAxisPointX(this.dataset.getDataX(p) - this.dataset.getDataEX(p));
-                //double xpH = frame.getAxisPointX(this.dataset.getDataX(p) + this.dataset.getDataEX(p));
-                
-                double ypL = frame.getAxisPointY(this.dataset.getDataY(p) - this.dataset.getDataEY(p));
-                double ypH = frame.getAxisPointY(this.dataset.getDataY(p) + this.dataset.getDataEY(p));
-                
-                g2d.setColor(TStyle.getColor(lineColor));
-                g2d.setStroke(new BasicStroke(this.dataset.getAttributes().getLineWidth()));
-                //g2d.drawLine((int) xpL, (int) yp, (int) xpH, (int) yp);
-                g2d.drawLine((int) xp, (int) ypL, (int) xp, (int) ypH);
-            }
+                    double xpc = frame.getAxisPointX(this.dataset.getDataX(p));
+                    double xpL = frame.getAxisPointX(this.dataset.getDataX(p)-0.5*this.dataset.getDataEX(p));
+                    double xpH = frame.getAxisPointX(this.dataset.getDataX(p)+0.5*this.dataset.getDataEX(p));
+                    
+                    //double yp = frame.getAxis(1).getAxisPosition(graphDataSet.getDataY(p));
+                    //double yp1 = frame.getAxisPointY(this.dataset.getDataY(p));
+                    //int    yc = (int) (frame.getAxis(1).getDimension().getMax() - yp 
+                    //        + frame.getAxis(1).getDimension().getMin());
+                    
+                    // double xpL = frame.getAxisPointX(this.dataset.getDataX(p) - this.dataset.getDataEX(p));
+                    //double xpH = frame.getAxisPointX(this.dataset.getDataX(p) + this.dataset.getDataEX(p));
+                    double ypc = frame.getAxisPointY(this.dataset.getDataY(p));
+                    double ypL = frame.getAxisPointY(this.dataset.getDataY(p) - this.dataset.getDataEY(p));
+                    double ypH = frame.getAxisPointY(this.dataset.getDataY(p) + this.dataset.getDataEY(p));
+                    
+                    g2d.setColor(TStyle.getColor(lineColor));
+                    g2d.setStroke(new BasicStroke(this.dataset.getAttributes().getLineWidth()));
+                    //g2d.drawLine((int) xpL, (int) yp, (int) xpH, (int) yp);
+                    g2d.drawLine((int) xpc, (int) ypL, (int) xpc, (int) ypH);
+                    g2d.drawLine((int) xpL, (int) ypc, (int) xpH, (int) ypc);
+                }
         }
     }
     
