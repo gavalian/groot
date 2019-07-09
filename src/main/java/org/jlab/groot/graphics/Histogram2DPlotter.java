@@ -59,6 +59,15 @@ public class Histogram2DPlotter implements IDataSetPlotter {
         frame.setDrawAxisZ(true);
         double dimMin = dataSet.getMin();
         double dimMax = dataSet.getMax();
+        
+        if(dimMin<1e-9){
+            if(dimMax>10){
+                dimMin = 1.0;
+            } else {
+                dimMin = 0.01;
+            }
+        }
+        
         boolean drawBox = false;
         
         if(plotterOptions.contains("box")==true) drawBox = true;
