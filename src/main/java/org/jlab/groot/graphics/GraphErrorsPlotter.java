@@ -129,7 +129,11 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
                     graphDataSet.getDataY(p) + graphDataSet.getDataEY(p),0.5);
         }
         
-        
+        if(graphDataSet.getDataSize(0)==0){
+            graphDataRegion.getDimension(0).setMinMax(0, 1.0);
+            graphDataRegion.getDimension(1).setMinMax(0, 1.0);
+            return graphDataRegion;
+        }
         
         if(graphDataRegion.getDimension(0).getLength()<1e-9){
             double value = graphDataRegion.getDimension(0).getMin();            
