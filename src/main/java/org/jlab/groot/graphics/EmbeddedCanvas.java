@@ -85,7 +85,8 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
     private JPopupMenu popup = null;
     private int popupPad = 0;
     private List<EmbeddedPad> canvasPads = new ArrayList<EmbeddedPad>();
-
+    private ArrayList<EmbeddedCanvas> children = new ArrayList<EmbeddedCanvas>();
+    
     public List<EmbeddedPad> getCanvasPads() {
         return canvasPads;
     }
@@ -388,6 +389,11 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
      */
     public void update() {
         this.repaint();
+        if(this.children.size()>0) {
+        	for(EmbeddedCanvas child : children){
+        		child.update();
+        	}
+        }
         //System.out.println(this.getBenchmarkString());
     }
 
@@ -423,6 +429,8 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
 
     public void initTimer(int interval) {
         System.out.println("[EmbeddedCanvas] ---->  starting an update timer.");
+        this.timer = true;
+        this.timerInterval = interval;
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -496,6 +504,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
             EmbeddedCanvas can = new EmbeddedCanvas();
             EmbeddedPad embeddedPad = this.getPad(pad).getCopy();
             can.showFPS(this.showFPS);
+            this.children.add(can);
             int xSize = (int) (this.getPad(pad).getWidth());
             int ySize = (int) (this.getPad(pad).getHeight());
 
