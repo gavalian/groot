@@ -223,8 +223,23 @@ public class GraphErrors implements IDataSet {
         return this.graphAttr.getTitleY();
     }
     
-    public void setTitle(String title){
-         this.graphAttr.setTitle(title);
+    /**
+     * set Title of the histogram
+     * @param title new title
+     */
+    public final void setTitle(String title){
+        
+        if(title.contains(";")==true){
+           String[] tokens = title.split(";");
+           if(tokens.length>0)
+               this.getAttributes().setTitle(tokens[0]);
+           if(tokens.length>1)
+        	   this.getAttributes().setTitleX(tokens[1]);
+           if(tokens.length>2)
+        	   this.getAttributes().setTitleY(tokens[2]);
+        } else {
+        	 this.getAttributes().setTitle(title);
+        }
     }
    
     public void setTitleX(String title) {
