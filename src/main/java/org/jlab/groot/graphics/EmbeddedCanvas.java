@@ -429,8 +429,6 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
 
     public void initTimer(int interval) {
         System.out.println("[EmbeddedCanvas] ---->  starting an update timer.");
-        this.timer = true;
-        this.timerInterval = interval;
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
