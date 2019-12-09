@@ -307,12 +307,22 @@ public class H2F implements IDataSet {
     }
     
     /**
-     * Sets the specified parameter as the title of the histogram
-     *
-     * @param title		The desired title of the histogram
+     * set Title of the histogram
+     * @param title new title
      */
-    public final void setTitle(String title) {
-        attr.setTitle(title);
+    public final void setTitle(String title){
+        
+        if(title.contains(";")==true){
+           String[] tokens = title.split(";");
+           if(tokens.length>0)
+               this.attr.setTitle(tokens[0]);
+           if(tokens.length>1)
+               this.attr.setTitleX(tokens[1]);
+           if(tokens.length>2)
+               this.attr.setTitleY(tokens[2]);
+        } else {
+            this.attr.setTitle(title);
+        }
     }
     
     public int getDataBufferSize(){
