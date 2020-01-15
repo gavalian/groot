@@ -142,7 +142,7 @@ public class GraphErrorsPlotter implements IDataSetPlotter {
         } else {
             graphDataRegion.getDimension(0).addPadding(0.05);
         }
-         if(graphDataRegion.getDimension(1).getLength()<1e-9){
+        if(graphDataRegion.getDimension(1).getLength()<1e-9){
             double value = graphDataRegion.getDimension(1).getMin();            
             double deviation = Math.abs(value)*0.10;
             graphDataRegion.getDimension(1).setMinMax(value-deviation, value+deviation);
