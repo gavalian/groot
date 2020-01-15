@@ -215,7 +215,20 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         draw(ds, "");
         cd(this.activePad + 1);
     }
-/**
+    /**
+     * Moves active pad to the next pad
+     */
+    public void next(){
+        cd(this.activePad+1);
+    }
+    /**
+     * returns the active pad number
+     * @return active pad
+     */
+    public int pwd(){
+        return this.activePad;
+    }
+    /**
      * draws data set on current pad and advances active pad by one.
      *
      * @param ds data set to be drawn
