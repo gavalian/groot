@@ -66,6 +66,23 @@ public class GraphErrors implements IDataSet {
         initAttributes();
     }
     
+    public static GraphErrors createGraph(H1F h, boolean supressZeros){
+        GraphErrors gr = new GraphErrors();
+        for(int i = 0; i < h.getXaxis().getNBins(); i++){
+            double y = h.getBinContent(i);
+            if(supressZeros==true){
+                if(y>10e-12){
+                    gr.addPoint(h.getXaxis().getBinCenter(i),
+                            h.getBinContent(i),0.0,h.getBinError(i));
+                }
+            } else {
+                gr.addPoint(h.getXaxis().getBinCenter(i),
+                        h.getBinContent(i),0.0,h.getBinError(i));
+            }
+        }
+        return gr;
+    }
+    
     public GraphErrors(String name, double[] x, double y[]){
         setName(name);
         for(int i = 0; i < x.length; i++){
