@@ -218,8 +218,9 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
     /**
      * Moves active pad to the next pad
      */
-    public void next(){
+    public EmbeddedCanvas next(){
         cd(this.activePad+1);
+        return this;
     }
     /**
      * returns the active pad number
@@ -241,17 +242,18 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         }
     }
     
-    public void draw(DataLine line){
+    public EmbeddedCanvas draw(DataLine line){
         //System.out.println("--- canvas adding line");
-        this.getPad(activePad).draw(line);
+        this.getPad(activePad).draw(line); return this;
     }
     /**
      * draws dataset on current active pad with no options
      *
      * @param ds data set to be drawn
+     * @return 
      */
-    public void draw(IDataSet ds) {
-        draw(ds, "");        
+    public EmbeddedCanvas draw(IDataSet ds) {
+        draw(ds, ""); return this;    
     }
 
     public void draw(LatexText text) {
@@ -262,12 +264,23 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
      *
      * @param ds data set to be drawn
      * @param options drawing options
+     * @return 
      */
-    public void draw(IDataSet ds, String options) {
+    public EmbeddedCanvas draw(IDataSet ds, String options) {
         this.getPad(activePad).draw(ds, options);
-        update();        
+        update();
+        return this;
     }
-
+    
+    public EmbeddedCanvas draw(List<H1F> hList, String options){
+        for(int i = 0; i < hList.size(); i++){
+            this.draw(hList.get(i), options);
+            if(options.contains("same")==false){
+                this.next();
+            }
+        }
+        return this;
+    }
     /**
      * updates pad margins when the canvas is resized and sets boundaries for
      * each pad

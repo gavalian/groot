@@ -14,13 +14,17 @@ import java.util.List;
  */
 public class H1FC {
     
-    private List<H1F>       histograms = new ArrayList<H1F>();
-    private List<H1FRegion>    regions = new ArrayList<H1FRegion>();
+    private List<H1F>            histograms = new ArrayList<H1F>();
+    private List<H1FRegion>         regions = new ArrayList<H1FRegion>();
+    private List<Integer>      regionColors = new ArrayList<Integer>();
     
     public H1FC(String name, int bins, double min, double max){
         H1F h = new H1F(name,bins,min,max);
         histograms.add(h);
         regions.add(new H1FRegion(min,max));
+        for(int i = 0; i < 10; i++){
+            regionColors.add(i+1);
+        }
     }
     
     public H1FC addCut(double min, double max){
@@ -30,6 +34,13 @@ public class H1FC {
         H1F h = new H1F(ref.getName(),ref.getXaxis().getNBins(),
                 ref.getXaxis().min(), ref.getXaxis().max());
         
+        int color = regions.size()+1;
+        if(color>10) color = color%10;
+        
+        h.setLineColor(color);
+        h.setFillColor(color+40);
+        regions.add(region);
+        histograms.add(h);
         return this;
     }
     

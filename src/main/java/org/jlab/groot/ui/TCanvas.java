@@ -95,8 +95,15 @@ public class TCanvas extends JFrame implements ActionListener {
         return this.canvas.getPad();
     }
     
-    public void divide(int xsize, int ysize){
+    public TCanvas divide(int xsize, int ysize){
         this.canvas.divide(xsize, ysize);
+        return this;
+    }
+    
+    
+    public TCanvas next(){
+        this.getCanvas().next();
+        return this;
     }
     
     public TCanvas cd(int pad){
@@ -104,32 +111,42 @@ public class TCanvas extends JFrame implements ActionListener {
         return this;
     }
     
-    public void draw(DataLine line) { 
+    public TCanvas draw(DataLine line) { 
         canvas.draw(line);
         this.getCanvas().update();
+        return this;
     } 
     
-    public void draw(H1FC data){
+    public TCanvas draw(List<H1F> data, String options){
+        this.getCanvas().draw(data, options);
+        return this;
+    }
+    
+    public TCanvas draw(H1FC data){
         List<H1F> list = data.getDataSets();
         draw(list.get(0));
         for(int i = 1; i < list.size(); i++){
             draw(list.get(i),"same");
         }
+        return this;
     }
     
-    public void draw(IDataSet ds, String options){
+    public TCanvas draw(IDataSet ds, String options){
         this.canvas.draw(ds, options);
         this.getCanvas().update();
+        return this;
     }
     
-    public void draw(LatexText text){
+    public TCanvas draw(LatexText text){
         this.canvas.draw(text);
         this.getCanvas().update();
+        return this;
     }
     
-    public void draw(IDataSet ds){
+    public TCanvas draw(IDataSet ds){
         this.canvas.draw(ds);
         this.getCanvas().update();
+        return this;
     }
     
     public void save(String filename){
