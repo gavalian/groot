@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
+import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.F1D;
 import org.jlab.jnp.graphics.base.Node2D;
 import org.jlab.jnp.groot.settings.GRootColorPalette;
@@ -38,6 +39,9 @@ public class FunctionNode1D extends DataNode2D {
                );
         return dataBounds;
     }
+    
+    @Override
+    public IDataSet getDataSet(){ return function;}
     
     @Override
     public void drawLayer(Graphics2D g2d, int layer){ 

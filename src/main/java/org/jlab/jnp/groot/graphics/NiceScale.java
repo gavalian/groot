@@ -11,7 +11,7 @@ import java.util.List;
 
 public class NiceScale {
     
-    private static int[] powers = new int[]{1,10,100,1000,10000,100000};
+    private static int[] powers = new int[]{1,10,100,1000,10000,100000,1000000,10000000};
     
     private double minPoint;
     private double maxPoint;
@@ -111,16 +111,29 @@ public class NiceScale {
     
     public void getTicks(List<Double> ticks){
         ticks.clear();
-        for(int i = 0 ; i < this.maxTicks+2; i++){
+        for(int i = 0 ; i < this.maxTicks+5; i++){
             //double value = this.minPoint + i*this.tickSpacing;
             double value = niceMin + i*this.tickSpacing;
             if(value>=this.minPoint&&value<=this.maxPoint)
-                ticks.add(this.minPoint + i*this.tickSpacing);
+                ticks.add(value);
         }
     }
-    
+    public int getNumberOrder(double num){
+        
+        if(num<10e-32) return 0;
+        
+        for(int i = 0; i < NiceScale.powers.length; i++){
+            int data = ( (int) (num*NiceScale.powers[i]));
+            int tail = data%10;
+            if(data!=0&&tail==0&&i==0) return 0;
+            if(data!=0&&tail==0)       return (i-1);
+            /*System.out.printf("oreder = %3d, dive = %9d, data = %5d, tail = %5d\n",
+                    i,NiceScale.powers[i],data,tail);*/
+        }
+        return -1;
+    }
     public int getScaleOrder(){
-        System.out.println(" Nice Min = " + this.niceMin + " nice MAx = " + niceMax);
+        //System.out.println(" Nice Min = " + this.niceMin + " nice MAx = " + niceMax);
         //if(this.tickSpacing>0){ return 0;}
         for(int i = 0; i < NiceScale.powers.length; i++){
             int data = ( (int) (this.tickSpacing*NiceScale.powers[i]));
@@ -133,8 +146,18 @@ public class NiceScale {
     }
     
     public String getOrderString(){return this.orderString;}
+    
     public void   setOrderString(){
-        int order = getScaleOrder();
+        int order = this.getNumberOrder(this.tickSpacing);
+        //System.out.println(" ORDER = " + order);
+        if(order==0){
+            int nminorder = getNumberOrder(niceMin);
+            //System.out.println("ORDER MIN = " + niceMin + "  " + nminorder);
+            if(nminorder==0){ 
+                orderString = "%.0f";
+                return;
+            }
+        }
         if(order>=0){
             orderString = "%."+order+"f";
         } else {
@@ -143,13 +166,34 @@ public class NiceScale {
         
     }
     public static void main(String[] args){
-        NiceScale nice = new NiceScale(0.1,0.2);
+        NiceScale nice = new NiceScale(0,10000);
+        nice.setMinMaxPoints(0, 100000);
+        nice.setOrderString();
+        
+        System.out.println("Order String = " +  nice.getOrderString());
+        
         System.out.println("spacing " + nice.getSpacing() + " ");
         System.out.println("order   " + nice.getScaleOrder());
+        System.out.println("num order " + nice.getNumberOrder(100));
         List<Double> ticks = new ArrayList<Double>();
         nice.getTicks(ticks);
         for(int i = 0; i < ticks.size(); i++){
             System.out.println(" --- " + i + "  value = " + ticks.get(i));
         }
+        
+        
+        for(int i = 0; i < 10 ; i++){
+            double num = 100*Math.pow(10, -i);
+            System.out.printf("%18.8f   -  %d\n",num,nice.getNumberOrder(num));
+        }
+        
+        System.out.printf("%.0f\n",100000.0);
+        
+        
+        System.out.println("----------------->>>");
+        nice.setMinMaxPoints(0, 11744.739990);
+        
+        nice.setOrderString();
+        System.out.println(nice.getOrderString());
     }
 }

@@ -34,6 +34,8 @@ public class HistogramNode1D extends DataNode2D {
         return dataBounds;
     }
     
+    public IDataSet getDataSet(){ return h1d;}
+    
     @Override
     public void drawLayer(Graphics2D g2d, int layer){ 
         Node2D parent = this.getParent();

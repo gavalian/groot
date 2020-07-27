@@ -8,6 +8,7 @@ package org.jlab.jnp.groot.graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
+import org.jlab.groot.data.IDataSet;
 import org.jlab.jnp.graphics.attr.AttributeCollection;
 import org.jlab.jnp.graphics.attr.AttributeType;
 import org.jlab.jnp.graphics.attr.ColorPalette;
@@ -44,6 +45,8 @@ public class DataNode2D extends Node2D {
        drawOptions = options;
        attributes = new AttributeCollection(attr,data);
     }
+    
+    public IDataSet getDataSet(){ return null;}
     
     public AttributeCollection getAttributes(){ return this.attributes;}
     

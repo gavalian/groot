@@ -14,6 +14,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
 import org.jlab.groot.math.F1D;
@@ -38,9 +39,9 @@ public class TDataCanvas extends JFrame implements ActionListener {
     
     public TDataCanvas(String title){
         this.dataCanvasTitle = title;
-        initUI();
-        
+        initUI();        
     }
+    
     public TDataCanvas(String title, int width, int height){
         this.CANVAS_DEFAULT_WIDTH  = width; this.CANVAS_DEFAULT_HEIGHT = height;
         initUI();
@@ -114,7 +115,7 @@ public class TDataCanvas extends JFrame implements ActionListener {
         //c1.getDataCanvas().left(120).setAxisTitleFont("Avenir", 18, 0);
         c1.getDataCanvas().divide(2,1);
         c1.getDataCanvas().left(80).setAxisTitleFont("Helvetica", 18, 0);        
-        c1.getDataCanvas().left(80).setAxisFont("Helvetica", 18, 0);        
+        //c1.getDataCanvas().left(80).setAxisFont("Helvetica", 18, 0);
         H1F h1 = FunctionFactory.randomGausian(100, 0.1, 2.5, 1000000, 1.25, 0.3);
         HistogramNode1D node = new HistogramNode1D(h1);
         
@@ -124,17 +125,17 @@ public class TDataCanvas extends JFrame implements ActionListener {
         h2.setBinContent(1, 0, 0.5);
         h2.setBinContent(0, 1, 0.4);
      */
-        H2F h2 = FunctionFactory.randomGausian2D(200, 0.0, 1.5, 10000000, 0.5, 0.2);
+        H2F h2 = FunctionFactory.randomGausian2D(200, 0.0, 2.5, 10000000, 1.25, 0.55);
         HistogramNode2D node2 = new HistogramNode2D(h2);
         
         h1.setLineColor(4);
-        h1.setLineWidth(1);
-        h1.setLineWidth(1);
+        //h1.setLineStyle(1);
+        h1.setLineWidth(2);
         h1.setFillColor(53);
         //c1.getDataCanvas().getRegion(0).getGraphicsAxis().addNode(node2);
         PaveText text = new PaveText("trying helvetica 0.1 20.7 80",0,0);
         PaveText textb = new PaveText("Bold Helvetica 0.1 20.7 80",0,120);
-        textb.setFont(new Font("Helvetica",Font.BOLD,18));
+        textb.setFont(new Font("Times",Font.PLAIN,18));
         //for(int i = 0; i < 6; i++){
         F1D function = new F1D("f1","x/sqrt(x*x+[m]*[m])",0.05,1.5);
         function.setParameter(0, 0.938);
@@ -142,13 +143,25 @@ public class TDataCanvas extends JFrame implements ActionListener {
         c1.getDataCanvas().getRegion(0).getGraphicsAxis().addNode(new HistogramNode2D(h2));
         c1.getDataCanvas().getRegion(0).getGraphicsAxis().addNode(new FunctionNode1D(function));
         
-        c1.getDataCanvas().getRegion(1).getGraphicsAxis().addNode(new HistogramNode1D(h1));
-        c1.getDataCanvas().getRegion(1).addNode(text);
-        c1.getDataCanvas().getRegion(1).addNode(textb);
+        //c1.getDataCanvas().getRegion(1).getGraphicsAxis().addNode(new HistogramNode1D(h1));
+        //c1.getDataCanvas().getRegion(1).addNode(text);
+        //c1.getDataCanvas().getRegion(1).addNode(textb);
         //}
         //c1.getDataCanvas().getRegion(0).getGraphicsAxis().addNode(node);
         //c1.getDataCanvas().getRegion(1).getGraphicsAxis().addNode(node2);
         c1.getDataCanvas().repaint();
+        GraphErrors graph = new GraphErrors();
+        
+        graph.setTitleX("P [GeV]");
+        graph.setTitleY("AI Rec Efficiency");
+        graph.readFile("demo_graph.data");
+        System.out.println("size = " + graph.getDataSize(0));
+        graph.setLineColor(1);
+        graph.setMarkerColor(4);
+        graph.setLineThickness(3);
+        graph.setMarkerSize(8);
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().setAxisLimits(0.5,9.5,0.0,1.4005);
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().addDataNode(new GraphNode2D(graph));
         
     }    
 }

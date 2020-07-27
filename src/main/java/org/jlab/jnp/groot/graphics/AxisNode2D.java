@@ -6,6 +6,7 @@
 package org.jlab.jnp.groot.graphics;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class AxisNode2D extends Node2D {
                     },                    
                     new String[]{"0",
                         "1","1",
-                        "5","5","20","20",
+                        "8","5","10","10",
                         "true","true","true","fasle"});
     
 //    private final  AxisAttributes  axisAttributes = new AxisAttributes();
@@ -124,8 +125,11 @@ public class AxisNode2D extends Node2D {
         } else if(this.AXIS_TYPE==AxisNode2D.AXIS_TYPE_VERTICAL){
             axisScale.setMaxTicks(this.maxAxisTicks);
             axisScale.setMinMaxPoints(axisLimits.getY(), axisLimits.getY()+axisLimits.getHeight());
+            
             axisScale.getTicks(axisMarkers);
             axisScale.setOrderString();
+            System.out.printf("Setting axis : %f %f \n",axisLimits.getY(), axisLimits.getY()+axisLimits.getHeight());
+            System.out.printf(" SPACING = %f , order = %s\n",axisScale.getSpacing(), axisScale.getOrderString());
             /*System.out.printf(" AXIS TYPE VERTICAL : %8.4f %8.4f : %5d\n",
                     axisLimits.getY(),axisLimits.getY() + axisLimits.getHeight(),
                     axisMarkers.size());*/
@@ -212,19 +216,23 @@ public class AxisNode2D extends Node2D {
             int titleOffset = axisAttributes.getInt(AttributeType.AXISTITLEOFFSET);
             
             if(tickOffset<0){ labelOffset = labelOffset + Math.abs(tickOffset);}
-            
+            int maxOffset = 0;
             for(int i = 0; i < this.axisMarkers.size(); i++){
                 double xcoord = parent.transformX(axisMarkers.get(i));
                 g2d.drawLine( (int) xcoord, (int) y2 , (int) xcoord, (int) (y2-tickOffset));                                
-                axisText.setText(String.format(axisScale.getOrderString(), axisMarkers.get(i)));
-                axisText.drawString(g2d, (int) xcoord, (int) (y2 + labelOffset), 
-                        LatexText.ALIGN_CENTER, LatexText.ALIGN_TOP);
+                //axisText.setText(String.format(axisScale.getOrderString(), axisMarkers.get(i)));
+                String label = String.format(axisScale.getOrderString(), axisMarkers.get(i));
+                int offset = axisText.drawString(label,g2d, (int) xcoord, (int) (y2 + labelOffset), 
+                        LatexText.ALIGN_CENTER, LatexText.ALIGN_TOP,0);
+                if(offset>maxOffset) maxOffset = offset;
             }
             
             int xtitle = (int) (bounds.getX() + bounds.getWidth()/2.0);
             int ytitle = (int) (bounds.getY()+bounds.getHeight());
-            axisTitleText.setText(axisTitle);            
-            axisTitleText.drawString(g2d, xtitle, ytitle + titleOffset, LatexText.ALIGN_CENTER, LatexText.ALIGN_TOP);
+            //axisTitleText.setFont(new Font("Symbol",Font.PLAIN,18));
+            axisTitleText.setText(axisTitle);                  
+            axisTitleText.drawString(g2d, xtitle, ytitle + titleOffset + maxOffset, LatexText.ALIGN_CENTER, LatexText.ALIGN_TOP);
+            
         } else if(this.AXIS_TYPE==AxisNode2D.AXIS_TYPE_VERTICAL){
             
             double x1 = bounds.getX();
@@ -243,19 +251,27 @@ public class AxisNode2D extends Node2D {
             int tickOffset = axisAttributes.getInt(AttributeType.AXISTICKSIZE);
             int labelOffset = axisAttributes.getInt(AttributeType.AXISLABELOFFSET);
             
+            System.out.println(" AXIS = " + axisScale.getSpacing());
+            System.out.println(" ORDERGIN = " + axisScale.getOrderString());
+            
+            
             if(tickOffset<0){ labelOffset = labelOffset + Math.abs(tickOffset);}
+            int maxOffset = 0;
             for(int i = 0; i < this.axisMarkers.size(); i++){
                 double ycoord = parent.transformY(axisMarkers.get(i));
                 g2d.drawLine( (int) x1 , (int) ycoord , (int) (x1+tickOffset), (int) ycoord);
-                axisText.setText(String.format(axisScale.getOrderString(), axisMarkers.get(i)));
-                axisText.drawString(g2d, (int) (x1 - labelOffset), (int) ycoord, 
-                        LatexText.ALIGN_RIGTH, LatexText.ALIGN_CENTER);
+                //axisText.setText(String.format(axisScale.getOrderString(), axisMarkers.get(i)));
+                String label = String.format(axisScale.getOrderString(), axisMarkers.get(i));
+                int offset = axisText.drawString(label,g2d, (int) (x1 - labelOffset), (int) ycoord, 
+                        LatexText.ALIGN_RIGTH, LatexText.ALIGN_CENTER,1);
+                if(offset>maxOffset) maxOffset = offset;
             }
+            
             int xtitle = (int) (bounds.getX());
             int ytitle = (int) (bounds.getY()+bounds.getHeight()/2.0);
             axisTitleText.setText(axisTitle);
             axisTitleText.drawString(g2d, 
-                    xtitle - titleOffset - titleOffsetVert, ytitle , 
+                    xtitle - titleOffset - maxOffset, ytitle , 
                     LatexText.ALIGN_CENTER, LatexText.ALIGN_CENTER,LatexText.ROTATE_LEFT);
         }
         

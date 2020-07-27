@@ -12,6 +12,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
+import org.jlab.groot.data.IDataSet;
 import org.jlab.jnp.graphics.base.Node2D;
 import org.jlab.jnp.groot.settings.GRootColorPalette;
 
@@ -36,6 +37,8 @@ public class HistogramNode2D extends DataNode2D {
                );
         return dataBounds;
     }
+    
+    public IDataSet getDataSet(){ return h2d;}
     
     @Override
     public void drawLayer(Graphics2D g2d, int layer){ 

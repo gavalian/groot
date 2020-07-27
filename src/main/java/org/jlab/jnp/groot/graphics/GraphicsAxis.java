@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.List;
 import org.jlab.jnp.graphics.attr.AttributeCollection;
 import org.jlab.jnp.graphics.attr.AttributeType;
@@ -38,8 +39,8 @@ public class GraphicsAxis extends Node2D {
                     new AttributeType[]{AttributeType.PAD_TITLE},
                     new String[]{"Graph Title"});
     
-    
-    
+    private Rectangle2D  axisFrameLimits = null;
+    private List<DataNode2D> dataNodes = new ArrayList<DataNode2D>();
     
     public GraphicsAxis(){
         super(20,20);
@@ -74,6 +75,14 @@ public class GraphicsAxis extends Node2D {
             this.axisY.setAxisTicks(ticks);
         }
         return this;
+    }
+    
+    public void setAxisLimits(Rectangle2D rect){
+        this.axisFrameLimits = rect;
+    }
+    
+    public void setAxisLimits(double xmin, double xmax, double ymin, double ymax){
+        this.axisFrameLimits = new Rectangle2D.Double(xmin,ymin,xmax-xmin,ymax-ymin);
     }
     
     public GraphicsAxis setAxisTitleOffset(Integer offset, String axis){
@@ -111,17 +120,32 @@ public class GraphicsAxis extends Node2D {
             node.getDataBounds(trans);
         }
         //System.out.println(trans);
-        axisX.setAxisRegion(trans);
-        axisY.setAxisRegion(trans);
         
+        if(this.axisFrameLimits==null) {
+            axisX.setAxisRegion(trans);
+            axisY.setAxisRegion(trans);
+        } else {
+            trans.setRect(axisFrameLimits.getX(), 
+                    axisFrameLimits.getY(),
+                    axisFrameLimits.getWidth(),
+                    axisFrameLimits.getHeight());
+            axisX.setAxisRegion(axisFrameLimits);
+            axisY.setAxisRegion(axisFrameLimits);
+        }
         
         axisX.drawLayer(g2d, 0);
         axisY.drawLayer(g2d, 0);
         
-        axisX.setTitle("X^2 title [GeV]");
+        /*axisX.setTitle("Q^2[ Gev^2/c]");
         axisY.setTitle("#phi^2 (#gamma) title [GeV]");
-        
-        drawChildren(g2d,layer);
+        */
+        //if(this.getChildren().size()>0){
+            
+        //}
+        for(DataNode2D node : this.dataNodes){
+            node.drawLayer(g2d, layer);
+        }
+        //drawChildren(g2d,layer);
         //System.out.println("drawing axis ----");
         axisX.drawLayer(g2d, 1);
         axisY.drawLayer(g2d, 1);
@@ -131,6 +155,15 @@ public class GraphicsAxis extends Node2D {
         g2d.drawString("b", (int) ( bounds.getX() + 40), (int) (bounds.getY() + 20));*/
        
         //g2d.drawString("helvetica", (int) ( bounds.getX() + 20), (int) (bounds.getY() + 80));
+    }
+    
+    public void addDataNode(DataNode2D node){
+        if(dataNodes.size()==0){
+            axisX.setTitle(node.getDataSet().getAttributes().getTitleX());
+            axisY.setTitle(node.getDataSet().getAttributes().getTitleY());
+        }
+        node.setParent(this);
+        dataNodes.add(node);
     }
     
     @Override
