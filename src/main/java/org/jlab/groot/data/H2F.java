@@ -24,15 +24,15 @@ public class H2F implements IDataSet {
     
     private long histogramUniqueID = 0L;
     
-    private float[] hBuffer;
+    private double[] hBuffer;
     private MultiIndex offset;
     
     private DatasetAttributes attr = new DatasetAttributes(DatasetAttributes.HISTOGRAM2D);
-    private Float     maximumBinValue = 0.0f;
+    private double     maximumBinValue = 0.0;
         
     public H2F() {
         offset = new MultiIndex(xAxis.getNBins(), yAxis.getNBins());
-        hBuffer = new float[offset.getArraySize()];
+        hBuffer = new double[offset.getArraySize()];
         initAttributes();
     }
     
@@ -47,7 +47,7 @@ public class H2F implements IDataSet {
     public H2F(String name) {
         hName = name;
         offset = new MultiIndex(xAxis.getNBins(), yAxis.getNBins());
-        hBuffer = new float[offset.getArraySize()];
+        hBuffer = new double[offset.getArraySize()];
         initAttributes();
         
     }
@@ -75,7 +75,7 @@ public class H2F implements IDataSet {
         hName = name;
         this.set(bx, xmin, xmax, by, ymin, ymax);
         offset = new MultiIndex(bx, by);
-        hBuffer = new float[offset.getArraySize()];    
+        hBuffer = new double[offset.getArraySize()];    
         initAttributes();
     }
     
@@ -85,7 +85,7 @@ public class H2F implements IDataSet {
         hName = name;
         this.set(bx, xmin, xmax, by, ymin, ymax);
         offset = new MultiIndex(bx, by);
-        hBuffer = new float[offset.getArraySize()];          
+        hBuffer = new double[offset.getArraySize()];          
         initAttributes();
         this.setTitle(title);
     }
@@ -142,7 +142,7 @@ public class H2F implements IDataSet {
         yAxis.set(by, ymin, ymax);
         offset = new MultiIndex(bx, by);
         int buff = offset.getArraySize();
-        hBuffer = new float[buff];
+        hBuffer = new double[buff];
     }
     
     /**
@@ -330,7 +330,7 @@ public class H2F implements IDataSet {
     }
     
     public float getDataBufferBin(int bin){
-        return this.hBuffer[bin];
+        return (float) this.hBuffer[bin];
     }
     
     public void setDataBufferBin(int bin, float value){
@@ -806,7 +806,9 @@ public class H2F implements IDataSet {
     }
     
     public float[] offset() {
-        return hBuffer;
+        float[] f = new float[hBuffer.length];
+        for(int i = 0; i < hBuffer.length; i++) f[i] = (float) hBuffer[i];
+        return f;
     }
     /**
      * Resets the content of the histogram, sets all bin contents to 0
