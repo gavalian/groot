@@ -94,11 +94,19 @@ public class Histogram2DPlotter implements IDataSetPlotter {
 
                 Color weightColor;
                 if (frame.getAxisZ().isAutoScale()) {
-                    weightColor = palette.getColor3D(dataWeight,
+                    try {
+                        weightColor = palette.getColor3D(dataWeight,
                             dimMin, dimMax, zAxisLog);
+                    } catch (Exception e ){
+                        weightColor = Color.white;
+                    }
                 } else {
-                    weightColor = palette.getColor3D(dataWeight,
-                            frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
+                    try{
+                        weightColor = palette.getColor3D(dataWeight,
+                                frame.getAxisZ().getRange().getMin(), frame.getAxisZ().getRange().getMax(), zAxisLog);
+                    } catch (Exception e){
+                        weightColor = Color.white;
+                    }
                 }
                 if(drawBox==false){                                    
                     g2d.setColor(weightColor);
