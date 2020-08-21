@@ -30,6 +30,19 @@ public class H3F {
     }
     
     
+    public H3F(double[] xLimits, double[] yLimits, double[] zLimits){
+        initData(xLimits,yLimits,zLimits);
+    }
+    
+    
+     private void initData(double[] xLimits, double[] yLimits, double[] zLimits){
+        xAxis.set(xLimits);
+        yAxis.set(yLimits);
+        zAxis.set(zLimits);
+        offset.setDimensions(xAxis.getNBins(),yAxis.getNBins(),zAxis.getNBins());
+        hBuffer = new float[offset.getArraySize()];
+    }
+     
     private void initData(int xbins, double xmin, double xmax, int ybins, double ymin, double ymax,
             int zbins, double zmin, double zmax){
         xAxis.set(xbins, xmin, xmax);
