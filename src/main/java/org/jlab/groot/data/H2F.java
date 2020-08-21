@@ -90,6 +90,31 @@ public class H2F implements IDataSet {
         this.setTitle(title);
     }
     
+    public H2F(String name, double[] binsX, double[] binsY){
+        xAxis.set(binsX);
+        yAxis.set(binsY);
+        int bx = xAxis.getNBins();
+        int by = yAxis.getNBins();
+        offset = new MultiIndex(bx, by);
+        int buff = offset.getArraySize();
+        hBuffer = new double[buff];
+        this.initAttributes();
+        this.hName = name;
+    }
+    
+    public H2F(String name, String title, double[] binsX, double[] binsY){
+        xAxis.set(binsX);
+        yAxis.set(binsY);
+        int bx = xAxis.getNBins();
+        int by = yAxis.getNBins();
+        offset = new MultiIndex(bx, by);
+        int buff = offset.getArraySize();
+        hBuffer = new double[buff];
+        this.initAttributes();
+        this.hName = name;
+        this.setTitle(title);
+    }
+    
     public H2F  setUniqueID(long id){ this.histogramUniqueID = id; return this;}
     public long getUniqueID(){ return this.histogramUniqueID;}
     

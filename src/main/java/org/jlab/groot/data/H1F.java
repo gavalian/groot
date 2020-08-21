@@ -130,6 +130,24 @@ public class H1F  implements IDataSet {
     	setTitle(title);
     }
     
+    public H1F(String name, double[] bins){
+        xAxis = new Axis(bins);
+    	yAxis = new Axis();
+        this.initAttributes();
+        setName(name);
+        initDataStore(xAxis.getNBins());
+    }
+    
+    public H1F(String name, String title, double[] bins){
+        xAxis = new Axis(bins);
+    	yAxis = new Axis();
+                
+        this.initAttributes();
+        setName(name);
+        setTitle(title);
+    	initDataStore(xAxis.getNBins());
+    }
+    
     public H1F  setUniqueID(long id){ this.histogramUniqueID = id; return this;}
     public long getUniqueID(){ return this.histogramUniqueID;}
 
