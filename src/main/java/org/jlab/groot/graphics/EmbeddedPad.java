@@ -555,6 +555,8 @@ public class EmbeddedPad {
     public EmbeddedPad getCopy() {
         EmbeddedPad pad = new EmbeddedPad();
         pad.setPalette(attr.getPalette().getActivePalette());
+        
+        //Copy Datasets
         for (int i = 0; i < this.datasetPlotters.size(); i++) {
             IDataSetPlotter plotter = this.datasetPlotters.get(i);
             if (plotter instanceof HistogramPlotter) {
@@ -571,6 +573,19 @@ public class EmbeddedPad {
                 //System.out.println("Graph errors");
             }
         }
+        
+        //Copy Latex
+        for(LatexText text : this.padLatexText){
+        	pad.addLatex(text);
+        }
+        
+        //Copy Datalines
+        for(DataLine line : this.padLines) {
+        	pad.padLines.add(line);
+        }
+        
+        
+        // Set Pad Attributes
         try {
             pad.getAxisX().setAttributes((AxisAttributes) this.getAxisX().getAttributes().clone());
             pad.getAxisY().setAttributes((AxisAttributes) this.getAxisY().getAttributes().clone());
@@ -581,7 +596,6 @@ public class EmbeddedPad {
             pad.setTitleFont(this.getTitleFont());
             pad.setStatBoxFont(this.getStatBoxFontName());
             pad.setStatBoxFontSize(this.getStatBoxFontSize());
-
         } catch (CloneNotSupportedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
