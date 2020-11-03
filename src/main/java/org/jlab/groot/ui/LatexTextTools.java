@@ -121,14 +121,14 @@ public class LatexTextTools {
         AttributedString  string = new AttributedString(newString);
         for(Integer indx : subindex){
             if(indx>0){
-                System.out.println(" Subscript = " + indx);
+//                System.out.println(" Subscript = " + indx);
                 string.addAttribute(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUB, indx,indx+1);
             }
         } 
         
         for(Integer indx : supindex){
             if(indx>0){
-                System.out.println(" Superscript = " + indx);
+//                System.out.println(" Superscript = " + indx);
                 string.addAttribute(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUPER, indx,indx+1);
             }
         }  

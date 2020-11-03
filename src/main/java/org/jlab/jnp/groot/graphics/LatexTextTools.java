@@ -93,31 +93,6 @@ public class LatexTextTools {
 		return newString;
 	}
 
-	public static AttributedString converSubScript(String line) {
-		ArrayList<Integer> supindex = new ArrayList<Integer>();
-		ArrayList<Integer> subindex = new ArrayList<Integer>();
-		int index = line.indexOf("^");
-		String newString = line;
-		while (index >= 0) {
-			// System.out.println("adding index = " + index);
-			supindex.add(index);
-			// newString = newString.replaceFirst("^", "");
-			newString = newString.substring(0, index) + newString.substring(index + 1);
-			index = newString.indexOf("_");
-			// System.out.println(newString);
-		}
-
-		AttributedString string = new AttributedString(newString);
-
-		for (Integer indx : supindex) {
-			if (indx > 0) {
-				// System.out.println(" L = " + indx);
-				string.addAttribute(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUPER, indx, indx + 1);
-			}
-		}
-
-		return string;
-	}
 
 	public static AttributedString convertSubAndSuperscript(String line) {
 		ArrayList<Integer> supindex = new ArrayList<Integer>();
@@ -147,14 +122,14 @@ public class LatexTextTools {
 		AttributedString string = new AttributedString(newString);
 		for (Integer indx : subindex) {
 			if (indx > 0) {
-				System.out.println(" Subscript = " + indx);
+//				System.out.println(" Subscript = " + indx);
 				string.addAttribute(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUB, indx, indx + 1);
 			}
 		}
 
 		for (Integer indx : supindex) {
 			if (indx > 0) {
-				System.out.println(" Superscript = " + indx);
+//				System.out.println(" Superscript = " + indx);
 				string.addAttribute(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUPER, indx, indx + 1);
 			}
 		}
