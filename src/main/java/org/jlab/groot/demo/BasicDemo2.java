@@ -41,7 +41,7 @@ public class BasicDemo2 {
 			bodemkamp.addPoint(bodenkampx[i], bodenkampy[i], 0, bodenkampyerr[i]);
 		}
 		
-		barber.setTitleX("E#gamma [GeV]");
+		barber.setTitleX("E_#gamma [GeV]");
 		barber.setTitleY("#sigma [nb]");
                 
 		canvas.getPad(0).setTitle("Total Cross Section #gammap#rarrowppp#bar");

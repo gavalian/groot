@@ -66,6 +66,27 @@ public class GraphErrors implements IDataSet {
         initAttributes();
     }
     
+    public GraphErrors(String name, double[] x, double y[], double[] ey){
+        setName(name);
+        for(int i = 0; i < x.length; i++){
+            this.addPoint(x[i], y[i], 0.0, ey[i]);
+        }
+        initAttributes();
+    }
+    
+    public GraphErrors(String name, double[] x, double y[]){
+        setName(name);
+        for(int i = 0; i < x.length; i++){
+            this.addPoint(x[i], y[i], 0.0, 0.0);
+        }
+        initAttributes();
+    }
+    
+    public GraphErrors(String name) {
+        graphName = name;
+        initAttributes();
+    }
+    
      public static GraphErrors createGraph(H1F h, String options, boolean supressZeros){
         GraphErrors gr = new GraphErrors();
         for(int i = 0; i < h.getXaxis().getNBins(); i++){
@@ -111,19 +132,8 @@ public class GraphErrors implements IDataSet {
         }
         return gr;
     }
-    
-    public GraphErrors(String name, double[] x, double y[]){
-        setName(name);
-        for(int i = 0; i < x.length; i++){
-            this.addPoint(x[i], y[i], 0.0,0.0);
-        }
-        initAttributes();
-    }
-    
-    public GraphErrors(String name) {
-        graphName = name;
-        initAttributes();
-    }
+
+ 
 
 
 	private void initAttributes(){
