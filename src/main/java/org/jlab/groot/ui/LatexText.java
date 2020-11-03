@@ -60,7 +60,7 @@ public class LatexText {
     public final void setText(String text){
     	asciiString = text;
         String ltx  = LatexTextTools.convertUnicode(text);
-        latexString = LatexTextTools.converSuperScript(ltx);
+        latexString = LatexTextTools.convertSubAndSuperscript(ltx);
         this.setFont(this.textFamily);
         this.setFontSize(this.textFontSize);
     }
