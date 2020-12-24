@@ -60,7 +60,8 @@ public class TCanvas extends JFrame implements ActionListener {
         super();
         this.setTitle(name);
         this.setSize(xsize, ysize);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.initMenu();
         this.setJMenuBar(menuBar);
 

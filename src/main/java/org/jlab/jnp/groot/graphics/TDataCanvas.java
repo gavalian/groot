@@ -114,8 +114,8 @@ public class TDataCanvas extends JFrame implements ActionListener {
         TDataCanvas c1 = new TDataCanvas("T",900,600);
         //c1.getDataCanvas().left(120).setAxisTitleFont("Avenir", 18, 0);
         c1.getDataCanvas().divide(2,1);
-        c1.getDataCanvas().left(80).setAxisTitleFont("Helvetica", 18, 0);        
-        //c1.getDataCanvas().left(80).setAxisFont("Helvetica", 18, 0);
+        c1.getDataCanvas().left(80).setAxisTitleFont("Avenir", 18, 0);        
+        c1.getDataCanvas().left(80).setAxisFont("Helvetica", 18, 0);
         H1F h1 = FunctionFactory.randomGausian(100, 0.1, 2.5, 1000000, 1.25, 0.3);
         HistogramNode1D node = new HistogramNode1D(h1);
         
