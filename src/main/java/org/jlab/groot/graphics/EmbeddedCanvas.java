@@ -63,6 +63,7 @@ import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.fitter.ParallelSliceFitter;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.math.Dimension1D;
+import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.FunctionFactory;
 import org.jlab.groot.ui.FitPanel;
 import org.jlab.groot.ui.LatexText;
@@ -787,7 +788,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
             FileFilter filterPNG = new FileNameExtensionFilter("PNG File", "png");
             fc.addChoosableFileFilter(filterPNG);
 
-            FileFilter filterTXT = new FileNameExtensionFilter("Bin Values as TXT File", "txt");
+            FileFilter filterTXT = new FileNameExtensionFilter("TXT File", "txt");
             fc.addChoosableFileFilter(filterTXT);
 
             fc.setSelectedFile(new File(path + ".png"));
@@ -981,48 +982,94 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
     }
 
     public void saveBins(String filename) {
+        String extension = filename.substring(filename.lastIndexOf("."));
+        filename = filename.substring(0, filename.lastIndexOf("."));
 
-        EmbeddedPad pad = this.getPad(popupPad);
-        for (IDataSetPlotter plotter : pad.datasetPlotters){
-            IDataSet data = plotter.getDataSet();
-            System.out.println(data);
+        List<IDataSetPlotter> plotters = this.getPad(popupPad).datasetPlotters;
+        for (int k = 0; k < plotters.size(); k++) {
+            try {
+                IDataSet data = plotters.get(k).getDataSet();
+                FileWriter file = new FileWriter(filename + "_" + k + extension);
+//                System.out.println(data);
+    
+                if (data instanceof F1D){
+                        FileWriter parsfile = new FileWriter(filename + "_" + k + "_pars" + extension);
+                        F1D tmpdata = (F1D) data;
+                        int bins = data.getDataSize(0);
 
-            if (data instanceof H1F){
-                try {
-                    FileWriter file = new FileWriter(filename);
-                    float[] tmpdata = ((H1F)data).getData();
-                    for (int i = 0; i < tmpdata.length; i++) {
-                        file.write(Float.toString(tmpdata[i]));
-                        if (i != tmpdata.length - 1)
-                            file.write(',');
-                    }
-                        file.close();
-                } catch (IOException e) {
-                }
-            }
+                        parsfile.write("#F1D: " + tmpdata.getName() + " nsamples: " + bins +"\n");
+                        parsfile.write(tmpdata.toString());
 
-            if (data instanceof H2F){
-                try {
-                    FileWriter file = new FileWriter(filename);
-                    double[][] tmpdata = ((H2F)data).getContentBuffer();
-                    for (double[] row : tmpdata) {
-                        for (int i = 0; i < tmpdata[0].length; i++) {
-                            file.write(Double.toString(row[i]));
-                            if (i != tmpdata[0].length - 1)
-                                file.write(',');
+                        file.write("#F1D: " + tmpdata.getName() + " nsamples: " + bins +"\n");
+                        file.write("#x,y\n");
+                        for(int i = 0; i < bins; i++) {
+                            file.write(String.format("%f,%f", tmpdata.getDataX(i), tmpdata.getDataY(i)));
+                            file.write('\n');
                         }
-                        file.write('\n');
-                    }
-                    file.close();
-                } catch (IOException e) {
+                        parsfile.close();
                 }
+
+                if (data instanceof GraphErrors){
+
+                        GraphErrors tmpdata = (GraphErrors) data;
+                        int bins = tmpdata.getDataSize(0);
+
+                        file.write("#GraphErrors: " + tmpdata.getName() + " npoints: " + bins +"\n");
+                        file.write("#x,y,xerror,yerror\n");
+                        for(int i = 0; i < bins; i++) {
+                            file.write(String.format("%f,%f,%f,%f",
+                                    tmpdata.getDataX(i), tmpdata.getDataY(i),
+                                    tmpdata.getDataEX(i), tmpdata.getDataEY(i)));
+                            file.write('\n');
+                        }
+
+
+                }
+
+                if (data instanceof H1F){
+                        H1F tmpdata = (H1F) data;
+                        int bins = ((H1F)data).getxAxis().getNBins();
+
+                        file.write("#H1F: " + tmpdata.getName() + " nbins: " + bins +"\n");
+                        file.write("#Bin Center X,Bin Value,Bin Error\n");
+                        for(int i = 0; i < bins; i++) {
+                            file.write(String.format("%f,%f,%f",
+                                    tmpdata.getXaxis().getBinCenter(i), tmpdata.getBinContent(i),
+                                    tmpdata.getBinError(i)));
+                            file.write('\n');
+                        }
+
+
+                }
+
+                if (data instanceof H2F){
+
+
+                        H2F tmpdata = (H2F) data;
+                        int xbins = ((H2F)data).getXAxis().getNBins();
+                        int ybins = ((H2F)data).getYAxis().getNBins();
+
+                        file.write("#H2F: " + tmpdata.getName() + " nxbins: " + xbins + " nybins: " + ybins + "\n");
+                        file.write("#Bin Center X,Bin Center Y,Bin Value\n");
+
+                        for (int i = 0; i < xbins; i++) {
+                            for (int j = 0; j < ybins; j++) {
+                                file.write(String.format("%f,%f,%f",
+                                        tmpdata.getXAxis().getBinCenter(i), tmpdata.getYAxis().getBinCenter(j),
+                                        tmpdata.getBinContent(i, j)));
+                                file.write('\n');
+                            }
+                        }
+
+
+                }
+
+                file.close();
+            } catch (IOException e) {
             }
-
-
 
         }
 
-//        System.out.println(pad.datasetPlotters);
     }
 
     public static void main(String[] args) {
