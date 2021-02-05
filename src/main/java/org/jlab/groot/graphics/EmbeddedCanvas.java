@@ -23,8 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -774,7 +773,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
             File desktop = new File(System.getProperty("user.home"), "Desktop");
             DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
             String data = df.format(new Date());
-            this.save(desktop.getAbsolutePath() + File.separator + "Plot_" + data + ".png");
+            this.saveScreenShot(desktop.getAbsolutePath() + File.separator + "Plot_" + data + ".png");
             System.out.println("Saved File:" + desktop.getAbsolutePath() + File.separator + "Plot_" + data + ".png");
         }
         if (e.getActionCommand().compareTo("Save As...") == 0) {
@@ -782,10 +781,29 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
             DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
             String data = df.format(new Date());
             //this.save(desktop.getAbsolutePath() +File.separator+"Plot_"+data+".png");
-            fc.setSelectedFile(new File(GStyle.getWorkingDirectory() + File.separator + "Plot_" + data + ".png"));
-            FileFilter filter = new FileNameExtensionFilter("PNG File", "png");
-            fc.addChoosableFileFilter(filter);
-            fc.setFileFilter(filter);
+
+            String path = GStyle.getWorkingDirectory() + File.separator + "Plot_" + data;
+
+            FileFilter filterPNG = new FileNameExtensionFilter("PNG File", "png");
+            fc.addChoosableFileFilter(filterPNG);
+
+            FileFilter filterTXT = new FileNameExtensionFilter("Bin Values as TXT File", "txt");
+            fc.addChoosableFileFilter(filterTXT);
+
+            fc.setSelectedFile(new File(path + ".png"));
+            fc.setFileFilter(filterPNG);
+
+            fc.addPropertyChangeListener(JFileChooser.FILE_FILTER_CHANGED_PROPERTY, evt -> {
+//                String currentPath = fc.getSelectedFile().getName();
+//                System.out.println(currentPath);
+//                File selectedFile = fc.getSelectedFile();
+//                String currentPath = selectedFile.getPath();
+//                currentPath = currentPath.substring(0, currentPath.lastIndexOf("."));
+
+                FileNameExtensionFilter currentFilter = (FileNameExtensionFilter)evt.getNewValue();
+                fc.setSelectedFile(new File(path + "." + currentFilter.getExtensions()[0]));
+            });
+
             //In response to a button click:
             int returnVal = fc.showSaveDialog(this);
 
@@ -796,12 +814,18 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
                     int result = JOptionPane.showConfirmDialog(this, "File already exists, would you like to overwrite it?",
                             "alert", JOptionPane.OK_CANCEL_OPTION);
                     if (result == JOptionPane.OK_OPTION) {
-                        this.save(file.getAbsolutePath());
+                        if (fc.getFileFilter() == filterPNG)
+                            this.saveScreenShot(file.getAbsolutePath());
+                        if (fc.getFileFilter() == filterTXT)
+                            this.saveBins(file.getAbsolutePath());
                         GStyle.setWorkingDirectory(file.getParent());
                     }
                 } else {
                     //System.out.println("saving file : " + file.getAbsolutePath());
-                    this.save(file.getAbsolutePath());
+                    if (fc.getFileFilter() == filterPNG)
+                        this.saveScreenShot(file.getAbsolutePath());
+                    if (fc.getFileFilter() == filterTXT)
+                        this.saveBins(file.getAbsolutePath());
                     GStyle.setWorkingDirectory(file.getParent());
                 }
             }
@@ -947,13 +971,58 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         c.setContents(trans, null);
     }
 
-    public void save(String filename) {
+    public void saveScreenShot(String filename) {
         File imageFile = new File(filename);
         try {
             imageFile.createNewFile();
             ImageIO.write(getScreenShot(), "png", imageFile);
         } catch (Exception ex) {
         }
+    }
+
+    public void saveBins(String filename) {
+
+        EmbeddedPad pad = this.getPad(popupPad);
+        for (IDataSetPlotter plotter : pad.datasetPlotters){
+            IDataSet data = plotter.getDataSet();
+            System.out.println(data);
+
+            if (data instanceof H1F){
+                try {
+                    FileWriter file = new FileWriter(filename);
+                    float[] tmpdata = ((H1F)data).getData();
+                    for (int i = 0; i < tmpdata.length; i++) {
+                        file.write(Float.toString(tmpdata[i]));
+                        if (i != tmpdata.length - 1)
+                            file.write(',');
+                    }
+                        file.close();
+                } catch (IOException e) {
+                }
+            }
+
+            if (data instanceof H2F){
+                try {
+                    FileWriter file = new FileWriter(filename);
+                    double[][] tmpdata = ((H2F)data).getContentBuffer();
+                    for (double[] row : tmpdata) {
+                        for (int i = 0; i < tmpdata[0].length; i++) {
+                            file.write(Double.toString(row[i]));
+                            if (i != tmpdata[0].length - 1)
+                                file.write(',');
+                        }
+                        file.write('\n');
+                    }
+                    file.close();
+                } catch (IOException e) {
+                }
+            }
+
+
+
+        }
+
+//        System.out.println(pad.datasetPlotters);
     }
 
     public static void main(String[] args) {
