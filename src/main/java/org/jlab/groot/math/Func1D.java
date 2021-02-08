@@ -11,6 +11,8 @@ import org.jlab.groot.base.DatasetAttributes;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.ui.PaveText;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  *
@@ -244,6 +246,30 @@ public class Func1D implements IDataSet {
     @Override
     public void reset() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void save(String filename) {
+        String extension = filename.substring(filename.lastIndexOf("."));
+        filename = filename.substring(0, filename.lastIndexOf("."));
+
+        try {
+            FileWriter parsfile = new FileWriter(filename + "_pars" + extension);
+            parsfile.write("#F1D: " + this.funcName + ", nsamples: " + getDataSize(0) +"\n");
+            parsfile.write(this.toString());
+            parsfile.close();
+
+            FileWriter file = new FileWriter(filename + extension);
+            file.write("#F1D: " + this.funcName + " nsamples: " + getDataSize(0) +"\n");
+            file.write("#x,y\n");
+            for(int i = 0; i < getDataSize(0); i++) {
+                file.write(String.format("%f,%f",
+                        getDataX(i), getDataY(i)));
+                file.write('\n');
+            }
+            file.close();
+
+        } catch (IOException e) {
+        }
     }
 
 }

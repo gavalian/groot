@@ -23,8 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,15 +54,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.base.TColorPalette;
-import org.jlab.groot.data.DataLine;
-import org.jlab.groot.data.DataParser;
-import org.jlab.groot.data.GraphErrors;
-import org.jlab.groot.data.H1F;
-import org.jlab.groot.data.H2F;
-import org.jlab.groot.data.IDataSet;
+import org.jlab.groot.data.*;
 import org.jlab.groot.fitter.ParallelSliceFitter;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.math.Dimension1D;
+import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.FunctionFactory;
 import org.jlab.groot.ui.FitPanel;
 import org.jlab.groot.ui.LatexText;
@@ -782,10 +777,32 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
             DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
             String data = df.format(new Date());
             //this.save(desktop.getAbsolutePath() +File.separator+"Plot_"+data+".png");
-            fc.setSelectedFile(new File(GStyle.getWorkingDirectory() + File.separator + "Plot_" + data + ".png"));
-            FileFilter filter = new FileNameExtensionFilter("PNG File", "png");
-            fc.addChoosableFileFilter(filter);
-            fc.setFileFilter(filter);
+
+            String path = GStyle.getWorkingDirectory() + File.separator + "Plot_" + data;
+
+            FileFilter filterPNG = new FileNameExtensionFilter("PNG File", "png");
+            fc.addChoosableFileFilter(filterPNG);
+
+            FileFilter filterTXT = new FileNameExtensionFilter("TXT File", "txt");
+            fc.addChoosableFileFilter(filterTXT);
+
+            FileFilter filterHIPO = new FileNameExtensionFilter("HIPO File", "hipo");
+            fc.addChoosableFileFilter(filterHIPO);
+
+            fc.setSelectedFile(new File(path + ".png"));
+            fc.setFileFilter(filterPNG);
+
+            fc.addPropertyChangeListener(JFileChooser.FILE_FILTER_CHANGED_PROPERTY, evt -> {
+//                String currentPath = fc.getSelectedFile().getName();
+//                System.out.println(currentPath);
+//                File selectedFile = fc.getSelectedFile();
+//                String currentPath = selectedFile.getPath();
+//                currentPath = currentPath.substring(0, currentPath.lastIndexOf("."));
+
+                FileNameExtensionFilter currentFilter = (FileNameExtensionFilter)evt.getNewValue();
+                fc.setSelectedFile(new File(path + "." + currentFilter.getExtensions()[0]));
+            });
+
             //In response to a button click:
             int returnVal = fc.showSaveDialog(this);
 
@@ -796,12 +813,22 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
                     int result = JOptionPane.showConfirmDialog(this, "File already exists, would you like to overwrite it?",
                             "alert", JOptionPane.OK_CANCEL_OPTION);
                     if (result == JOptionPane.OK_OPTION) {
-                        this.save(file.getAbsolutePath());
+                        if (fc.getFileFilter() == filterPNG)
+                            this.save(file.getAbsolutePath(), SaveType.PNG);
+                        if (fc.getFileFilter() == filterTXT)
+                            this.save(file.getAbsolutePath(), SaveType.TXT);
+                        if (fc.getFileFilter() == filterHIPO)
+                            this.save(file.getAbsolutePath(), SaveType.HIPO);
                         GStyle.setWorkingDirectory(file.getParent());
                     }
                 } else {
                     //System.out.println("saving file : " + file.getAbsolutePath());
-                    this.save(file.getAbsolutePath());
+                    if (fc.getFileFilter() == filterPNG)
+                        this.save(file.getAbsolutePath(), SaveType.PNG);
+                    if (fc.getFileFilter() == filterTXT)
+                        this.save(file.getAbsolutePath(), SaveType.TXT);
+                    if (fc.getFileFilter() == filterHIPO)
+                        this.save(file.getAbsolutePath(), SaveType.HIPO);
                     GStyle.setWorkingDirectory(file.getParent());
                 }
             }
@@ -947,12 +974,43 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         c.setContents(trans, null);
     }
 
-    public void save(String filename) {
+    public void save(String filename) {  // left to preserve functionality
         File imageFile = new File(filename);
         try {
             imageFile.createNewFile();
             ImageIO.write(getScreenShot(), "png", imageFile);
         } catch (Exception ex) {
+        }
+    }
+
+    public void save(String filename, SaveType saveType) {
+
+        if (saveType == SaveType.PNG) {
+            save(filename);
+        }
+
+        if (saveType == SaveType.TXT) {
+            String extension = filename.substring(filename.lastIndexOf("."));
+            filename = filename.substring(0, filename.lastIndexOf("."));
+
+            List<IDataSetPlotter> plotters = this.getPad(popupPad).datasetPlotters;
+            for (int k = 0; k < plotters.size(); k++) {
+                IDataSet data = plotters.get(k).getDataSet();
+//            System.out.println(data);
+                data.save(filename + "_" + k + "_" + data.getName() + extension);
+            }
+        }
+
+        if (saveType == SaveType.HIPO) {
+            TDirectory tdir = new TDirectory();
+            tdir.mkdir("data");
+            tdir.cd("data");
+
+            List<IDataSetPlotter> plotters = this.getPad(popupPad).datasetPlotters;
+            for (IDataSetPlotter plotter : plotters)
+                tdir.addDataSet(plotter.getDataSet());
+
+            tdir.writeFile(filename);
         }
     }
 

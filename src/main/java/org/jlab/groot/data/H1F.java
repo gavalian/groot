@@ -7,6 +7,8 @@ import org.jlab.groot.math.Func1D;
 import org.jlab.groot.math.StatNumber;
 import org.jlab.groot.ui.PaveText;
 
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 /**
@@ -1034,5 +1036,20 @@ public class H1F  implements IDataSet {
             }
         }
         return max;
+    }
+
+    public void save(String filename) {
+        try {
+            FileWriter file = new FileWriter(filename);
+            file.write("#H1F: " + this.histName + ", nbins: " + xAxis.getNBins() +"\n");
+            file.write("#Bin Center X,Bin Value,Bin Error\n");
+            for(int i = 0; i < xAxis.getNBins(); i++) {
+                file.write(String.format("%f,%f,%f",
+                        xAxis.getBinCenter(i), getBinContent(i), getBinError(i)));
+                file.write('\n');
+            }
+            file.close();
+        } catch (IOException e) {
+        }
     }
 }

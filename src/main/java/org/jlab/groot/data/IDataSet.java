@@ -27,4 +27,5 @@ public interface IDataSet {
     PaveText    getStatBox();
     double getMin();
     double getMax();
+    void save(String filename);
 }

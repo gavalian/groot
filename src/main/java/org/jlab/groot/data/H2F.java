@@ -1,5 +1,7 @@
 package org.jlab.groot.data;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jlab.groot.base.DatasetAttributes;
@@ -944,5 +946,24 @@ public class H2F implements IDataSet {
             }
         }
         return max;
+    }
+
+    public void save(String filename) {
+        try {
+            FileWriter file = new FileWriter(filename);
+            file.write("#H2F: " + this.hName + ", nxbins: " + xAxis.getNBins()
+                    + ", nybins: " + yAxis.getNBins() + "\n");
+            file.write("#Bin Center X,Bin Center Y,Bin Value\n");
+
+            for (int i = 0; i < xAxis.getNBins(); i++) {
+                for (int j = 0; j < yAxis.getNBins(); j++) {
+                    file.write(String.format("%f,%f,%f",
+                            xAxis.getBinCenter(i), yAxis.getBinCenter(j), getBinContent(i, j)));
+                    file.write('\n');
+                }
+            }
+            file.close();
+        } catch (IOException e) {
+        }
     }
 }
