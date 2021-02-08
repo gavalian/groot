@@ -54,12 +54,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.base.PadMargins;
 import org.jlab.groot.base.TColorPalette;
-import org.jlab.groot.data.DataLine;
-import org.jlab.groot.data.DataParser;
-import org.jlab.groot.data.GraphErrors;
-import org.jlab.groot.data.H1F;
-import org.jlab.groot.data.H2F;
-import org.jlab.groot.data.IDataSet;
+import org.jlab.groot.data.*;
 import org.jlab.groot.fitter.ParallelSliceFitter;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.math.Dimension1D;
@@ -791,6 +786,9 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
             FileFilter filterTXT = new FileNameExtensionFilter("TXT File", "txt");
             fc.addChoosableFileFilter(filterTXT);
 
+            FileFilter filterHIPO = new FileNameExtensionFilter("HIPO File", "hipo");
+            fc.addChoosableFileFilter(filterHIPO);
+
             fc.setSelectedFile(new File(path + ".png"));
             fc.setFileFilter(filterPNG);
 
@@ -816,17 +814,21 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
                             "alert", JOptionPane.OK_CANCEL_OPTION);
                     if (result == JOptionPane.OK_OPTION) {
                         if (fc.getFileFilter() == filterPNG)
-                            this.save(file.getAbsolutePath());
+                            this.save(file.getAbsolutePath(), SaveType.PNG);
                         if (fc.getFileFilter() == filterTXT)
-                            this.saveBins(file.getAbsolutePath());
+                            this.save(file.getAbsolutePath(), SaveType.TXT);
+                        if (fc.getFileFilter() == filterHIPO)
+                            this.save(file.getAbsolutePath(), SaveType.HIPO);
                         GStyle.setWorkingDirectory(file.getParent());
                     }
                 } else {
                     //System.out.println("saving file : " + file.getAbsolutePath());
                     if (fc.getFileFilter() == filterPNG)
-                        this.save(file.getAbsolutePath());
+                        this.save(file.getAbsolutePath(), SaveType.PNG);
                     if (fc.getFileFilter() == filterTXT)
-                        this.saveBins(file.getAbsolutePath());
+                        this.save(file.getAbsolutePath(), SaveType.TXT);
+                    if (fc.getFileFilter() == filterHIPO)
+                        this.save(file.getAbsolutePath(), SaveType.HIPO);
                     GStyle.setWorkingDirectory(file.getParent());
                 }
             }
@@ -972,7 +974,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         c.setContents(trans, null);
     }
 
-    public void save(String filename) {
+    public void save(String filename) {  // left to preserve functionality
         File imageFile = new File(filename);
         try {
             imageFile.createNewFile();
@@ -981,17 +983,35 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         }
     }
 
-    public void saveBins(String filename) {
-        String extension = filename.substring(filename.lastIndexOf("."));
-        filename = filename.substring(0, filename.lastIndexOf("."));
+    public void save(String filename, SaveType saveType) {
 
-        List<IDataSetPlotter> plotters = this.getPad(popupPad).datasetPlotters;
-        for (int k = 0; k < plotters.size(); k++) {
-            IDataSet data = plotters.get(k).getDataSet();
-//            System.out.println(data);
-            data.save(filename + "_" + k + "_" + data.getName() + extension);
+        if (saveType == SaveType.PNG) {
+            save(filename);
         }
 
+        if (saveType == SaveType.TXT) {
+            String extension = filename.substring(filename.lastIndexOf("."));
+            filename = filename.substring(0, filename.lastIndexOf("."));
+
+            List<IDataSetPlotter> plotters = this.getPad(popupPad).datasetPlotters;
+            for (int k = 0; k < plotters.size(); k++) {
+                IDataSet data = plotters.get(k).getDataSet();
+//            System.out.println(data);
+                data.save(filename + "_" + k + "_" + data.getName() + extension);
+            }
+        }
+
+        if (saveType == SaveType.HIPO) {
+            TDirectory tdir = new TDirectory();
+            tdir.mkdir("data");
+            tdir.cd("data");
+
+            List<IDataSetPlotter> plotters = this.getPad(popupPad).datasetPlotters;
+            for (IDataSetPlotter plotter : plotters)
+                tdir.addDataSet(plotter.getDataSet());
+
+            tdir.writeFile(filename);
+        }
     }
 
     public static void main(String[] args) {
