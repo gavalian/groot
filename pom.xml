@@ -46,6 +46,12 @@
             <version>2.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>org.jfree.svg</artifactId>
+            <version>4.2</version>
+        </dependency>
+
 
         <!--      <dependency>
                 <groupId>org.freehep</groupId>
