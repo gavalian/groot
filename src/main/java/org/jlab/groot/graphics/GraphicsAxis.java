@@ -426,9 +426,10 @@ public class GraphicsAxis {
                 }
             }
 
-            attr.getTitle().drawString(g2d, x - axisBounds - labelOffset - titleOffset - 8 - attr.getTitleFontSize(),
-                    (int) midpoint,
-                    LatexText.ALIGN_CENTER, LatexText.ALIGN_TOP, LatexText.ROTATE_LEFT);
+            if (!attr.getTitle().getTextString().equals(""))
+                attr.getTitle().drawString(g2d, x - axisBounds - labelOffset - titleOffset - 8 - attr.getTitleFontSize(),
+                        (int) midpoint,
+                        LatexText.ALIGN_CENTER, LatexText.ALIGN_TOP, LatexText.ROTATE_LEFT);
 
         }
 

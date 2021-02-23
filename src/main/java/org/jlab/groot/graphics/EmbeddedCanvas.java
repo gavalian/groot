@@ -986,19 +986,37 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
         c.setContents(trans, null);
     }
 
-    public void save(String filename) {  // left to preserve functionality
-        File imageFile = new File(filename);
-        try {
-            imageFile.createNewFile();
-            ImageIO.write(getScreenShot(), "png", imageFile);
-        } catch (Exception ex) {
+    public void save(String filename) {
+        String extension = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+
+        switch(extension) {
+            case "pdf":
+                save(filename, SaveType.PDF);
+                break;
+            case "svg":
+                save(filename, SaveType.SVG);
+                break;
+            case "txt":
+                save(filename, SaveType.TXT);
+                break;
+            case "hipo":
+                save(filename, SaveType.HIPO);
+                break;
+            default:
+                save(filename, SaveType.PNG);
+                break;
         }
     }
 
     public void save(String filename, SaveType saveType) {
 
         if (saveType == SaveType.PNG) {
-            save(filename);
+            File imageFile = new File(filename);
+            try {
+                imageFile.createNewFile();
+                ImageIO.write(getScreenShot(), "png", imageFile);
+            } catch (Exception ignored) {
+            }
         }
 
         if (saveType == SaveType.TXT) {
