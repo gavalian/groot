@@ -6,7 +6,11 @@
 
 package org.jlab.groot.base;
 
-import java.awt.GraphicsEnvironment;
+import java.awt.*;
+import java.io.File;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -91,6 +95,24 @@ public class FontProperties {
                 }
             }
         }
+
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            File directory = new File(FontProperties.class.getClassLoader().getResource("fonts").getFile());
+
+            try(DirectoryStream<Path> dirStream = Files.newDirectoryStream(directory.toPath(), "*.{ttf,otf}")) {
+                for (Path entry: dirStream) {
+                    Font tmp = Font.createFont(Font.TRUETYPE_FONT, entry.toFile());
+                    fontList.add(tmp.getFamily());
+                    ge.registerFont(tmp);
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Whoops!");
+            System.err.println(e);
+        }
+
         System.out.println("[SystemFonts] ---> set size = " + fontSet.size()
         + ", available " + fontList.size());
         return fontList;
