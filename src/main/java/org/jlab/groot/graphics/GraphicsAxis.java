@@ -395,9 +395,10 @@ public class GraphicsAxis {
             }
             
             int axisBounds = (int) texts.get(0).getBoundsNumber(g2d).getHeight();
-            attr.getTitle().drawString(g2d,
-                    (int) midpoint,
-                    y + axisBounds + labelOffset + titleOffset, 1, 0);
+            if (!attr.getTitle().getTextString().equals(""))
+                attr.getTitle().drawString(g2d,
+                        (int) midpoint,
+                        y + axisBounds + labelOffset + titleOffset, 1, 0);
         } else {
             g2d.drawLine(x, (int) this.attr.getAxisDimension().getMin(), x, 
                     (int) this.attr.getAxisDimension().getMax());
