@@ -7,6 +7,9 @@ package org.jlab.jnp.groot.graphics;
 
 import java.awt.Graphics2D;
 import java.util.Arrays;
+import org.jlab.groot.data.GraphErrors;
+import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.IDataSet;
 import org.jlab.jnp.graphics.attr.AttributeCollection;
 import org.jlab.jnp.graphics.attr.AttributeDialog;
 import org.jlab.jnp.graphics.attr.AttributeType;
@@ -23,7 +26,8 @@ import org.jlab.jnp.graphics.base.PopupProvider;
 public class DataCanvas extends Canvas2D {
     
     
-    private AttributeCollection attributes = null;
+    private AttributeCollection   attributes = null;
+    private int                 activeRegion = 0;
     
     public DataCanvas(){
         super();
@@ -111,7 +115,30 @@ public class DataCanvas extends Canvas2D {
         return this;
     }
     
+    public DataCanvas cd(int region){
+        if(region>=0&&region<getGraphicsComponents().size()){
+            activeRegion = region;
+        }
+        return this;
+    }
     
+    public DataCanvas draw(IDataSet ds, String options){
+        if(ds instanceof GraphErrors){
+            if(options.contains("same")==false)
+                getRegion(activeRegion).getGraphicsAxis().reset();
+            
+            getRegion(activeRegion).getGraphicsAxis().addDataNode(new GraphNode2D((GraphErrors) ds,options));
+        }
+        
+        if(ds instanceof H1F){
+            if(options.contains("same")==false)
+                getRegion(activeRegion).getGraphicsAxis().reset();
+            
+            getRegion(activeRegion).getGraphicsAxis().addDataNode(new HistogramNode1D((H1F) ds,options));
+        }
+        
+        return this;
+    }
     public DataRegion getRegion(int region){
         return (DataRegion) getGraphicsComponents().get(region);
     }

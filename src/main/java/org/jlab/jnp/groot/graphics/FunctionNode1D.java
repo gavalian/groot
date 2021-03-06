@@ -14,6 +14,7 @@ import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.F1D;
 import org.jlab.jnp.graphics.base.Node2D;
 import org.jlab.jnp.groot.settings.GRootColorPalette;
+import org.jlab.jnp.groot.settings.GRootTheme;
 
 /**
  *
@@ -21,7 +22,7 @@ import org.jlab.jnp.groot.settings.GRootColorPalette;
  */
 public class FunctionNode1D extends DataNode2D {
     private F1D function   = null;
-    private int resolution = 300;
+    private int resolution = 400;
     
     public FunctionNode1D(F1D f1d){
         this.function = f1d;
@@ -69,9 +70,13 @@ public class FunctionNode1D extends DataNode2D {
         }
         GRootColorPalette palette = GRootColorPalette.getInstance();
         int color = function.getLineColor();
+        int style = function.getLineStyle();
+        int width = function.getLineWidth();
         
+        GRootTheme theme = GRootTheme.getInstance();
+
         g2d.setColor(palette.getColor(color));
-        g2d.setStroke(new BasicStroke(3));
+        g2d.setStroke(theme.getLineStroke(style, width));
         g2d.draw(path);
     }
 }

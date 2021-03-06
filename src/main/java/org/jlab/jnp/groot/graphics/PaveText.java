@@ -21,16 +21,20 @@ import org.jlab.jnp.graphics.base.NodeRegion2D;
  */
 public class PaveText extends Node2D {
     
-    private Font           textFont = new Font("Helvetica", Font.PLAIN, 18);
+    private Font           textFont = new Font("Avenir", Font.PLAIN, 18);
     private Color         textColor = Color.BLACK;
     private Color       borderColor = new Color(180,180,180);
     private Color  headerBackground = new Color(255,255,255);
     private String       textHeader = "Info";
     private List<String> textStrings = new ArrayList<>();
+    private int          positionX   = 0;
+    private int          positionY   = 0;
     
     public PaveText(String text, int x, int y){
         super(x,y);
         //setBackgroundColor(240,240,240);
+        this.positionX = x;
+        this.positionY = y;
         setName("pave_text");
         textStrings.add(text);
     }
@@ -52,15 +56,20 @@ public class PaveText extends Node2D {
         double height = textHeight + 5;
         
         g2d.setColor(this.headerBackground);
-        g2d.fillRect((int) bounds.getX(),(int) bounds.getY(),(int) width,(int) height);
+        
+        g2d.fillRoundRect((int) (bounds.getX() + this.positionX),
+                (int) (bounds.getY() + this.positionY),(int) width,(int) height, 10,10);
         
         g2d.setStroke(new BasicStroke(1));
         g2d.setColor(borderColor);
-        g2d.drawRect((int) bounds.getX(),(int) bounds.getY(),(int) width,(int) height);
+        
+        g2d.drawRoundRect((int)
+                (bounds.getX() + positionX),
+                (int) (bounds.getY() + positionY),(int) width,(int) height,10,10);
         
         g2d.setColor(textColor);
         g2d.setFont(textFont);
-        g2d.drawString(textStrings.get(0), (int) (bounds.getX()+5), (int) (bounds.getY()+textHeight-5));
+        g2d.drawString(textStrings.get(0), (int) (bounds.getX()+5 + positionX), (int) (bounds.getY()+textHeight-5 + positionY));
         this.setBounds(bounds.getX(), bounds.getY(), width, height);
         getTextHeight(metrics,textStrings.get(0));
         //System.out.println(bounds.toString());

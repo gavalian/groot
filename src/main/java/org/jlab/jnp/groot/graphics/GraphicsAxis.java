@@ -56,6 +56,9 @@ public class GraphicsAxis extends Node2D {
         setName("axis");
     }
     
+    public void reset(){
+        dataNodes.clear();
+    }
     public AxisNode2D getAxisX(){ return axisX;}
     public AxisNode2D getAxisY(){ return axisY;}
     

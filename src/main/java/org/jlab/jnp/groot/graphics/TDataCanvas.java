@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
+import org.jlab.groot.data.IDataSet;
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.FunctionFactory;
 
@@ -25,6 +26,7 @@ import org.jlab.groot.math.FunctionFactory;
  * @author gavalian
  */
 public class TDataCanvas extends JFrame implements ActionListener {
+    
     private int CANVAS_DEFAULT_WIDTH  = 600;
     private int CANVAS_DEFAULT_HEIGHT = 400;
     
@@ -34,6 +36,12 @@ public class TDataCanvas extends JFrame implements ActionListener {
     private String     dataCanvasTitle = "c1";
     
     public TDataCanvas(){
+        initUI();
+    }
+    
+    public TDataCanvas(int xsize, int ysize){
+        this.CANVAS_DEFAULT_WIDTH = xsize;
+        this.CANVAS_DEFAULT_HEIGHT = ysize;
         initUI();
     }
     
@@ -95,6 +103,14 @@ public class TDataCanvas extends JFrame implements ActionListener {
         return this.dataCanvas;
     }
     
+    public TDataCanvas cd(int region){
+        this.getDataCanvas().cd(region);
+        return this;
+    }
+    
+    public TDataCanvas draw(IDataSet ds, String options){
+        this.getDataCanvas().draw(ds, options); return this;
+    }
     
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -115,9 +131,13 @@ public class TDataCanvas extends JFrame implements ActionListener {
         //c1.getDataCanvas().left(120).setAxisTitleFont("Avenir", 18, 0);
         c1.getDataCanvas().divide(2,1);
         c1.getDataCanvas().left(80).setAxisTitleFont("Avenir", 18, 0);        
-        c1.getDataCanvas().left(80).setAxisFont("Helvetica", 18, 0);
+        c1.getDataCanvas().left(80).setAxisFont("Avenir", 18, 0);
+        
         H1F h1 = FunctionFactory.randomGausian(100, 0.1, 2.5, 1000000, 1.25, 0.3);
         HistogramNode1D node = new HistogramNode1D(h1);
+        
+        H1F h11 = FunctionFactory.randomGausian(100, 0.0, 2.5, 1000000, 0.5, 0.5);
+        HistogramNode1D node11 = new HistogramNode1D(h11);
         
         /*H2F h2 = new H2F("h2",2,0.0,1.0,2,0.0,1.0);
         h2.setBinContent(0, 0, 0.8);
@@ -125,13 +145,16 @@ public class TDataCanvas extends JFrame implements ActionListener {
         h2.setBinContent(1, 0, 0.5);
         h2.setBinContent(0, 1, 0.4);
      */
-        H2F h2 = FunctionFactory.randomGausian2D(200, 0.0, 2.5, 10000000, 1.25, 0.55);
-        HistogramNode2D node2 = new HistogramNode2D(h2);
         
-        h1.setLineColor(4);
-        //h1.setLineStyle(1);
-        h1.setLineWidth(2);
-        h1.setFillColor(53);
+        
+        h1.setLineColor(3);
+        h1.setLineWidth(1);
+        h1.setFillColor(73);
+        
+        h11.setLineColor(2);
+        h11.setLineWidth(1);
+        h11.setFillColor(72);
+        
         //c1.getDataCanvas().getRegion(0).getGraphicsAxis().addNode(node2);
         PaveText text = new PaveText("trying helvetica 0.1 20.7 80",0,0);
         PaveText textb = new PaveText("Bold Helvetica 0.1 20.7 80",0,120);
@@ -140,8 +163,8 @@ public class TDataCanvas extends JFrame implements ActionListener {
         F1D function = new F1D("f1","x/sqrt(x*x+[m]*[m])",0.05,1.5);
         function.setParameter(0, 0.938);
         function.setLineColor(2);
-        c1.getDataCanvas().getRegion(0).getGraphicsAxis().addNode(new HistogramNode2D(h2));
-        c1.getDataCanvas().getRegion(0).getGraphicsAxis().addNode(new FunctionNode1D(function));
+       // c1.getDataCanvas().getRegion(0).getGraphicsAxis().addNode(new HistogramNode2D(h2));
+        //c1.getDataCanvas().getRegion(0).getGraphicsAxis().addNode(new FunctionNode1D(function));
         
         //c1.getDataCanvas().getRegion(1).getGraphicsAxis().addNode(new HistogramNode1D(h1));
         //c1.getDataCanvas().getRegion(1).addNode(text);
@@ -151,17 +174,69 @@ public class TDataCanvas extends JFrame implements ActionListener {
         //c1.getDataCanvas().getRegion(1).getGraphicsAxis().addNode(node2);
         c1.getDataCanvas().repaint();
         GraphErrors graph = new GraphErrors();
+        GraphErrors graph2 = new GraphErrors();
+        GraphErrors graph3 = new GraphErrors();
         
-        graph.setTitleX("P [GeV]");
-        graph.setTitleY("AI Rec Efficiency");
-        graph.readFile("demo_graph.data");
+        graph.addPoint(1, 0.3, 0.0, 0.1);
+        graph.addPoint(2, 0.5, 0.0, 0.2);
+        graph.addPoint(3, 0.7, 0.0, 0.3);
+        
+        graph2.addPoint(3.1, 0.3, 0.0, 0.1);
+        graph2.addPoint(4.1, 0.5, 0.0, 0.2);
+        graph2.addPoint(5.1, 0.7, 0.0, 0.3);
+        
+        graph3.addPoint(2.2, 1.2, 0.0, 0.1);
+        graph3.addPoint(5.2, 0.9, 0.0, 0.2);
+        graph3.addPoint(8.2, 0.8, 0.0, 0.3);
+        graph.setTitleX("P [GeV] & #chi^2");
+        graph.setTitleY("Reconstruction Efficiency");
+        //graph.readFile("demo_graph.data");
         System.out.println("size = " + graph.getDataSize(0));
         graph.setLineColor(1);
         graph.setMarkerColor(4);
-        graph.setLineThickness(3);
-        graph.setMarkerSize(8);
-        c1.getDataCanvas().getRegion(1).getGraphicsAxis().setAxisLimits(0.5,9.5,0.0,1.4005);
-        c1.getDataCanvas().getRegion(1).getGraphicsAxis().addDataNode(new GraphNode2D(graph));
+        graph.setLineThickness(1);
+        graph.setMarkerSize(15);
+        graph.setMarkerStyle(4);
         
-    }    
+        graph2.setLineColor(1);
+        graph2.setMarkerColor(2);
+        graph2.setLineThickness(1);
+        graph2.setMarkerSize(15);
+        graph2.setMarkerStyle(3);
+        
+        graph3.setLineColor(3);
+        graph3.setMarkerColor(3);
+        graph3.setLineThickness(1);
+        graph3.setMarkerSize(12);
+        graph3.setMarkerStyle(2);
+        
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().setAxisLimits(0.5,9.5,0.0,1.4005);
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().addDataNode(new GraphNode2D(graph));
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().addDataNode(new GraphNode2D(graph2,"PLS"));
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().addDataNode(new GraphNode2D(graph3,"PLS"));
+        
+        PaveText text2 = new PaveText("reconstructed efficiency",500,300);
+        LegendNode2D  legend = new LegendNode2D(300,350);
+        legend.add(graph, "ML tracking efficiency");
+        legend.add(graph2, "negative tracking efficiency");
+        legend.add(graph3, "positive tracking efficiency");
+        c1.getDataCanvas().getRegion(0).addNode(legend);
+        //c1.getDataCanvas().repaint();
+        
+        
+        H2F h2 = FunctionFactory.randomGausian2D(200, 0.0, 2.5, 10000000, 1.25, 0.55);
+        HistogramNode2D node2 = new HistogramNode2D(h2);
+        
+        StatisticsNode2D stats = new StatisticsNode2D(0,0);
+        
+        stats.add("name", "H100");
+        stats.add("mean", "1.2456");
+        stats.add("rms", "0.3458");
+
+        
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().setAxisLimits(0.0,2.5,0.0,12500);
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().addDataNode(node);
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().addDataNode(node11);
+        c1.getDataCanvas().getRegion(1).addNode(stats);
+    }
 }

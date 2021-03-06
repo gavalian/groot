@@ -21,9 +21,15 @@ import org.jlab.jnp.groot.settings.GRootColorPalette;
  */
 public class HistogramNode1D extends DataNode2D {
     private H1F h1d = null;
+    private String drawOptions = "";
     
     public HistogramNode1D(H1F data){
         h1d = data;
+    }
+    
+    public HistogramNode1D(H1F data,String options){
+        h1d = data;
+        drawOptions = options;
     }
     
     public Rectangle2D getDataBounds( Rectangle2D dataBounds){
@@ -53,11 +59,17 @@ public class HistogramNode1D extends DataNode2D {
         int nbins = h1d.getXaxis().getNBins();
         for(int i = 0; i < nbins; i++){
             yp = h1d.getBinContent(i);
+            
             path.lineTo(parent.transformX(xp), parent.transformY(yp));
+           // System.out.println("xp = " + xp + ", yp = " + yp + 
+           //         " ===> " + parent.transformX(xp) + " , " + parent.transformY(yp));
             xp = h1d.getXaxis().getBinCenter(i) + h1d.getXaxis().getBinWidth(i)*0.5;
             path.lineTo(parent.transformX(xp), parent.transformY(yp));
             
         }
+        
+        path.lineTo(parent.transformX(xp), parent.transformY(0.0));
+        
         GRootColorPalette palette = GRootColorPalette.getInstance();
         int fill_color = h1d.getFillColor();
         int line_color = h1d.getLineColor();

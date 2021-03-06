@@ -52,7 +52,7 @@ public class AxisNode2D extends Node2D {
                     },                    
                     new String[]{"0",
                         "1","1",
-                        "8","5","10","10",
+                        "5","5","10","10",
                         "true","true","true","fasle"});
     
 //    private final  AxisAttributes  axisAttributes = new AxisAttributes();
@@ -128,8 +128,8 @@ public class AxisNode2D extends Node2D {
             
             axisScale.getTicks(axisMarkers);
             axisScale.setOrderString();
-            System.out.printf("Setting axis : %f %f \n",axisLimits.getY(), axisLimits.getY()+axisLimits.getHeight());
-            System.out.printf(" SPACING = %f , order = %s\n",axisScale.getSpacing(), axisScale.getOrderString());
+            //System.out.printf("Setting axis : %f %f \n",axisLimits.getY(), axisLimits.getY()+axisLimits.getHeight());
+            //System.out.printf(" SPACING = %f , order = %s\n",axisScale.getSpacing(), axisScale.getOrderString());
             /*System.out.printf(" AXIS TYPE VERTICAL : %8.4f %8.4f : %5d\n",
                     axisLimits.getY(),axisLimits.getY() + axisLimits.getHeight(),
                     axisMarkers.size());*/
@@ -185,7 +185,7 @@ public class AxisNode2D extends Node2D {
     public void drawLayer(Graphics2D g2d, int layer){ 
                 
         if(layer == 0 ) { 
-            this.drawAxisGrid(g2d);
+            //this.drawAxisGrid(g2d);
             return;
         }
         Node2D       parent = this.getParent();
@@ -251,8 +251,8 @@ public class AxisNode2D extends Node2D {
             int tickOffset = axisAttributes.getInt(AttributeType.AXISTICKSIZE);
             int labelOffset = axisAttributes.getInt(AttributeType.AXISLABELOFFSET);
             
-            System.out.println(" AXIS = " + axisScale.getSpacing());
-            System.out.println(" ORDERGIN = " + axisScale.getOrderString());
+            //System.out.println(" AXIS = " + axisScale.getSpacing());
+            //System.out.println(" ORDERGIN = " + axisScale.getOrderString());
             
             
             if(tickOffset<0){ labelOffset = labelOffset + Math.abs(tickOffset);}

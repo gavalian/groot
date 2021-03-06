@@ -50,7 +50,7 @@ public class GraphicsDebug {
         //canvas.divide(2,2);
         canvas.divide(new int[]{3,2});*/
         canvas.divide(2, 2);
-        canvas.divide(new double[][]{{0.6,0.4},{0.333,0.333,0.333},{0.25,0.25,0.25,0.25}});
+        canvas.divide(new double[][]{{0.6,0.4},{0.333,0.333,0.333},{0.50,0.25,0.25,0.25}});
         JPanel pane = new JPanel();
         pane.setLayout(new BorderLayout());
         pane.add(canvas, BorderLayout.CENTER);

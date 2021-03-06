@@ -18,6 +18,10 @@ public class GRootColorPalette {
     
     private List<Color> colorPalette3D = new ArrayList<Color>();
     private List<Color> colorPalette   = new ArrayList<Color>();
+    private Color paletteColors[];
+    private Color bgColor = new Color(200, 200, 200);
+    private double stops[] = {0.0000, 0.1250, 0.2500, 0.3750, 0.5000, 0.6250, 0.7500, 0.8750, 1.0000};
+    
     public static GRootColorPalette GROOTPalette = new GRootColorPalette();
     
     double[] red   = {0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
@@ -63,6 +67,65 @@ public class GRootColorPalette {
         }
     }
     
+    public void setColorScheme(String scheme){
+        if(scheme.compareTo("tab10")==0){
+            colorPalette.clear();
+            colorPalette.add(Color.WHITE);
+            colorPalette.add(Color.BLACK);
+            colorPalette.add(new Color( 20,120,178)); // BLUE
+            colorPalette.add(new Color(255,127, 30)); // ORANGE
+            colorPalette.add(new Color( 39,160, 56));  // GREEN
+            colorPalette.add(new Color(216, 39, 40));  // RED
+            colorPalette.add(new Color(148,104,186));  // PURPLE
+            colorPalette.add(new Color(141, 86, 76));  // BROWN
+            colorPalette.add(new Color(227,119,190));  // PINK
+            colorPalette.add(new Color(127,127,127));  // GRAY
+            colorPalette.add(new Color(186,185, 53));  // OLIVE
+            colorPalette.add(new Color(  0,188,203));  // CYAN  
+            //colorPalette.add(new Color());
+        }
+    }
+    
+    
+    public void setColorPalette(){
+        
+        /*this.colorPalette3D.clear();
+        for(int i = 0; i < 200; i++){
+            this.colorPalette3D.add(new Color(0,0,i+55));
+        }*/
+        //double red[] = {19., 42., 64., 88., 118., 147., 175., 187., 205.};
+        //double green[] = {19., 55., 89., 125., 154., 169., 161., 129., 70.};
+        //double blue[] = {19., 32., 47., 70., 100., 128., 145., 130., 75.};
+        double red[] = {53.0, 15.0, 19.0, 5.0, 45.0, 135.0, 208.0, 253.0, 248.0};
+        double green[] = {42.0, 91.0, 128.0, 163.0, 183.0, 191.0, 186.0, 200.0, 250.0};
+        double blue[] = {134.0, 221.0, 213.0, 201.0, 163.0, 118.0, 89.0, 50.0, 13.0};
+        CreateGradientColorTable(red, green, blue);
+        
+    }
+    
+    
+    private void CreateGradientColorTable(double[] red, double[] green, double[] blue) {
+        if (red.length == 47) {
+            paletteColors = new Color[red.length];
+            for (int icol = 0; icol < red.length; icol++) {
+                paletteColors[icol] = new Color((float) red[icol], (float) green[icol], (float) blue[icol]);
+            }
+        } else {
+            paletteColors = new Color[255];
+            int nstops = stops.length;
+            int icolor = 0;
+            for (int istop = 1; istop < nstops; istop++) {
+                int ncolors = (int) (Math.floor(255.0 * stops[istop]) - Math.floor(255.0 * stops[istop - 1]));
+                for (int ic = 0; ic < ncolors; ic++) {
+                    double rr = red[istop - 1] + ic * (red[istop] - red[istop - 1]) / ncolors;
+                    double gg = green[istop - 1] + ic * (green[istop] - green[istop - 1]) / ncolors;
+                    double bb = blue[istop - 1] + ic * (blue[istop] - blue[istop - 1]) / ncolors;
+                    paletteColors[icolor++] = new Color((int) rr, (int) gg, (int) bb);
+                }
+            }
+        }
+    }
+    
     public Color getColor(int color){
         if(color<colorPalette.size()){
             return this.colorPalette.get(color);
@@ -76,13 +139,42 @@ public class GRootColorPalette {
     public static GRootColorPalette getInstance(){ return GROOTPalette;}
     
     public Color getColor3D(double min, double max, double value){
-        int         nbins = colorPalette3D.size();
+       /* int         nbins = colorPalette3D.size();
         double  fraction = (value-min)/(max-min);
-
         int         binC = (int) (fraction*nbins);
         //System.out.printf(" fraction = %12.6f, bin = %d, size = %d\n",fraction,binC, nbins);
-        if(binC<1) return new Color(200,200,200);//Color.WHITE;
-        return this.colorPalette3D.get(binC-1);
+        if(binC<1) return Color.WHITE;//new Color(200,200,200);//Color.WHITE;
+        return this.colorPalette3D.get(binC-1);*/
         //return Color.WHITE;
+        return getColor3D(value,min,max,false);
+    }
+    
+    public Color getColor3D(double value, double min, double max, boolean islog) {
+        double fraction = 0.0;
+        if (max < min) {
+            throw new UnsupportedOperationException("axis range is wrong: Maximum < Minimum");
+        }
+        if (value == 0 && min >= 0) {
+            return bgColor;
+        }
+        if (islog == true) {
+            if (value <= 0) {
+                throw new UnsupportedOperationException("Logarithmic scale can't be enabled for negative values");
+            }
+            if (min == 0) {
+                min = 0.1;
+            }
+            value = Math.log10(value);
+            min = Math.log10(min);
+            max = Math.log10(max);
+        }
+        fraction = (value - min) / (max - min);
+
+        if (fraction > 1) {
+            fraction = 1.0;
+        } else if (fraction < 0) {
+            fraction = 0;
+        }
+        return paletteColors[(int) (fraction * (paletteColors.length - 1))];
     }
 }

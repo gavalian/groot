@@ -147,7 +147,8 @@ public class GROOTDemo {
         can3.getPad(1).setTitle("Function with Autoscaled Axis");
         h2d.getAttributes().setLineColor(2);
         h2d2.getAttributes().setLineColor(4);
-        can3.draw(h2d2,"box");
+        //can3.draw(h2d2,"box");
+        can3.draw(h2d2,"");
         can3.cd(3);
         can3.getPad(3).setTitle("X Projection");
         H1F projectionX = h2d.projectionX();
