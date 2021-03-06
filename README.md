@@ -16,6 +16,13 @@ To run the example: Simply double click on the jar if you're a mac user, or if y
 <img src="https://github.com/gavalian/groot/blob/master/images/copyPaste.png" width="400">
 <img src="https://github.com/gavalian/groot/blob/master/images/totalcs_ppbar.png" width="800">
 
+# groot 4
+groot is getting an updated plotting package. Many improvements with plotting and new features.
+This version (version=4) has many improvements allowing to produce article and presentation 
+ready figures, supports PDF and SVG output.
+
+<img src="https://github.com/gavalian/groot/blob/master/images/groot4_example_1.png" width="800">
+
 # Installation
 Simply add this [library jar](https://github.com/gavalian/groot/raw/master/jars/) to your build path in an IDE.
 
