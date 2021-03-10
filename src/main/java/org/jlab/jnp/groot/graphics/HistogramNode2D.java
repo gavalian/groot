@@ -27,6 +27,7 @@ public class HistogramNode2D extends DataNode2D {
         h2d = data;
     }
     
+    @Override
     public Rectangle2D getDataBounds( Rectangle2D dataBounds){
         
         dataBounds.setRect(

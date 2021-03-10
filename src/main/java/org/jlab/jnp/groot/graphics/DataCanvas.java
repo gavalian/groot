@@ -5,11 +5,19 @@
  */
 package org.jlab.jnp.groot.graphics;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.io.File;
 import java.util.Arrays;
+import org.jfree.pdf.PDFDocument;
+import org.jfree.pdf.PDFGraphics2D;
+import org.jfree.pdf.Page;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.H2F;
 import org.jlab.groot.data.IDataSet;
+import org.jlab.groot.math.F1D;
 import org.jlab.jnp.graphics.attr.AttributeCollection;
 import org.jlab.jnp.graphics.attr.AttributeDialog;
 import org.jlab.jnp.graphics.attr.AttributeType;
@@ -70,6 +78,7 @@ public class DataCanvas extends Canvas2D {
         return this;
     }
     
+    
     public DataCanvas setAxisTicks(int ticks, String axis){
         for(Node2D item : this.getGraphicsComponents()){
             DataRegion region = (DataRegion) item;
@@ -122,6 +131,50 @@ public class DataCanvas extends Canvas2D {
         return this;
     }
     
+    public DataCanvas draw(IDataSet ds){
+        draw(ds,""); return this;
+    }
+    
+    public DataCanvas setAxisFontSize(int size){
+        for(Node2D item : this.getGraphicsComponents()){
+            DataRegion region = (DataRegion) item;
+            Font fontX = region.getGraphicsAxis().getAxisX().getAxisFont();
+            region.getGraphicsAxis().getAxisX().setAxisFont(new Font(fontX.getFontName(),size,fontX.getStyle()));
+            
+            Font fontY = region.getGraphicsAxis().getAxisY().getAxisFont();
+            region.getGraphicsAxis().getAxisY().setAxisFont(new Font(fontY.getFontName(),size,fontY.getStyle()));            
+        }
+        return this;
+    }
+    
+    public DataCanvas setAxisTitleFontSize(int size){
+        for(Node2D item : this.getGraphicsComponents()){
+            DataRegion region = (DataRegion) item;
+            Font fontX = region.getGraphicsAxis().getAxisX().getAxisTitleFont();
+            region.getGraphicsAxis().getAxisX().setAxisTitleFont(new Font(fontX.getFontName(),size,fontX.getStyle()));
+            
+            Font fontY = region.getGraphicsAxis().getAxisY().getAxisTitleFont();
+            region.getGraphicsAxis().getAxisY().setAxisTitleFont(new Font(fontY.getFontName(),size,fontY.getStyle()));            
+        }
+        return this;
+    }
+    
+    public DataCanvas setAxisTitleOffsetX(Integer offset){
+        for(Node2D item : this.getGraphicsComponents()){
+            DataRegion region = (DataRegion) item;
+            region.getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXISTITLEOFFSET, offset.toString());
+        }
+        return this;
+    }
+    
+    public DataCanvas setAxisTitleOffsetY(Integer offset){
+        for(Node2D item : this.getGraphicsComponents()){
+            DataRegion region = (DataRegion) item;
+            region.getGraphicsAxis().getAxisY().getAttributes().changeValue(AttributeType.AXISTITLEOFFSET, offset.toString());
+        }
+        return this;
+    }
+    
     public DataCanvas draw(IDataSet ds, String options){
         if(ds instanceof GraphErrors){
             if(options.contains("same")==false)
@@ -137,10 +190,35 @@ public class DataCanvas extends Canvas2D {
             getRegion(activeRegion).getGraphicsAxis().addDataNode(new HistogramNode1D((H1F) ds,options));
         }
         
+        if(ds instanceof H2F){
+            if(options.contains("same")==false)
+                getRegion(activeRegion).getGraphicsAxis().reset();
+            
+            getRegion(activeRegion).getGraphicsAxis().addDataNode(new HistogramNode2D((H2F) ds));
+        }
+        
+        if(ds instanceof F1D){
+            if(options.contains("same")==false)
+                getRegion(activeRegion).getGraphicsAxis().reset();            
+            getRegion(activeRegion).getGraphicsAxis().addDataNode(new FunctionNode1D((F1D) ds));
+        }
+                
         return this;
     }
+    
+    
+    
     public DataRegion getRegion(int region){
         return (DataRegion) getGraphicsComponents().get(region);
+    }
+    
+    public void divide(double left, double bottom, int cols, int rows){
+        this.getGraphicsComponents().clear();
+        for(int i = 0; i < cols*rows; i++){
+            DataRegion pad = new DataRegion("canvas_pad_"+i);
+            this.addNode(pad);
+        }
+        this.arrangeWithGap(left, bottom, cols, rows);
     }
     
     @Override
@@ -171,5 +249,13 @@ public class DataCanvas extends Canvas2D {
                 ));
         dialog.pack();
         dialog.setVisible(true);
+    }
+    
+    public void export(String filename){
+        PDFDocument pdfDoc = new PDFDocument();
+            Page page = pdfDoc.createPage(new Rectangle(this.getSize().width, this.getSize().height));
+            PDFGraphics2D g2 = page.getGraphics2D();
+            this.paint(g2);
+            pdfDoc.writeToFile(new File(filename));
     }
 }

@@ -55,6 +55,16 @@ public class TDataCanvas extends JFrame implements ActionListener {
         initUI();
     }
     
+    public TDataCanvas setMargins(int left, int top, int right, int bottom){
+        getDataCanvas().left(left).top(top).right(right).bottom(bottom);
+        return this;
+    }
+    
+    public TDataCanvas setAxisFontSize(int labelSize, int titleSize){
+        getDataCanvas().setAxisFontSize(labelSize).setAxisTitleFontSize(titleSize);
+        return this;
+    }
+    
     private void initUI(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -79,6 +89,26 @@ public class TDataCanvas extends JFrame implements ActionListener {
         this.setVisible(true);
     }
     
+    public TDataCanvas cd(int pad){
+        getDataCanvas().cd(pad); return this;
+    }
+    
+    public TDataCanvas draw(IDataSet ds){
+        getDataCanvas().draw(ds); return this;
+    }
+    
+    public TDataCanvas draw(IDataSet ds, String options){
+        getDataCanvas().draw(ds,options); return this;
+    }
+    
+    public TDataCanvas divide(int x, int y){
+        getDataCanvas().divide(x, y); return this;
+    }
+    
+     public TDataCanvas divide(double[][] pads){
+        getDataCanvas().divide(pads); return this;
+    }
+     
     private JMenuBar createMenuBar(){
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
@@ -88,10 +118,13 @@ public class TDataCanvas extends JFrame implements ActionListener {
         JMenuItem savePDF = new JMenuItem("Export PDF");
         JMenuItem saveEPS = new JMenuItem("Export EPS");
         JMenuItem saveSVG = new JMenuItem("Export SVG");
+        JMenuItem savePDFFree = new JMenuItem("Export PDF free Hep");
         saveMenu.add(savePDF);
         saveMenu.add(saveEPS);
         saveMenu.add(saveSVG);
+        saveMenu.add(savePDFFree);
         savePDF.addActionListener(this);
+        savePDFFree.addActionListener(this);
         saveEPS.addActionListener(this);
         saveSVG.addActionListener(this);
         fileMenu.add(saveMenu);
@@ -103,19 +136,14 @@ public class TDataCanvas extends JFrame implements ActionListener {
         return this.dataCanvas;
     }
     
-    public TDataCanvas cd(int region){
-        this.getDataCanvas().cd(region);
-        return this;
-    }
-    
-    public TDataCanvas draw(IDataSet ds, String options){
-        this.getDataCanvas().draw(ds, options); return this;
-    }
-    
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand().compareTo("Export PDF")==0){
             this.getDataCanvas().save(this.dataCanvasTitle + ".pdf");
+        }
+        
+        if(e.getActionCommand().compareTo("Export PDF free Hep")==0){
+            this.getDataCanvas().export("test_free" + ".pdf");
         }
         
         if(e.getActionCommand().compareTo("Export EPS")==0){

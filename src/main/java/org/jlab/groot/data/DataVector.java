@@ -231,6 +231,20 @@ public class DataVector {
         double rms2 = rms/datavec.size();
         return Math.sqrt(rms2);
     }
+    
+    public double sum(){
+        double s = 0.0;
+        for(int i = 0; i < getSize(); i++) s += getValue(i);
+        return s;
+    }
+    
+    public String getVectorString(){
+        StringBuilder str = new StringBuilder();
+        for(int i = 0; i < getSize(); i++){
+            str.append(String.format("%12.6f", getValue(i)));
+        }
+        return str.toString();
+    }
     /**
      * Returns the number of entries in the vector
      * @return size

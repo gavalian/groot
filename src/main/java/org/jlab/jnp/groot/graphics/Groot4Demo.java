@@ -6,11 +6,13 @@
 package org.jlab.jnp.groot.graphics;
 
 import java.util.Random;
+import org.jlab.groot.data.BarGraph;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
 import org.jlab.groot.math.F1D;
 import org.jlab.jnp.graphics.attr.AttributeType;
+import org.jlab.jnp.groot.graphics.LegendNode2D.LegendStyle;
 import org.jlab.jnp.groot.settings.GRootColorPalette;
 
 /**
@@ -116,11 +118,11 @@ public class Groot4Demo {
         f4.setLineStyle(0);
         f4.setLineWidth(2);
         
-        c1.getDataCanvas().getRegion(2).getGraphicsAxis().setAxisLimits(0,Math.PI*4,-2.5,2.5);
         c1.getDataCanvas().getRegion(2).getGraphicsAxis().addDataNode(new FunctionNode1D(f1));
         c1.getDataCanvas().getRegion(2).getGraphicsAxis().addDataNode(new FunctionNode1D(f2));
         c1.getDataCanvas().getRegion(2).getGraphicsAxis().addDataNode(new FunctionNode1D(f3));
         c1.getDataCanvas().getRegion(2).getGraphicsAxis().addDataNode(new FunctionNode1D(f4));
+        c1.getDataCanvas().getRegion(2).getGraphicsAxis().setAxisLimits(0,Math.PI*4,-2.5,2.5);
         
         H2F h2 = Julia.getJulia();
         c1.getDataCanvas().getRegion(3).getGraphicsAxis().addDataNode(new HistogramNode2D(h2));
@@ -295,10 +297,112 @@ public class Groot4Demo {
         }
     }
     
+    public static void demo2(){
+        TDataCanvas c1 = new TDataCanvas(600,400);
+        c1.getDataCanvas().divide(1, 1);
+        //c1.getDataCanvas().divide(new double[][]{ {0.65,0.35},{1.0} });
+        BarGraph bar = new BarGraph(new String[]{"ROOT","HIPO","AVRO","EVIO","HDF5"},
+                new double[][]{
+                    {0.4,0.5,0.8,0.5},
+                    {0.2,0.7,0.6,0.8},
+                    {0.4,0.8,0.7,0.8},
+                    {0.45,0.9,0.2,0.8},
+                    {0.75,0.15,0.65,0.8}
+                });
+        
+        bar.setPadding(8);
+        bar.setBarColor(0, 27);
+        bar.setBarColor(1, 23);
+        bar.setBarColor(2, 29);
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().addDataNode(new BarGraphNode2D(bar));
+        GraphicsAxis axis = c1.getDataCanvas().getRegion(0).getGraphicsAxis();
+        axis.getAxisX().setAxisLabelType(AxisNode2D.AXIS_LABELS_FORCED);
+        axis.getAxisX().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
+        axis.getAxisY().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
+        axis.getAxisX().setAxisTickLabels(
+                new String[]{"ROOT","HIPO","AVRO","EVIO","HDF5"});
+        
+        axis.setAxisLimits(0.5, 5.5, 0.0, 1.05);
+        
+        GraphErrors gr1 = new GraphErrors();
+        gr1.setLineColor(1);
+        gr1.setMarkerColor(27);
+        gr1.setMarkerStyle(2);
+        gr1.setLineThickness(1);
+        
+        GraphErrors gr2 = new GraphErrors();
+        gr2.setLineColor(1);
+        gr2.setMarkerColor(23);
+        gr2.setMarkerStyle(2);
+        gr2.setLineThickness(1);
+        
+        GraphErrors gr3 = new GraphErrors();
+        gr3.setLineColor(1);
+        gr3.setMarkerColor(29);
+        gr3.setMarkerStyle(2);
+        gr3.setLineThickness(1);
+        
+        LegendNode2D legend = new LegendNode2D(60,25,LegendStyle.ONELINE);
+        legend.add(gr1, "4 super layer");
+        legend.add(gr2, "5 super layer");
+        legend.add(gr3, "6 super layer");
+        
+        c1.getDataCanvas().getRegion(0).addNode(legend);
+    }
+    
+    public static void demo3(){
+        TDataCanvas c1 = new TDataCanvas(600,400);
+        c1.getDataCanvas().divide(1, 1);
+        
+        GraphicsAxis axis = c1.getDataCanvas().getRegion(0).getGraphicsAxis();
+        
+        axis.getAxisX().setAxisLabelType(AxisNode2D.AXIS_LABELS_FORCED);
+        axis.getAxisX().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
+        axis.getAxisY().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
+        axis.getAxisX().setAxisTickLabels(new String[]{"CUDA","OpenCL","CPU","GPU"});
+        axis.setAxisLimits(0.5, 4.5, 0.0, 2.5);
+    }
+    
+    
+    public static void demo4(){
+        TDataCanvas c1 = new TDataCanvas(600,400);
+        c1.getDataCanvas().divide(1, 1);
+        
+        //c1.getDataCanvas().left(100).right(100).top(100).bottom(120);
+        c1.getDataCanvas().bottom(45);
+        PaveText text = new PaveText(60,120);
+        text.addLines(new String[]{"negative",
+            "positive","de-noising",
+            "ai assisted"}).setSpacing(0.0);
+        
+        PaveText text2 = new PaveText(60,150);
+        text2.addLines(new String[]{"mean = 0.54x10^2, ",
+            "rms = 0.02346, ","overflow = 12456, ",
+            "underflow = 6789"}).setSpacing(0.2);
+        
+        PaveText text3 = new PaveText(60,30);
+        text3.addLines(new String[]{
+            "mean=0.5456,",
+            "rms=0.023x10^3,","over=12456,",
+            "under=6789"
+        }).setSpacing(0.4);
+        
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXIS_DRAW_LABELS, "false");
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXIS_DRAW_TICKS, "false");
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXIS_DRAW_TITLE, "false");
+        
+        c1.getDataCanvas().getRegion(0).addNode(text);
+        c1.getDataCanvas().getRegion(0).addNode(text2);
+        c1.getDataCanvas().getRegion(0).addNode(text3);
+    }
     public static void main(String[] args){
+        
         GRootColorPalette.getInstance().setColorPalette();
         GRootColorPalette.getInstance().setColorScheme("tab10");
         
         Groot4Demo.demo1();
+        //Groot4Demo.demo2();
+        //Groot4Demo.demo3();
+        //Groot4Demo.demo4();
     }
 }

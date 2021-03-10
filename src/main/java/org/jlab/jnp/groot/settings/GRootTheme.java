@@ -6,6 +6,8 @@
 package org.jlab.jnp.groot.settings;
 
 import java.awt.BasicStroke;
+import org.jlab.jnp.graphics.attr.AttributeCollection;
+import org.jlab.jnp.graphics.attr.AttributeType;
 
 /**
  *
@@ -22,8 +24,32 @@ public class GRootTheme {
     public static float[]  dashPattern4 = new float[]{2.0f,8.0f,2.0f,4.0f};
     public static float[]  dashPattern5 = new float[]{2.0f,6.0f,2.0f,2.0f};
     
-        
+    private AttributeCollection dataSetAttributes = null;
+    private AttributeCollection    axisAttributes = null;
+    private AttributeCollection  regionAttributes = null;
+    
+    
     public GRootTheme(){
+        initAttributes();
+    }
+    
+    protected final void initAttributes(){
+        
+        axisAttributes = new AttributeCollection(
+                new AttributeType[]{
+                    AttributeType.AXISLINECOLOR,
+                    AttributeType.AXISLINEWIDTH,AttributeType.AXISLINESTYLE,
+                    AttributeType.AXISTICKSIZE,AttributeType.AXISLABELOFFSET,
+                    AttributeType.AXISTITLEOFFSET,AttributeType.AXISTITLEOFFSETVERTICAL,
+                    AttributeType.AXISDRAWBOX,AttributeType.AXISDRAWTICKS,
+                    AttributeType.AXISDRAWLINE,AttributeType.AXISDRAWGRID, 
+                    AttributeType.AXIS_DRAW_LABELS,AttributeType.AXIS_DRAW_TITLE,
+                    AttributeType.AXIS_DRAW_TICKS
+                },                    
+                new String[]{"0",
+                    "1","1",
+                    "5","5","10","10",
+                    "true","true","true","fasle","true","true","true"});
         
     }
     

@@ -13,6 +13,8 @@ import org.jlab.groot.ui.PaveText;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
+import org.jlab.groot.io.CSVReader;
 
 /**
  *
@@ -231,6 +233,14 @@ public class GraphErrors implements IDataSet {
         return this.dataY;
     }
 
+    public DataVector getVectorEX() {
+        return this.dataEX;
+    }
+
+    public DataVector getVectorEY() {
+        return this.dataEY;
+    }
+    
     public void setMarkerSize(int size) {
         this.graphAttr.setMarkerSize(size);
     }
@@ -324,6 +334,27 @@ public class GraphErrors implements IDataSet {
         }
     }
 
+    
+    public static GraphErrors  csvGraphXY(String filename,int columnX, int columnY, int skip){
+        GraphErrors graph = new GraphErrors();
+        CSVReader reader = new CSVReader();
+        List<double[]> data = reader.readColumn(filename, new int[]{columnX,columnY}, skip);
+        for(int i = 0; i < data.size(); i++){
+            graph.addPoint(data.get(i)[0], data.get(i)[1], 0.0, 0.0);
+        }
+        return graph;
+    }
+    
+    public static GraphErrors  csvGraphXYEY(String filename,int columnX, int columnY, int columnEY, int skip){
+        GraphErrors graph = new GraphErrors();
+        CSVReader reader = new CSVReader();
+        List<double[]> data = reader.readColumn(filename, new int[]{columnX,columnY,columnEY}, skip);
+        for(int i = 0; i < data.size(); i++){
+            graph.addPoint(data.get(i)[0], data.get(i)[1], 0.0, data.get(i)[2]);
+        }
+        return graph;
+    }
+    
     public void readFile(String filename) {
         TextFileReader reader = new TextFileReader();
         reader.openFile(filename);
