@@ -23,6 +23,10 @@ ready figures, supports PDF and SVG output.
 
 <img src="https://github.com/gavalian/groot/blob/master/images/groot4_example_1.png" width="800">
 
+In new version there are few new graph types, commonly used in analysis. Here is an example of Bar graph.
+
+<img src="https://github.com/gavalian/groot/blob/master/images/bar_graph_example.png" width="800">
+
 # Installation
 Simply add this [library jar](https://github.com/gavalian/groot/raw/master/jars/) to your build path in an IDE.
 
