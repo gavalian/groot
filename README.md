@@ -27,6 +27,10 @@ In new version there are few new graph types, commonly used in analysis. Here is
 
 <img src="https://github.com/gavalian/groot/blob/master/images/bar_graph_example.png" width="800">
 
+New canvas styles are imeplemented with preset configuration for plotting related plots.
+
+<img src="https://github.com/gavalian/groot/blob/master/images/multiplot_example.png" width="800">
+
 # Installation
 Simply add this [library jar](https://github.com/gavalian/groot/raw/master/jars/) to your build path in an IDE.
 
