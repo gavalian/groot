@@ -15,10 +15,10 @@ import org.jlab.jnp.graphics.attr.AttributeCollection;
 import org.jlab.jnp.graphics.attr.AttributeType;
 import org.jlab.jnp.graphics.attr.AxisAttributes;
 import org.jlab.jnp.graphics.attr.LineStyles;
-import org.jlab.jnp.graphics.attr.Theme;
 import org.jlab.jnp.graphics.base.Node2D;
 import org.jlab.jnp.graphics.base.NodeInsets;
 import org.jlab.jnp.graphics.base.NodeRegion2D;
+import org.jlab.jnp.groot.settings.GRootTheme;
 
 /**
  *
@@ -62,7 +62,7 @@ public class AxisNode2D extends Node2D {
                         AttributeType.AXIS_DRAW_LABELS,AttributeType.AXIS_DRAW_TITLE,
                         AttributeType.AXIS_DRAW_TICKS
                     },                    
-                    new String[]{"0",
+                    new String[]{"1",
                         "1","1",
                         "5","5","10","10",
                         "true","true","true","fasle","true","true","true"});
@@ -257,7 +257,7 @@ public class AxisNode2D extends Node2D {
             return;
         }
         Node2D       parent = this.getParent();
-        Theme        theme  = Theme.getInstance();
+        GRootTheme        theme  = GRootTheme.getInstance();
         
         NodeRegion2D bounds =  getBounds();
         NodeInsets   insets =  getInsets();                       
@@ -265,6 +265,7 @@ public class AxisNode2D extends Node2D {
         int axisColor   = this.axisAttributes.getInt(AttributeType.AXISLINECOLOR);
         g2d.setColor(theme.getPalette().getColor(axisColor));
         this.axisText.setColor(theme.getPalette().getColor(axisColor));
+        this.axisTitleText.setColor(theme.getPalette().getColor(axisColor));
         g2d.setStroke(LineStyles.getStrokeWidth(strokeWidth));
         
         if(this.AXIS_TYPE==AxisNode2D.AXIS_TYPE_HORIZONTAL){
@@ -325,6 +326,9 @@ public class AxisNode2D extends Node2D {
             double x3 = bounds.getX() + bounds.getWidth();
             double y1 = bounds.getY();
             double y2 = bounds.getY() + bounds.getHeight();
+            //g2d.setColor(theme.getPalette().getColor(axisColor));
+            //this.axisText.setColor(theme.getPalette().getColor(axisColor));
+            
             g2d.drawLine((int) x1, (int) y1, (int) x2, (int) y2);
             if(this.axisAttributes.getBoolean(AttributeType.AXISDRAWBOX)==true){
                 g2d.drawLine((int) x3, (int) y1, (int) x3, (int) y2);
@@ -361,6 +365,7 @@ public class AxisNode2D extends Node2D {
             } else {
                 for(int i = 0; i < this.axisMarkers.size(); i++){
                     double ycoord = parent.transformY(axisMarkers.get(i));
+                    
                     if(drawTicks==true) g2d.drawLine( (int) x1 , (int) ycoord , (int) (x1+tickOffset), (int) ycoord);
                     //axisText.setText(String.format(axisScale.getOrderString(), axisMarkers.get(i)));
                     if(drawLabels==true){

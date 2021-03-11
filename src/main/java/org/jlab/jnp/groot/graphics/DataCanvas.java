@@ -44,7 +44,12 @@ public class DataCanvas extends Canvas2D {
         this.setPopupProvider(popup);
         attributes = new AttributeCollection(new AttributeType[]{},new String[]{});
         Background2D back = Background2D.createBackground(255, 255, 255);
-        this.setBackground(back);
+        setBackground(back);
+    }
+    
+    public void initBackground(int red, int green, int blue){
+        Background2D back = Background2D.createBackground(red,green,blue);
+        setBackground(back);
     }
     
     public void setPadInsets(int t, int l, int b, int r){

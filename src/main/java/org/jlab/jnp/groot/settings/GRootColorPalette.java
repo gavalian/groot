@@ -72,16 +72,17 @@ public class GRootColorPalette {
             colorPalette.clear();
             colorPalette.add(Color.WHITE);
             colorPalette.add(Color.BLACK);
-            colorPalette.add(new Color( 20,120,178)); // BLUE
-            colorPalette.add(new Color(255,127, 30)); // ORANGE
-            colorPalette.add(new Color( 39,160, 56));  // GREEN
-            colorPalette.add(new Color(216, 39, 40));  // RED
-            colorPalette.add(new Color(148,104,186));  // PURPLE
-            colorPalette.add(new Color(141, 86, 76));  // BROWN
-            colorPalette.add(new Color(227,119,190));  // PINK
-            colorPalette.add(new Color(127,127,127));  // GRAY
-            colorPalette.add(new Color(186,185, 53));  // OLIVE
-            colorPalette.add(new Color(  0,188,203));  // CYAN  
+            colorPalette.add(new Color( 20,120,178)); // BLUE - 2
+            colorPalette.add(new Color(255,127, 30)); // ORANGE - 3
+            colorPalette.add(new Color( 39,160, 56));  // GREEN - 4
+            colorPalette.add(new Color(216, 39, 40));  // RED - 5
+            colorPalette.add(new Color(148,104,186));  // PURPLE - 6
+            colorPalette.add(new Color(141, 86, 76));  // BROWN - 7
+            colorPalette.add(new Color(227,119,190));  // PINK - 8
+            colorPalette.add(new Color(127,127,127));  // GRAY - 9
+            colorPalette.add(new Color(186,185, 53));  // OLIVE - 10
+            colorPalette.add(new Color(  0,188,203));  // CYAN  - 11
+            colorPalette.add(new Color(  168,182,196));  // GRAY - 12
             //colorPalette.add(new Color());
         }
     }

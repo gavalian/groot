@@ -5,6 +5,7 @@
  */
 package org.jlab.jnp.groot.graphics;
 
+import java.awt.Color;
 import java.util.Random;
 import org.jlab.groot.data.BarGraph;
 import org.jlab.groot.data.GraphErrors;
@@ -54,14 +55,15 @@ public class Groot4Demo {
             graph.addPoint(4.0, 1.2 + i*2.2 , 0.0, 0.4);
             graph.addPoint(5.0, 1.0 + i*2.2 , 0.0, 0.5);
             //}
-            if(i<6){
-                int color = i+2;
-                legend.add(graph, "graph with color = " + color);
-            }
+            
             graph.setMarkerColor(i+2);
             graph.setLineColor(i+2);
             graph.setMarkerSize(12);
-            int style = i%4 + 1;
+            int style = i%7 + 1;
+            if(i<7){
+                int color = i+2;
+                legend.add(graph, "color=" + color + ",style="+style);
+            }
             graph.setMarkerStyle(style);
             c1.getDataCanvas().cd(0).draw(graph, "samePLS");
             //c1.getDataCanvas().cd(2).draw(graph, "samePLS");
@@ -395,14 +397,71 @@ public class Groot4Demo {
         c1.getDataCanvas().getRegion(0).addNode(text2);
         c1.getDataCanvas().getRegion(0).addNode(text3);
     }
+    
+    public static void demo5(DataCanvas canvas, int pad, boolean dark){
+        int size = 22;
+        canvas.cd(pad);
+        String options = "same";
+        for(int i = 0; i < size; i++){
+            F1D func = new F1D("func","[a]",0.5,9.5);
+            func.setParameter(0, i+1);
+            func.setLineWidth(2);
+            func.setLineStyle(i+1);
+            if(dark==true) func.setLineColor(0);
+            if(i!=0){
+                canvas.draw(func, "same");
+            } else {                
+                canvas.draw(func);
+            }
+        }
+        canvas.getRegion(pad).getGraphicsAxis().setAxisLimits(0, 10, 0, size+1);
+        canvas.getRegion(pad).getGraphicsAxis().getAxisY().setTitle("Line Style");
+    }
+    
+    public static void demo6(DataCanvas canvas, int pad, boolean dark){
+        LegendNode2D legend = new LegendNode2D(200,30);
+        if(dark==true){
+            legend.setBackgroundColor(69, 90, 101);
+            legend.setTextColor(Color.WHITE);
+        }
+        int yoffset = 1;
+        for(int i = 0; i <= 17; i++){
+            GraphErrors graph = new GraphErrors();
+            //for(int p = 0; p <= 10; p++){
+            graph.addPoint(1.0, yoffset + 3.0 + i*2.2 , 0.0, 0.8);
+            graph.addPoint(2.0, yoffset + 2.0 + i*2.2 , 0.0, 0.6);
+            graph.addPoint(3.0, yoffset + 1.5 + i*2.2 , 0.0, 0.3);
+            graph.addPoint(4.0, yoffset + 1.2 + i*2.2 , 0.0, 0.4);
+            graph.addPoint(5.0, yoffset + 1.0 + i*2.2 , 0.0, 0.5);
+            
+            graph.setMarkerColor(i+1);
+            graph.setLineColor(i+1);
+            graph.setMarkerSize(12);
+            int style = i%7 + 1;
+            if(i<7){
+                int color = i+1;
+                legend.add(graph, "color=" + color + ",style="+style);
+            }
+            graph.setMarkerStyle(style);
+            canvas.cd(pad).draw(graph, "samePLS");
+        }
+        
+        canvas.getRegion(pad).getGraphicsAxis().setAxisLimits(0.0,6.0,0.0,45);
+        canvas.getRegion(pad).addNode(legend);
+    }
+    
     public static void main(String[] args){
         
         GRootColorPalette.getInstance().setColorPalette();
         GRootColorPalette.getInstance().setColorScheme("tab10");
         
-        Groot4Demo.demo1();
+        //Groot4Demo.demo1();
         //Groot4Demo.demo2();
         //Groot4Demo.demo3();
         //Groot4Demo.demo4();
+        
+        TDataCanvas c = new TDataCanvas(600,400);
+        c.divide(1, 1);
+        Groot4Demo.demo5(c.getDataCanvas(), 0,false);
     }
 }

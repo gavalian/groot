@@ -129,7 +129,9 @@ public class LegendNode2D extends Node2D {
         
     }
     
-    
+    public void setTextColor(Color col){
+        this.textColor = col;
+    }
     @Override
     public void drawLayer(Graphics2D g2d, int layer){
         
@@ -151,7 +153,7 @@ public class LegendNode2D extends Node2D {
         int boxHeight = boxPaddingY*3 + ((int) textHeight) + (descriptions.size()-1)*textSpacing;
         int boxWidth  = 10 + boxPaddingX*3 + ((int)textWidth); 
 
-        g2d.setColor(this.headerBackground);
+        g2d.setColor(getBackgroundColor());
         
         g2d.fillRoundRect((int) (bounds.getX() + this.positionX),
                 (int) (bounds.getY() + this.positionY),(int) boxWidth,(int) boxHeight, 10,10);
