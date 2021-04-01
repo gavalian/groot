@@ -378,6 +378,33 @@ public class GraphErrors implements IDataSet {
         }
     }
 
+    public static GraphErrors readFile(String filename, int start, int npoints, int[] columns) {
+        
+        TextFileReader reader = new TextFileReader();
+        reader.openFile(filename);
+        GraphErrors gr = new GraphErrors();
+        
+        for(int n = 0; n < start; n++) reader.readNext();
+        
+        int counter = 0;
+        while (reader.readNext() == true&& counter<npoints) {
+            double[] data = reader.getAsDouble(columns);
+            //System.out.println("COLUMNS = " + columns[0] + " " + columns[1]);
+            if(columns.length==2){
+                gr.addPoint(data[0], data[1], 0.0, 0.0);
+                //System.out.println("adding point " + data[0] + " " + data[1]);
+            }
+            if (columns.length==3) {
+                gr.addPoint(data[0],data[1],0.0,data[2]);
+            }
+            if (columns.length>3) {
+                gr.addPoint(data[0],data[1],data[2],data[3]);
+            }
+            counter++;
+        }
+        
+        return gr;
+    }
     @Override
     public void reset() {
         this.dataX.clear();
@@ -395,7 +422,15 @@ public class GraphErrors implements IDataSet {
     public double getMax() {
         return dataY.getMax();
     }
-
+    public void show(){
+        System.out.println(">>> graph");
+        for(int i = 0; i < dataX.getSize(); i++){
+            System.out.printf("%9.5f %9.5f %9.5f %9.5f \n",
+                    dataX.getValue(i),dataY.getValue(i),
+                    dataEX.getValue(i),dataEY.getValue(i)
+                    );
+        }
+    }
     public void save(String filename) {
         try {
             FileWriter file = new FileWriter(filename);

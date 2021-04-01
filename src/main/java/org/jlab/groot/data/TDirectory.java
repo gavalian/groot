@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import org.jlab.groot.data.DataSetSerializer4.DataSetType;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.group.DataGroupDescriptor;
+import org.jlab.groot.math.F1D;
 import org.jlab.groot.ui.TBrowser;
-import org.jlab.jnp.hipo.data.HipoEvent;
-import org.jlab.jnp.hipo.data.HipoNode;
-import org.jlab.jnp.hipo.io.HipoWriter;
-import org.jlab.jnp.hipo.io.HipoReader;
+import org.jlab.jnp.hipo4.data.Event;
+import org.jlab.jnp.hipo4.data.Node;
 
 /**
  *
@@ -71,8 +72,113 @@ public class TDirectory extends Directory<IDataSet> {
         }
     }
     
-    public void writeFile(String filename){
+    public void load(String filename){
+        org.jlab.jnp.hipo4.io.HipoReader reader = new  org.jlab.jnp.hipo4.io.HipoReader();
+        Event event = new Event();
+        reader.open(filename);
         
+        while(reader.hasNext()==true){
+            reader.nextEvent(event);
+            Node type = event.read(21, 7);
+            if(type.getInt(0) == DataSetType.H1F.getType()){
+                H1F h = DataSetSerializer4.deserializeH1F(event);
+                String fullName = h.getName();
+                String dirname = this.stringDirectoryFromPath(fullName);
+                String objname = stringObjectFromPath(fullName);
+                
+                h.setName(objname);
+                mkdir(dirname);
+                cd(dirname);
+                addDataSet(h);
+            }
+            
+            if(type.getInt(0) == DataSetType.H2F.getType()){
+                H2F h = DataSetSerializer4.deserializeH2F(event);
+                String fullName = h.getName();
+                String dirname = this.stringDirectoryFromPath(fullName);
+                String objname = stringObjectFromPath(fullName);
+                
+                h.setName(objname);
+                mkdir(dirname);
+                cd(dirname);
+                addDataSet(h);
+            }
+            
+             if(type.getInt(0) == DataSetType.FUNC.getType()){
+                F1D f = DataSetSerializer4.deserializeF1D(event);
+                String fullName = f.getName();
+                String dirname = this.stringDirectoryFromPath(fullName);
+                String objname = stringObjectFromPath(fullName);
+                
+                f.setName(objname);
+                mkdir(dirname);
+                cd(dirname);
+                addDataSet(f);
+            }
+            
+             if(type.getInt(0) == DataSetType.GRAPH.getType()){
+                GraphErrors g = DataSetSerializer4.deserializeGraphErrors(event);
+                String fullName = g.getName();
+                String dirname = this.stringDirectoryFromPath(fullName);
+                String objname = stringObjectFromPath(fullName);
+                
+                g.setName(objname);
+                mkdir(dirname);
+                cd(dirname);
+                addDataSet(g);
+            }
+        }
+        
+    }
+    
+    public void save(String filename){
+        org.jlab.jnp.hipo4.io.HipoWriter writer = new  org.jlab.jnp.hipo4.io.HipoWriter();
+        Event event = new Event();
+        writer.open(filename);
+        List<String>  objectList = this.getCompositeObjectList(this);
+        for(String object : objectList){
+            //System.out.println("writing object ---> " + object);
+            IDataSet ds = getObject(object);
+            if(ds!=null){
+                if(ds instanceof H1F){
+                    ds.setName(object);
+                    List<Node> nodes = DataSetSerializer4.serializeH1F((H1F) ds);
+                    event.reset();
+                    for(Node node: nodes) event.write(node);
+                    writer.addEvent(event);
+                }
+                
+                if(ds instanceof H2F){
+                    ds.setName(object);
+                    List<Node> nodes = DataSetSerializer4.serializeH2F((H2F) ds);
+                    event.reset();
+                    for(Node node: nodes) event.write(node);
+                    writer.addEvent(event);
+                }
+                
+                if(ds instanceof F1D){
+                    ds.setName(object);
+                    List<Node> nodes = DataSetSerializer4.serializeF1D((F1D) ds);
+                    event.reset();
+                    for(Node node: nodes) event.write(node);
+                    writer.addEvent(event);
+                }
+                if(ds instanceof GraphErrors){
+                    ds.setName(object);
+                    List<Node> nodes = DataSetSerializer4.serializeGraphErrors((GraphErrors) ds);
+                    event.reset();
+                    for(Node node: nodes) event.write(node);
+                    writer.addEvent(event);
+                }                
+            }                        
+        }
+        writer.close();
+        
+    }
+    
+    public void writeFile(String filename){
+        save(filename);
+        /*
         HipoWriter  writer = new HipoWriter();
         writer.setCompressionType(1);
         writer.open(filename);
@@ -103,7 +209,7 @@ public class TDirectory extends Directory<IDataSet> {
             System.out.println(event);
             writer.writeEvent(event);
         }
-        writer.close();
+        writer.close();*/
     }
     
     public static void addFiles(String outputFile, List<String> inputFiles){
@@ -149,7 +255,8 @@ public class TDirectory extends Directory<IDataSet> {
     }
     
     public void readFile(String filename){
-
+        load(filename);
+        /*
         HipoReader reader = new HipoReader();
         reader.open(filename);
         
@@ -202,13 +309,61 @@ public class TDirectory extends Directory<IDataSet> {
             
         }
         System.out.println(" EVENT # " + nevents + " : counter = " +
-                counter + " groups = " + groupCounter);
+                counter + " groups = " + groupCounter);*/
     }
     
     
     public static void main(String[] args){
+        
         TDirectory dir = new TDirectory();
         
+        dir.ls();
+        dir.mkdir("/first");
+        dir.cd("/first");
+        H1F h = new H1F("h100","data sample",100,0.0,1.0);
+        h.setTitleX("x axis");
+        h.setTitleY("y axis");
+        
+        
+        H2F h2 = new H2F("h200","2d gaussian",20,0.0,1.0,30,0.0,1.0);
+        h2.setTitleX("gaus X axis");
+        h2.setTitleY("gaus Y axis");
+        Random r = new Random();
+        
+        for(int i = 0; i < 10000; i++){
+            h.fill(r.nextGaussian()+0.6);
+            h2.fill(r.nextGaussian()+0.6, r.nextGaussian()+0.3);
+        }
+        dir.addDataSet(h);
+        dir.addDataSet(h2);
+        dir.cd("/");
+        dir.mkdir("/second");
+        dir.cd("/second");
+        
+        F1D func = new F1D("func","[a]+[b]*x",0.0,1.0);
+        func.setParameter(0,5.0);
+        func.setParameter(1,2.0);
+        
+        func.setLineColor(5);
+        func.setLineStyle(4);
+        func.setLineWidth(2);
+        
+        dir.addDataSet(func);
+
+        GraphErrors gr = new GraphErrors("graph_100",new double[]{0.1,0.2,0.3,0.4}, new double[]{2.4,3,6,1.2});
+        
+        dir.addDataSet(gr);
+        
+        dir.save("newDir.hipo");
+        
+        
+        TDirectory rdir = new TDirectory();
+        
+        rdir.load("newDir.hipo");
+        
+        rdir.ls();
+        
+        TBrowser t = new TBrowser(rdir);
        /* dir.mkdir("/aa");
         dir.cd("/aa");
         dir.add("TEST", new H1F());
@@ -217,7 +372,7 @@ public class TDirectory extends Directory<IDataSet> {
        //dir.readFile("/Users/gavalian/Desktop/out_monitor.hipo");
        //TBrowser browser = new TBrowser(dir);
         
-        
+        /*
         if(args.length<3){
             System.out.println("error: \n\n Usage : hadd [outputfile] [input1] [input2] ....\n\n");
             String filename = "ftCalCosmic_0_04-04-2018_05.59.18_PM.hipo";
@@ -228,92 +383,9 @@ public class TDirectory extends Directory<IDataSet> {
         String outputFile = args[0];
         
         List<String> inputFiles = new ArrayList<>();
-        for(int i = 1; i < args.length;i++) inputFiles.add(args[i]);
-        
+        for(int i = 1; i < args.length;i++) inputFiles.add(args[i]);        
         TDirectory.addFiles(outputFile, inputFiles);
+        */        
         
-        
-        /*
-        TDirectory dir = new TDirectory();
-        dir.mkdir("/calibration/PCAL");
-        dir.mkdir("/calibration/ECIN");
-        dir.mkdir("/calibration/ECOUT");
-        
-        dir.cd("/calibration/PCAL");
-        
-        H1F h1pcal = new H1F("h1pcal",100,0.0,2.0);
-        for(int i = 0; i < 600; i++) h1pcal.fill(Math.random()+Math.random());
-        dir.addDataSet(h1pcal);
-        
-        dir.cd("/calibration/ECIN");
-        H1F h1ecin = new H1F("h1ecin",100,0.0,2.0);
-        H2F h2ecin = new H2F("h2ecin",120,0.0,2.0,120,0.0,2.0);
-        for(int i = 0; i < 60000; i++){
-            h1ecin.fill(Math.random()+Math.random());
-            h2ecin.fill(Math.random()+Math.random(),Math.random()+Math.random());
-        }
-        dir.addDataSet(h1ecin);
-        dir.addDataSet(h2ecin);
-        
-        dir.cd("/calibration/ECOUT");
-        H1F h1ecout = new H1F("h1ecout",100,0.0,2.0);
-        h1ecout.setLineColor(4);
-        h1ecout.setLineWidth(3);
-        h1ecout.setFillColor(3);
-        h1ecout.setTitle("Random Generator");
-        h1ecout.setTitleX("ep #rarrow ep#pi^+#pi^- [GeV^2]");
-        h1ecout.setTitleY("counts");
-        h1ecout.setOptStat(1111001111);
-        F1D func  = new F1D("func","[amp]*gaus(x,[mean],[sigma])",0.0,2.0);
-        F1D funcL = new F1D("func","[a]+[b]*x",0.5,3.5);
-        func.setParameter(0, 25.0);
-        func.setParameter(1, 0.5);
-        func.setParameter(2, 0.5);
-        for(int i = 0; i < 600; i++) h1ecout.fill(Math.random()+Math.random());
-        
-        GraphErrors graph = new GraphErrors("Attenuation");
-        graph.getAttributes().setOptStat("111111");
-        graph.addPoint(1.0, 1.5, 0.0, 0.2);
-        graph.addPoint(2.0, 2.6, 0.0, 0.15);
-        graph.addPoint(3.0, 3.4, 0.0, 0.10);
-        
-        dir.addDataSet(h1ecout);
-        dir.addDataSet(graph);
-        DataFitter.fit(func, h1ecout, "N");
-        DataFitter.fit(funcL, graph, "N");        
-        
-        System.out.println(">>>>>>>>>>>>>>>>>>>>");
-        System.out.println(func);
-        func.setLineColor(2);
-        func.setLineWidth(3);
-       
-        dir.cd();
-        dir.tree();
-        dir.writeFile("testfile.hipo");
-        
-        
-        TDirectory dirRead = new TDirectory();
-        dirRead.readFile("testfile.hipo");
-        dirRead.cd();        
-        H1F h1 = (H1F) dirRead.getObject("/calibration/ECOUT/h1ecout");
-        H2F h2 = (H2F) dirRead.getObject("/calibration/ECIN/h2ecin");
-        GraphErrors graphR = (GraphErrors) dirRead.getObject("/calibration/ECOUT/Attenuation");
-        dirRead.cd("calibration");
-        dirRead.pwd();
-        System.out.println(h1);
-        
-        dirRead.cd();
-        dirRead.tree();
-        TCanvas c1 = new TCanvas("c1",900,900);
-        c1.divide(2,2);
-        c1.cd(0);
-        c1.draw(h1);
-        c1.cd(1);
-        c1.draw(graphR);
-        c1.cd(2);
-        c1.draw(h2);
-        System.out.println("***********************");
-        System.out.println(h1.getFunction());
-       */
     }
 }

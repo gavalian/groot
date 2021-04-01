@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +26,23 @@ public class PaveText extends Node2D {
         MULTILINE, ONELINE;
     }
      
-    private Font             textFont = new Font("Avenir", Font.PLAIN, 12);
+    protected Font             textFont = new Font("Avenir", Font.PLAIN, 14);
     private Color           textColor = Color.BLACK;
     private Color         borderColor = new Color(180,180,180);
     private Color    headerBackground = new Color(255,255,255);
     private String         textHeader = "Info";
     private List<String>  textStrings = new ArrayList<>();
+    private List<Point2D.Double>  textPositions = new ArrayList<>();
+    
     private LatexText       latexText = new LatexText("a",0,0);
     private double        textSpacing = 0.0;
     private int             positionX = 0;
     private int             positionY = 0;
     
     private int           paddingLeft = 3;
-    private int          paddingRight = 2;
-    private int            paddingTop = 2;
-    private int         paddingBottom = 2;
+    private int          paddingRight = 3;
+    private int            paddingTop = 3;
+    private int         paddingBottom = 6;
     
     public  PaveTextStyle   paveStyle = PaveTextStyle.MULTILINE;
     
@@ -50,6 +53,7 @@ public class PaveText extends Node2D {
         this.positionY = y;
         setName("pave_text");
         textStrings.add(text);
+        textPositions.add(new Point2D.Double(0.0,0.0));
     }
     
     public PaveText(int x, int y){
@@ -65,17 +69,23 @@ public class PaveText extends Node2D {
         paveStyle = style; return this;
     }
     
+    public PaveTextStyle getStyle(){
+        return paveStyle;
+    }
+    
     public void setTextColor(Color col){
         this.textColor = col;
     }
     
     public PaveText addLine(String line){
-        textStrings.add(line); return this;
+        textStrings.add(line); 
+        textPositions.add(new Point2D.Double(0.0,0.0));
+        return this;
     }
     
     public PaveText addLines(String[] lines){
         for(String line : lines)
-            textStrings.add(line);
+            this.addLine(line);
         return this;
     }
     
@@ -104,6 +114,7 @@ public class PaveText extends Node2D {
     
     public void setFont(Font font){
         this.textFont = font;
+        this.latexText.setFont(font);
     }
     
     public PaveText setBackgroundColor(Color color){
@@ -144,11 +155,19 @@ public class PaveText extends Node2D {
             Rectangle2D tb = latexText.getBounds(g2d);
             g2d.setColor(textColor);
             latexText.setColor(textColor);
+            double xPosMarker = xPos - ((double)paddingLeft)/2.0;
+            this.textPositions.get(i).x = xPosMarker;
+            this.textPositions.get(i).y = yPos + (tb.getHeight() + textSpacing*tb.getHeight())*0.5;
             latexText.drawString(g2d, (int) xPos, (int) yPos,  LatexText.ALIGN_LEFT,
                     LatexText.ALIGN_TOP);
             yPos += tb.getHeight() + textSpacing*tb.getHeight();
         }
     }
+    
+    protected List<Point2D.Double> getTextPositions(){
+        return this.textPositions;
+    }
+    
     protected void drawLayerOneLine(Graphics2D g2d){
         NodeRegion2D bounds = getParent().getBounds();
         //System.out.println("[Pave Text] ---> " + bounds);
@@ -173,8 +192,9 @@ public class PaveText extends Node2D {
                 10, 10);
         
         xPos += paddingLeft;
-        yPos += paddingTop;
+        yPos += paddingTop+textHeight/2.0;
         
+
         for(int i = 0; i < textStrings.size(); i++){
             latexText.setText(textStrings.get(i));
             Rectangle2D tb = latexText.getBounds(g2d);
@@ -182,6 +202,15 @@ public class PaveText extends Node2D {
             latexText.setColor(textColor);
             latexText.drawString(g2d, (int) xPos, (int) yPos,  LatexText.ALIGN_LEFT,
                     LatexText.ALIGN_CENTER);
+
+            double xPosMarker = xPos - ((double)paddingLeft)/2.0;
+            this.textPositions.get(i).x = xPosMarker;
+            this.textPositions.get(i).y = yPos;
+            
+            /*g2d.drawLine((int) (xPosMarker-10), (int) yPos, (int) (xPosMarker+10), (int) yPos);
+            g2d.drawLine((int) xPosMarker, (int) (yPos-10), (int) (xPosMarker), (int) (yPos+10));
+            */
+
             xPos += tb.getWidth() + paddingLeft + paddingRight;
             //yPos += tb.getHeight() + textSpacing*tb.getHeight();
         }

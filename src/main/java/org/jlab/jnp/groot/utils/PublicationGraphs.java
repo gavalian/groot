@@ -7,13 +7,19 @@ package org.jlab.jnp.groot.utils;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 import org.jlab.groot.data.BarGraph;
 import org.jlab.groot.data.GraphErrors;
+import org.jlab.groot.data.H1F;
 import org.jlab.groot.fitter.DataFitter;
+import org.jlab.groot.io.CSVReader;
+import org.jlab.groot.io.DataIO;
 import org.jlab.groot.math.F1D;
 import org.jlab.jnp.graphics.attr.AttributeType;
 import org.jlab.jnp.groot.graphics.AxisNode2D;
 import org.jlab.jnp.groot.graphics.BarGraphNode2D;
+import org.jlab.jnp.groot.graphics.Legend;
 import org.jlab.jnp.groot.graphics.LegendNode2D;
 import org.jlab.jnp.groot.graphics.PaveText;
 import org.jlab.jnp.groot.graphics.TDataCanvas;
@@ -83,6 +89,9 @@ public class PublicationGraphs {
                 new String[]{
                     "45nA","50nA","55nA","90nA","100nA","110nA"});
         c1.getDataCanvas().getRegion(1).getGraphicsAxis().getAxisX().setAxisLabelType(AxisNode2D.AXIS_LABELS_FORCED);
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().setAxisLimits(0.0, 7, 0.0, 1.15);
+        Legend barLegend = bar.getLegend(new String[]{"4 segments","5 segments","6 segment"});
+        c1.getDataCanvas().getRegion(1).addNode(barLegend);
     }
     
      public static void set2(){
@@ -92,7 +101,7 @@ public class PublicationGraphs {
         TDataCanvas c1 = new TDataCanvas(550,400);
         c1.divide(1, 1);
         c1.getDataCanvas().bottom(55);
-         c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
         c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisY().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
         
         GraphErrors pos = new GraphErrors("pos",
@@ -123,7 +132,7 @@ public class PublicationGraphs {
         
         GraphErrors denoise = new GraphErrors("neg",
                 new double[]{45.0,50.0,55.0,90.0,100.0,110.0},
-                new double[]{0.9269,0.9197,0.9142,0.8121,0.7961,0.7711},
+                new double[]{0.98307,0.98009,0.97874,0.95200,0.94841,0.93927},
                 new double[]{0.0,0.0,0.0,0.0,0.0,0.0},
                 new double[]{0.0,0.0,0.0,0.0,0.0,0.0}
         );
@@ -183,10 +192,119 @@ public class PublicationGraphs {
         c1.repaint();
      }
      
+     public static void set3(){
+         String file = "model_comparison_results.csv";
+        TDataCanvas c1 = new TDataCanvas(850,350);
+        c1.divide(2, 1);
+        GraphErrors lg = GraphErrors.csvGraphXYEY(file, 0,  4,  5, 1);
+        GraphErrors ln = GraphErrors.csvGraphXYEY(file, 0, 12, 13, 1);
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisY().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
+    
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().getAxisY().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");
+    
+//lg.getVectorEY().divide(2.0);
+        //ln.getVectorEY().divide(2.0);
+        lg.setTitleX("Model");
+        lg.setTitleY("Hit Reconstruction Efficiency (%)");
+        lg.setMarkerSize(12);
+        lg.setMarkerColor(2);
+        lg.setLineColor(2);
+        lg.setLineThickness(2);
+        c1.cd(0).draw(lg, "PL");
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().setAxisLimits(0.0, 10, 0, 120.0);
+        ln.setTitleX("Model");
+        ln.setTitleY("Noise Removal Efficiency (%)");
+        ln.setMarkerSize(12);
+        ln.setMarkerStyle(2);
+        ln.setMarkerColor(3);
+        ln.setLineColor(3);
+        ln.setLineThickness(2);
+        c1.cd(1).draw(ln, "PL");
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().setAxisLimits(0.0, 10, 0, 120.0);
+        
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().getAxisX().setAxisTickLabels(
+                new String[]{
+                    "0","0a","0b","0c","0d","0e","0f","1","2"});
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().getAxisX().setAxisLabelType(AxisNode2D.AXIS_LABELS_FORCED);
+        
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisX().setAxisTickLabels(
+                new String[]{
+                    "0","0a","0b","0c","0d","0e","0f","1","2"});
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisX().setAxisLabelType(AxisNode2D.AXIS_LABELS_FORCED);
+        
+        c1.getDataCanvas().getRegion(0).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXISTITLEOFFSET, "25");
+        c1.getDataCanvas().getRegion(1).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXISTITLEOFFSET, "25");
+     }
+     
+     public static List<H1F> read(String directory){
+         List<H1F> hList = new ArrayList<>();
+         String[] dataFiles = new String[]{
+             "hits_hist_data.csv","noise_hist_data.csv",
+             "noise_red_hist_data.csv"
+         };
+         CSVReader reader = new CSVReader();
+         for(int i = 0; i < dataFiles.length; i++){
+             List<double[]> hdata       = reader.readColumn(directory+"/"+dataFiles[i], new int[]{0,1}, 0);
+             H1F h = new H1F("h","",40,0.0,100.0);
+             h.setTitleX("Efficiency");
+             h.setTitleY("Count");
+             h.setFillColor(52);
+             h.setLineColor(1);
+             h.setLineWidth(1);
+             for(int j = 0; j < hdata.size(); j++){
+             h.fill(hdata.get(j)[0], hdata.get(j)[1]);
+             }
+             hList.add(h);
+         }
+         return hList;
+     }
+     public static void set4(){
+        
+        TDataCanvas c1 = new TDataCanvas(850,750);
+        c1.divide(2, 3);
+         CSVReader reader = new CSVReader();
+         
+         String[] dirs = new String[]{"OneDrive/model_0a",
+             "OneDrive/model_0b"
+                 ,"OneDrive/model_0c","OneDrive/model_0d"
+                 ,"OneDrive/model_0e","OneDrive/model_0f"
+         };
+        for(int i = 0; i < dirs.length; i++){
+            List<H1F> hList = PublicationGraphs.read(dirs[i]);
+            hList.get(1).setFillColor(55);
+            hList.get(0).setFillColor(59);
+            c1.cd(i).draw(hList.get(1)).
+                    draw(hList.get(0),"same").draw(hList.get(2), "same");
+        }
+         
+         c1.repaint();
+     }
+     
+     public static void set5(){
+         TDataCanvas c1 = new TDataCanvas(850,750);
+         H1F h = new H1F("h1",100,0.0,1.0);
+         H1F h2 = new H1F("h1",100,0.0,1.0);
+         
+         h.setFillColor(44);
+         h2.setFillColor(42);
+         DataIO.csvH1(h, "all_hits_data_005.csv", 7, 1);
+         DataIO.csvH1(h2, "all_hits_data_005.csv", 6, 1);
+         c1.draw(h2);
+         c1.draw(h,"same");
+         
+         System.out.printf("H ==> mean = %.6f, rms = %.6f\n",h.getMean(),h.getRMS());
+         System.out.printf("H2 => mean = %.6f, rms = %.6f\n",h2.getMean(),h2.getRMS());
+     }
+     
     public static void main(String[] args){
         GRootColorPalette.getInstance().setColorPalette();
         GRootColorPalette.getInstance().setColorScheme("tab10");
         //PublicationGraphs.set1();
         PublicationGraphs.set2();
+        //PublicationGraphs.set3();
+        //PublicationGraphs.set4();
+        //PublicationGraphs.set5();
     }
 }

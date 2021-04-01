@@ -155,6 +155,8 @@ public class H1F  implements IDataSet {
 
     public long getUnderflow(){ return this.histogramUnderFlow;}
     public long getOverflow() { return this.histogramOverFlow;}
+    protected void setOverflow(long over){ histogramOverFlow = over;}
+    protected void setUnderflow(long under){ histogramUnderFlow = under;}
     
     public final void initAttributes(){
     	try {
@@ -315,11 +317,15 @@ public class H1F  implements IDataSet {
         }
     }
     
+    protected void setEntries(long entries){
+        histogramEntries = entries;
+    }
+    
     public long getEntries(){
-        int entries = 0;
+        /*int entries = 0;
         for(int loop = 0; loop < this.histogramData.length; loop++){
             entries += (int) this.histogramData[loop];
-        }
+        }*/
         return histogramEntries;
     }
     /**

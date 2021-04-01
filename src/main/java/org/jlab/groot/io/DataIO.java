@@ -7,28 +7,28 @@ package org.jlab.groot.io;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.jlab.groot.data.H1F;
 
 /**
  *
  * @author gavalian
  */
-public class CSVReader {
+public class DataIO {
     
-    public CSVReader(){
-        
-    }
-        
-    public List<double[]> readColumn(String filename, int[] columns, int skip){
+    public static void csvH1(H1F h, String filename, int column, int skip){
         TextFileReader reader = new TextFileReader(",");
         reader.openFile(filename);
         for(int i = 0; i < skip; i++){
             reader.readNext();
         }
-        List<double[]> data = new ArrayList<>();
+        int[] columns = new int[]{column};
+        
         while(reader.readNext()==true){
+            
             double[] row = reader.getAsDouble(columns);
-            data.add(row);
+            h.fill(row[0]);
         }
-        return data;
-    }    
+    }
+    
+    
 }

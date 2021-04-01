@@ -360,7 +360,11 @@ public class H2F implements IDataSet {
         return (float) this.hBuffer[bin];
     }
     
-    public void setDataBufferBin(int bin, float value){
+    public double getDataBufferBinAsDouble(int bin){
+        return this.hBuffer[bin];
+    }
+    
+    public void setDataBufferBin(int bin, double value){
         hBuffer[bin] = value;
     }
     /**

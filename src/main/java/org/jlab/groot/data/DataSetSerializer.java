@@ -29,10 +29,10 @@ public class DataSetSerializer {
      * @param h1
      * @return 
      */
+    
     public static List<HipoNode>  serializeH1F(H1F h1){
         
         List<HipoNode> nodes = new ArrayList<>();
-
 
         HipoNode dataType   = new HipoNode(100,1, HipoNodeType.INT,1);
         HipoNode dataName   = new HipoNode(100,2, h1.getName());

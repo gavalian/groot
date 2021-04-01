@@ -10,6 +10,7 @@ import java.util.List;
 import org.jlab.groot.base.DatasetAttributes;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.ui.PaveText;
+import org.jlab.jnp.groot.graphics.Legend;
 
 /**
  *
@@ -237,6 +238,19 @@ public class BarGraph implements IDataSet {
         return new PaveText(2);
     }
 
+    public Legend getLegend(String[] descriptions){
+        Legend legend = new Legend(55,30);
+        legend.setStyle(org.jlab.jnp.groot.graphics.PaveText.PaveTextStyle.ONELINE);
+        for(int i = 0; i < this.barFillColors.size(); i++){
+            H1F h = new H1F("h",1,0,1);
+            h.setFillColor(this.barFillColors.get(i));
+            h.setLineColor(1);
+            h.setLineWidth(1);
+            legend.add(h, descriptions[i]);
+        }
+        return legend;
+    }
+    
     @Override
     public void save(String filename) {
         // Reserved to save

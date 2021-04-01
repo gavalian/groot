@@ -64,7 +64,9 @@ public class AxisNode2D extends Node2D {
                     },                    
                     new String[]{"1",
                         "1","1",
-                        "5","5","10","10",
+                        "5","5",
+                        //"12","12",
+                        "5","5",
                         "true","true","true","fasle","true","true","true"});
     
 //    private final  AxisAttributes  axisAttributes = new AxisAttributes();
@@ -119,12 +121,12 @@ public class AxisNode2D extends Node2D {
     
     public void setAxisFont(String fontname, int fontsize, int fontFace){
         this.axisText.setFontSize(fontsize);
-        this.axisText.setFont(fontname, fontFace);
+        //this.axisText.setFont(fontname, fontFace);
     }
     
     public void setAxisTitleFont(String fontname, int fontsize, int fontFace){
         this.axisTitleText.setFontSize(fontsize);
-        this.axisTitleText.setFont(fontname, fontFace);
+        //this.axisTitleText.setFont(fontname, fontFace);
     }
     
     public void setAxisRegion(NodeRegion2D node){
@@ -256,11 +258,20 @@ public class AxisNode2D extends Node2D {
             //this.drawAxisGrid(g2d);
             return;
         }
-        Node2D       parent = this.getParent();
+        
+        Node2D            parent = this.getParent();
         GRootTheme        theme  = GRootTheme.getInstance();
         
         NodeRegion2D bounds =  getBounds();
-        NodeInsets   insets =  getInsets();                       
+        NodeInsets   insets =  getInsets();     
+        
+        //System.out.println("AXIS : bounds = " + bounds.toString());
+        //System.out.print("AXIS : ticks  = " + this.axisMarkers.size() + " => ");
+        /*for(int i = 0; i < axisMarkers.size(); i++){
+            System.out.printf("%8.4f ",axisMarkers.get(i));
+        }
+        System.out.println();
+        */
         int strokeWidth = this.axisAttributes.getInt(AttributeType.AXISLINEWIDTH);
         int axisColor   = this.axisAttributes.getInt(AttributeType.AXISLINECOLOR);
         g2d.setColor(theme.getPalette().getColor(axisColor));
@@ -292,6 +303,8 @@ public class AxisNode2D extends Node2D {
             
             for(int i = 0; i < this.axisMarkers.size(); i++){
                 double xcoord = parent.transformX(axisMarkers.get(i));
+                
+                //System.out.printf("x = %8.4f , translated = %8.4f\n",axisMarkers.get(i),xcoord);
                 if(drawTicks==true) g2d.drawLine( (int) xcoord, (int) y2 , (int) xcoord, (int) (y2-tickOffset));                                
                 //axisText.setText(String.format(axisScale.getOrderString(), axisMarkers.get(i)));
                 
@@ -314,9 +327,10 @@ public class AxisNode2D extends Node2D {
             int xtitle = (int) (bounds.getX() + bounds.getWidth()/2.0);
             int ytitle = (int) (bounds.getY()+bounds.getHeight());
             //axisTitleText.setFont(new Font("Symbol",Font.PLAIN,18));
-            
-            axisTitleText.setText(axisTitle);
-            axisTitleText.drawString(g2d, xtitle, ytitle + titleOffset + maxOffset, LatexText.ALIGN_CENTER, LatexText.ALIGN_TOP);
+            if(axisTitle.length()>0){
+                axisTitleText.setText(axisTitle);
+                axisTitleText.drawString(g2d, xtitle, ytitle + titleOffset + maxOffset, LatexText.ALIGN_CENTER, LatexText.ALIGN_TOP);
+            }
            
             
         } else if(this.AXIS_TYPE==AxisNode2D.AXIS_TYPE_VERTICAL){
@@ -381,10 +395,12 @@ public class AxisNode2D extends Node2D {
             
             int xtitle = (int) (bounds.getX());
             int ytitle = (int) (bounds.getY()+bounds.getHeight()/2.0);
-            axisTitleText.setText(axisTitle);
-            axisTitleText.drawString(g2d, 
-                    xtitle - titleOffset - maxOffset, ytitle , 
-                    LatexText.ALIGN_CENTER, LatexText.ALIGN_CENTER,LatexText.ROTATE_LEFT);
+            if(axisTitle.length()>0){
+                axisTitleText.setText(axisTitle);
+                axisTitleText.drawString(g2d, 
+                        xtitle - titleOffset - maxOffset, ytitle , 
+                        LatexText.ALIGN_CENTER, LatexText.ALIGN_BOTTOM,LatexText.ROTATE_LEFT);
+            }
         }
         
     }
