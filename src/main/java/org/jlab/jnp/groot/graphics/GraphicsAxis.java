@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.jlab.jnp.graphics.attr.AttributeCollection;
 import org.jlab.jnp.graphics.attr.AttributeType;
@@ -40,7 +41,7 @@ public class GraphicsAxis extends Node2D {
                     new String[]{"Graph Title"});
     
     private Rectangle2D  axisFrameLimits = null;
-    private List<DataNode2D> dataNodes = new ArrayList<DataNode2D>();
+    private List<DataNode2D> dataNodes = Collections.synchronizedList(new ArrayList<DataNode2D>());
     
     public GraphicsAxis(){
         super(20,20);
@@ -172,9 +173,50 @@ public class GraphicsAxis extends Node2D {
             dataRange = node.getDataBounds(dataRange);
             setAxisLimits(dataRange);
             
+        } else {
+            Rectangle2D dataRange = new Rectangle2D.Double();
+            dataRange = node.getDataBounds(dataRange);
+            Rectangle2D combined = grow(dataRange,axisFrameLimits);
+            setAxisLimits(combined);
         }
         node.setParent(this);
         dataNodes.add(node);
+    }
+    
+    public void setAxisAutomatic(){
+        if(this.dataNodes.size()>0){
+            Rectangle2D dataRegion = new Rectangle2D.Double();
+            Rectangle2D       temp = new Rectangle2D.Double();
+            dataNodes.get(0).getDataBounds(dataRegion);
+            setAxisLimits(dataRegion);
+            
+            for(int i = 1; i < dataNodes.size(); i++){
+                dataNodes.get(i).getDataBounds(temp);
+                Rectangle2D combined = grow(temp,axisFrameLimits);
+                setAxisLimits(combined);
+            }
+        } else {
+            Rectangle2D dataRegion = new Rectangle2D.Double(0.0,0.0, 1.0,1.0);
+            this.setAxisLimits(dataRegion);
+        }
+    }
+    
+    protected Rectangle2D grow(Rectangle2D rect1, Rectangle2D rect2){
+        double xmin1 = rect1.getX();
+        double xmax1 = xmin1 + rect1.getWidth();
+        double ymin1 = rect1.getY();
+        double ymax1 = ymin1 + rect1.getHeight();
+        
+        double xmin2 = rect2.getX();
+        double xmax2 = xmin2 + rect2.getWidth();
+        double ymin2 = rect2.getY();
+        double ymax2 = ymin2 + rect2.getHeight();
+
+        double xmin = xmin1>xmin2?xmin2:xmin1;
+        double xmax = xmax1>xmax2?xmax1:xmax2;
+        double ymin = ymin1>ymin2?ymin2:ymin1;
+        double ymax = ymax1>ymax2?ymax1:ymax2;
+        return new Rectangle2D.Double(xmin, ymin, xmax-xmin, ymax-ymin);
     }
     
     @Override

@@ -189,7 +189,7 @@ public class LuminocityAnalyzer {
         GRootColorPalette.getInstance().setColorScheme("tab10");
         //LuminocityAnalyzer.graphStudy3();
         //LuminocityAnalyzer.graphStudy4();
-        LuminocityAnalyzer.graphStudy5();
+        //LuminocityAnalyzer.graphStudy5();
         //LuminocityAnalyzer.graphStudy2();
         //LuminocityAnalyzer.createData();
     }

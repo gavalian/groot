@@ -74,6 +74,17 @@ public class TDataCanvas extends JFrame implements ActionListener {
         return this;
     }
     
+    
+    public void setAxisLimits(double xmin, double xmax, double ymin, double ymax){
+        this.dataCanvas.setAxisLimits(xmin, xmax, ymin, ymax);
+    }
+    
+    public void setAxisLimits(boolean automatic){
+        if(automatic==true){
+            this.getDataCanvas().setAxisLimits(automatic);
+        }
+    }
+    
     private void initUI(boolean closeOnExit){
         
         if(closeOnExit==true) setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -155,6 +166,11 @@ public class TDataCanvas extends JFrame implements ActionListener {
     
     public DataCanvas getDataCanvas(){
         return this.dataCanvas;
+    }
+    
+    public TDataCanvas addLegend(Legend leg){
+        this.dataCanvas.addLegend(leg);
+        return this;
     }
     
     @Override

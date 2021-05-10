@@ -66,6 +66,16 @@ public class DataCanvas extends Canvas2D {
         repaint();
     }
     
+    public void setAxisLimits(double xmin, double xmax, double ymin, double ymax){
+        getRegion(this.activeRegion).getGraphicsAxis().setAxisLimits(xmin, xmax, ymin, ymax);
+    }
+    
+    public void setAxisLimits(boolean automatic){
+        if(automatic==true){
+            getRegion(this.activeRegion).getGraphicsAxis().setAxisAutomatic();
+        }
+    }
+    
     public void setAxisTitleFont(String fontname, int fontsize, int fontface){
         for(Node2D item : this.getGraphicsComponents()){
             DataRegion region = (DataRegion) item;
@@ -169,6 +179,12 @@ public class DataCanvas extends Canvas2D {
             DataRegion region = (DataRegion) item;
             region.getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXISTITLEOFFSET, offset.toString());
         }
+        return this;
+    }
+    
+    
+    public DataCanvas addLegend(Legend leg){
+        this.getRegion(this.activeRegion).addNode(leg);
         return this;
     }
     

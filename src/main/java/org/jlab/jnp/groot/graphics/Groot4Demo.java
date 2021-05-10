@@ -136,6 +136,7 @@ public class Groot4Demo {
         c1.getDataCanvas().getRegion(3).getGraphicsAxis().getAxisY().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");;
         c1.getDataCanvas().getRegion(3).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXISTICKSIZE, "-5");;
         
+        c1.repaint();
     }
     
     public static class Complex {
@@ -455,7 +456,7 @@ public class Groot4Demo {
         GRootColorPalette.getInstance().setColorPalette();
         GRootColorPalette.getInstance().setColorScheme("tab10");
         
-        //Groot4Demo.demo1();
+        Groot4Demo.demo1();
         //Groot4Demo.demo2();
         //Groot4Demo.demo3();
         //Groot4Demo.demo4();
@@ -463,5 +464,7 @@ public class Groot4Demo {
         TDataCanvas c = new TDataCanvas(600,400);
         c.divide(1, 1);
         Groot4Demo.demo5(c.getDataCanvas(), 0,false);
+        
+        c.repaint();
     }
 }

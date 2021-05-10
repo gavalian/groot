@@ -14,7 +14,9 @@ import org.jlab.groot.ui.PaveText;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import org.jlab.groot.fitter.DataFitter;
 import org.jlab.groot.io.CSVReader;
+import org.jlab.groot.math.StatNumber;
 
 /**
  *
@@ -170,6 +172,14 @@ public class GraphErrors implements IDataSet {
         dataY.set(point, y);
     }
 
+    public void shiftX(double xshift){
+        int npoints = this.dataX.getSize();
+        for (int i = 0; i < npoints; i++){
+            double xvalue = this.dataX.getValue(i);
+            this.dataX.set(i, xvalue+xshift);
+        }
+    }
+    
     public void setError(int point, double ex, double ey) {
         dataEX.set(point, ex);
         dataEY.set(point, ey);
@@ -293,6 +303,15 @@ public class GraphErrors implements IDataSet {
         return this.graphAttr.getTitleY();
     }
 
+    
+    public void fit(Func1D func, String options){
+        DataFitter.fit(func, this, options);
+    }
+    
+    public void fit(Func1D func){
+        this.fit(func, "");
+    }
+    
     /**
      * set Title of the histogram
      *
@@ -378,6 +397,51 @@ public class GraphErrors implements IDataSet {
         }
     }
 
+    public GraphErrors divide(double number){
+        
+        StatNumber denom = new StatNumber(number,0.0);
+        StatNumber   nom = new StatNumber(number,0.0);
+        GraphErrors gr = new GraphErrors();
+        
+        for(int i = 0; i < this.dataY.size(); i++){
+            double value = dataY.getValue(i);
+            nom.set(value, dataEY.getValue(i));
+            nom.divide(denom);
+            //dataY.setValue(i, nom.number());
+            //dataEY.setValue(i, nom.error());
+            gr.addPoint(dataX.getValue(i), nom.number(), dataEX.getValue(i), nom.error());
+        }
+        return gr;
+    }
+    public GraphErrors  divide(GraphErrors gr){
+        if(this.getDataSize(0)!=gr.getDataSize(0)){
+            System.out.println("[graph:divide] error , graphs have different sizes");
+            return new GraphErrors();
+        }
+        
+        GraphErrors result = new GraphErrors();
+        StatNumber nom = new StatNumber();
+        StatNumber denom = new StatNumber();
+        
+        for(int i = 0; i < this.getDataSize(0); i++){
+            
+            nom.set(this.getDataY(i),this.getDataEY(i));
+            denom.set(gr.getDataY(i),gr.getDataEY(i));
+            nom.divide(denom);
+            result.addPoint(this.getDataX(i), nom.number(), 0.0, nom.error());
+        }
+        return result;
+    }
+    
+    
+    public void statErrors(){
+        int ndata = dataX.getSize();
+        for(int i = 0; i < ndata; i++){
+            double ye = this.dataY.getValue(i);
+            this.dataEY.set(i, Math.sqrt(Math.abs(ye)));
+        }
+    }
+    
     public static GraphErrors readFile(String filename, int start, int npoints, int[] columns) {
         
         TextFileReader reader = new TextFileReader();
