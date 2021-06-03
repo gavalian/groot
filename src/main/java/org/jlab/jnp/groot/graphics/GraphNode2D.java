@@ -81,6 +81,27 @@ public class GraphNode2D extends DataNode2D {
         g2d.fillPolygon(polygonX, polygonY, npoints);
     }
     
+    public void drawLine(Graphics2D g2d, Node2D parent, Color color, int lineWidth){
+        //int npoints = graph.getDataSize(0)*2+1;
+        //int[] polygonX = new int[npoints];
+        //int[] polygonY = new int[npoints];
+        GeneralPath path = new GeneralPath();
+        
+        int counter = 0;
+        
+        for(int i = 0; i < graph.getDataSize(0); i++){
+            double xcl = parent.transformX(graph.getDataX(i));
+            double ycl = parent.transformY(graph.getDataY(i));
+            if(i==0){
+                path.moveTo(xcl, ycl);
+            } else { path.lineTo(xcl, ycl);}
+        }
+        g2d.setColor(color);        
+       g2d.setStroke(new BasicStroke(lineWidth));
+       g2d.draw(path);
+    }
+    
+    
     @Override
     public void drawLayer(Graphics2D g2d, int layer){ 
         Node2D parent = this.getParent();
@@ -95,13 +116,16 @@ public class GraphNode2D extends DataNode2D {
         int color_line = graph.getLineColor();
         int marker_size = graph.getMarkerSize();
         int line_size   = graph.getLineThickness();
+        int line_width  = marker_size/3;
         int marker_style = graph.getMarkerStyle();
         
         if(drawOptions.contains("S")==true){
             this.drawShadow(g2d, parent, theme.getColor(color_fill+90));
         }
         
-        
+        if(drawOptions.contains("L")==true){
+            this.drawLine(g2d, parent, theme.getColor(color_fill),line_width);
+        }
         for(int i = 0; i < graph.getDataSize(0); i++){
             double xcl = parent.transformX(graph.getDataX(i));
             double ycl = parent.transformY(graph.getDataY(i));

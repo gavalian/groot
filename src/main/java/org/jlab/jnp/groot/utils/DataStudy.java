@@ -135,6 +135,7 @@ public class DataStudy {
         dataresult.setMarkerSize(12);
         dataresult.setLineThickness(1);
         
+        dataresult.show();
         
         List<GraphErrors> clas12 = DataStudy.getStandardGraphs();
         
@@ -317,11 +318,11 @@ public class DataStudy {
     public static void main(String[] args){
         GRootColorPalette.getInstance().setColorPalette();
         GRootColorPalette.getInstance().setColorScheme("tab10");
-        //DataStudy.drawMerging();
+        DataStudy.drawMerging();
         //DataStudy.drawDenoising();
         //DataStudy.drawML();
         
-        DataStudy.test2();
+        //DataStudy.test2();
     }
     
 }
