@@ -85,12 +85,12 @@ public class ImageScatter {
             {0.45,0.45},
             {0.45,0.45}
         });*/
-        c1.getDataCanvas().divide(0.03,0.08, 4, 2);
+        c1.getDataCanvas().divide(0.03,0.08, 4,1);
         int pad = 2;
         c1.getDataCanvas().left(pad).right(pad).top(pad).bottom(pad);
         
         for(int i = 0; i < 4; i++){
-            GraphErrors gr = fromImage(noisy[i]);
+            GraphErrors gr = fromImage("imagestemp/" + noisy[i]);
             gr.setMarkerColor(71);
             gr.setLineColor(21);
             c1.cd(i);
@@ -100,7 +100,7 @@ public class ImageScatter {
             c1.getDataCanvas().getRegion(i).getGraphicsAxis().getAxisY().setAxisTicks(new double[]{6,12,18,24,30,36});
 
             
-            c1.getDataCanvas().getRegion(i).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXIS_DRAW_LABELS, "false");
+            //c1.getDataCanvas().getRegion(i).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXIS_DRAW_LABELS, "false");
             //c1.getDataCanvas().getRegion(i).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXIS_DRAW_TICKS, "false");
             //c1.getDataCanvas().getRegion(i).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXIS_DRAW_TITLE, "false");
             if(i!=0) c1.getDataCanvas().getRegion(i).getGraphicsAxis().getAxisY().getAttributes().changeValue(AttributeType.AXIS_DRAW_LABELS, "false");
@@ -111,15 +111,15 @@ public class ImageScatter {
         }
         
         for(int i = 0; i < 4; i++){
-            GraphErrors gr = fromImage(correct[i]);
-            c1.cd(i+4);
-            c1.draw(gr, "");
-            c1.getDataCanvas().getRegion(i+4).getGraphicsAxis().setAxisLimits(0.0, 113, 0.0, 37);
-            c1.getDataCanvas().getRegion(i+4).getGraphicsAxis().getAxisY().setAxisTicks(new double[]{6,12,18,24,30,36});
+            GraphErrors gr = fromImage("imagestemp/" + correct[i]);
+            c1.cd(i);
+            c1.draw(gr, "same");
+            c1.getDataCanvas().getRegion(i).getGraphicsAxis().setAxisLimits(0.0, 113, 0.0, 37);
+            c1.getDataCanvas().getRegion(i).getGraphicsAxis().getAxisY().setAxisTicks(new double[]{6,12,18,24,30,36});
             //c1.getDataCanvas().getRegion(i+4).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXIS_DRAW_LABELS, "false");
             //c1.getDataCanvas().getRegion(i+4).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXIS_DRAW_TICKS, "false");
             //c1.getDataCanvas().getRegion(i+4).getGraphicsAxis().getAxisX().getAttributes().changeValue(AttributeType.AXIS_DRAW_TITLE, "false");
-            if(i!=0) c1.getDataCanvas().getRegion(i+4).getGraphicsAxis().getAxisY().getAttributes().changeValue(AttributeType.AXIS_DRAW_LABELS, "false");
+            if(i!=0) c1.getDataCanvas().getRegion(i).getGraphicsAxis().getAxisY().getAttributes().changeValue(AttributeType.AXIS_DRAW_LABELS, "false");
             //c1.getDataCanvas().getRegion(i+4).getGraphicsAxis().getAxisY().getAttributes().changeValue(AttributeType.AXIS_DRAW_TICKS, "false");
             //c1.getDataCanvas().getRegion(i+4).getGraphicsAxis().getAxisY().getAttributes().changeValue(AttributeType.AXIS_DRAW_TITLE, "false");
         }
@@ -314,9 +314,9 @@ public class ImageScatter {
     public static void main(String[] args){
         ImageScatter scatter = new ImageScatter();
 
-        //scatter.createExamplePlots();
+        scatter.createExamplePlots();
         //scatter.createLuminocityPlots();
-        scatter.createTrainingPlots();;
+        //scatter.createTrainingPlots();;
         
     }
 }

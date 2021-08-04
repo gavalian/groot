@@ -454,7 +454,8 @@ public class Groot4Demo {
     public static void main(String[] args){
         
         GRootColorPalette.getInstance().setColorPalette();
-        GRootColorPalette.getInstance().setColorScheme("tab10");
+        //GRootColorPalette.getInstance().setColorScheme("tab10");
+        GRootColorPalette.getInstance().setColorScheme("gold10");
         
         Groot4Demo.demo1();
         //Groot4Demo.demo2();

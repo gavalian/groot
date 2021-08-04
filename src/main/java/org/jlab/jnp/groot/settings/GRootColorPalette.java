@@ -85,6 +85,24 @@ public class GRootColorPalette {
             colorPalette.add(new Color(  168,182,196));  // GRAY - 12
             //colorPalette.add(new Color());
         }
+        
+        if(scheme.compareTo("gold10")==0){
+            colorPalette.clear();
+            colorPalette.add(Color.WHITE); // white - 0
+            colorPalette.add(Color.BLACK); // black - 1
+            colorPalette.add(new Color( 37,75,135)); // NAVY - 2
+            colorPalette.add(new Color( 37,118,117)); // TEAL - 3
+            colorPalette.add(new Color( 255,195,114)); // GOLD 70 - 4
+            colorPalette.add(new Color( 220,115,28)); // DARK GOLD - 5
+            colorPalette.add(new Color( 186,164,150)); // Neutral60 - 6
+            colorPalette.add(new Color( 116,87,69)); // Dark Neutral - 7
+            colorPalette.add(new Color( 220,156,191)); // Purple 50 - 8
+            colorPalette.add(new Color( 160,27,104)); // Dark Purple - 9
+            colorPalette.add(new Color( 231,158,142)); // Red 60 - 10
+            colorPalette.add(new Color( 209,65,36)); // Red - 11
+            
+            
+        }
     }
     
     
