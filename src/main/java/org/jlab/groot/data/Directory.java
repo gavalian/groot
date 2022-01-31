@@ -7,12 +7,15 @@ package org.jlab.groot.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -459,7 +462,14 @@ public class Directory<T> {
     public DefaultMutableTreeNode getTreeNode(){
         DefaultMutableTreeNode  root = new DefaultMutableTreeNode("Root");
         List<String>            objects = this.getCompositeObjectList(this);
-        System.out.println("Get Tree Nodes : Size = " + objects.size());
+        /*for(String obj : objects){
+            System.out.println("---> " + obj);
+        }*/
+        Collections.sort(objects);
+        /*for(String obj : objects){
+            System.out.println("sorted ---> " + obj);
+        }*/
+        //System.out.println("Get Tree Nodes : Size = " + objects.size());
         DefaultMutableTreeNode node = getNodes(root,objects,1);
         return node;
     }
@@ -479,7 +489,8 @@ public class Directory<T> {
     
     public Set<String>  getChildrenList(String parent, List<String> list, int depth){
         
-        Set<String>  children = new HashSet<String>();
+        SortedSet<String>  children = new TreeSet<String>();
+        //Set<String>  children = new HashSet<String>();
         
         if(depth<1) return children;
         
