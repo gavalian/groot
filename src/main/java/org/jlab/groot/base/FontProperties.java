@@ -22,7 +22,7 @@ import java.util.Set;
  */
 public class FontProperties {
     
-    private static final List<String>   systemAvailableFonts = FontProperties.initSystemFonts();
+    private static List<String>   systemAvailableFonts = null;//FontProperties.initSystemFonts();
     
     private String fontName = "Avenir";
     private int    fontSize = 12;
@@ -42,10 +42,16 @@ public class FontProperties {
     }
     
     public static List<String>  getSystemFonts(){
+        if(systemAvailableFonts==null){
+            systemAvailableFonts = FontProperties.initSystemFonts();
+        }
         return systemAvailableFonts;
     }
     
     public static String[]  getSystemFontsArray(){
+        if(systemAvailableFonts==null){
+            systemAvailableFonts = FontProperties.initSystemFonts();
+        }
         String[] fonts = new String[systemAvailableFonts.size()];
         int icounter = 0;
         for(String fn : systemAvailableFonts){
