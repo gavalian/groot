@@ -12,8 +12,12 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -61,6 +65,7 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
             this.initBottomBar();
         }
     }
+    
     public EmbeddedCanvasTabbed(boolean isStatic,String... canvases){
         super();
         this.setLayout(new BorderLayout());
@@ -169,6 +174,13 @@ public class EmbeddedCanvasTabbed extends JPanel implements ActionListener {
         this.tabbedCanvases.put(name, canvas);
         tabbedPane.addTab(name, canvas);
         tabbedPane.setSelectedComponent(canvas);
+    }
+    
+    public List<String> getCanvasList(){
+        Set<String> keys = this.tabbedCanvases.keySet();
+        List<String> list = new ArrayList<>();
+        for(String key : keys) list.add(key);
+        return list;
     }
     
     @Override
