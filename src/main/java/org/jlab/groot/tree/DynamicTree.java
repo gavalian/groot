@@ -43,7 +43,7 @@ public class DynamicTree extends JPanel {
          
         rootNode = new DefaultMutableTreeNode(name);
         treeModel = new DefaultTreeModel(rootNode, false);
-    treeModel.addTreeModelListener(new MyTreeModelListener());
+        treeModel.addTreeModelListener(new MyTreeModelListener());
         tree = new JTree(treeModel);
         tree.setEditable(true);
         tree.getSelectionModel().setSelectionMode

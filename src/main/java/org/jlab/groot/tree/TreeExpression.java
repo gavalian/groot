@@ -88,7 +88,9 @@ public class TreeExpression {
     
     final void init(){
         String[] variables = new String[expVariables.size()];
-        for(int i=0; i < variables.length; i++) variables[i] = expVariables.get(i);        
+        for(int i=0; i < variables.length; i++) {
+            variables[i] = expVariables.get(i);
+        }
         ExpressionBuilder builder = new ExpressionBuilder(treeExpression)
                 .function(funcVec3m).function(funcVec3p).function(funcVec3t);
         builder.variables(variables);

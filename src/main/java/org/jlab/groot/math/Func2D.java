@@ -9,7 +9,7 @@ package org.jlab.groot.math;
  *
  * @author gavalian
  */
-public class Func2D {
+public class Func2D implements Params {
     
 
     private       String          funcName = "f1d";

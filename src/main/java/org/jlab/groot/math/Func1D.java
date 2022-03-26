@@ -18,7 +18,7 @@ import java.io.IOException;
  *
  * @author gavalian
  */
-public class Func1D implements IDataSet {
+public class Func1D implements IDataSet, Params {
     
     UserParameters  userPars = new UserParameters();
     String          funcName = "f1d";

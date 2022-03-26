@@ -238,6 +238,7 @@ public class Dimension1D implements Cloneable{
         double valueH = frHigh*getLength();
         setMinMax(this.dimMin-valueL,this.dimMax+valueH);
     }
+
     
     @Override
     public String toString(){

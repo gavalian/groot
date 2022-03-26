@@ -113,9 +113,7 @@ public class StudioToolBar {
         //toolbar.add(new JSeparator());
         toolbar.add(playButton);
         toolbar.add(fastButton);
-        
 
-        
     }
     
     public JToolBar  getToolBar(){
