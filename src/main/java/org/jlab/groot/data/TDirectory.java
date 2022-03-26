@@ -133,7 +133,7 @@ public class TDirectory extends Directory<IDataSet> {
     
     public void save(String filename){
         org.jlab.jnp.hipo4.io.HipoWriter writer = new  org.jlab.jnp.hipo4.io.HipoWriter();
-        Event event = new Event();
+        Event event = new Event(900*1024);
         writer.open(filename);
         List<String>  objectList = this.getCompositeObjectList(this);
         for(String object : objectList){
