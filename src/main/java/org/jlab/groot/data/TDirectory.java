@@ -131,9 +131,15 @@ public class TDirectory extends Directory<IDataSet> {
         
     }
     
+    private int getReqiredSize(List<Node> list){
+        int size = 0; 
+        for(Node n : list) size += n.getBufferSize();
+        return size + 1024;
+    }
+    
     public void save(String filename){
         org.jlab.jnp.hipo4.io.HipoWriter writer = new  org.jlab.jnp.hipo4.io.HipoWriter();
-        Event event = new Event(900*1024);
+        Event event = new Event(1024*1024);
         writer.open(filename);
         List<String>  objectList = this.getCompositeObjectList(this);
         for(String object : objectList){
@@ -144,6 +150,8 @@ public class TDirectory extends Directory<IDataSet> {
                     ds.setName(object);
                     List<Node> nodes = DataSetSerializer4.serializeH1F((H1F) ds);
                     event.reset();
+                    int required = this.getReqiredSize(nodes);
+                    event.require(required);
                     for(Node node: nodes) event.write(node);
                     writer.addEvent(event);
                 }
@@ -152,6 +160,8 @@ public class TDirectory extends Directory<IDataSet> {
                     ds.setName(object);
                     List<Node> nodes = DataSetSerializer4.serializeH2F((H2F) ds);
                     event.reset();
+                    int required = this.getReqiredSize(nodes);
+                    event.require(required);
                     for(Node node: nodes) event.write(node);
                     writer.addEvent(event);
                 }
@@ -160,6 +170,8 @@ public class TDirectory extends Directory<IDataSet> {
                     ds.setName(object);
                     List<Node> nodes = DataSetSerializer4.serializeF1D((F1D) ds);
                     event.reset();
+                    int required = this.getReqiredSize(nodes);
+                    event.require(required);
                     for(Node node: nodes) event.write(node);
                     writer.addEvent(event);
                 }
@@ -167,6 +179,8 @@ public class TDirectory extends Directory<IDataSet> {
                     ds.setName(object);
                     List<Node> nodes = DataSetSerializer4.serializeGraphErrors((GraphErrors) ds);
                     event.reset();
+                    int required = this.getReqiredSize(nodes);
+                    event.require(required);
                     for(Node node: nodes) event.write(node);
                     writer.addEvent(event);
                 }                
