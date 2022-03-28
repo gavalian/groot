@@ -154,13 +154,13 @@ public class DataSetSerializer4 {
         return nodes;
     }
     
-    public static List<Node>  serializeGraphErrors(GraphErrors gr){
-        
+    public static List<Node>  serializeGraphErrors(GraphErrors gr){        
         List<Node> nodes = new ArrayList<Node>();
         Node   storeDataType = new Node(21,7, new int[]{DataSetType.GRAPH.getType()});
         
         Node dataType   = new Node(300,1,new int[]{1});
-        Node dataName   = new Node(300,2,gr.getName());                
+        Node dataName   = new Node(300,2,gr.getName());
+        
         Node axisDataX  = new Node(300,3,DataType.DOUBLE,gr.getDataSize(0));
         Node axisDataY  = new Node(300,4,DataType.DOUBLE,gr.getDataSize(0));
         Node axisDataXE = new Node(300,5,DataType.DOUBLE,gr.getDataSize(0));
@@ -269,14 +269,14 @@ public class DataSetSerializer4 {
         //Map<Integer,HipoNode> nodes = event.getGroup(500);
         //System.out.println(" F1D DESERIALIZER NODES SIZE = " + nodes.size());
         Map<Integer,Node> nodes = event.readNodes(400);
-        System.out.println("READING SIZE (F1D) = " + nodes.size());
+        //System.out.println("READING SIZE (F1D) = " + nodes.size());
         
-        event.scanShow();
-        DataSetSerializer4.printMap(nodes);
+        //event.scanShow();
+        //DataSetSerializer4.printMap(nodes);
         //if(nodes.size()!=8) return null;
         String funcname   = nodes.get(2).getString();
         String expression = nodes.get(3).getString();
-        F1D func = new F1D(funcname,expression,nodes.get(4).getDouble(0),nodes.get(6).getDouble(1));
+        F1D func = new F1D(funcname,expression,nodes.get(4).getDouble(0),nodes.get(4).getDouble(1));
         
 
         func.setChiSquare(nodes.get(5).getDouble(0));
@@ -294,22 +294,37 @@ public class DataSetSerializer4 {
         //Map<Integer,HipoNode> nodes = event.getGroup(300);
         Map<Integer,Node> nodes = event.readNodes(300);
         //if(nodes.size()!=6) return null;
-        System.out.println("READING SIZE (GRAPH) = " + nodes.size());
-        event.scanShow();
-        DataSetSerializer4.printMap(nodes);
+        //System.out.println("READING SIZE (GRAPH) = " + nodes.size());
+        //event.scanShow();
+        //event.scan();
+        //DataSetSerializer4.printMap(nodes);
         
-        String grname   = nodes.get(2).getString();
-        int npoints = nodes.get(3).getDataSize();
+        String   grname = nodes.get(2).getString();
         GraphErrors graph = new GraphErrors(grname);
         
-        for(int i = 0; i < npoints; i++){
-            graph.addPoint(
-                    nodes.get(3).getDouble(i),
-                    nodes.get(4).getDouble(i),
-                    nodes.get(5).getDouble(i),
-                    nodes.get(6).getDouble(i)
+        if(nodes.containsKey(3)&&nodes.containsKey(4)&&
+                nodes.containsKey(5)&&nodes.containsKey(6)){                    
+            int     npoints = nodes.get(3).getDataSize();                        
+            for(int i = 0; i < npoints; i++){
+                graph.addPoint(
+                        nodes.get(3).getDouble(i),
+                        nodes.get(4).getDouble(i),
+                        nodes.get(5).getDouble(i),
+                        nodes.get(6).getDouble(i)
+                );
+            }
+        } else {
+            if(nodes.containsKey(3)&&nodes.containsKey(4)){
+                int     npoints = nodes.get(3).getDataSize();                        
+                for(int i = 0; i < npoints; i++){
+                    graph.addPoint(
+                            nodes.get(3).getDouble(i),
+                            nodes.get(4).getDouble(i),
+                            0.0,0.0
                     );
-        }        
+                }
+            }
+        }
         DatasetAttributes attr = DataSetSerializer4.deserializeAttributes(nodes);
         graph.getAttributes().setAttributes(attr);        
         //F1D func = DataSetSerializer.deserializeF1D(event);
@@ -327,9 +342,10 @@ public class DataSetSerializer4 {
         
         Map<Integer,Node> nodes = event.readNodes(100);
         //DatasetAttributes attr = DataSetSerializer.deserializeAttributes(nodes.get(3));
-        System.out.println("READING SIZE (H1F) = " + nodes.size());
-        event.scanShow();
-        DataSetSerializer4.printMap(nodes);
+        //System.out.println("READING SIZE (H1F) = " + nodes.size());
+        //event.scanShow();
+        //DataSetSerializer4.printMap(nodes);
+        
         H1F h1 = new H1F();
         DatasetAttributes attr = DataSetSerializer4.deserializeAttributes(nodes);
         h1.getAttributes().setAttributes(attr);
@@ -403,5 +419,40 @@ public class DataSetSerializer4 {
        
         //H1F h1 = DataSetSerializer.deserializeH1F(event);
         return null;
+    }
+        
+    public static void main(String[] args){
+        
+        GraphErrors gr = new GraphErrors("gr",new double[]{1,2,3,4},new double[]{3,4,5,6});
+        List<Node> nodes = DataSetSerializer4.serializeGraphErrors(gr);
+        System.out.println(" size = " + nodes.size());
+        Event event = new Event();
+        gr.setTitle("normal graph");
+        gr.setTitleX("graph X");
+        gr.setTitleY("graph Y");
+
+        for(Node n : nodes) {
+            System.out.println(" n " + n.getGroup() + " " + n.getItem());
+            event.write(n);
+        }
+        
+        event.show();        
+        event.scan();
+        
+        GraphErrors g = DataSetSerializer4.deserializeGraphErrors(event);
+        
+        TDirectory dir = new TDirectory();
+        
+        dir.mkdir("/ec");
+        dir.cd("/ec");
+        dir.add("graph", gr);
+        dir.cd();
+        dir.ls();
+        dir.save("dir.hipo");
+        
+        TDirectory dir2 = new TDirectory();        
+        dir2.readFile("dir.hipo");        
+        dir2.ls();
+        
     }
 }

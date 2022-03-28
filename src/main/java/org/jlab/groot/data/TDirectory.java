@@ -80,6 +80,7 @@ public class TDirectory extends Directory<IDataSet> {
         while(reader.hasNext()==true){
             reader.nextEvent(event);
             Node type = event.read(21, 7);
+            //System.out.println("--------- FOUND " + type.getInt(0));
             if(type.getInt(0) == DataSetType.H1F.getType()){
                 H1F h = DataSetSerializer4.deserializeH1F(event);
                 String fullName = h.getName();
@@ -329,6 +330,13 @@ public class TDirectory extends Directory<IDataSet> {
     
     public static void main(String[] args){
         
+        
+        
+        TDirectory dir = new TDirectory();
+        dir.readFile("/Users/gavalian/Desktop/CLAS12Mon_run_5038_03-28-2022_11.45.06_PM.hipo");
+        
+        
+        /*
         TDirectory dir = new TDirectory();
         
         dir.ls();
@@ -377,7 +385,7 @@ public class TDirectory extends Directory<IDataSet> {
         
         rdir.ls();
         
-        TBrowser t = new TBrowser(rdir);
+        TBrowser t = new TBrowser(rdir);*/
        /* dir.mkdir("/aa");
         dir.cd("/aa");
         dir.add("TEST", new H1F());
