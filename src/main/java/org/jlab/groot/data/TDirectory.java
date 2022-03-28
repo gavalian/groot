@@ -271,6 +271,8 @@ public class TDirectory extends Directory<IDataSet> {
     
     public void readFile(String filename){
         load(filename);
+        
+        System.out.println("\n\n[4.0.1] READING FILE COMPLETED : " + filename);
         /*
         HipoReader reader = new HipoReader();
         reader.open(filename);
