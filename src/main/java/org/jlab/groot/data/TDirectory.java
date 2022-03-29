@@ -148,6 +148,7 @@ public class TDirectory extends Directory<IDataSet> {
             IDataSet ds = getObject(object);
             if(ds!=null){
                 if(ds instanceof H1F){
+                    String dataName = ds.getName();                    
                     ds.setName(object);
                     List<Node> nodes = DataSetSerializer4.serializeH1F((H1F) ds);
                     event.reset();
@@ -155,9 +156,11 @@ public class TDirectory extends Directory<IDataSet> {
                     event.require(required);
                     for(Node node: nodes) event.write(node);
                     writer.addEvent(event);
+                    ds.setName(dataName);
                 }
                 
                 if(ds instanceof H2F){
+                    String dataName = ds.getName();
                     ds.setName(object);
                     List<Node> nodes = DataSetSerializer4.serializeH2F((H2F) ds);
                     event.reset();
@@ -165,9 +168,11 @@ public class TDirectory extends Directory<IDataSet> {
                     event.require(required);
                     for(Node node: nodes) event.write(node);
                     writer.addEvent(event);
+                    ds.setName(dataName);
                 }
                 
                 if(ds instanceof F1D){
+                    String dataName = ds.getName();
                     ds.setName(object);
                     List<Node> nodes = DataSetSerializer4.serializeF1D((F1D) ds);
                     event.reset();
@@ -175,8 +180,10 @@ public class TDirectory extends Directory<IDataSet> {
                     event.require(required);
                     for(Node node: nodes) event.write(node);
                     writer.addEvent(event);
+                    ds.setName(dataName);
                 }
                 if(ds instanceof GraphErrors){
+                    String dataName = ds.getName();
                     ds.setName(object);
                     List<Node> nodes = DataSetSerializer4.serializeGraphErrors((GraphErrors) ds);
                     event.reset();
@@ -184,11 +191,11 @@ public class TDirectory extends Directory<IDataSet> {
                     event.require(required);
                     for(Node node: nodes) event.write(node);
                     writer.addEvent(event);
-                }                
-            }                        
+                    ds.setName(dataName);
+                }
+            }
         }
-        writer.close();
-        
+        writer.close();        
     }
     
     public void writeFile(String filename){
