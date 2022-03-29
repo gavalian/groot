@@ -362,7 +362,7 @@ public class Directory<T> {
         String[] path = directory.split("/");
         cd();
         for(String element : path){
-            System.out.println("debug : trying " + element);
+            //System.out.println("debug : trying " + element);
             if(cd(element)==false){
                 return null;
             }
