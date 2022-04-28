@@ -28,6 +28,8 @@ public class Func1D implements IDataSet {
     private double      funcChi2       = 0.0;
     private int         funcNDF        = 0;
     
+    private String      statBoxFormatString = "%.4f";
+    
     public Func1D(String name){
         this.funcName = name;
         initAttributes();
@@ -52,6 +54,10 @@ public class Func1D implements IDataSet {
     
     public final void setRange(double min, double max){
         this.functionRange.setMinMax(min, max);
+    }
+    
+    public void setStatBoxFormat(String format){
+        this.statBoxFormatString = format;
     }
     
     public void addParameter(String name){
@@ -221,11 +227,11 @@ public class Func1D implements IDataSet {
         PaveText  stat = new PaveText(2);
         stat.addText("Name:",this.getName());
         for(UserParameter par : userPars.getParameters()){
-            stat.addText(par.name(),String.format("%.3f", par.value()));
+            stat.addText(par.name(),String.format(this.statBoxFormatString, par.value()));
         }
-        stat.addText("#chi^2/ndf",String.format("%.3f", this.getChiSquare()/(double)this.getNDF()));
-        stat.addText("#chi^2",String.format("%.3f", this.getChiSquare()));
-        stat.addText("ndf",String.format("%.3f", (double)this.getNDF()));
+        stat.addText("#chi^2/ndf",String.format(this.statBoxFormatString, this.getChiSquare()/(double)this.getNDF()));
+        stat.addText("#chi^2",String.format(this.statBoxFormatString, this.getChiSquare()));
+        stat.addText("ndf",String.format(this.statBoxFormatString, (double)this.getNDF()));
         return stat;
     }
     
