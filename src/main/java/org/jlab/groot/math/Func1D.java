@@ -27,7 +27,7 @@ public class Func1D implements IDataSet {
     private DatasetAttributes   funcAttr      = new DatasetAttributes();
     private double      funcChi2       = 0.0;
     private int         funcNDF        = 0;
-    
+    private boolean     isFitValid  = false;
     private String      statBoxFormatString = "%.4f";
     
     public Func1D(String name){
@@ -51,6 +51,12 @@ public class Func1D implements IDataSet {
 			e.printStackTrace();
 		}	
     }
+    
+    public final void setFitValid(boolean flag){
+        this.isFitValid = flag;
+    }
+    
+    public final boolean isFitValid(){ return this.isFitValid;}
     
     public final void setRange(double min, double max){
         this.functionRange.setMinMax(min, max);

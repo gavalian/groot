@@ -82,7 +82,8 @@ public class DataFitter {
 	        MnMigrad migrad = new MnMigrad(funcFitter, upar);
 	        
 	        FunctionMinimum min = migrad.minimize();
-	        
+	        func.setFitValid(min.isValid());
+                
 	        MnUserParameters userpar = min.userParameters();
 	        
 	        for(int loop = 0; loop < npars; loop++){
