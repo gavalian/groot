@@ -599,6 +599,34 @@ public class H1F  implements IDataSet {
         }
         return h1div;
     }
+    
+    public static H1F add(H1F h1, H1F h2, double c1, double c2){
+        
+        if(h1.getXaxis().getNBins()!=h2.getXaxis().getNBins()){
+            System.out.println("[H1D::divide] error : histograms have inconsistent bins");
+            return null;
+        }
+        H1F h1div = new H1F(h1.getName()+"_ADD_"+h2.getName(),
+                h1.getXaxis().getNBins(),
+                h1.getXaxis().min(),h1.getXaxis().max());
+        StatNumber   result = new StatNumber();
+        StatNumber   denom  = new StatNumber();
+        
+        StatNumber   c1stat = new StatNumber(c1,0.0);
+        StatNumber   c2stat = new StatNumber(c2,0.0);
+        
+        for(int bin = 0; bin < h1.getXaxis().getNBins(); bin++){
+            result.set(h1.getBinContent(bin), h1.getBinError(bin));
+            denom.set(h2.getBinContent(bin), h2.getBinError(bin));
+            result.multiply( c1stat);
+            denom.multiply(  c2stat);
+            result.add(denom);
+            h1div.setBinContent(bin, result.number());
+            h1div.setBinError(bin, result.error());
+        }
+        return h1div;
+    }
+    
     public static H1F sub(H1F h1, H1F h2){
         if(h1.getXaxis().getNBins()!=h2.getXaxis().getNBins()){
             System.out.println("[H1D::divide] error : histograms have inconsistent bins");
@@ -1089,14 +1117,15 @@ public class H1F  implements IDataSet {
     
     
     
-    public static H1F getAsym(H1F hpos, H1F hneg){
-        H1F hnom = H1F.sub(hpos,hneg);
-        H1F hden = H1F.add(hpos,hneg);
+    public static H1F getAsym(H1F hpos, H1F hneg, double c2, double dc2){
+        
+        H1F hnom = H1F.add(hpos,hneg,1,-c2);
+        H1F hden = H1F.add(hpos,hneg,1, c2);
         
         H1F asym = H1F.divide(hnom, hden);
         
-        double  c2 = 1.0;
-        double dc2 = 1.0;
+        //double  c2 = 1.0;
+        //double dc2 = 0.0;
         
         int xbins = asym.getxAxis().getNBins();
         for(int i = 0; i < xbins; i++){
@@ -1112,4 +1141,7 @@ public class H1F  implements IDataSet {
         }
         return asym;
     }
+    
+    public static H1F getAsym(H1F hpos, H1F hneg) {return H1F.getAsym(hpos, hneg, 1, 0);}
+    
 }
