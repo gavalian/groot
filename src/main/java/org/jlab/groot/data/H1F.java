@@ -599,6 +599,25 @@ public class H1F  implements IDataSet {
         }
         return h1div;
     }
+    public static H1F sub(H1F h1, H1F h2){
+        if(h1.getXaxis().getNBins()!=h2.getXaxis().getNBins()){
+            System.out.println("[H1D::divide] error : histograms have inconsistent bins");
+            return null;
+        }
+        H1F h1div = new H1F(h1.getName()+"_ADD_"+h2.getName(),
+                h1.getXaxis().getNBins(),
+                h1.getXaxis().min(),h1.getXaxis().max());
+        StatNumber   result = new StatNumber();
+        StatNumber   denom  = new StatNumber();
+        for(int bin = 0; bin < h1.getXaxis().getNBins(); bin++){
+            result.set(h1.getBinContent(bin), h1.getBinError(bin));
+            denom.set(h2.getBinContent(bin), h2.getBinError(bin));
+            result.subtract(denom);
+            h1div.setBinContent(bin, result.number());
+            h1div.setBinError(bin, result.error());
+        }
+        return h1div;
+    }
     /**
      * Subtract the given histogram from this histogram.
      * @param h reference histogram
@@ -1066,5 +1085,31 @@ public class H1F  implements IDataSet {
             file.close();
         } catch (IOException e) {
         }
+    }
+    
+    
+    
+    public static H1F getAsym(H1F hpos, H1F hneg){
+        H1F hnom = H1F.sub(hpos,hneg);
+        H1F hden = H1F.add(hpos,hneg);
+        
+        H1F asym = H1F.divide(hnom, hden);
+        
+        double  c2 = 1.0;
+        double dc2 = 1.0;
+        
+        int xbins = asym.getxAxis().getNBins();
+        for(int i = 0; i < xbins; i++){
+            double a = hpos.getBinContent(i);
+            double b = hneg.getBinContent(i);
+            double bot = hden.getBinContent(i);
+            if(bot < 1e-6){} else {
+              double dasq  = hpos.getBinError(i);//->GetBinErrorSqUnchecked(bin);
+              double dbsq  = hneg.getBinError(i);
+              double error = 2*Math.sqrt(a*a*c2*c2*dbsq + c2*c2*b*b*dasq+a*a*b*b*dc2*dc2)/(bot*bot);  
+              asym.setBinError(i, error);
+            }
+        }
+        return asym;
     }
 }
