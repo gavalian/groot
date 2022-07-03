@@ -102,11 +102,9 @@ public class GraphicsAxisFrame {
     
     public double getPointY(double value){
         double frac  = graphicsAxis.get(1).getRange().getFraction(value);
-        /*int xticks_y = (int) (this.frameDimensions.getDimension(1).getMax()
-                graphicsAxis.get(1).getDimension().getMin());
-          */
-        int xticks_y = (int) (frameDimensions.getDimension(1).getMax() -  
-                (graphicsAxis.get(1).getDimension().getMin() - frameDimensions.getDimension(1).getMin()));
+        int max = frameDimensions.getDimension(1).getMax();
+        int min = graphicsAxis.get(1).getDimension().getMin() - frameDimensions.getDimension(1).getMin();
+        int xticks_y = (int) ( max - min);
         double length = graphicsAxis.get(1).getDimension().getLength();
         /*System.out.println(" X = " + xticks_y + "  data = "  + value + 
                 " fraction = " + frac + " length = " + length);
@@ -169,15 +167,17 @@ public class GraphicsAxisFrame {
         /*int xticks_y = (int) (frame.getDimension(1).getLength()-
                 graphicsAxis.get(1).getDimension().getMin());
         */
-        int xticks_y = (int) (frameDimensions.getDimension(1).getMax() -  
-                (graphicsAxis.get(1).getDimension().getMin() - frameDimensions.getDimension(1).getMin()));
+        int max = frameDimensions.getDimension(1).getMax();
+        int min = graphicsAxis.get(1).getDimension().getMin() - frameDimensions.getDimension(1).getMin();
+        int xticks_y = (int) (max - min);
         //System.out.println(" Y AXIS = " + graphicsAxis.get(1).getDimension());
         //System.out.println("DRAING AXIS X at Y = " + xticks_y);
-        
+        int max1 = graphicsAxis.get(0).getDimension().getMin();
+        int min1 = graphicsAxis.get(0).getDimension().getMax();
         g2d.drawLine(
-                (int) graphicsAxis.get(0).getDimension().getMin(),
+                (int) max1 ,
                 xticks_y,
-                (int) graphicsAxis.get(0).getDimension().getMax(),
+                (int) min1,
                 xticks_y
                 );        
         List<Double>    xTicks = graphicsAxis.get(0).getAxisTicks();
@@ -208,11 +208,12 @@ public class GraphicsAxisFrame {
          * Draw the Y-axis 
          */
         int yticks_x = (int) graphicsAxis.get(0).getDimension().getMin();
-        
+        int max2 = frame.getDimension(1).getLength() - graphicsAxis.get(1).getDimension().getMin();
+        int min2 = frame.getDimension(1).getLength() - graphicsAxis.get(1).getDimension().getMax();
         g2d.drawLine( yticks_x,
-                (int) (frame.getDimension(1).getLength() - graphicsAxis.get(1).getDimension().getMin()),
+                (int) max2,
                 yticks_x,
-                (int) (frame.getDimension(1).getLength() - graphicsAxis.get(1).getDimension().getMax())
+                (int) min2
                 );
         
         List<Double>    yTicks = graphicsAxis.get(1).getAxisTicks();
@@ -236,11 +237,13 @@ public class GraphicsAxisFrame {
             g2d.drawLine(yticks_x,ytick, yticks_x+ (int) (0.5*tickSize),ytick);
         }
         if(this.frameAttributes.get(AttributeType.AXIS_FRAME_STYLE)>0){
-            
+            int length = this.graphicsAxis.get(1).getDimension().getLength();
+            int l0 = this.graphicsAxis.get(0).getDimension().getLength();
+            int l1 = this.graphicsAxis.get(1).getDimension().getLength();
             g2d.drawRect(yticks_x, 
-                    (int) ( xticks_y-this.graphicsAxis.get(1).getDimension().getLength()),
-                    (int) this.graphicsAxis.get(0).getDimension().getLength(),
-                    (int) this.graphicsAxis.get(1).getDimension().getLength()
+                    (int) ( xticks_y-length),
+                    (int) l0,
+                    (int) l1
                     );
         }
         /**
@@ -260,13 +263,16 @@ public class GraphicsAxisFrame {
     }
     
     public void update(Graphics2D g2d){
-        
+        int max0 = this.frameDimensions.getDimension(0).getMin();
+        int min0 = this.frameDimensions.getDimension(0).getMax();
+        int max1 = this.frameDimensions.getDimension(1).getMin();
+        int min1 = this.frameDimensions.getDimension(1).getMax();
         this.graphicsAxis.get(0).setDimension(
-                (int) this.frameDimensions.getDimension(0).getMin(),
-                (int) this.frameDimensions.getDimension(0).getMax());
+                (int) max0,
+                (int) min0);
         this.graphicsAxis.get(1).setDimension( 
-                (int) this.frameDimensions.getDimension(1).getMin(),
-                (int) this.frameDimensions.getDimension(1).getMax()
+                (int) max1,
+                (int) min1
                 );
         
         this.graphicsAxis.get(0).setAxisDivisions(10);
@@ -303,19 +309,21 @@ public class GraphicsAxisFrame {
         
         
         if(this.frameAttributes.get(AttributeType.AXIS_DRAW_Z)>0){
-            int zAxisWidth = zAxisPalette.getAxisWidth(g2d, 0, 0, 15, 
-                   (int) this.frameDimensions.getDimension(1).getLength()
-                    , 0.0,400.0,this.getAxis(2).getLog());
+            boolean log = this.getAxis(2).getLog();
+            double leng = this.frameDimensions.getDimension(1).getLength();
+            int zAxisWidth = zAxisPalette.getAxisWidth(g2d, 0, 0, 15, (int) leng, 0.0,400.0,log);
             //System.out.println(" MARGINS RIGHT moved by " + zAxisWidth);
             this.axisFrameMargins.setRightMargin(15+zAxisWidth);
         }
-        
+        int marginBottom =frameDimensions.getDimension(1).getMin()+axisFrameMargins.getBottomMargin();
+        int marginTop = frameDimensions.getDimension(1).getMax()-axisFrameMargins.getTopMargin();
+        int marginLeft = frameDimensions.getDimension(0).getMin()+axisFrameMargins.getLeftMargin();
+        int marginRight = frameDimensions.getDimension(0).getMax()-axisFrameMargins.getRightMargin();
         this.graphicsAxis.get(1).setDimension(
-                (int) frameDimensions.getDimension(1).getMin()+axisFrameMargins.getBottomMargin(),
-                (int) frameDimensions.getDimension(1).getMax()-axisFrameMargins.getTopMargin() );
+                marginBottom, marginTop);
         this.graphicsAxis.get(0).setDimension(
-                (int) frameDimensions.getDimension(0).getMin()+axisFrameMargins.getLeftMargin(),
-                (int) frameDimensions.getDimension(0).getMax()-axisFrameMargins.getRightMargin()
+                marginLeft, marginRight
+
         );
                
     }
