@@ -96,7 +96,12 @@ public class ParameterPanel extends JPanel{
 							double xHigh = Double.parseDouble(parameterMax.get(i).getText());
 							double sliderMax = parameterValueSliders.get(i).getMaximum();
 							double sliderMin = parameterValueSliders.get(i).getMinimum();
-							parameterValueSliders.get(i).setValue((int)((fitFunction.parameter(i).value()-xLow)/((xHigh-xLow)/(double)(sliderMax-sliderMin))));
+							double topTemp = (fitFunction.parameter(i).value()-xLow);
+							double downTemp = (xHigh-xLow);
+							double downFinal = (double)(sliderMax-sliderMin);
+							downFinal = (downTemp/downFinal);
+							int result = (int)(topTemp/downFinal);
+							parameterValueSliders.get(i).setValue(result);
 						}
 					}
 				}
@@ -112,7 +117,12 @@ public class ParameterPanel extends JPanel{
 							double xHigh = Double.parseDouble(parameterMax.get(i).getText());
 							double sliderMax = parameterValueSliders.get(i).getMaximum();
 							double sliderMin = parameterValueSliders.get(i).getMinimum();
-							parameterValueSliders.get(i).setValue((int)((fitFunction.parameter(i).value()-xLow)/((xHigh-xLow)/(double)(sliderMax-sliderMin))));
+							double topTemp = (fitFunction.parameter(i).value()-xLow);
+							double downTemp = (xHigh-xLow);
+							double downFinal = (double)(sliderMax-sliderMin);
+							downFinal = (downTemp/downFinal);
+							int result = (int)(topTemp/downFinal);
+							parameterValueSliders.get(i).setValue(result);
 						}
 					}
 				}
@@ -125,8 +135,15 @@ public class ParameterPanel extends JPanel{
 			double xHigh = Double.parseDouble(parameterMax.get(i).getText());
 			double sliderMax = parameterValueSliders.get(i).getMaximum();
 			double sliderMin = parameterValueSliders.get(i).getMinimum();
-			parameterValueSliders.get(i).setValue((int)((fitFunction.parameter(i).value()-xLow)/((xHigh-xLow)/(double)(sliderMax-sliderMin))));
-			System.out.println("Initialize Slider:"+(int)((fitFunction.parameter(i).value()- xLow)/((xHigh-xLow)/(double)(sliderMax-sliderMin) )));
+			int top = (int)((fitFunction.parameter(i).value()-xLow)/((xHigh-xLow)));
+			double down = (double)(sliderMax-sliderMin);
+			parameterValueSliders.get(i).setValue((int)(top/down));
+			double topD =(fitFunction.parameter(i).value()- xLow);
+			double down1 = (xHigh-xLow);
+			double down2 = (double)(sliderMax-sliderMin);
+			double resultTemp = down/down2;
+			int resultRight =  (int)(topD/resultTemp);
+			System.out.println("Initialize Slider:"+ resultRight);
 			parameterValueLabel.add(new JLabel("Value:"));
 			parameterName.add(new JLabel());
 			parameterName.get(i).setText(fitFunction.parameter(i).name());
