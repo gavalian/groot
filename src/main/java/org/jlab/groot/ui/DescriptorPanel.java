@@ -268,9 +268,12 @@ public class DescriptorPanel extends JPanel {
 					String xerr = branchVariableFieldXerr.getText();
 					String y = branchVariableFieldY.getText();
 					String yerr = branchVariableFieldYerr.getText();
-					if ((xerr == "" || xerr == "0") && (yerr == "" || yerr == "0")) {
-						descriptor = new DatasetDescriptor(descriptorName.getText(), x + ":" + y, tree);
-					} else if ((xerr == "" || xerr == "0")) {
+					if (xerr == "" || xerr == "0") {
+						if (yerr == "" || yerr == "0"){
+							descriptor = new DatasetDescriptor(descriptorName.getText(), x + ":" + y, tree);
+						}
+					}
+					} if ((xerr == "" || xerr == "0")) {
 						descriptor = new DatasetDescriptor(descriptorName.getText(), x + ":" + y + ":" + yerr, tree);
 					} else {
 						descriptor = new DatasetDescriptor(descriptorName.getText(),
