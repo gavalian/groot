@@ -302,9 +302,9 @@ public class PublicationGraphs {
         GRootColorPalette.getInstance().setColorPalette();
         GRootColorPalette.getInstance().setColorScheme("tab10");
         //PublicationGraphs.set1();
-        PublicationGraphs.set2();
+        //PublicationGraphs.set2();
         //PublicationGraphs.set3();
-        //PublicationGraphs.set4();
-        //PublicationGraphs.set5();
+        PublicationGraphs.set4();
+        PublicationGraphs.set5();
     }
 }

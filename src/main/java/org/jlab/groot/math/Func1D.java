@@ -29,6 +29,7 @@ public class Func1D implements IDataSet {
     private int         funcNDF        = 0;
     private boolean     isFitValid  = false;
     private String      statBoxFormatString = "%.4f";
+    private String      statBoxFormatError = "%.5f";
     
     public Func1D(String name){
         this.funcName = name;
@@ -64,6 +65,10 @@ public class Func1D implements IDataSet {
     
     public void setStatBoxFormat(String format){
         this.statBoxFormatString = format;
+    }
+    
+    public void setStatBoxErrorFormat(String format){
+        this.statBoxFormatError = format;
     }
     
     public void addParameter(String name){
@@ -233,7 +238,8 @@ public class Func1D implements IDataSet {
         PaveText  stat = new PaveText(2);
         stat.addText("Name:",this.getName());
         for(UserParameter par : userPars.getParameters()){
-            stat.addText(par.name(),String.format(this.statBoxFormatString, par.value()));
+            stat.addText(par.name(),String.format(this.statBoxFormatString+"/"+this.statBoxFormatError, 
+                    par.value(),par.error()));
         }
         stat.addText("#chi^2/ndf",String.format(this.statBoxFormatString, this.getChiSquare()/(double)this.getNDF()));
         stat.addText("#chi^2",String.format(this.statBoxFormatString, this.getChiSquare()));
