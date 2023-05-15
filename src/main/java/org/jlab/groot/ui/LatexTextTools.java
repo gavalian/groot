@@ -77,7 +77,7 @@ public class LatexTextTools {
         table.put("#darrow"  , "\u2193");
         table.put("#overline", "\u0305");
         table.put("#bar"     , "\u0304");
-        
+        table.put("#pm"     , "\u00B1");
         return table;
     }
     

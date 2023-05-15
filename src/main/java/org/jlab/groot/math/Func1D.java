@@ -238,7 +238,7 @@ public class Func1D implements IDataSet {
         PaveText  stat = new PaveText(2);
         stat.addText("Name:",this.getName());
         for(UserParameter par : userPars.getParameters()){
-            stat.addText(par.name(),String.format(this.statBoxFormatString+"/"+this.statBoxFormatError, 
+            stat.addText(par.name(),String.format(this.statBoxFormatString+"#pm"+this.statBoxFormatError, 
                     par.value(),par.error()));
         }
         stat.addText("#chi^2/ndf",String.format(this.statBoxFormatString, this.getChiSquare()/(double)this.getNDF()));
