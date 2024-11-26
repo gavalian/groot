@@ -1,44 +1,41 @@
-# groot
-Java Data Visualization project designed to make histogramming, plotting, and fitting accessible for Java users. 
-## Features
-- Histograms 1D/2D
-- Functions 
-- GraphErrors 
-- Fitting routines using Minuit
-- GUI tools for easily editing plot attributes and for fitting
+# twig
+# Data Visualization and Analysis Software
 
-# Examples
-Try out the [demo jar](https://github.com/gavalian/groot/raw/master/jars/GrootDemo.jar) and check out the examples on our [Wiki](https://github.com/gavalian/groot/wiki "GROOT Wiki"). 
-To run the example: Simply double click on the jar if you're a mac user, or if you're a linux user run ```java -jar GrootDemo.jar```
+Twig library is evolution of groot, which was initially developped 
+for small data visualization while developing data reconstruction codes,
+and since became very improtant part of CLAS12 online and offline software.
 
-<img src="https://github.com/gavalian/groot/blob/master/images/multipad.png" width="800">
-<img src="https://github.com/gavalian/groot/blob/master/images/histogram2d_demo.png" width="400">
-<img src="https://github.com/gavalian/groot/blob/master/images/copyPaste.png" width="400">
-<img src="https://github.com/gavalian/groot/blob/master/images/totalcs_ppbar.png" width="800">
+# Visualization
 
-# groot 4
-groot is getting an updated plotting package. Many improvements with plotting and new features.
-This version (version=4) has many improvements allowing to produce article and presentation 
-ready figures, supports PDF and SVG output.
+<img src="https://github.com/gavalian/twig/blob/main/tutorials/images/twig-demo-0.0.4.png" width="800">
 
-<img src="https://github.com/gavalian/groot/blob/master/images/groot4_example_1.png" width="800">
+# Tutorials
 
-In new version there are few new graph types, commonly used in analysis. Here is an example of Bar graph.
 
-<img src="https://github.com/gavalian/groot/blob/master/images/bar_graph_example.png" width="800">
+Some new features, requested by users, required fresh look at the library 
+structure, and new iteration was born with better implementation of graphics
+components, making it easier to implement new data visualization plot styles.
 
-New canvas styles are imeplemented with preset configuration for plotting related plots.
+# Example of creating tuple from text file
 
-<img src="https://github.com/gavalian/groot/blob/master/images/multiplot_example.png" width="800">
+We start from file that constains events each presented in two lines
 
-# Installation
-Simply add this [library jar](https://github.com/gavalian/groot/raw/master/jars/) to your build path in an IDE.
+```
+awk '{print $2,$5,$6,$7}' extractedDataPred2.txt > epip_hb.txt
+```
 
-# Requirements
-Java 1.8 or greater
+this command takes two lines from the input and joins them into one line
 
-# Documentation
-Check out our [Wiki](https://github.com/gavalian/groot/wiki "GROOT Wiki")!
+```
+paste - - < epip_hb.txt > epip_hb_joined.txt
+```
 
-# Feature requests and contributions
-One of the best ways to contribute is to give us feature requests and bug reports on the [issues page](https://github.com/gavalian/groot/issues "GROOT Issues page")! 
+# Distribution
+
+The distribution of current package containing twig package can be obtained here:
+
+```
+https://userweb.jlab.org/~gavalian/software/j4np/
+```
+
+The latest j4np package should be used.
