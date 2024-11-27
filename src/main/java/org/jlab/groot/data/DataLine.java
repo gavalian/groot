@@ -9,8 +9,8 @@ package org.jlab.groot.data;
  *
  * @author gavalian
  */
-public class DataLine {
-    
+public class DataLine extends SetEndandOrigin{
+
     private double originX = 0.0;
     private double originY = 0.0;
     private double endX = 0.0;
@@ -21,7 +21,7 @@ public class DataLine {
     private int          lineWidth = 2;
     private int          lineStyle = 1;
     private double      arrowAngle = 30.0;
-    
+    SetEndandOrigin set = new SetEndandOrigin();
     public DataLine(){}
     
     public DataLine(double o_x, double o_y, double e_x, double e_y)
@@ -29,11 +29,11 @@ public class DataLine {
         setOrigin(o_x,o_y); setEnd(e_x,e_y);
     }
     
-    public final DataLine setOrigin(double x, double y){ 
+    public final DataLine setOrigin(double x, double y){
         originX = x; originY = y;
         return this;
     }
-    
+
     public final DataLine setEnd(double x, double y){
         endX = x; endY = y;
         return this;
@@ -49,12 +49,14 @@ public class DataLine {
     public double getArrowSizeOrigin(){ return arrowSizeOrigin;}
     public double getArrowSizeEnd(){ return arrowSizeEnd;}
     
-    public  DataLine setArrowSizeOrigin(double size){ 
-        arrowSizeOrigin = size; return this;
+    public  DataLine setArrowSizeOrigin(double size){
+        arrowSizeOrigin = set.setOrigin(size);
+        return this;
     }
     
     public  DataLine setArrowSizeEnd(double size){ 
-        arrowSizeEnd = size; return this;
+        arrowSizeEnd = set.setOrigin(size);
+        return this;
     }
     
     public DataLine setLineColor(int color) { lineColor = color; return this;}

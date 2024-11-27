@@ -56,7 +56,6 @@ import org.jlab.groot.data.*;
 import org.jlab.groot.fitter.ParallelSliceFitter;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.groot.math.Dimension1D;
-import org.jlab.groot.math.F1D;
 import org.jlab.groot.math.FunctionFactory;
 import org.jlab.groot.ui.FitPanel;
 import org.jlab.groot.ui.LatexText;
@@ -332,15 +331,15 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
-            int w = this.getSize().width;
-            int h = this.getSize().height;
+            int width = this.getSize().width;
+            int height = this.getSize().height;
             
             g2d.setColor(GStyle.getCanvasBackgroundColor());
             
             //g2d.setColor(Color.WHITE);
 //            g2d.setColor(new Color(230,230,230));
-            g2d.fillRect(0, 0, w, h);
-            updateCanvasPads(w, h);
+            g2d.fillRect(0, 0, width, height);
+            updateCanvasPads(width, height);
 
             PadMargins margins = new PadMargins();
             //System.out.println(" margins ");
@@ -353,7 +352,7 @@ public class EmbeddedCanvas extends JPanel implements MouseMotionListener, Mouse
 
             for (int i = 0; i < canvasPads.size(); i++) {
                 EmbeddedPad pad = canvasPads.get(i);
-                //pad.setDimension(0, 0, w, h);                        
+                //pad.setDimension(0, 0, width, height);
                 //System.out.println("PAD " + i + " " + pad.getAxisFrame().getFrameMargins());
                 //pad.getAxisFrame().setAxisMargins(pad.getAxisFrame().getFrameMargins());                
                 //System.out.println(pad.getAxisFrame().getFrameMargins());

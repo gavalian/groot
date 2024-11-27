@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+//import com.sun.org.apache.xerces.internal.impl.xpath.XPath;
 import org.jlab.groot.base.DatasetAttributes;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.math.Axis;
@@ -18,7 +19,7 @@ import org.jlab.groot.ui.PaveText;
  * @author Erin Kirby
  * @version 061714
  */
-public class H2F implements IDataSet {
+public class H2F extends Axis implements IDataSet {
 
     private String hName = "basic2D";
     private Axis xAxis = new Axis();
@@ -33,8 +34,6 @@ public class H2F implements IDataSet {
     private double     maximumBinValue = 0.0;
         
     public H2F() {
-        offset = new MultiIndex(xAxis.getNBins(), yAxis.getNBins());
-        hBuffer = new double[offset.getArraySize()];
         initAttributes();
     }
     
@@ -48,8 +47,6 @@ public class H2F implements IDataSet {
      */
     public H2F(String name) {
         hName = name;
-        offset = new MultiIndex(xAxis.getNBins(), yAxis.getNBins());
-        hBuffer = new double[offset.getArraySize()];
         initAttributes();
         
     }
@@ -209,44 +206,7 @@ public class H2F implements IDataSet {
         return maximum;
     }
     
-    /**
-     * Checks if that bin is valid (exists)
-     *
-     * @param bx
-     *            The x coordinate of the bin
-     * @param by
-     *            The y coordinate of the bin
-     * @return The truth value of the validity of that bin
-     */
-    private boolean isValidBins(int bx, int by) {
-        if ((bx >= 0) && (bx <= xAxis.getNBins()) && (by >= 0)
-                && (by <= yAxis.getNBins())) {
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * Finds the bin content at that bin
-     *
-     * @param bx
-     *            The x coordinate of the bin
-     * @param by
-     *            The y coordinate of the bin
-     * @return The content at that bin
-     */
-    public double getBinContent(int bx, int by) {
-        if (this.isValidBins(bx, by)) {
-            int buff = offset.getArrayIndex(bx, by);
-            if(buff>=0&&buff<hBuffer.length){
-                return hBuffer[buff];
-            } else {
-                System.out.println("[Index] error for binx = "+ bx +
-                        " biny = " + by);
-            }
-        }
-        return 0.0;
-    }
+
     
     public void modify(DataVector vecX, DataVector vecY, double xmin, double xmax, double ymin, double ymax){
         int nbinsX = xAxis.getNBins();
@@ -337,7 +297,7 @@ public class H2F implements IDataSet {
      * set Title of the histogram
      * @param title new title
      */
-    public final void setTitle(String title){
+    public void setTitle(String title){
         
         if(title.contains(";")==true){
            String[] tokens = title.split(";");
@@ -816,25 +776,7 @@ public class H2F implements IDataSet {
         }
         return sliceX;
     }
-    /**
-     * Creates a 1-D Histogram slice of the specified x Bin
-     *
-     * @param yBin			the bin on the x axis to create a slice of
-     * @return 				a slice of the y bins on the specified x bin as a 1-D Histogram
-     */
-    public H1F sliceY(int yBin) {
-        String name = "Slice of " + yBin + " Y Bin";
-        double xMin = xAxis.min();
-        double xMax = xAxis.max();
-        int    xNum = xAxis.getNBins();
-        H1F sliceY = new H1F(name, name, xNum, xMin, xMax);
-        
-        for (int y = 0; y < xNum; y++) {
-            sliceY.setBinContent(y, this.getBinContent(y,yBin));
-        }
-        
-        return sliceY;
-    }
+
     
     public float[] offset() {
         float[] f = new float[hBuffer.length];

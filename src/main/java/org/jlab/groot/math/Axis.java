@@ -1,5 +1,8 @@
 package org.jlab.groot.math;
 
+import org.jlab.groot.data.H1F;
+import org.jlab.groot.data.H2F;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -18,6 +21,10 @@ public class Axis implements Serializable {
 	private double minVal;
 	private double maxVal;
 	private boolean isUniform = true;
+	Axis xAxis = new Axis();
+	Axis yAxis = new Axis();
+	private MultiIndex offset = new MultiIndex(xAxis.getNBins(), yAxis.getNBins());
+	private double[] hBuffer = new double[offset.getArraySize()];
         
 	/**
 	 * Creates a default axis with 1 bin, a minimum value of 0, and maximum
@@ -185,6 +192,65 @@ public class Axis implements Serializable {
         if(bin>=0) return bin;               
         return ((-bin) - 2);
     }
+
+	/**
+	 * Checks if that bin is valid (exists)
+	 *
+	 * @param bx
+	 *            The x coordinate of the bin
+	 * @param by
+	 *            The y coordinate of the bin
+	 * @return The truth value of the validity of that bin
+	 */
+	protected boolean isValidBins(int bx, int by) {
+		if ((bx >= 0) && (bx <= xAxis.getNBins()) && (by >= 0)
+				&& (by <= yAxis.getNBins())) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Finds the bin content at that bin
+	 *
+	 * @param bx
+	 *            The x coordinate of the bin
+	 * @param by
+	 *            The y coordinate of the bin
+	 * @return The content at that bin
+	 */
+	public double getBinContent(int bx, int by) {
+		if (this.isValidBins(bx, by)) {
+			int buff = offset.getArrayIndex(bx, by);
+			if(buff>=0&&buff<hBuffer.length){
+				return hBuffer[buff];
+			} else {
+				System.out.println("[Index] error for binx = "+ bx +
+						" biny = " + by);
+			}
+		}
+		return 0.0;
+	}
+
+	/**
+	 * Creates a 1-D Histogram slice of the specified x Bin
+	 *
+	 * @param yBin			the bin on the x axis to create a slice of
+	 * @return 				a slice of the y bins on the specified x bin as a 1-D Histogram
+	 */
+	public H1F sliceY(int yBin) {
+		String name = "Slice of " + yBin + " Y Bin";
+		double xMin = xAxis.min();
+		double xMax = xAxis.max();
+		int    xNum = xAxis.getNBins();
+		H1F sliceY = new H1F(name, name, xNum, xMin, xMax);
+
+		for (int y = 0; y < xNum; y++) {
+			sliceY.setBinContent(y, this.getBinContent(y,yBin));
+		}
+
+		return sliceY;
+	}
     
     /**
      * Scales the range by a specified unit

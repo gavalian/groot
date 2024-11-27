@@ -245,12 +245,7 @@ public class H1F  implements IDataSet {
         	min = .9999*min;
         	max = 1.0001*max; 
         }
-        H1F h = new H1F(name,"",bins,min,max);
-        for(int i = 0; i < vec.getSize(); i++){
-            h.fill(vec.getValue(i));
-        }
-        h.setFillColor(43);        
-        return h;
+        return getH1F(name, bins, min, max, vec);
     }
     
     public static H1F  create(String name, int bins, DataVector vec, double min, double max){
@@ -260,13 +255,18 @@ public class H1F  implements IDataSet {
         	min = .9999*min;
         	max = 1.0001*max; 
         }
-        H1F h = new H1F(name,"",bins,min,max);
+        return getH1F(name, bins, min, max, vec);
+    }
+
+    private static H1F getH1F(String name, int bins, double min, double max, DataVector vec) {
+        H1F h = new H1F(name,"", bins, min, max);
         for(int i = 0; i < vec.getSize(); i++){
             h.fill(vec.getValue(i));
         }
-        h.setFillColor(43);        
+        h.setFillColor(43);
         return h;
     }
+
     /**
      * The getter for the histogram title.
      * @return Title of the histogram.
