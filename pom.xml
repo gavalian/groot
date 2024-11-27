@@ -81,6 +81,16 @@
             <id>freehep-repo-public</id>
             <url>https://srs.slac.stanford.edu/nexus/content/groups/freehep-maven2-public/</url>
         </repository>
+	<repository>
+	   <id>atpnaidu8260265</id>
+	   <url>https://pkgs.dev.azure.com/atpnaidu8260265/_packaging/atpnaidu8260265/maven/v1</url>
+	  <releases>
+	    <enabled>true</enabled>
+	  </releases>
+	  <snapshots>
+	    <enabled>true</enabled>
+	  </snapshots>
+	</repository>    
     </repositories>
 
 
@@ -137,6 +147,16 @@
             <id>ssh-clasweb</id>
             <url>scpexe://clas12@jlabl1.jlab.org/group/clas/www/clasweb/html/clas12maven</url>
         </repository>
+     <repository>
+	  <id>atpnaidu8260265</id>
+	  <url>https://pkgs.dev.azure.com/atpnaidu8260265/_packaging/atpnaidu8260265/maven/v1</url>
+	  <releases>
+	    <enabled>true</enabled>
+	  </releases>
+	  <snapshots>
+	    <enabled>true</enabled>
+	  </snapshots>
+      </repository>    
     </distributionManagement>
 <!--
     <properties>
