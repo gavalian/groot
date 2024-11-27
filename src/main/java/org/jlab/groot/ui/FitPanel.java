@@ -437,10 +437,15 @@ public class FitPanel extends JPanel {
 		for (int i = 0; i < data.getDataSize(0); i++) {
 			double x = data.getDataX(i);
 			double y = data.getDataY(i);
-			if (x > min && x < max && y != 0) {
-				nsamples++;
-				sum += x * y;
-				nEntries += y;
+			if (x > min) {
+				if (x < max){
+
+				}
+				if (y != 0){
+					nsamples++;
+					sum += x * y;
+					nEntries += y;
+				}
 			}
 		}
 		return sum / (double) nEntries;
@@ -455,10 +460,15 @@ public class FitPanel extends JPanel {
 		for (int i = 0; i < data.getDataSize(0); i++) {
 			double x = data.getDataX(i);
 			double y = data.getDataY(i);
-			if (x > min && x < max && y != 0) {
-				nsamples++;
-				sum += Math.pow(x - mean, 2) * y;
-				nEntries += y;
+			if (x > min && x < max) {
+				if (x < max){
+
+				}
+				if (y != 0){
+					nsamples++;
+					sum += Math.pow(x - mean, 2) * y;
+					nEntries += y;
+				}
 			}
 		}
 		return Math.sqrt(sum / (double) nEntries);
@@ -470,9 +480,13 @@ public class FitPanel extends JPanel {
 		for (int i = 0; i < data.getDataSize(0); i++) {
 			double x = data.getDataX(i);
 			double y = data.getDataY(i);
-			if (x > min && x < max && y != 0) {
-				nsamples++;
-				sum += y;
+			if (x > min) {
+				if (x < max){
+					if (y != 0){
+						nsamples++;
+						sum += y;
+					}
+				}
 			}
 		}
 		return sum / (double) nsamples;
@@ -484,10 +498,14 @@ public class FitPanel extends JPanel {
 		for (int i = 0; i < data.getDataSize(0); i++) {
 			double x = data.getDataX(i);
 			double y = data.getDataY(i);
-			if (x > min && x < max && y != 0) {
-				if (y > max1) {
-					max1 = y;
-					xMax = x;
+			if (x > min) {
+				if (x < max){
+					if (y != 0){
+						if (y > max1) {
+							max1 = y;
+							xMax = x;
+						}
+					}
 				}
 			}
 		}
@@ -499,10 +517,14 @@ public class FitPanel extends JPanel {
 		for (int i = 0; i < data.getDataSize(0); i++) {
 			double x = data.getDataX(i);
 			double y = data.getDataY(i);
-			if (x > min && x < max && y != 0) {
-				if (y > max1) {
-					max1 = y;
-					xMax = x;
+			if (x > min) {
+				if (x < max){
+					if (y != 0){
+						if (y > max1) {
+							max1 = y;
+							xMax = x;
+						}
+					}
 				}
 			}
 		}

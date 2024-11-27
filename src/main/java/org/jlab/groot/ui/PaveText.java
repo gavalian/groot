@@ -5,12 +5,9 @@
  */
 package org.jlab.groot.ui;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,20 +76,14 @@ public class PaveText {
         
         this.updateDimensions(g2d);
         g2d.setColor(this.backgroundColor);
-        g2d.fillRect(
-                (int) this.paveDimension.getDimension(0).getMin() - xPadding,
-                (int) this.paveDimension.getDimension(1).getMin() - yPadding,
-                (int) this.paveDimension.getDimension(0).getLength() + 2*xPadding,
-                (int) this.paveDimension.getDimension(1).getLength() + 2*yPadding
-        );
+        int xx = (int) this.paveDimension.getDimension(0).getMin() - xPadding;
+        int yy = (int) this.paveDimension.getDimension(1).getMin() - yPadding;
+        int widthXX = (int) this.paveDimension.getDimension(0).getLength() + 2*xPadding;
+        int heightXX = (int) this.paveDimension.getDimension(1).getLength() + 2*yPadding;
+        g2d.fillRect( xx, yy, widthXX, heightXX);
         
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(  
-                (int) this.paveDimension.getDimension(0).getMin() - xPadding,
-                (int) this.paveDimension.getDimension(1).getMin() - yPadding,
-                (int) this.paveDimension.getDimension(0).getLength() + 2*xPadding,
-                (int) this.paveDimension.getDimension(1).getLength() + 2*yPadding
-                );
+        g2d.drawRect(xx, yy, widthXX, heightXX);
         /*g2d.drawRoundRect(
                 (int) this.paveDimension.getDimension(0).getMin() - xPadding,
                 (int) this.paveDimension.getDimension(1).getMin() - yPadding,
@@ -140,8 +131,9 @@ public class PaveText {
         double   height = 0; 
         for(List<LatexText> list : this.paveTexts){
             for(int i = 0; i < this.N_COLUMNS; i++){
-                Rectangle2D rect = fmg.getStringBounds(list.get(i).getText().getIterator(), 0,
-                        list.get(i).getText().getIterator().getEndIndex(),g2d);
+                int limit  = list.get(i).getText().getIterator().getEndIndex();
+                CharacterIterator ci = list.get(i).getText().getIterator();
+                Rectangle2D rect = fmg.getStringBounds(ci, 0, limit,g2d);
                 if(rect.getWidth()>widths[i]) widths[i] = rect.getWidth();
                 height += rect.getHeight()/this.N_COLUMNS;
             }
@@ -150,10 +142,11 @@ public class PaveText {
         double width = 0.0;
         for(int i = 0; i < widths.length; i++) width+= widths[i];
         ySpacing = (int) (1.1*height/this.paveTexts.size());
-        
+        double min = (int) paveDimension.getDimension(0).getMin();
+        in max = this.xLeftOffset + paveDimension.getDimension(0).getMin() + width + xSpacing;
         this.paveDimension.getDimension(0).setMinMax(
-                 paveDimension.getDimension(0).getMin(), 
-                this.xLeftOffset + paveDimension.getDimension(0).getMin() + width + xSpacing
+                 min,
+                max
                 );
         this.paveDimension.getDimension(1).setMinMax(
                 paveDimension.getDimension(1).getMin(), 

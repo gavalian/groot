@@ -147,11 +147,21 @@ public class OptionsPanel extends JPanel {
 		gridPanel.add(yGridBox);
 		
 		JPanel applyToAllPanel = new JPanel(new BorderLayout());
-		String[] applyToAllOptions = {"Font","Title Font Size","Axis Title Font Size","Axis Label Font Size","Stat Box Font Size","Title","X Axis Title","Y Axis Title","Grid X","Grid Y"};
+		List<String> aplly = new ArrayList<String>();
+		aplly.add("Font");
+		aplly.add("Title Font Size");
+		aplly.add("Axis Title Font Size");
+		aplly.add("Axis Label Font Size");
+		aplly.add("Stat Box Font Size");
+		aplly.add("Title");
+		aplly.add("X Axis Title");
+		aplly.add("Y Axis Title");
+		aplly.add("Grid X");
+		aplly.add("Grid Y");
 		boolean[] applyToAllDefaults = {true,true,true,true,true,false,false,false,true,true,false,false};
-		applyToAllCheckBoxes = new JCheckBox[applyToAllOptions.length];
-		for(int i=0; i<applyToAllOptions.length; i++){
-			applyToAllCheckBoxes[i] = new JCheckBox(applyToAllOptions[i]);
+		applyToAllCheckBoxes = new JCheckBox[aplly.size()];
+		for(int i=0; i<aplly.size(); i++){
+			applyToAllCheckBoxes[i] = new JCheckBox(aplly.get(i));
 			applyToAllCheckBoxes[i].setSelected(applyToAllDefaults[i]);
 		}
 		JComboCheckBox applyToAllComboCheckBox = new JComboCheckBox(applyToAllCheckBoxes);
@@ -208,7 +218,7 @@ public class OptionsPanel extends JPanel {
 			}
 			
 		};
-		for(int i=0; i<applyToAllOptions.length; i++){
+		for(int i=0; i<aplly.size(); i++){
 			applyToAllCheckBoxes[i].addItemListener(itemListener);
 		}
 		applyToAllComboCheckBox.addActionListener(applyToAllListener);
